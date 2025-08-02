@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20iPadOS-lightgrey.svg)](https://developer.apple.com/)
 [![Documentation](https://img.shields.io/badge/Documentation-Complete-blue.svg)](Documentation/)
-[![Templates](https://img.shields.io/badge/Templates-10+-yellow.svg)](Templates/)
+[![Templates](https://img.shields.io/badge/Templates-3+-yellow.svg)](Templates/)
 
 **Professional iOS App Templates Collection - Ready-to-use templates for different app types**
 
@@ -19,6 +19,7 @@ A comprehensive collection of production-ready iOS app templates built with Clea
 - **UI**: Modern SwiftUI with custom components
 - **Backend**: Firebase integration ready
 - **Status**: ✅ Production Ready
+- **Location**: `Templates/SocialMediaApp/`
 
 ### 🛒 **E-commerce App Template**
 - **Features**: Product catalog, shopping cart, checkout, payment, orders
@@ -26,6 +27,7 @@ A comprehensive collection of production-ready iOS app templates built with Clea
 - **UI**: Professional e-commerce design
 - **Payment**: Stripe integration ready
 - **Status**: ✅ Production Ready
+- **Location**: `Templates/EcommerceApp/`
 
 ### 💪 **Fitness App Template**
 - **Features**: Workout tracking, progress charts, goals, achievements
@@ -33,55 +35,7 @@ A comprehensive collection of production-ready iOS app templates built with Clea
 - **UI**: Health-focused design with charts
 - **HealthKit**: Apple Health integration
 - **Status**: ✅ Production Ready
-
-### 📰 **News App Template**
-- **Features**: News feed, categories, search, bookmarks, sharing
-- **Architecture**: Clean Architecture + MVVM
-- **UI**: News-focused design with rich content
-- **API**: RESTful API integration
-- **Status**: ✅ Production Ready
-
-### 💬 **Chat App Template**
-- **Features**: Real-time messaging, user profiles, groups, media sharing
-- **Architecture**: Clean Architecture + MVVM
-- **UI**: Modern chat interface
-- **Real-time**: WebSocket integration
-- **Status**: ✅ Production Ready
-
-### 🎵 **Music App Template**
-- **Features**: Music player, playlists, search, favorites, lyrics
-- **Architecture**: Clean Architecture + MVVM
-- **UI**: Music-focused design with animations
-- **Audio**: AVFoundation integration
-- **Status**: ✅ Production Ready
-
-### 📸 **Photo Gallery App Template**
-- **Features**: Photo grid, albums, editing, sharing, cloud sync
-- **Architecture**: Clean Architecture + MVVM
-- **UI**: Photo-focused design with gestures
-- **Storage**: CloudKit integration
-- **Status**: ✅ Production Ready
-
-### 🗺️ **Travel App Template**
-- **Features**: Destinations, maps, bookings, reviews, itineraries
-- **Architecture**: Clean Architecture + MVVM
-- **UI**: Travel-focused design with maps
-- **Maps**: MapKit integration
-- **Status**: ✅ Production Ready
-
-### 📚 **Learning App Template**
-- **Features**: Courses, progress tracking, quizzes, certificates
-- **Architecture**: Clean Architecture + MVVM
-- **UI**: Education-focused design
-- **Content**: Rich media support
-- **Status**: ✅ Production Ready
-
-### 🏥 **Health App Template**
-- **Features**: Health tracking, vitals monitoring, medication, appointments
-- **Architecture**: Clean Architecture + MVVM
-- **UI**: Health-focused design with charts
-- **HealthKit**: Full HealthKit integration
-- **Status**: ✅ Production Ready
+- **Location**: `Templates/FitnessApp/`
 
 ## 🏗️ Architecture
 
