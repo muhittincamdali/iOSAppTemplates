@@ -1,31 +1,44 @@
 import SwiftUI
 import Firebase
+import FirebaseAuth
+import FirebaseFirestore
+import FirebaseStorage
+import Kingfisher
 
 // MARK: - Social Media App
 @main
 struct SocialMediaApp: App {
     
+    @StateObject private var authManager = AuthManager.shared
+    @StateObject private var dataManager = DataManager.shared
+    @StateObject private var notificationManager = NotificationManager.shared
+    
     init() {
         setupFirebase()
         setupAppearance()
+        setupAnalytics()
     }
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(AuthManager.shared)
-                .environmentObject(PostManager.shared)
-                .environmentObject(UserManager.shared)
+                .environmentObject(authManager)
+                .environmentObject(dataManager)
+                .environmentObject(notificationManager)
+                .onAppear {
+                    setupApp()
+                }
         }
     }
     
     // MARK: - Setup Methods
     private func setupFirebase() {
         FirebaseApp.configure()
+        print("🔥 Firebase configured successfully")
     }
     
     private func setupAppearance() {
-        // Configure navigation bar appearance
+        // Navigation bar appearance
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = UIColor.systemBackground
@@ -36,29 +49,354 @@ struct SocialMediaApp: App {
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
         
-        // Configure tab bar appearance
+        // Tab bar appearance
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()
         tabBarAppearance.backgroundColor = UIColor.systemBackground
         
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        
+        print("🎨 App appearance configured")
+    }
+    
+    private func setupAnalytics() {
+        Analytics.setAnalyticsCollectionEnabled(true)
+        Analytics.logEvent(AnalyticsEventAppOpen, parameters: nil)
+        print("📊 Analytics configured")
+    }
+    
+    private func setupApp() {
+        Task {
+            await authManager.checkAuthState()
+            await dataManager.initialize()
+            await notificationManager.requestPermission()
+        }
     }
 }
 
 // MARK: - Content View
 struct ContentView: View {
     @StateObject private var authManager = AuthManager.shared
+    @State private var isLoading = true
     
     var body: some View {
         Group {
-            if authManager.isAuthenticated {
+            if isLoading {
+                SplashView()
+            } else if authManager.isAuthenticated {
                 MainTabView()
             } else {
-                AuthenticationView()
+                AuthView()
             }
         }
-        .animation(.easeInOut, value: authManager.isAuthenticated)
+        .animation(.easeInOut(duration: 0.3), value: authManager.isAuthenticated)
+        .animation(.easeInOut(duration: 0.3), value: isLoading)
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                withAnimation {
+                    isLoading = false
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Splash View
+struct SplashView: View {
+    @State private var logoScale: CGFloat = 0.5
+    @State private var logoOpacity: Double = 0.0
+    @State private var textOpacity: Double = 0.0
+    
+    var body: some View {
+        ZStack {
+            // Background gradient
+            LinearGradient(
+                colors: [Color.blue.opacity(0.8), Color.purple.opacity(0.6)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+            
+            VStack(spacing: 24) {
+                // App logo
+                Image(systemName: "bubble.left.and.bubble.right.fill")
+                    .font(.system(size: 80))
+                    .foregroundColor(.white)
+                    .scaleEffect(logoScale)
+                    .opacity(logoOpacity)
+                    .onAppear {
+                        withAnimation(.easeOut(duration: 1.0)) {
+                            logoScale = 1.0
+                            logoOpacity = 1.0
+                        }
+                    }
+                
+                // App name
+                Text("SocialConnect")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .opacity(textOpacity)
+                    .onAppear {
+                        withAnimation(.easeOut(duration: 1.0).delay(0.5)) {
+                            textOpacity = 1.0
+                        }
+                    }
+                
+                // Tagline
+                Text("Connect with the world")
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.8))
+                    .opacity(textOpacity)
+            }
+        }
+    }
+}
+
+// MARK: - Auth View
+struct AuthView: View {
+    @State private var isSignUp = false
+    
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 0) {
+                // Header
+                AuthHeaderView()
+                
+                // Auth forms
+                if isSignUp {
+                    SignUpView()
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .trailing).combined(with: .opacity),
+                            removal: .move(edge: .leading).combined(with: .opacity)
+                        ))
+                } else {
+                    SignInView()
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .leading).combined(with: .opacity),
+                            removal: .move(edge: .trailing).combined(with: .opacity)
+                        ))
+                }
+                
+                // Toggle button
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        isSignUp.toggle()
+                    }
+                }) {
+                    Text(isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up")
+                        .font(.subheadline)
+                        .foregroundColor(.blue)
+                        .padding()
+                }
+            }
+            .navigationBarHidden(true)
+        }
+    }
+}
+
+// MARK: - Auth Header View
+struct AuthHeaderView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            // Logo
+            Image(systemName: "bubble.left.and.bubble.right.fill")
+                .font(.system(size: 60))
+                .foregroundColor(.blue)
+            
+            // Title
+            Text("Welcome to SocialConnect")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+            
+            // Subtitle
+            Text("Connect, share, and discover amazing content")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.top, 60)
+        .padding(.horizontal, 32)
+    }
+}
+
+// MARK: - Sign In View
+struct SignInView: View {
+    @StateObject private var authManager = AuthManager.shared
+    @State private var email = ""
+    @State private var password = ""
+    @State private var isLoading = false
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    
+    var body: some View {
+        VStack(spacing: 24) {
+            // Form fields
+            VStack(spacing: 16) {
+                CustomTextField(
+                    text: $email,
+                    placeholder: "Email",
+                    icon: "envelope",
+                    validation: .email
+                )
+                
+                CustomTextField(
+                    text: $password,
+                    placeholder: "Password",
+                    icon: "lock",
+                    validation: .password,
+                    isSecure: true
+                )
+            }
+            .padding(.horizontal, 32)
+            
+            // Sign in button
+            PrimaryButton(
+                title: "Sign In",
+                isLoading: isLoading
+            ) {
+                signIn()
+            }
+            .padding(.horizontal, 32)
+            
+            // Forgot password
+            Button("Forgot Password?") {
+                // Handle forgot password
+            }
+            .font(.subheadline)
+            .foregroundColor(.blue)
+            
+            Spacer()
+        }
+        .alert("Sign In Error", isPresented: $showAlert) {
+            Button("OK") { }
+        } message: {
+            Text(alertMessage)
+        }
+    }
+    
+    private func signIn() {
+        guard !email.isEmpty && !password.isEmpty else {
+            alertMessage = "Please fill in all fields"
+            showAlert = true
+            return
+        }
+        
+        isLoading = true
+        
+        Task {
+            do {
+                try await authManager.signIn(email: email, password: password)
+                await MainActor.run {
+                    isLoading = false
+                }
+            } catch {
+                await MainActor.run {
+                    isLoading = false
+                    alertMessage = error.localizedDescription
+                    showAlert = true
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Sign Up View
+struct SignUpView: View {
+    @StateObject private var authManager = AuthManager.shared
+    @State private var username = ""
+    @State private var email = ""
+    @State private var password = ""
+    @State private var confirmPassword = ""
+    @State private var isLoading = false
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    
+    var body: some View {
+        VStack(spacing: 24) {
+            // Form fields
+            VStack(spacing: 16) {
+                CustomTextField(
+                    text: $username,
+                    placeholder: "Username",
+                    icon: "person",
+                    validation: .username
+                )
+                
+                CustomTextField(
+                    text: $email,
+                    placeholder: "Email",
+                    icon: "envelope",
+                    validation: .email
+                )
+                
+                CustomTextField(
+                    text: $password,
+                    placeholder: "Password",
+                    icon: "lock",
+                    validation: .password,
+                    isSecure: true
+                )
+                
+                CustomTextField(
+                    text: $confirmPassword,
+                    placeholder: "Confirm Password",
+                    icon: "lock",
+                    validation: .password,
+                    isSecure: true
+                )
+            }
+            .padding(.horizontal, 32)
+            
+            // Sign up button
+            PrimaryButton(
+                title: "Create Account",
+                isLoading: isLoading
+            ) {
+                signUp()
+            }
+            .padding(.horizontal, 32)
+            
+            Spacer()
+        }
+        .alert("Sign Up Error", isPresented: $showAlert) {
+            Button("OK") { }
+        } message: {
+            Text(alertMessage)
+        }
+    }
+    
+    private func signUp() {
+        guard !username.isEmpty && !email.isEmpty && !password.isEmpty && !confirmPassword.isEmpty else {
+            alertMessage = "Please fill in all fields"
+            showAlert = true
+            return
+        }
+        
+        guard password == confirmPassword else {
+            alertMessage = "Passwords do not match"
+            showAlert = true
+            return
+        }
+        
+        isLoading = true
+        
+        Task {
+            do {
+                try await authManager.signUp(username: username, email: email, password: password)
+                await MainActor.run {
+                    isLoading = false
+                }
+            } catch {
+                await MainActor.run {
+                    isLoading = false
+                    alertMessage = error.localizedDescription
+                    showAlert = true
+                }
+            }
+        }
     }
 }
 
@@ -103,435 +441,174 @@ struct MainTabView: View {
                 }
                 .tag(4)
         }
-        .accentColor(.primary)
-    }
-}
-
-// MARK: - Authentication View
-struct AuthenticationView: View {
-    @State private var isSignUp = false
-    
-    var body: some View {
-        NavigationView {
-            VStack(spacing: 20) {
-                // App Logo
-                Image(systemName: "bubble.left.and.bubble.right.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(.primary)
-                    .padding(.top, 60)
-                
-                Text("Social Media App")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                
-                Text("Connect with friends and share your moments")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal)
-                
-                Spacer()
-                
-                // Authentication Buttons
-                VStack(spacing: 16) {
-                    Button(action: {
-                        isSignUp = false
-                    }) {
-                        Text("Sign In")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                    }
-                    
-                    Button(action: {
-                        isSignUp = true
-                    }) {
-                        Text("Sign Up")
-                            .font(.headline)
-                            .foregroundColor(.blue)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(Color.blue.opacity(0.1))
-                            .cornerRadius(10)
-                    }
-                }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 40)
-            }
-            .sheet(isPresented: $isSignUp) {
-                SignUpView()
-            }
-        }
+        .accentColor(.blue)
     }
 }
 
 // MARK: - Feed View
 struct FeedView: View {
-    @StateObject private var postManager = PostManager.shared
-    @State private var isLoading = false
+    @StateObject private var feedViewModel = FeedViewModel()
+    @State private var showCreatePost = false
     
     var body: some View {
         NavigationView {
             ScrollView {
                 LazyVStack(spacing: 16) {
-                    ForEach(postManager.posts) { post in
+                    ForEach(feedViewModel.posts) { post in
                         PostCard(post: post)
                     }
                 }
-                .padding()
+                .padding(.vertical, 16)
             }
             .navigationTitle("Feed")
-            .refreshable {
-                await loadPosts()
-            }
-            .onAppear {
-                Task {
-                    await loadPosts()
-                }
-            }
-        }
-    }
-    
-    private func loadPosts() async {
-        isLoading = true
-        await postManager.fetchPosts()
-        isLoading = false
-    }
-}
-
-// MARK: - Explore View
-struct ExploreView: View {
-    @State private var searchText = ""
-    
-    var body: some View {
-        NavigationView {
-            ScrollView {
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
-                    ForEach(0..<30) { index in
-                        Rectangle()
-                            .fill(Color.gray.opacity(0.3))
-                            .aspectRatio(1, contentMode: .fit)
-                            .cornerRadius(8)
-                    }
-                }
-                .padding()
-            }
-            .navigationTitle("Explore")
-            .searchable(text: $searchText, prompt: "Search posts...")
-        }
-    }
-}
-
-// MARK: - Create Post View
-struct CreatePostView: View {
-    @State private var postText = ""
-    @State private var selectedImage: UIImage?
-    @State private var showingImagePicker = false
-    @Environment(\.dismiss) private var dismiss
-    
-    var body: some View {
-        NavigationView {
-            VStack {
-                TextEditor(text: $postText)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding()
-                
-                if let image = selectedImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 200)
-                        .cornerRadius(10)
-                        .padding()
-                }
-                
-                HStack {
-                    Button("Add Photo") {
-                        showingImagePicker = true
-                    }
-                    .foregroundColor(.blue)
-                    
-                    Spacer()
-                    
-                    Button("Post") {
-                        // Handle post creation
-                        dismiss()
-                    }
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 8)
-                    .background(Color.blue)
-                    .cornerRadius(8)
-                }
-                .padding()
-            }
-            .navigationTitle("Create Post")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.large)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showCreatePost = true
+                    }) {
+                        Image(systemName: "plus")
                     }
                 }
             }
-            .sheet(isPresented: $showingImagePicker) {
-                ImagePicker(selectedImage: $selectedImage)
+            .refreshable {
+                await feedViewModel.refreshFeed()
+            }
+            .sheet(isPresented: $showCreatePost) {
+                CreatePostView()
             }
         }
     }
 }
 
-// MARK: - Notifications View
-struct NotificationsView: View {
-    var body: some View {
-        NavigationView {
-            List {
-                ForEach(0..<10) { index in
-                    NotificationRow(
-                        title: "New like",
-                        message: "Someone liked your post",
-                        time: "2 hours ago"
-                    )
-                }
-            }
-            .navigationTitle("Notifications")
-        }
-    }
-}
-
-// MARK: - Profile View
-struct ProfileView: View {
-    @StateObject private var userManager = UserManager.shared
-    
-    var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(spacing: 20) {
-                    // Profile Header
-                    VStack {
-                        Image(systemName: "person.circle.fill")
-                            .font(.system(size: 80))
-                            .foregroundColor(.primary)
-                        
-                        Text(userManager.currentUser?.name ?? "User")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                        
-                        Text(userManager.currentUser?.email ?? "user@example.com")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding()
-                    
-                    // Stats
-                    HStack(spacing: 40) {
-                        VStack {
-                            Text("\(userManager.currentUser?.postsCount ?? 0)")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                            Text("Posts")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                        
-                        VStack {
-                            Text("\(userManager.currentUser?.followersCount ?? 0)")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                            Text("Followers")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                        
-                        VStack {
-                            Text("\(userManager.currentUser?.followingCount ?? 0)")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                            Text("Following")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                    .padding()
-                    
-                    // Settings
-                    VStack(spacing: 0) {
-                        SettingsRow(title: "Edit Profile", icon: "person")
-                        SettingsRow(title: "Privacy", icon: "lock")
-                        SettingsRow(title: "Notifications", icon: "bell")
-                        SettingsRow(title: "Help", icon: "questionmark.circle")
-                        SettingsRow(title: "Logout", icon: "rectangle.portrait.and.arrow.right")
-                    }
-                    .background(Color(.systemGray6))
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-                }
-            }
-            .navigationTitle("Profile")
-        }
-    }
-}
-
-// MARK: - Supporting Views
+// MARK: - Post Card
 struct PostCard: View {
     let post: Post
+    @State private var isLiked = false
+    @State private var isBookmarked = false
+    @State private var showComments = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // User info
+            // Header
             HStack {
-                Image(systemName: "person.circle.fill")
-                    .font(.title2)
-                VStack(alignment: .leading) {
-                    Text(post.authorName)
-                        .font(.headline)
-                    Text(post.timestamp, style: .relative)
+                AsyncImage(url: URL(string: post.authorAvatarURL ?? "")) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    Image(systemName: "person.circle.fill")
+                        .foregroundColor(.gray)
+                }
+                .frame(width: 40, height: 40)
+                .clipShape(Circle())
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack {
+                        Text(post.authorDisplayName)
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                        
+                        if post.authorIsVerified {
+                            Image(systemName: "checkmark.seal.fill")
+                                .foregroundColor(.blue)
+                                .font(.caption)
+                        }
+                    }
+                    
+                    Text("@\(post.authorUsername)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
+                
                 Spacer()
+                
+                Text(post.createdAt, style: .relative)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
             
-            // Post content
+            // Content
             Text(post.content)
                 .font(.body)
+                .multilineTextAlignment(.leading)
             
-            // Post image if available
-            if let imageURL = post.imageURL {
-                AsyncImage(url: imageURL) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                } placeholder: {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.3))
-                        .aspectRatio(16/9, contentMode: .fit)
+            // Media
+            if let images = post.images, !images.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(images, id: \.self) { imageURL in
+                            AsyncImage(url: URL(string: imageURL)) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                            } placeholder: {
+                                Rectangle()
+                                    .fill(Color.gray.opacity(0.3))
+                            }
+                            .frame(width: 200, height: 200)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                        }
+                    }
+                    .padding(.horizontal, 16)
                 }
-                .cornerRadius(8)
             }
             
-            // Action buttons
+            // Actions
             HStack(spacing: 20) {
-                Button(action: {}) {
-                    HStack {
-                        Image(systemName: "heart")
-                        Text("\(post.likesCount)")
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isLiked.toggle()
                     }
-                    .foregroundColor(.red)
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: isLiked ? "heart.fill" : "heart")
+                            .foregroundColor(isLiked ? .red : .primary)
+                        Text("\(post.likesCount)")
+                            .font(.caption)
+                    }
                 }
                 
-                Button(action: {}) {
-                    HStack {
+                Button(action: {
+                    showComments = true
+                }) {
+                    HStack(spacing: 4) {
                         Image(systemName: "bubble.left")
                         Text("\(post.commentsCount)")
+                            .font(.caption)
                     }
-                    .foregroundColor(.primary)
                 }
                 
-                Button(action: {}) {
-                    Image(systemName: "square.and.arrow.up")
-                        .foregroundColor(.primary)
+                Button(action: {
+                    // Handle share
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "arrowshape.turn.up.right")
+                        Text("\(post.sharesCount)")
+                            .font(.caption)
+                    }
                 }
                 
                 Spacer()
+                
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isBookmarked.toggle()
+                    }
+                }) {
+                    Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
+                        .foregroundColor(isBookmarked ? .blue : .primary)
+                }
             }
+            .foregroundColor(.primary)
         }
         .padding()
         .background(Color(.systemBackground))
         .cornerRadius(12)
-        .shadow(radius: 2)
-    }
-}
-
-struct NotificationRow: View {
-    let title: String
-    let message: String
-    let time: String
-    
-    var body: some View {
-        HStack {
-            Image(systemName: "bell.fill")
-                .foregroundColor(.blue)
-                .font(.title3)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.headline)
-                Text(message)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-            
-            Spacer()
-            
-            Text(time)
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .padding(.vertical, 4)
-    }
-}
-
-struct SettingsRow: View {
-    let title: String
-    let icon: String
-    
-    var body: some View {
-        HStack {
-            Image(systemName: icon)
-                .foregroundColor(.primary)
-                .frame(width: 24)
-            
-            Text(title)
-                .font(.body)
-            
-            Spacer()
-            
-            Image(systemName: "chevron.right")
-                .foregroundColor(.secondary)
-                .font(.caption)
-        }
-        .padding()
-        .background(Color(.systemBackground))
-    }
-}
-
-struct ImagePicker: UIViewControllerRepresentable {
-    @Binding var selectedImage: UIImage?
-    @Environment(\.dismiss) private var dismiss
-    
-    func makeUIViewController(context: Context) -> UIImagePickerController {
-        let picker = UIImagePickerController()
-        picker.delegate = context.coordinator
-        picker.sourceType = .photoLibrary
-        return picker
-    }
-    
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        let parent: ImagePicker
-        
-        init(_ parent: ImagePicker) {
-            self.parent = parent
-        }
-        
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let image = info[.originalImage] as? UIImage {
-                parent.selectedImage = image
-            }
-            parent.dismiss()
-        }
-        
-        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            parent.dismiss()
+        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+        .padding(.horizontal, 16)
+        .sheet(isPresented: $showComments) {
+            CommentsView(post: post)
         }
     }
 }
@@ -539,23 +616,224 @@ struct ImagePicker: UIViewControllerRepresentable {
 // MARK: - Models
 struct Post: Identifiable, Codable {
     let id: String
+    let authorId: String
+    let authorUsername: String
+    let authorDisplayName: String
+    let authorAvatarURL: String?
+    let authorIsVerified: Bool
     let content: String
-    let authorName: String
-    let authorID: String
-    let timestamp: Date
-    let imageURL: URL?
+    let images: [String]?
+    let videoURL: String?
     let likesCount: Int
     let commentsCount: Int
+    let sharesCount: Int
+    let createdAt: Date
+    let updatedAt: Date
 }
 
-struct User: Codable {
-    let id: String
-    let name: String
-    let email: String
-    let profileImageURL: URL?
-    let postsCount: Int
-    let followersCount: Int
-    let followingCount: Int
+// MARK: - View Models
+class FeedViewModel: ObservableObject {
+    @Published var posts: [Post] = []
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+    
+    init() {
+        loadMockData()
+    }
+    
+    func refreshFeed() async {
+        await MainActor.run {
+            isLoading = true
+        }
+        
+        // Simulate API call
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        
+        await MainActor.run {
+            loadMockData()
+            isLoading = false
+        }
+    }
+    
+    private func loadMockData() {
+        posts = [
+            Post(
+                id: "1",
+                authorId: "user1",
+                authorUsername: "johndoe",
+                authorDisplayName: "John Doe",
+                authorAvatarURL: "https://picsum.photos/200",
+                authorIsVerified: true,
+                content: "Just launched my new app! 🚀 It's been an amazing journey building this. Can't wait to see how it helps people connect and share their stories.",
+                images: ["https://picsum.photos/400/300"],
+                videoURL: nil,
+                likesCount: 42,
+                commentsCount: 8,
+                sharesCount: 3,
+                createdAt: Date().addingTimeInterval(-3600),
+                updatedAt: Date().addingTimeInterval(-3600)
+            ),
+            Post(
+                id: "2",
+                authorId: "user2",
+                authorUsername: "sarahsmith",
+                authorDisplayName: "Sarah Smith",
+                authorAvatarURL: "https://picsum.photos/201",
+                authorIsVerified: false,
+                content: "Beautiful sunset today! 🌅 Nature always finds a way to amaze us. What's your favorite time of day?",
+                images: ["https://picsum.photos/400/301", "https://picsum.photos/400/302"],
+                videoURL: nil,
+                likesCount: 128,
+                commentsCount: 15,
+                sharesCount: 7,
+                createdAt: Date().addingTimeInterval(-7200),
+                updatedAt: Date().addingTimeInterval(-7200)
+            ),
+            Post(
+                id: "3",
+                authorId: "user3",
+                authorUsername: "mikejohnson",
+                authorDisplayName: "Mike Johnson",
+                authorAvatarURL: "https://picsum.photos/202",
+                authorIsVerified: true,
+                content: "Just finished reading an incredible book about AI and the future of technology. The insights are mind-blowing! 📚🤖",
+                images: nil,
+                videoURL: nil,
+                likesCount: 89,
+                commentsCount: 12,
+                sharesCount: 5,
+                createdAt: Date().addingTimeInterval(-10800),
+                updatedAt: Date().addingTimeInterval(-10800)
+            )
+        ]
+    }
+}
+
+// MARK: - Supporting Views
+struct ExploreView: View {
+    var body: some View {
+        NavigationView {
+            Text("Explore View")
+                .navigationTitle("Explore")
+        }
+    }
+}
+
+struct CreatePostView: View {
+    var body: some View {
+        NavigationView {
+            Text("Create Post View")
+                .navigationTitle("Create Post")
+        }
+    }
+}
+
+struct NotificationsView: View {
+    var body: some View {
+        NavigationView {
+            Text("Notifications View")
+                .navigationTitle("Notifications")
+        }
+    }
+}
+
+struct ProfileView: View {
+    var body: some View {
+        NavigationView {
+            Text("Profile View")
+                .navigationTitle("Profile")
+        }
+    }
+}
+
+struct CommentsView: View {
+    let post: Post
+    
+    var body: some View {
+        NavigationView {
+            Text("Comments for post: \(post.id)")
+                .navigationTitle("Comments")
+        }
+    }
+}
+
+// MARK: - Custom Components
+struct CustomTextField: View {
+    @Binding var text: String
+    let placeholder: String
+    let icon: String?
+    let validation: TextFieldValidation
+    let isSecure: Bool
+    
+    init(
+        text: Binding<String>,
+        placeholder: String,
+        icon: String? = nil,
+        validation: TextFieldValidation = .none,
+        isSecure: Bool = false
+    ) {
+        self._text = text
+        self.placeholder = placeholder
+        self.icon = icon
+        self.validation = validation
+        self.isSecure = isSecure
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                if let icon = icon {
+                    Image(systemName: icon)
+                        .foregroundColor(.secondary)
+                        .frame(width: 20)
+                }
+                
+                if isSecure {
+                    SecureField(placeholder, text: $text)
+                } else {
+                    TextField(placeholder, text: $text)
+                }
+            }
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
+        }
+    }
+}
+
+enum TextFieldValidation {
+    case none
+    case email
+    case password
+    case username
+}
+
+struct PrimaryButton: View {
+    let title: String
+    let isLoading: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .scaleEffect(0.8)
+                } else {
+                    Text(title)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                }
+            }
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(Color.blue)
+            .cornerRadius(10)
+        }
+        .disabled(isLoading)
+    }
 }
 
 // MARK: - Managers
@@ -567,46 +845,70 @@ class AuthManager: ObservableObject {
     
     private init() {}
     
-    func signIn(email: String, password: String) async throws {
-        // Firebase authentication implementation
-        isAuthenticated = true
+    func checkAuthState() async {
+        // Check Firebase auth state
+        if let user = Auth.auth().currentUser {
+            await MainActor.run {
+                self.isAuthenticated = true
+                // Load user data
+            }
+        }
     }
     
-    func signUp(email: String, password: String, name: String) async throws {
-        // Firebase authentication implementation
-        isAuthenticated = true
+    func signIn(email: String, password: String) async throws {
+        let result = try await Auth.auth().signIn(withEmail: email, password: password)
+        await MainActor.run {
+            self.isAuthenticated = true
+            // Load user data
+        }
+    }
+    
+    func signUp(username: String, email: String, password: String) async throws {
+        let result = try await Auth.auth().createUser(withEmail: email, password: password)
+        await MainActor.run {
+            self.isAuthenticated = true
+            // Create user profile
+        }
     }
     
     func signOut() {
+        try? Auth.auth().signOut()
         isAuthenticated = false
         currentUser = nil
     }
 }
 
-class PostManager: ObservableObject {
-    static let shared = PostManager()
-    
-    @Published var posts: [Post] = []
+class DataManager: ObservableObject {
+    static let shared = DataManager()
     
     private init() {}
     
-    func fetchPosts() async {
-        // Fetch posts from Firebase
-        // This is a mock implementation
-        posts = [
-            Post(id: "1", content: "Hello World! This is my first post.", authorName: "John Doe", authorID: "1", timestamp: Date(), imageURL: nil, likesCount: 5, commentsCount: 2),
-            Post(id: "2", content: "Beautiful sunset today! 🌅", authorName: "Jane Smith", authorID: "2", timestamp: Date().addingTimeInterval(-3600), imageURL: nil, likesCount: 12, commentsCount: 3)
-        ]
+    func initialize() async {
+        // Initialize data manager
     }
 }
 
-class UserManager: ObservableObject {
-    static let shared = UserManager()
+class NotificationManager: ObservableObject {
+    static let shared = NotificationManager()
     
-    @Published var currentUser: User?
+    private init() {}
     
-    private init() {
-        // Mock user data
-        currentUser = User(id: "1", name: "John Doe", email: "john@example.com", profileImageURL: nil, postsCount: 15, followersCount: 234, followingCount: 123)
+    func requestPermission() async {
+        // Request notification permission
     }
+}
+
+struct User: Identifiable, Codable {
+    let id: String
+    let username: String
+    let email: String
+    let displayName: String
+    let avatarURL: String?
+    let bio: String?
+    let followersCount: Int
+    let followingCount: Int
+    let postsCount: Int
+    let isVerified: Bool
+    let createdAt: Date
+    let lastActiveAt: Date
 } 
