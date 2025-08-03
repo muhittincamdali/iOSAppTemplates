@@ -3,15 +3,17 @@ import Firebase
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
-import Kingfisher
+import HealthKit
+import Charts
 
-// MARK: - Social Media App
+// MARK: - Fitness App
 @main
-struct SocialMediaApp: App {
+struct FitnessApp: App {
     
     @StateObject private var authManager = AuthManager.shared
-    @StateObject private var dataManager = DataManager.shared
-    @StateObject private var notificationManager = NotificationManager.shared
+    @StateObject private var workoutManager = WorkoutManager.shared
+    @StateObject private var healthKitManager = HealthKitManager.shared
+    @StateObject private var progressManager = ProgressManager.shared
     
     init() {
         setupFirebase()
@@ -23,8 +25,9 @@ struct SocialMediaApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(authManager)
-                .environmentObject(dataManager)
-                .environmentObject(notificationManager)
+                .environmentObject(workoutManager)
+                .environmentObject(healthKitManager)
+                .environmentObject(progressManager)
                 .onAppear {
                     setupApp()
                 }
@@ -69,8 +72,9 @@ struct SocialMediaApp: App {
     private func setupApp() {
         Task {
             await authManager.checkAuthState()
-            await dataManager.initialize()
-            await notificationManager.requestPermission()
+            await healthKitManager.requestAuthorization()
+            await workoutManager.loadWorkouts()
+            await progressManager.loadProgress()
         }
     }
 }
@@ -112,7 +116,7 @@ struct SplashView: View {
         ZStack {
             // Background gradient
             LinearGradient(
-                colors: [Color.blue.opacity(0.8), Color.purple.opacity(0.6)],
+                colors: [Color.green.opacity(0.8), Color.blue.opacity(0.6)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -120,7 +124,7 @@ struct SplashView: View {
             
             VStack(spacing: 24) {
                 // App logo
-                Image(systemName: "bubble.left.and.bubble.right.fill")
+                Image(systemName: "figure.run")
                     .font(.system(size: 80))
                     .foregroundColor(.white)
                     .scaleEffect(logoScale)
@@ -133,7 +137,7 @@ struct SplashView: View {
                     }
                 
                 // App name
-                Text("SocialConnect")
+                Text("FitConnect")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
@@ -145,7 +149,7 @@ struct SplashView: View {
                     }
                 
                 // Tagline
-                Text("Connect with the world")
+                Text("Transform your fitness journey")
                     .font(.subheadline)
                     .foregroundColor(.white.opacity(0.8))
                     .opacity(textOpacity)
@@ -187,7 +191,7 @@ struct AuthView: View {
                 }) {
                     Text(isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up")
                         .font(.subheadline)
-                        .foregroundColor(.blue)
+                        .foregroundColor(.green)
                         .padding()
                 }
             }
@@ -201,18 +205,18 @@ struct AuthHeaderView: View {
     var body: some View {
         VStack(spacing: 16) {
             // Logo
-            Image(systemName: "bubble.left.and.bubble.right.fill")
+            Image(systemName: "figure.run")
                 .font(.system(size: 60))
-                .foregroundColor(.blue)
+                .foregroundColor(.green)
             
             // Title
-            Text("Welcome to SocialConnect")
+            Text("Welcome to FitConnect")
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
             
             // Subtitle
-            Text("Connect, share, and discover amazing content")
+            Text("Track, improve, and achieve your fitness goals")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -266,7 +270,7 @@ struct SignInView: View {
                 // Handle forgot password
             }
             .font(.subheadline)
-            .foregroundColor(.blue)
+            .foregroundColor(.green)
             
             Spacer()
         }
@@ -406,31 +410,31 @@ struct MainTabView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            FeedView()
+            DashboardView()
                 .tabItem {
                     Image(systemName: "house")
-                    Text("Feed")
+                    Text("Dashboard")
                 }
                 .tag(0)
             
-            ExploreView()
+            WorkoutsView()
                 .tabItem {
-                    Image(systemName: "magnifyingglass")
-                    Text("Explore")
+                    Image(systemName: "figure.run")
+                    Text("Workouts")
                 }
                 .tag(1)
             
-            CreatePostView()
+            ProgressView()
                 .tabItem {
-                    Image(systemName: "plus.circle")
-                    Text("Create")
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                    Text("Progress")
                 }
                 .tag(2)
             
-            NotificationsView()
+            GoalsView()
                 .tabItem {
-                    Image(systemName: "bell")
-                    Text("Notifications")
+                    Image(systemName: "target")
+                    Text("Goals")
                 }
                 .tag(3)
             
@@ -441,199 +445,342 @@ struct MainTabView: View {
                 }
                 .tag(4)
         }
-        .accentColor(.blue)
+        .accentColor(.green)
     }
 }
 
-// MARK: - Feed View
-struct FeedView: View {
-    @StateObject private var feedViewModel = FeedViewModel()
-    @State private var showCreatePost = false
+// MARK: - Dashboard View
+struct DashboardView: View {
+    @StateObject private var workoutManager = WorkoutManager.shared
+    @StateObject private var progressManager = ProgressManager.shared
     
     var body: some View {
         NavigationView {
             ScrollView {
-                LazyVStack(spacing: 16) {
-                    ForEach(feedViewModel.posts) { post in
-                        PostCard(post: post)
-                    }
+                LazyVStack(spacing: 20) {
+                    // Today's summary
+                    TodaySummaryCard()
+                    
+                    // Quick stats
+                    QuickStatsGrid()
+                    
+                    // Recent workouts
+                    RecentWorkoutsSection()
+                    
+                    // Weekly progress
+                    WeeklyProgressSection()
                 }
                 .padding(.vertical, 16)
             }
-            .navigationTitle("Feed")
+            .navigationTitle("Dashboard")
             .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        showCreatePost = true
-                    }) {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
             .refreshable {
-                await feedViewModel.refreshFeed()
-            }
-            .sheet(isPresented: $showCreatePost) {
-                CreatePostView()
+                await workoutManager.refreshWorkouts()
+                await progressManager.refreshProgress()
             }
         }
     }
 }
 
-// MARK: - Post Card
-struct PostCard: View {
-    let post: Post
-    @State private var isLiked = false
-    @State private var isBookmarked = false
-    @State private var showComments = false
-    
+// MARK: - Today Summary Card
+struct TodaySummaryCard: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Header
-            HStack {
-                AsyncImage(url: URL(string: post.authorAvatarURL ?? "")) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } placeholder: {
-                    Image(systemName: "person.circle.fill")
-                        .foregroundColor(.gray)
-                }
-                .frame(width: 40, height: 40)
-                .clipShape(Circle())
-                
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack {
-                        Text(post.authorDisplayName)
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                        
-                        if post.authorIsVerified {
-                            Image(systemName: "checkmark.seal.fill")
-                                .foregroundColor(.blue)
-                                .font(.caption)
-                        }
-                    }
-                    
-                    Text("@\(post.authorUsername)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                
-                Spacer()
-                
-                Text(post.createdAt, style: .relative)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Today's Summary")
+                .font(.title2)
+                .fontWeight(.bold)
             
-            // Content
-            Text(post.content)
-                .font(.body)
-                .multilineTextAlignment(.leading)
-            
-            // Media
-            if let images = post.images, !images.isEmpty {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(images, id: \.self) { imageURL in
-                            AsyncImage(url: URL(string: imageURL)) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                            } placeholder: {
-                                Rectangle()
-                                    .fill(Color.gray.opacity(0.3))
-                            }
-                            .frame(width: 200, height: 200)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                        }
-                    }
-                    .padding(.horizontal, 16)
-                }
-            }
-            
-            // Actions
             HStack(spacing: 20) {
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isLiked.toggle()
-                    }
-                }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: isLiked ? "heart.fill" : "heart")
-                            .foregroundColor(isLiked ? .red : .primary)
-                        Text("\(post.likesCount)")
-                            .font(.caption)
-                    }
-                }
+                StatCard(
+                    title: "Calories",
+                    value: "1,250",
+                    icon: "flame.fill",
+                    color: .orange
+                )
                 
-                Button(action: {
-                    showComments = true
-                }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "bubble.left")
-                        Text("\(post.commentsCount)")
-                            .font(.caption)
-                    }
-                }
+                StatCard(
+                    title: "Steps",
+                    value: "8,432",
+                    icon: "figure.walk",
+                    color: .blue
+                )
                 
-                Button(action: {
-                    // Handle share
-                }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "arrowshape.turn.up.right")
-                        Text("\(post.sharesCount)")
-                            .font(.caption)
-                    }
-                }
-                
-                Spacer()
-                
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isBookmarked.toggle()
-                    }
-                }) {
-                    Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
-                        .foregroundColor(isBookmarked ? .blue : .primary)
-                }
+                StatCard(
+                    title: "Active Time",
+                    value: "45m",
+                    icon: "clock.fill",
+                    color: .green
+                )
             }
-            .foregroundColor(.primary)
         }
         .padding()
         .background(Color(.systemBackground))
         .cornerRadius(12)
         .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
         .padding(.horizontal, 16)
-        .sheet(isPresented: $showComments) {
-            CommentsView(post: post)
+    }
+}
+
+// MARK: - Stat Card
+struct StatCard: View {
+    let title: String
+    let value: String
+    let icon: String
+    let color: Color
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(color)
+            
+            Text(value)
+                .font(.title3)
+                .fontWeight(.bold)
+            
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(color.opacity(0.1))
+        .cornerRadius(8)
+    }
+}
+
+// MARK: - Quick Stats Grid
+struct QuickStatsGrid: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Quick Stats")
+                .font(.title2)
+                .fontWeight(.bold)
+                .padding(.horizontal, 16)
+            
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
+                QuickStatCard(
+                    title: "Weekly Distance",
+                    value: "12.5 km",
+                    icon: "figure.run",
+                    color: .green
+                )
+                
+                QuickStatCard(
+                    title: "Weekly Workouts",
+                    value: "5",
+                    icon: "dumbbell.fill",
+                    color: .blue
+                )
+                
+                QuickStatCard(
+                    title: "Weekly Calories",
+                    value: "8,750",
+                    icon: "flame.fill",
+                    color: .orange
+                )
+                
+                QuickStatCard(
+                    title: "Weekly Time",
+                    value: "4h 30m",
+                    icon: "clock.fill",
+                    color: .purple
+                )
+            }
+            .padding(.horizontal, 16)
         }
     }
 }
 
+// MARK: - Quick Stat Card
+struct QuickStatCard: View {
+    let title: String
+    let value: String
+    let icon: String
+    let color: Color
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: icon)
+                    .font(.title3)
+                    .foregroundColor(color)
+                
+                Spacer()
+            }
+            
+            Text(value)
+                .font(.title2)
+                .fontWeight(.bold)
+            
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+    }
+}
+
+// MARK: - Recent Workouts Section
+struct RecentWorkoutsSection: View {
+    @StateObject private var workoutManager = WorkoutManager.shared
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Recent Workouts")
+                .font(.title2)
+                .fontWeight(.bold)
+                .padding(.horizontal, 16)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: 16) {
+                    ForEach(workoutManager.recentWorkouts) { workout in
+                        WorkoutCard(workout: workout)
+                    }
+                }
+                .padding(.horizontal, 16)
+            }
+        }
+    }
+}
+
+// MARK: - Workout Card
+struct WorkoutCard: View {
+    let workout: Workout
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            // Workout type icon
+            Image(systemName: workoutTypeIcon)
+                .font(.title2)
+                .foregroundColor(workoutTypeColor)
+            
+            Text(workout.name)
+                .font(.headline)
+                .fontWeight(.semibold)
+                .lineLimit(2)
+            
+            Text(workout.duration)
+                .font(.caption)
+                .foregroundColor(.secondary)
+            
+            Text("\(workout.caloriesBurned) cal")
+                .font(.caption)
+                .fontWeight(.semibold)
+                .foregroundColor(.orange)
+        }
+        .frame(width: 120)
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+    }
+    
+    private var workoutTypeIcon: String {
+        switch workout.type.lowercased() {
+        case "running": return "figure.run"
+        case "cycling": return "bicycle"
+        case "swimming": return "figure.pool.swim"
+        case "strength": return "dumbbell.fill"
+        case "yoga": return "figure.mind.and.body"
+        default: return "figure.run"
+        }
+    }
+    
+    private var workoutTypeColor: Color {
+        switch workout.type.lowercased() {
+        case "running": return .green
+        case "cycling": return .blue
+        case "swimming": return .cyan
+        case "strength": return .orange
+        case "yoga": return .purple
+        default: return .green
+        }
+    }
+}
+
+// MARK: - Weekly Progress Section
+struct WeeklyProgressSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Weekly Progress")
+                .font(.title2)
+                .fontWeight(.bold)
+                .padding(.horizontal, 16)
+            
+            WeeklyProgressChart()
+                .frame(height: 200)
+                .padding(.horizontal, 16)
+        }
+    }
+}
+
+// MARK: - Weekly Progress Chart
+struct WeeklyProgressChart: View {
+    let weeklyData = [
+        ("Mon", 45),
+        ("Tue", 60),
+        ("Wed", 30),
+        ("Thu", 75),
+        ("Fri", 50),
+        ("Sat", 90),
+        ("Sun", 40)
+    ]
+    
+    var body: some View {
+        VStack {
+            Chart {
+                ForEach(Array(weeklyData.enumerated()), id: \.offset) { index, data in
+                    BarMark(
+                        x: .value("Day", data.0),
+                        y: .value("Minutes", data.1)
+                    )
+                    .foregroundStyle(Color.green.gradient)
+                }
+            }
+            .chartYAxis {
+                AxisMarks(position: .leading)
+            }
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+    }
+}
+
 // MARK: - Models
-struct Post: Identifiable, Codable {
+struct Workout: Identifiable, Codable {
     let id: String
-    let authorId: String
-    let authorUsername: String
-    let authorDisplayName: String
-    let authorAvatarURL: String?
-    let authorIsVerified: Bool
-    let content: String
-    let images: [String]?
-    let videoURL: String?
-    let likesCount: Int
-    let commentsCount: Int
-    let sharesCount: Int
+    let name: String
+    let type: String
+    let duration: String
+    let caloriesBurned: Int
+    let distance: Double?
+    let heartRate: Int?
+    let date: Date
+    let notes: String?
+}
+
+struct Goal: Identifiable, Codable {
+    let id: String
+    let title: String
+    let description: String
+    let targetValue: Double
+    let currentValue: Double
+    let unit: String
+    let deadline: Date?
+    let isCompleted: Bool
     let createdAt: Date
-    let updatedAt: Date
 }
 
 // MARK: - View Models
-class FeedViewModel: ObservableObject {
-    @Published var posts: [Post] = []
+class WorkoutManager: ObservableObject {
+    @Published var workouts: [Workout] = []
+    @Published var recentWorkouts: [Workout] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
     
@@ -641,7 +788,7 @@ class FeedViewModel: ObservableObject {
         loadMockData()
     }
     
-    func refreshFeed() async {
+    func loadWorkouts() async {
         await MainActor.run {
             isLoading = true
         }
@@ -655,84 +802,98 @@ class FeedViewModel: ObservableObject {
         }
     }
     
+    func refreshWorkouts() async {
+        await loadWorkouts()
+    }
+    
     private func loadMockData() {
-        posts = [
-            Post(
+        workouts = [
+            Workout(
                 id: "1",
-                authorId: "user1",
-                authorUsername: "johndoe",
-                authorDisplayName: "John Doe",
-                authorAvatarURL: "https://picsum.photos/200",
-                authorIsVerified: true,
-                content: "Just launched my new app! 🚀 It's been an amazing journey building this. Can't wait to see how it helps people connect and share their stories.",
-                images: ["https://picsum.photos/400/300"],
-                videoURL: nil,
-                likesCount: 42,
-                commentsCount: 8,
-                sharesCount: 3,
-                createdAt: Date().addingTimeInterval(-3600),
-                updatedAt: Date().addingTimeInterval(-3600)
+                name: "Morning Run",
+                type: "Running",
+                duration: "45m",
+                caloriesBurned: 450,
+                distance: 5.2,
+                heartRate: 145,
+                date: Date().addingTimeInterval(-3600),
+                notes: "Great morning run, felt energized"
             ),
-            Post(
+            Workout(
                 id: "2",
-                authorId: "user2",
-                authorUsername: "sarahsmith",
-                authorDisplayName: "Sarah Smith",
-                authorAvatarURL: "https://picsum.photos/201",
-                authorIsVerified: false,
-                content: "Beautiful sunset today! 🌅 Nature always finds a way to amaze us. What's your favorite time of day?",
-                images: ["https://picsum.photos/400/301", "https://picsum.photos/400/302"],
-                videoURL: nil,
-                likesCount: 128,
-                commentsCount: 15,
-                sharesCount: 7,
-                createdAt: Date().addingTimeInterval(-7200),
-                updatedAt: Date().addingTimeInterval(-7200)
+                name: "Strength Training",
+                type: "Strength",
+                duration: "60m",
+                caloriesBurned: 380,
+                distance: nil,
+                heartRate: 120,
+                date: Date().addingTimeInterval(-7200),
+                notes: "Upper body focus"
             ),
-            Post(
+            Workout(
                 id: "3",
-                authorId: "user3",
-                authorUsername: "mikejohnson",
-                authorDisplayName: "Mike Johnson",
-                authorAvatarURL: "https://picsum.photos/202",
-                authorIsVerified: true,
-                content: "Just finished reading an incredible book about AI and the future of technology. The insights are mind-blowing! 📚🤖",
-                images: nil,
-                videoURL: nil,
-                likesCount: 89,
-                commentsCount: 12,
-                sharesCount: 5,
-                createdAt: Date().addingTimeInterval(-10800),
-                updatedAt: Date().addingTimeInterval(-10800)
+                name: "Evening Cycling",
+                type: "Cycling",
+                duration: "30m",
+                caloriesBurned: 320,
+                distance: 12.5,
+                heartRate: 135,
+                date: Date().addingTimeInterval(-10800),
+                notes: "Relaxing evening ride"
             )
         ]
+        
+        recentWorkouts = Array(workouts.prefix(5))
     }
+}
+
+class ProgressManager: ObservableObject {
+    @Published var progress: [ProgressData] = []
+    @Published var isLoading = false
+    
+    init() {}
+    
+    func loadProgress() async {
+        // Load progress data
+    }
+    
+    func refreshProgress() async {
+        await loadProgress()
+    }
+}
+
+struct ProgressData: Identifiable {
+    let id = UUID()
+    let date: Date
+    let calories: Int
+    let steps: Int
+    let activeMinutes: Int
 }
 
 // MARK: - Supporting Views
-struct ExploreView: View {
+struct WorkoutsView: View {
     var body: some View {
         NavigationView {
-            Text("Explore View")
-                .navigationTitle("Explore")
+            Text("Workouts View")
+                .navigationTitle("Workouts")
         }
     }
 }
 
-struct CreatePostView: View {
+struct ProgressView: View {
     var body: some View {
         NavigationView {
-            Text("Create Post View")
-                .navigationTitle("Create Post")
+            Text("Progress View")
+                .navigationTitle("Progress")
         }
     }
 }
 
-struct NotificationsView: View {
+struct GoalsView: View {
     var body: some View {
         NavigationView {
-            Text("Notifications View")
-                .navigationTitle("Notifications")
+            Text("Goals View")
+                .navigationTitle("Goals")
         }
     }
 }
@@ -742,17 +903,6 @@ struct ProfileView: View {
         NavigationView {
             Text("Profile View")
                 .navigationTitle("Profile")
-        }
-    }
-}
-
-struct CommentsView: View {
-    let post: Post
-    
-    var body: some View {
-        NavigationView {
-            Text("Comments for post: \(post.id)")
-                .navigationTitle("Comments")
         }
     }
 }
@@ -829,7 +979,7 @@ struct PrimaryButton: View {
             .foregroundColor(.white)
             .frame(maxWidth: .infinity)
             .frame(height: 50)
-            .background(Color.blue)
+            .background(Color.green)
             .cornerRadius(10)
         }
         .disabled(isLoading)
@@ -878,23 +1028,15 @@ class AuthManager: ObservableObject {
     }
 }
 
-class DataManager: ObservableObject {
-    static let shared = DataManager()
+class HealthKitManager: ObservableObject {
+    static let shared = HealthKitManager()
+    
+    private let healthStore = HKHealthStore()
     
     private init() {}
     
-    func initialize() async {
-        // Initialize data manager
-    }
-}
-
-class NotificationManager: ObservableObject {
-    static let shared = NotificationManager()
-    
-    private init() {}
-    
-    func requestPermission() async {
-        // Request notification permission
+    func requestAuthorization() async {
+        // Request HealthKit authorization
     }
 }
 
@@ -904,11 +1046,10 @@ struct User: Identifiable, Codable {
     let email: String
     let displayName: String
     let avatarURL: String?
-    let bio: String?
-    let followersCount: Int
-    let followingCount: Int
-    let postsCount: Int
-    let isVerified: Bool
+    let height: Double?
+    let weight: Double?
+    let age: Int?
+    let fitnessLevel: String?
     let createdAt: Date
-    let lastActiveAt: Date
+    let updatedAt: Date
 } 

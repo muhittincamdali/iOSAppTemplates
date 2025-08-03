@@ -6,6 +6,8 @@
 [![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20iPadOS-lightgrey.svg)](https://developer.apple.com/)
 [![Documentation](https://img.shields.io/badge/Documentation-Complete-blue.svg)](Documentation/)
 [![Templates](https://img.shields.io/badge/Templates-3+-yellow.svg)](Templates/)
+[![Stars](https://img.shields.io/github/stars/muhittincamdali/iOSAppTemplates?style=social)](https://github.com/muhittincamdali/iOSAppTemplates)
+[![Forks](https://img.shields.io/github/forks/muhittincamdali/iOSAppTemplates?style=social)](https://github.com/muhittincamdali/iOSAppTemplates)
 
 **Professional iOS App Templates Collection - Ready-to-use templates for different app types**
 

@@ -4,17 +4,20 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 import Kingfisher
+import Stripe
 
-// MARK: - Social Media App
+// MARK: - E-commerce App
 @main
-struct SocialMediaApp: App {
+struct EcommerceApp: App {
     
     @StateObject private var authManager = AuthManager.shared
-    @StateObject private var dataManager = DataManager.shared
-    @StateObject private var notificationManager = NotificationManager.shared
+    @StateObject private var cartManager = CartManager.shared
+    @StateObject private var productManager = ProductManager.shared
+    @StateObject private var orderManager = OrderManager.shared
     
     init() {
         setupFirebase()
+        setupStripe()
         setupAppearance()
         setupAnalytics()
     }
@@ -23,8 +26,9 @@ struct SocialMediaApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(authManager)
-                .environmentObject(dataManager)
-                .environmentObject(notificationManager)
+                .environmentObject(cartManager)
+                .environmentObject(productManager)
+                .environmentObject(orderManager)
                 .onAppear {
                     setupApp()
                 }
@@ -35,6 +39,11 @@ struct SocialMediaApp: App {
     private func setupFirebase() {
         FirebaseApp.configure()
         print("🔥 Firebase configured successfully")
+    }
+    
+    private func setupStripe() {
+        StripeAPI.defaultPublishableKey = "pk_test_your_stripe_key"
+        print("💳 Stripe configured successfully")
     }
     
     private func setupAppearance() {
@@ -69,8 +78,8 @@ struct SocialMediaApp: App {
     private func setupApp() {
         Task {
             await authManager.checkAuthState()
-            await dataManager.initialize()
-            await notificationManager.requestPermission()
+            await productManager.loadProducts()
+            await cartManager.loadCart()
         }
     }
 }
@@ -112,7 +121,7 @@ struct SplashView: View {
         ZStack {
             // Background gradient
             LinearGradient(
-                colors: [Color.blue.opacity(0.8), Color.purple.opacity(0.6)],
+                colors: [Color.orange.opacity(0.8), Color.red.opacity(0.6)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -120,7 +129,7 @@ struct SplashView: View {
             
             VStack(spacing: 24) {
                 // App logo
-                Image(systemName: "bubble.left.and.bubble.right.fill")
+                Image(systemName: "bag.fill")
                     .font(.system(size: 80))
                     .foregroundColor(.white)
                     .scaleEffect(logoScale)
@@ -133,7 +142,7 @@ struct SplashView: View {
                     }
                 
                 // App name
-                Text("SocialConnect")
+                Text("ShopConnect")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
@@ -145,7 +154,7 @@ struct SplashView: View {
                     }
                 
                 // Tagline
-                Text("Connect with the world")
+                Text("Discover amazing products")
                     .font(.subheadline)
                     .foregroundColor(.white.opacity(0.8))
                     .opacity(textOpacity)
@@ -187,7 +196,7 @@ struct AuthView: View {
                 }) {
                     Text(isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up")
                         .font(.subheadline)
-                        .foregroundColor(.blue)
+                        .foregroundColor(.orange)
                         .padding()
                 }
             }
@@ -201,18 +210,18 @@ struct AuthHeaderView: View {
     var body: some View {
         VStack(spacing: 16) {
             // Logo
-            Image(systemName: "bubble.left.and.bubble.right.fill")
+            Image(systemName: "bag.fill")
                 .font(.system(size: 60))
-                .foregroundColor(.blue)
+                .foregroundColor(.orange)
             
             // Title
-            Text("Welcome to SocialConnect")
+            Text("Welcome to ShopConnect")
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
             
             // Subtitle
-            Text("Connect, share, and discover amazing content")
+            Text("Shop, discover, and save on amazing products")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -266,7 +275,7 @@ struct SignInView: View {
                 // Handle forgot password
             }
             .font(.subheadline)
-            .foregroundColor(.blue)
+            .foregroundColor(.orange)
             
             Spacer()
         }
@@ -406,31 +415,31 @@ struct MainTabView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            FeedView()
+            HomeView()
                 .tabItem {
                     Image(systemName: "house")
-                    Text("Feed")
+                    Text("Home")
                 }
                 .tag(0)
             
-            ExploreView()
+            CategoriesView()
                 .tabItem {
-                    Image(systemName: "magnifyingglass")
-                    Text("Explore")
+                    Image(systemName: "square.grid.2x2")
+                    Text("Categories")
                 }
                 .tag(1)
             
-            CreatePostView()
+            CartView()
                 .tabItem {
-                    Image(systemName: "plus.circle")
-                    Text("Create")
+                    Image(systemName: "cart")
+                    Text("Cart")
                 }
                 .tag(2)
             
-            NotificationsView()
+            OrdersView()
                 .tabItem {
-                    Image(systemName: "bell")
-                    Text("Notifications")
+                    Image(systemName: "bag")
+                    Text("Orders")
                 }
                 .tag(3)
             
@@ -441,199 +450,254 @@ struct MainTabView: View {
                 }
                 .tag(4)
         }
-        .accentColor(.blue)
+        .accentColor(.orange)
     }
 }
 
-// MARK: - Feed View
-struct FeedView: View {
-    @StateObject private var feedViewModel = FeedViewModel()
-    @State private var showCreatePost = false
+// MARK: - Home View
+struct HomeView: View {
+    @StateObject private var productManager = ProductManager.shared
+    @State private var searchText = ""
+    @State private var selectedCategory: String?
     
     var body: some View {
         NavigationView {
             ScrollView {
-                LazyVStack(spacing: 16) {
-                    ForEach(feedViewModel.posts) { post in
-                        PostCard(post: post)
+                LazyVStack(spacing: 20) {
+                    // Search bar
+                    SearchBar(text: $searchText, placeholder: "Search products...")
+                        .padding(.horizontal, 16)
+                    
+                    // Featured products
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Featured Products")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .padding(.horizontal, 16)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 16) {
+                                ForEach(productManager.featuredProducts) { product in
+                                    FeaturedProductCard(product: product)
+                                }
+                            }
+                            .padding(.horizontal, 16)
+                        }
+                    }
+                    
+                    // Categories
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Categories")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .padding(.horizontal, 16)
+                        
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
+                            ForEach(productManager.categories, id: \.self) { category in
+                                CategoryCard(category: category)
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                    }
+                    
+                    // Recent products
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Recent Products")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .padding(.horizontal, 16)
+                        
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
+                            ForEach(productManager.recentProducts) { product in
+                                ProductCard(product: product)
+                            }
+                        }
+                        .padding(.horizontal, 16)
                     }
                 }
                 .padding(.vertical, 16)
             }
-            .navigationTitle("Feed")
+            .navigationTitle("ShopConnect")
             .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        showCreatePost = true
-                    }) {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
             .refreshable {
-                await feedViewModel.refreshFeed()
-            }
-            .sheet(isPresented: $showCreatePost) {
-                CreatePostView()
+                await productManager.refreshProducts()
             }
         }
     }
 }
 
-// MARK: - Post Card
-struct PostCard: View {
-    let post: Post
-    @State private var isLiked = false
-    @State private var isBookmarked = false
-    @State private var showComments = false
+// MARK: - Product Card
+struct ProductCard: View {
+    let product: Product
+    @StateObject private var cartManager = CartManager.shared
+    @State private var isFavorite = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Header
-            HStack {
-                AsyncImage(url: URL(string: post.authorAvatarURL ?? "")) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } placeholder: {
-                    Image(systemName: "person.circle.fill")
-                        .foregroundColor(.gray)
-                }
-                .frame(width: 40, height: 40)
-                .clipShape(Circle())
+        VStack(alignment: .leading, spacing: 8) {
+            // Product image
+            AsyncImage(url: URL(string: product.imageURL)) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            } placeholder: {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.3))
+            }
+            .frame(height: 150)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            
+            // Product info
+            VStack(alignment: .leading, spacing: 4) {
+                Text(product.name)
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .lineLimit(2)
                 
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack {
-                        Text(post.authorDisplayName)
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                        
-                        if post.authorIsVerified {
-                            Image(systemName: "checkmark.seal.fill")
-                                .foregroundColor(.blue)
-                                .font(.caption)
-                        }
-                    }
-                    
-                    Text("@\(post.authorUsername)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                
-                Spacer()
-                
-                Text(post.createdAt, style: .relative)
+                Text(product.category)
                     .font(.caption)
                     .foregroundColor(.secondary)
-            }
-            
-            // Content
-            Text(post.content)
-                .font(.body)
-                .multilineTextAlignment(.leading)
-            
-            // Media
-            if let images = post.images, !images.isEmpty {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(images, id: \.self) { imageURL in
-                            AsyncImage(url: URL(string: imageURL)) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                            } placeholder: {
-                                Rectangle()
-                                    .fill(Color.gray.opacity(0.3))
-                            }
-                            .frame(width: 200, height: 200)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                
+                HStack {
+                    Text("$\(String(format: "%.2f", product.price))")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .foregroundColor(.orange)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isFavorite.toggle()
                         }
+                    }) {
+                        Image(systemName: isFavorite ? "heart.fill" : "heart")
+                            .foregroundColor(isFavorite ? .red : .gray)
                     }
-                    .padding(.horizontal, 16)
+                }
+                
+                // Add to cart button
+                Button(action: {
+                    cartManager.addToCart(product: product)
+                }) {
+                    Text("Add to Cart")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 32)
+                        .background(Color.orange)
+                        .cornerRadius(8)
                 }
             }
-            
-            // Actions
-            HStack(spacing: 20) {
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isLiked.toggle()
-                    }
-                }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: isLiked ? "heart.fill" : "heart")
-                            .foregroundColor(isLiked ? .red : .primary)
-                        Text("\(post.likesCount)")
-                            .font(.caption)
-                    }
-                }
-                
-                Button(action: {
-                    showComments = true
-                }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "bubble.left")
-                        Text("\(post.commentsCount)")
-                            .font(.caption)
-                    }
-                }
-                
-                Button(action: {
-                    // Handle share
-                }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "arrowshape.turn.up.right")
-                        Text("\(post.sharesCount)")
-                            .font(.caption)
-                    }
-                }
-                
-                Spacer()
-                
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isBookmarked.toggle()
-                    }
-                }) {
-                    Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
-                        .foregroundColor(isBookmarked ? .blue : .primary)
-                }
-            }
-            .foregroundColor(.primary)
         }
-        .padding()
+        .padding(12)
         .background(Color(.systemBackground))
         .cornerRadius(12)
         .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-        .padding(.horizontal, 16)
-        .sheet(isPresented: $showComments) {
-            CommentsView(post: post)
+    }
+}
+
+// MARK: - Featured Product Card
+struct FeaturedProductCard: View {
+    let product: Product
+    @StateObject private var cartManager = CartManager.shared
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            // Product image
+            AsyncImage(url: URL(string: product.imageURL)) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            } placeholder: {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.3))
+            }
+            .frame(width: 200, height: 200)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            
+            // Product info
+            VStack(alignment: .leading, spacing: 4) {
+                Text(product.name)
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .lineLimit(2)
+                
+                Text("$\(String(format: "%.2f", product.price))")
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundColor(.orange)
+            }
+        }
+        .frame(width: 200)
+        .padding(12)
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+    }
+}
+
+// MARK: - Category Card
+struct CategoryCard: View {
+    let category: String
+    
+    var body: some View {
+        VStack {
+            Image(systemName: categoryIcon)
+                .font(.system(size: 40))
+                .foregroundColor(.orange)
+            
+            Text(category)
+                .font(.headline)
+                .fontWeight(.semibold)
+                .multilineTextAlignment(.center)
+        }
+        .frame(height: 100)
+        .frame(maxWidth: .infinity)
+        .background(Color.orange.opacity(0.1))
+        .cornerRadius(12)
+    }
+    
+    private var categoryIcon: String {
+        switch category.lowercased() {
+        case "electronics": return "laptopcomputer"
+        case "clothing": return "tshirt"
+        case "books": return "book"
+        case "sports": return "sportscourt"
+        case "home": return "house"
+        case "beauty": return "sparkles"
+        default: return "cube"
         }
     }
 }
 
 // MARK: - Models
-struct Post: Identifiable, Codable {
+struct Product: Identifiable, Codable {
     let id: String
-    let authorId: String
-    let authorUsername: String
-    let authorDisplayName: String
-    let authorAvatarURL: String?
-    let authorIsVerified: Bool
-    let content: String
-    let images: [String]?
-    let videoURL: String?
-    let likesCount: Int
-    let commentsCount: Int
-    let sharesCount: Int
+    let name: String
+    let description: String
+    let price: Double
+    let originalPrice: Double?
+    let imageURL: String
+    let category: String
+    let brand: String
+    let rating: Double
+    let reviewCount: Int
+    let stockQuantity: Int
+    let isFeatured: Bool
+    let isOnSale: Bool
+    let salePercentage: Int?
+    let tags: [String]
     let createdAt: Date
     let updatedAt: Date
 }
 
 // MARK: - View Models
-class FeedViewModel: ObservableObject {
-    @Published var posts: [Post] = []
+class ProductManager: ObservableObject {
+    @Published var products: [Product] = []
+    @Published var featuredProducts: [Product] = []
+    @Published var recentProducts: [Product] = []
+    @Published var categories: [String] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
     
@@ -641,7 +705,7 @@ class FeedViewModel: ObservableObject {
         loadMockData()
     }
     
-    func refreshFeed() async {
+    func loadProducts() async {
         await MainActor.run {
             isLoading = true
         }
@@ -655,84 +719,101 @@ class FeedViewModel: ObservableObject {
         }
     }
     
+    func refreshProducts() async {
+        await loadProducts()
+    }
+    
     private func loadMockData() {
-        posts = [
-            Post(
+        products = [
+            Product(
                 id: "1",
-                authorId: "user1",
-                authorUsername: "johndoe",
-                authorDisplayName: "John Doe",
-                authorAvatarURL: "https://picsum.photos/200",
-                authorIsVerified: true,
-                content: "Just launched my new app! 🚀 It's been an amazing journey building this. Can't wait to see how it helps people connect and share their stories.",
-                images: ["https://picsum.photos/400/300"],
-                videoURL: nil,
-                likesCount: 42,
-                commentsCount: 8,
-                sharesCount: 3,
-                createdAt: Date().addingTimeInterval(-3600),
-                updatedAt: Date().addingTimeInterval(-3600)
+                name: "Wireless Bluetooth Headphones",
+                description: "High-quality wireless headphones with noise cancellation",
+                price: 99.99,
+                originalPrice: 129.99,
+                imageURL: "https://picsum.photos/300/300",
+                category: "Electronics",
+                brand: "TechBrand",
+                rating: 4.5,
+                reviewCount: 128,
+                stockQuantity: 50,
+                isFeatured: true,
+                isOnSale: true,
+                salePercentage: 23,
+                tags: ["wireless", "bluetooth", "noise-cancellation"],
+                createdAt: Date(),
+                updatedAt: Date()
             ),
-            Post(
+            Product(
                 id: "2",
-                authorId: "user2",
-                authorUsername: "sarahsmith",
-                authorDisplayName: "Sarah Smith",
-                authorAvatarURL: "https://picsum.photos/201",
-                authorIsVerified: false,
-                content: "Beautiful sunset today! 🌅 Nature always finds a way to amaze us. What's your favorite time of day?",
-                images: ["https://picsum.photos/400/301", "https://picsum.photos/400/302"],
-                videoURL: nil,
-                likesCount: 128,
-                commentsCount: 15,
-                sharesCount: 7,
-                createdAt: Date().addingTimeInterval(-7200),
-                updatedAt: Date().addingTimeInterval(-7200)
+                name: "Premium Cotton T-Shirt",
+                description: "Comfortable and stylish cotton t-shirt",
+                price: 29.99,
+                originalPrice: nil,
+                imageURL: "https://picsum.photos/301/301",
+                category: "Clothing",
+                brand: "FashionBrand",
+                rating: 4.2,
+                reviewCount: 89,
+                stockQuantity: 100,
+                isFeatured: false,
+                isOnSale: false,
+                salePercentage: nil,
+                tags: ["cotton", "comfortable", "stylish"],
+                createdAt: Date(),
+                updatedAt: Date()
             ),
-            Post(
+            Product(
                 id: "3",
-                authorId: "user3",
-                authorUsername: "mikejohnson",
-                authorDisplayName: "Mike Johnson",
-                authorAvatarURL: "https://picsum.photos/202",
-                authorIsVerified: true,
-                content: "Just finished reading an incredible book about AI and the future of technology. The insights are mind-blowing! 📚🤖",
-                images: nil,
-                videoURL: nil,
-                likesCount: 89,
-                commentsCount: 12,
-                sharesCount: 5,
-                createdAt: Date().addingTimeInterval(-10800),
-                updatedAt: Date().addingTimeInterval(-10800)
+                name: "Smart Fitness Watch",
+                description: "Advanced fitness tracking with heart rate monitor",
+                price: 199.99,
+                originalPrice: 249.99,
+                imageURL: "https://picsum.photos/302/302",
+                category: "Electronics",
+                brand: "FitTech",
+                rating: 4.7,
+                reviewCount: 256,
+                stockQuantity: 25,
+                isFeatured: true,
+                isOnSale: true,
+                salePercentage: 20,
+                tags: ["fitness", "smartwatch", "heart-rate"],
+                createdAt: Date(),
+                updatedAt: Date()
             )
         ]
+        
+        featuredProducts = products.filter { $0.isFeatured }
+        recentProducts = Array(products.prefix(6))
+        categories = ["Electronics", "Clothing", "Books", "Sports", "Home", "Beauty"]
     }
 }
 
 // MARK: - Supporting Views
-struct ExploreView: View {
+struct CategoriesView: View {
     var body: some View {
         NavigationView {
-            Text("Explore View")
-                .navigationTitle("Explore")
+            Text("Categories View")
+                .navigationTitle("Categories")
         }
     }
 }
 
-struct CreatePostView: View {
+struct CartView: View {
     var body: some View {
         NavigationView {
-            Text("Create Post View")
-                .navigationTitle("Create Post")
+            Text("Cart View")
+                .navigationTitle("Cart")
         }
     }
 }
 
-struct NotificationsView: View {
+struct OrdersView: View {
     var body: some View {
         NavigationView {
-            Text("Notifications View")
-                .navigationTitle("Notifications")
+            Text("Orders View")
+                .navigationTitle("Orders")
         }
     }
 }
@@ -742,17 +823,6 @@ struct ProfileView: View {
         NavigationView {
             Text("Profile View")
                 .navigationTitle("Profile")
-        }
-    }
-}
-
-struct CommentsView: View {
-    let post: Post
-    
-    var body: some View {
-        NavigationView {
-            Text("Comments for post: \(post.id)")
-                .navigationTitle("Comments")
         }
     }
 }
@@ -829,10 +899,38 @@ struct PrimaryButton: View {
             .foregroundColor(.white)
             .frame(maxWidth: .infinity)
             .frame(height: 50)
-            .background(Color.blue)
+            .background(Color.orange)
             .cornerRadius(10)
         }
         .disabled(isLoading)
+    }
+}
+
+struct SearchBar: View {
+    @Binding var text: String
+    let placeholder: String
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.secondary)
+            
+            TextField(placeholder, text: $text)
+                .textFieldStyle(PlainTextFieldStyle())
+            
+            if !text.isEmpty {
+                Button(action: {
+                    text = ""
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color(.systemGray6))
+        .cornerRadius(10)
     }
 }
 
@@ -878,24 +976,85 @@ class AuthManager: ObservableObject {
     }
 }
 
-class DataManager: ObservableObject {
-    static let shared = DataManager()
+class CartManager: ObservableObject {
+    static let shared = CartManager()
+    
+    @Published var cartItems: [CartItem] = []
+    @Published var totalAmount: Double = 0.0
     
     private init() {}
     
-    func initialize() async {
-        // Initialize data manager
+    func loadCart() async {
+        // Load cart from local storage or API
+    }
+    
+    func addToCart(product: Product) {
+        if let existingItem = cartItems.first(where: { $0.product.id == product.id }) {
+            existingItem.quantity += 1
+        } else {
+            cartItems.append(CartItem(product: product, quantity: 1))
+        }
+        calculateTotal()
+    }
+    
+    func removeFromCart(productId: String) {
+        cartItems.removeAll { $0.product.id == productId }
+        calculateTotal()
+    }
+    
+    func updateQuantity(productId: String, quantity: Int) {
+        if let item = cartItems.first(where: { $0.product.id == productId }) {
+            item.quantity = quantity
+            if quantity <= 0 {
+                removeFromCart(productId: productId)
+            }
+        }
+        calculateTotal()
+    }
+    
+    private func calculateTotal() {
+        totalAmount = cartItems.reduce(0) { $0 + ($1.product.price * Double($1.quantity)) }
     }
 }
 
-class NotificationManager: ObservableObject {
-    static let shared = NotificationManager()
+class OrderManager: ObservableObject {
+    static let shared = OrderManager()
+    
+    @Published var orders: [Order] = []
     
     private init() {}
-    
-    func requestPermission() async {
-        // Request notification permission
-    }
+}
+
+struct CartItem: Identifiable {
+    let id = UUID()
+    let product: Product
+    var quantity: Int
+}
+
+struct Order: Identifiable, Codable {
+    let id: String
+    let userId: String
+    let items: [OrderItem]
+    let totalAmount: Double
+    let status: OrderStatus
+    let createdAt: Date
+    let updatedAt: Date
+}
+
+struct OrderItem: Identifiable, Codable {
+    let id: String
+    let productId: String
+    let productName: String
+    let quantity: Int
+    let price: Double
+}
+
+enum OrderStatus: String, Codable {
+    case pending = "pending"
+    case confirmed = "confirmed"
+    case shipped = "shipped"
+    case delivered = "delivered"
+    case cancelled = "cancelled"
 }
 
 struct User: Identifiable, Codable {
@@ -904,11 +1063,16 @@ struct User: Identifiable, Codable {
     let email: String
     let displayName: String
     let avatarURL: String?
-    let bio: String?
-    let followersCount: Int
-    let followingCount: Int
-    let postsCount: Int
-    let isVerified: Bool
+    let address: Address?
+    let phoneNumber: String?
     let createdAt: Date
-    let lastActiveAt: Date
+    let updatedAt: Date
+}
+
+struct Address: Codable {
+    let street: String
+    let city: String
+    let state: String
+    let zipCode: String
+    let country: String
 } 
