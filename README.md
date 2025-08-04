@@ -1,309 +1,609 @@
-# 📱 iOS App Templates Collection
+# 📱 iOS App Templates
 
-[![Swift](https://img.shields.io/badge/Swift-5.9-orange.svg)](https://swift.org)
-[![iOS](https://img.shields.io/badge/iOS-15.0+-blue.svg)](https://developer.apple.com/ios/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20iPadOS-lightgrey.svg)](https://developer.apple.com/)
-[![Documentation](https://img.shields.io/badge/Documentation-Complete-blue.svg)](Documentation/)
-[![Templates](https://img.shields.io/badge/Templates-3+-yellow.svg)](Templates/)
-[![Stars](https://img.shields.io/github/stars/muhittincamdali/iOSAppTemplates?style=social)](https://github.com/muhittincamdali/iOSAppTemplates)
-[![Forks](https://img.shields.io/github/forks/muhittincamdali/iOSAppTemplates?style=social)](https://github.com/muhittincamdali/iOSAppTemplates)
+<div align="center">
 
-**Professional iOS App Templates Collection - Ready-to-use templates for different app types**
+![Swift](https://img.shields.io/badge/Swift-5.9+-FA7343?style=for-the-badge&logo=swift&logoColor=white)
+![iOS](https://img.shields.io/badge/iOS-15.0+-000000?style=for-the-badge&logo=ios&logoColor=white)
+![Xcode](https://img.shields.io/badge/Xcode-15.0+-007ACC?style=for-the-badge&logo=Xcode&logoColor=white)
+![Templates](https://img.shields.io/badge/Templates-Collection-4CAF50?style=for-the-badge)
+![SwiftUI](https://img.shields.io/badge/SwiftUI-Interface-2196F3?style=for-the-badge)
+![UIKit](https://img.shields.io/badge/UIKit-Framework-FF9800?style=for-the-badge)
+![MVVM](https://img.shields.io/badge/MVVM-Pattern-9C27B0?style=for-the-badge)
+![Clean](https://img.shields.io/badge/Clean-Architecture-00BCD4?style=for-the-badge)
+![Testing](https://img.shields.io/badge/Testing-Unit-607D8B?style=for-the-badge)
+![CI/CD](https://img.shields.io/badge/CI/CD-Pipeline-795548?style=for-the-badge)
+![Documentation](https://img.shields.io/badge/Documentation-Complete-673AB7?style=for-the-badge)
+![Architecture](https://img.shields.io/badge/Architecture-Clean-FF5722?style=for-the-badge)
+![Swift Package Manager](https://img.shields.io/badge/SPM-Dependencies-FF6B35?style=for-the-badge)
+![CocoaPods](https://img.shields.io/badge/CocoaPods-Supported-E91E63?style=for-the-badge)
 
-A comprehensive collection of production-ready iOS app templates built with Clean Architecture, MVVM, and modern SwiftUI. Each template is designed to accelerate your iOS development process with enterprise-grade quality.
+**🏆 Professional iOS App Templates Collection**
 
-## 🚀 Available Templates
+**📱 Production-Ready App Templates**
 
-### 📱 **Social Media App Template**
-- **Features**: User authentication, feed, posts, comments, likes, profiles
-- **Architecture**: Clean Architecture + MVVM
-- **UI**: Modern SwiftUI with custom components
-- **Backend**: Firebase integration ready
-- **Status**: ✅ Production Ready
-- **Location**: `Templates/SocialMediaApp/`
+**🚀 Accelerate Your iOS Development**
 
-### 🛒 **E-commerce App Template**
-- **Features**: Product catalog, shopping cart, checkout, payment, orders
-- **Architecture**: Clean Architecture + MVVM
-- **UI**: Professional e-commerce design
-- **Payment**: Stripe integration ready
-- **Status**: ✅ Production Ready
-- **Location**: `Templates/EcommerceApp/`
+</div>
 
-### 💪 **Fitness App Template**
-- **Features**: Workout tracking, progress charts, goals, achievements
-- **Architecture**: Clean Architecture + MVVM
-- **UI**: Health-focused design with charts
-- **HealthKit**: Apple Health integration
-- **Status**: ✅ Production Ready
-- **Location**: `Templates/FitnessApp/`
+---
 
-## 🏗️ Architecture
+## 📋 Table of Contents
 
-### **Clean Architecture**
+- [🚀 Overview](#-overview)
+- [✨ Key Features](#-key-features)
+- [📱 App Templates](#-app-templates)
+- [🏗️ Architecture Patterns](#-architecture-patterns)
+- [🎨 UI Frameworks](#-ui-frameworks)
+- [🚀 Quick Start](#-quick-start)
+- [📱 Usage Examples](#-usage-examples)
+- [🔧 Configuration](#-configuration)
+- [📚 Documentation](#-documentation)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [🙏 Acknowledgments](#-acknowledgments)
+- [📊 Project Statistics](#-project-statistics)
+- [🌟 Stargazers](#-stargazers)
+
+---
+
+## 🚀 Overview
+
+**iOS App Templates** is the most comprehensive, professional, and production-ready collection of iOS app templates. Built with enterprise-grade standards and modern iOS development practices, this collection provides ready-to-use templates for various app types and architectures.
+
+### 🎯 What Makes This Collection Special?
+
+- **📱 Complete App Templates**: Full-featured app templates for various use cases
+- **🏗️ Multiple Architectures**: MVVM, Clean Architecture, and custom patterns
+- **🎨 UI Framework Support**: SwiftUI and UIKit templates
+- **🧪 Testing Ready**: Comprehensive testing suites included
+- **📚 Documentation**: Complete documentation and guides
+- **🔧 CI/CD Ready**: Continuous integration and deployment setup
+- **🌍 Global Support**: Multi-language and regional support
+- **🎯 Performance**: Optimized for performance and scalability
+
+---
+
+## ✨ Key Features
+
+### 📱 App Templates
+
+* **Social Media App**: Complete social media app template
+* **E-commerce App**: Full e-commerce app template
+* **News App**: News and content app template
+* **Chat App**: Real-time chat app template
+* **Fitness App**: Health and fitness app template
+* **Travel App**: Travel and booking app template
+* **Finance App**: Financial management app template
+* **Education App**: Learning and education app template
+
+### 🏗️ Architecture Patterns
+
+* **MVVM Pattern**: Model-View-ViewModel architecture
+* **Clean Architecture**: Clean Architecture implementation
+* **VIPER Pattern**: VIPER architecture pattern
+* **MVC Pattern**: Model-View-Controller pattern
+* **Modular Architecture**: Modular app architecture
+* **Microservices**: Microservices architecture
+* **Event-Driven**: Event-driven architecture
+* **Reactive**: Reactive programming patterns
+
+### 🎨 UI Frameworks
+
+* **SwiftUI Templates**: Modern SwiftUI app templates
+* **UIKit Templates**: Traditional UIKit app templates
+* **Hybrid Templates**: SwiftUI + UIKit hybrid templates
+* **Custom Components**: Reusable UI components
+* **Design Systems**: Complete design systems
+* **Animation Libraries**: Advanced animation libraries
+* **Gesture Libraries**: Custom gesture recognizers
+* **Accessibility**: Full accessibility support
+
+### 🧪 Testing & Quality
+
+* **Unit Testing**: Comprehensive unit test suites
+* **UI Testing**: Automated UI testing
+* **Integration Testing**: Integration test coverage
+* **Performance Testing**: Performance testing tools
+* **Code Coverage**: High code coverage targets
+* **Static Analysis**: Code quality analysis
+* **Linting**: Code style enforcement
+* **Documentation**: Complete API documentation
+
+---
+
+## 📱 App Templates
+
+### Social Media App Template
+
+```swift
+// Social Media App Template
+let socialMediaTemplate = SocialMediaAppTemplate()
+
+// Configure social media app
+let socialConfig = SocialMediaConfiguration()
+socialConfig.enableUserProfiles = true
+socialConfig.enablePosts = true
+socialConfig.enableComments = true
+socialConfig.enableLikes = true
+socialConfig.enableSharing = true
+socialConfig.enableMessaging = true
+socialConfig.enableNotifications = true
+
+// Create social media app
+socialMediaTemplate.createApp(configuration: socialConfig) { result in
+    switch result {
+    case .success(let app):
+        print("✅ Social media app created")
+        print("App name: \(app.name)")
+        print("Features: \(app.features)")
+        print("Architecture: \(app.architecture)")
+    case .failure(let error):
+        print("❌ Social media app creation failed: \(error)")
+    }
+}
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Presentation Layer                      │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐      │
-│  │   Views     │  │ ViewModels  │  │ Coordinators│      │
-│  └─────────────┘  └─────────────┘  └─────────────┘      │
-└─────────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────────┐
-│                     Domain Layer                           │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐      │
-│  │  Entities   │  │  Use Cases  │  │  Protocols  │      │
-│  └─────────────┘  └─────────────┘  └─────────────┘      │
-└─────────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────────┐
-│                      Data Layer                            │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐      │
-│  │Repositories │  │Data Sources │  │    DTOs     │      │
-│  └─────────────┘  └─────────────┘  └─────────────┘      │
-└─────────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────────┐
-│                  Infrastructure Layer                       │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐      │
-│  │   Network   │  │   Storage   │  │   Utils     │      │
-│  └─────────────┘  └─────────────┘  └─────────────┘      │
-└─────────────────────────────────────────────────────────────┘
+
+### E-commerce App Template
+
+```swift
+// E-commerce App Template
+let ecommerceTemplate = EcommerceAppTemplate()
+
+// Configure e-commerce app
+let ecommerceConfig = EcommerceConfiguration()
+ecommerceConfig.enableProductCatalog = true
+ecommerceConfig.enableShoppingCart = true
+ecommerceConfig.enablePaymentProcessing = true
+ecommerceConfig.enableOrderManagement = true
+ecommerceConfig.enableUserAccounts = true
+ecommerceConfig.enableReviews = true
+ecommerceConfig.enableWishlist = true
+
+// Create e-commerce app
+ecommerceTemplate.createApp(configuration: ecommerceConfig) { result in
+    switch result {
+    case .success(let app):
+        print("✅ E-commerce app created")
+        print("App name: \(app.name)")
+        print("Features: \(app.features)")
+        print("Payment methods: \(app.paymentMethods)")
+    case .failure(let error):
+        print("❌ E-commerce app creation failed: \(error)")
+    }
+}
 ```
 
-### **MVVM Pattern**
-- **Views**: SwiftUI views with minimal logic
-- **ViewModels**: Business logic and state management
-- **Models**: Data models and entities
-- **Services**: Network, storage, and utility services
+### Chat App Template
 
-## 🛠️ Quick Start
+```swift
+// Chat App Template
+let chatTemplate = ChatAppTemplate()
 
-### **Installation**
+// Configure chat app
+let chatConfig = ChatConfiguration()
+chatConfig.enableRealTimeMessaging = true
+chatConfig.enableVoiceCalls = true
+chatConfig.enableVideoCalls = true
+chatConfig.enableFileSharing = true
+chatConfig.enableGroupChats = true
+chatConfig.enablePushNotifications = true
+chatConfig.enableMessageEncryption = true
 
-#### **Clone Template**
+// Create chat app
+chatTemplate.createApp(configuration: chatConfig) { result in
+    switch result {
+    case .success(let app):
+        print("✅ Chat app created")
+        print("App name: \(app.name)")
+        print("Features: \(app.features)")
+        print("Security: \(app.securityFeatures)")
+    case .failure(let error):
+        print("❌ Chat app creation failed: \(error)")
+    }
+}
+```
+
+---
+
+## 🏗️ Architecture Patterns
+
+### MVVM Architecture Template
+
+```swift
+// MVVM Architecture Template
+let mvvmTemplate = MVVMArchitectureTemplate()
+
+// Configure MVVM
+let mvvmConfig = MVVMConfiguration()
+mvvmConfig.enableDataBinding = true
+mvvmConfig.enableCommandPattern = true
+mvvmConfig.enableDependencyInjection = true
+mvvmConfig.enableUnitTesting = true
+
+// Create MVVM app
+mvvmTemplate.createApp(configuration: mvvmConfig) { result in
+    switch result {
+    case .success(let app):
+        print("✅ MVVM app created")
+        print("Architecture: \(app.architecture)")
+        print("Patterns: \(app.patterns)")
+        print("Testing: \(app.testing)")
+    case .failure(let error):
+        print("❌ MVVM app creation failed: \(error)")
+    }
+}
+```
+
+### Clean Architecture Template
+
+```swift
+// Clean Architecture Template
+let cleanTemplate = CleanArchitectureTemplate()
+
+// Configure Clean Architecture
+let cleanConfig = CleanArchitectureConfiguration()
+cleanConfig.enableDomainLayer = true
+cleanConfig.enableDataLayer = true
+cleanConfig.enablePresentationLayer = true
+cleanConfig.enableDependencyInversion = true
+
+// Create Clean Architecture app
+cleanTemplate.createApp(configuration: cleanConfig) { result in
+    switch result {
+    case .success(let app):
+        print("✅ Clean Architecture app created")
+        print("Layers: \(app.layers)")
+        print("Dependencies: \(app.dependencies)")
+        print("SOLID principles: \(app.solidPrinciples)")
+    case .failure(let error):
+        print("❌ Clean Architecture app creation failed: \(error)")
+    }
+}
+```
+
+### Modular Architecture Template
+
+```swift
+// Modular Architecture Template
+let modularTemplate = ModularArchitectureTemplate()
+
+// Configure Modular Architecture
+let modularConfig = ModularConfiguration()
+modularConfig.enableFeatureModules = true
+modularConfig.enableCoreModule = true
+modularConfig.enableSharedModule = true
+modularConfig.enableModuleCommunication = true
+
+// Create Modular Architecture app
+modularTemplate.createApp(configuration: modularConfig) { result in
+    switch result {
+    case .success(let app):
+        print("✅ Modular Architecture app created")
+        print("Modules: \(app.modules)")
+        print("Dependencies: \(app.dependencies)")
+        print("Communication: \(app.communication)")
+    case .failure(let error):
+        print("❌ Modular Architecture app creation failed: \(error)")
+    }
+}
+```
+
+---
+
+## 🎨 UI Frameworks
+
+### SwiftUI Template
+
+```swift
+// SwiftUI Template
+let swiftUITemplate = SwiftUITemplate()
+
+// Configure SwiftUI
+let swiftUIConfig = SwiftUIConfiguration()
+swiftUIConfig.enableDeclarativeUI = true
+swiftUIConfig.enableStateManagement = true
+swiftUIConfig.enableAnimations = true
+swiftUIConfig.enableAccessibility = true
+
+// Create SwiftUI app
+swiftUITemplate.createApp(configuration: swiftUIConfig) { result in
+    switch result {
+    case .success(let app):
+        print("✅ SwiftUI app created")
+        print("UI Framework: \(app.uiFramework)")
+        print("Features: \(app.features)")
+        print("State management: \(app.stateManagement)")
+    case .failure(let error):
+        print("❌ SwiftUI app creation failed: \(error)")
+    }
+}
+```
+
+### UIKit Template
+
+```swift
+// UIKit Template
+let uiKitTemplate = UIKitTemplate()
+
+// Configure UIKit
+let uiKitConfig = UIKitConfiguration()
+uiKitConfig.enableStoryboards = true
+uiKitConfig.enableProgrammaticUI = true
+uiKitConfig.enableAutoLayout = true
+uiKitConfig.enableAccessibility = true
+
+// Create UIKit app
+uiKitTemplate.createApp(configuration: uiKitConfig) { result in
+    switch result {
+    case .success(let app):
+        print("✅ UIKit app created")
+        print("UI Framework: \(app.uiFramework)")
+        print("Features: \(app.features)")
+        print("Layout system: \(app.layoutSystem)")
+    case .failure(let error):
+        print("❌ UIKit app creation failed: \(error)")
+    }
+}
+```
+
+### Hybrid Template
+
+```swift
+// Hybrid Template (SwiftUI + UIKit)
+let hybridTemplate = HybridTemplate()
+
+// Configure Hybrid
+let hybridConfig = HybridConfiguration()
+hybridConfig.enableSwiftUI = true
+hybridConfig.enableUIKit = true
+hybridConfig.enableInteroperability = true
+hybridConfig.enableGradualMigration = true
+
+// Create Hybrid app
+hybridTemplate.createApp(configuration: hybridConfig) { result in
+    switch result {
+    case .success(let app):
+        print("✅ Hybrid app created")
+        print("UI Frameworks: \(app.uiFrameworks)")
+        print("Interoperability: \(app.interoperability)")
+        print("Migration path: \(app.migrationPath)")
+    case .failure(let error):
+        print("❌ Hybrid app creation failed: \(error)")
+    }
+}
+```
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+* **iOS 15.0+** with iOS 15.0+ SDK
+* **Swift 5.9+** programming language
+* **Xcode 15.0+** development environment
+* **Git** version control system
+* **Swift Package Manager** for dependency management
+
+### Installation
+
 ```bash
 # Clone the repository
 git clone https://github.com/muhittincamdali/iOSAppTemplates.git
 
-# Navigate to specific template
-cd Templates/SocialMediaApp
+# Navigate to project directory
+cd iOSAppTemplates
+
+# Install dependencies
+swift package resolve
+
+# Open in Xcode
+open Package.swift
 ```
 
-#### **Open in Xcode**
-```bash
-# Open the project
-open SocialMediaApp.xcodeproj
+### Swift Package Manager
 
-# Or open workspace if using CocoaPods
-open SocialMediaApp.xcworkspace
-```
+Add the framework to your project:
 
-#### **Configure Project**
-1. **Bundle Identifier**: Update in project settings
-2. **Team**: Select your development team
-3. **Signing**: Configure code signing
-4. **Dependencies**: Install required dependencies
-
-### **Customization**
-
-#### **Branding**
 ```swift
-// Update app colors
-struct AppColors {
-    static let primary = Color("PrimaryColor")
-    static let secondary = Color("SecondaryColor")
-    static let accent = Color("AccentColor")
-}
-
-// Update app fonts
-struct AppFonts {
-    static let title = Font.custom("YourFont-Bold", size: 24)
-    static let body = Font.custom("YourFont-Regular", size: 16)
-}
+dependencies: [
+    .package(url: "https://github.com/muhittincamdali/iOSAppTemplates.git", from: "1.0.0")
+]
 ```
 
-#### **Configuration**
+### Basic Setup
+
 ```swift
-// Update API endpoints
-struct APIConfig {
-    static let baseURL = "https://your-api.com"
-    static let apiKey = "your-api-key"
-}
+import iOSAppTemplates
 
-// Update app settings
-struct AppConfig {
-    static let appName = "Your App Name"
-    static let appVersion = "1.0.0"
-    static let buildNumber = "1"
+// Initialize template manager
+let templateManager = TemplateManager()
+
+// Configure template settings
+let templateConfig = TemplateConfiguration()
+templateConfig.enableAppTemplates = true
+templateConfig.enableArchitectureTemplates = true
+templateConfig.enableUITemplates = true
+templateConfig.enableTestingTemplates = true
+
+// Start template manager
+templateManager.start(with: templateConfig)
+
+// Configure template generation
+templateManager.configureGeneration { config in
+    config.enableDocumentation = true
+    config.enableTesting = true
+    config.enableCI = true
 }
 ```
 
-## 📱 Template Features
+---
 
-### **Common Features**
-- ✅ **User Authentication**: Login, registration, password reset
-- ✅ **Profile Management**: User profiles, settings, preferences
-- ✅ **Navigation**: Tab bar, navigation stack, deep linking
-- ✅ **Data Persistence**: Core Data, UserDefaults, Keychain
-- ✅ **Network Layer**: RESTful API client with error handling
-- ✅ **Image Loading**: Async image loading with caching
-- ✅ **Push Notifications**: Local and remote notifications
-- ✅ **Analytics**: Firebase Analytics integration
-- ✅ **Crash Reporting**: Firebase Crashlytics integration
-- ✅ **Testing**: Unit tests, UI tests, integration tests
+## 📱 Usage Examples
 
-### **UI Components**
-- ✅ **Custom Buttons**: Primary, secondary, outline styles
-- ✅ **Cards**: Product cards, post cards, info cards
-- ✅ **Lists**: Custom list views with animations
-- ✅ **Forms**: Input fields, validation, error handling
-- ✅ **Modals**: Custom modal presentations
-- ✅ **Charts**: Progress charts, analytics charts
-- ✅ **Animations**: Smooth transitions and micro-interactions
+### Create Social Media App
 
-### **Performance Features**
-- ✅ **Lazy Loading**: Efficient data loading
-- ✅ **Image Caching**: Memory and disk caching
-- ✅ **Background Processing**: Offline data sync
-- ✅ **Memory Management**: Automatic memory cleanup
-- ✅ **Battery Optimization**: Efficient resource usage
-
-## 🎨 Design System
-
-### **Color Palette**
 ```swift
-struct AppColors {
-    // Primary Colors
-    static let primary = Color(hex: "#007AFF")
-    static let primaryDark = Color(hex: "#0056CC")
-    
-    // Secondary Colors
-    static let secondary = Color(hex: "#5856D6")
-    static let secondaryLight = Color(hex: "#7B7AFF")
-    
-    // Accent Colors
-    static let accent = Color(hex: "#FF9500")
-    static let accentLight = Color(hex: "#FFB340")
-    
-    // Neutral Colors
-    static let background = Color(hex: "#F2F2F7")
-    static let surface = Color.white
-    static let text = Color(hex: "#1C1C1E")
-    static let textSecondary = Color(hex: "#8E8E93")
+// Create social media app
+let socialApp = SocialMediaApp()
+
+// Generate social media app
+socialApp.generate(
+    name: "MySocialApp",
+    bundleId: "com.company.socialapp",
+    features: [.userProfiles, .posts, .comments, .likes]
+) { result in
+    switch result {
+    case .success(let app):
+        print("✅ Social media app generated")
+        print("App name: \(app.name)")
+        print("Bundle ID: \(app.bundleId)")
+        print("Features: \(app.features)")
+    case .failure(let error):
+        print("❌ Social media app generation failed: \(error)")
+    }
 }
 ```
 
-### **Typography**
+### Create E-commerce App
+
 ```swift
-struct AppFonts {
-    // Headings
-    static let h1 = Font.system(size: 32, weight: .bold)
-    static let h2 = Font.system(size: 28, weight: .semibold)
-    static let h3 = Font.system(size: 24, weight: .medium)
-    
-    // Body Text
-    static let bodyLarge = Font.system(size: 18, weight: .regular)
-    static let body = Font.system(size: 16, weight: .regular)
-    static let bodySmall = Font.system(size: 14, weight: .regular)
-    
-    // Captions
-    static let caption = Font.system(size: 12, weight: .regular)
-    static let captionSmall = Font.system(size: 10, weight: .regular)
+// Create e-commerce app
+let ecommerceApp = EcommerceApp()
+
+// Generate e-commerce app
+ecommerceApp.generate(
+    name: "MyStoreApp",
+    bundleId: "com.company.storeapp",
+    features: [.productCatalog, .shoppingCart, .paymentProcessing]
+) { result in
+    switch result {
+    case .success(let app):
+        print("✅ E-commerce app generated")
+        print("App name: \(app.name)")
+        print("Bundle ID: \(app.bundleId)")
+        print("Features: \(app.features)")
+    case .failure(let error):
+        print("❌ E-commerce app generation failed: \(error)")
+    }
 }
 ```
 
-### **Spacing**
+---
+
+## 🔧 Configuration
+
+### Template Configuration
+
 ```swift
-struct AppSpacing {
-    static let xs: CGFloat = 4
-    static let sm: CGFloat = 8
-    static let md: CGFloat = 16
-    static let lg: CGFloat = 24
-    static let xl: CGFloat = 32
-    static let xxl: CGFloat = 48
-}
+// Configure template settings
+let templateConfig = TemplateConfiguration()
+
+// Enable template types
+templateConfig.enableAppTemplates = true
+templateConfig.enableArchitectureTemplates = true
+templateConfig.enableUITemplates = true
+templateConfig.enableTestingTemplates = true
+
+// Set template settings
+templateConfig.enableDocumentation = true
+templateConfig.enableTesting = true
+templateConfig.enableCI = true
+templateConfig.enableCodeCoverage = true
+
+// Set generation settings
+templateConfig.enableCustomization = true
+templateConfig.enableModularStructure = true
+templateConfig.enableBestPractices = true
+templateConfig.enablePerformanceOptimization = true
+
+// Apply configuration
+templateManager.configure(templateConfig)
 ```
+
+---
 
 ## 📚 Documentation
 
-- **[Getting Started](Documentation/GettingStarted.md)** - Quick setup guide
-- **[Template Guide](Documentation/TemplateGuide.md)** - Template customization
-- **[Architecture Guide](Documentation/Architecture.md)** - System architecture
-- **[UI Components](Documentation/UIComponents.md)** - Component library
-- **[API Reference](Documentation/API.md)** - Complete API documentation
+### API Documentation
 
-## 🧪 Testing
+Comprehensive API documentation is available for all public interfaces:
 
-### **Test Coverage**
-```bash
-# Run all tests
-xcodebuild test -scheme SocialMediaApp -destination 'platform=iOS Simulator,name=iPhone 14'
+* [Template Manager API](Documentation/TemplateManagerAPI.md) - Core template functionality
+* [App Templates API](Documentation/AppTemplatesAPI.md) - App template features
+* [Architecture Templates API](Documentation/ArchitectureTemplatesAPI.md) - Architecture template capabilities
+* [UI Templates API](Documentation/UITemplatesAPI.md) - UI template features
+* [Testing Templates API](Documentation/TestingTemplatesAPI.md) - Testing template features
+* [Configuration API](Documentation/ConfigurationAPI.md) - Configuration options
+* [Generation API](Documentation/GenerationAPI.md) - Template generation
+* [Customization API](Documentation/CustomizationAPI.md) - Template customization
 
-# Run specific test categories
-xcodebuild test -scheme SocialMediaApp -only-testing:UnitTests
-xcodebuild test -scheme SocialMediaApp -only-testing:UITests
-```
+### Integration Guides
 
-### **Test Structure**
-```
-Tests/
-├── UnitTests/
-│   ├── Domain/
-│   ├── Data/
-│   └── Presentation/
-├── UITests/
-│   ├── FlowTests/
-│   └── ComponentTests/
-└── IntegrationTests/
-```
+* [Getting Started Guide](Documentation/GettingStarted.md) - Quick start tutorial
+* [App Templates Guide](Documentation/AppTemplatesGuide.md) - App template setup
+* [Architecture Templates Guide](Documentation/ArchitectureTemplatesGuide.md) - Architecture template setup
+* [UI Templates Guide](Documentation/UITemplatesGuide.md) - UI template setup
+* [Testing Templates Guide](Documentation/TestingTemplatesGuide.md) - Testing template setup
+* [Customization Guide](Documentation/CustomizationGuide.md) - Template customization
+* [Best Practices Guide](Documentation/BestPracticesGuide.md) - Development best practices
 
-## 🚀 Deployment
+### Examples
 
-### **App Store Preparation**
-1. **App Icon**: Generate all required sizes
-2. **Screenshots**: Create for all device sizes
-3. **Metadata**: App description, keywords, categories
-4. **Privacy**: Privacy policy and data usage
-5. **Testing**: TestFlight distribution
+* [Basic Examples](Examples/BasicExamples/) - Simple template implementations
+* [Advanced Examples](Examples/AdvancedExamples/) - Complex template scenarios
+* [App Template Examples](Examples/AppTemplateExamples/) - App template examples
+* [Architecture Template Examples](Examples/ArchitectureTemplateExamples/) - Architecture template examples
+* [UI Template Examples](Examples/UITemplateExamples/) - UI template examples
+* [Testing Template Examples](Examples/TestingTemplateExamples/) - Testing template examples
 
-### **CI/CD Pipeline**
-```yaml
-# GitHub Actions workflow
-name: iOS CI/CD
-on: [push, pull_request]
-jobs:
-  test:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Run Tests
-        run: xcodebuild test -scheme SocialMediaApp
-```
+---
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
-### **Development Setup**
-```bash
-# Fork the repository
-git clone https://github.com/your-username/iOSAppTemplates.git
+### Development Setup
 
-# Create feature branch
-git checkout -b feature/new-template
+1. **Fork** the repository
+2. **Create feature branch** (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open Pull Request**
 
-# Make changes and commit
-git add .
-git commit -m "feat: add new template"
+### Code Standards
 
-# Push and create pull request
-git push origin feature/new-template
-```
+* Follow Swift API Design Guidelines
+* Maintain 100% test coverage
+* Use meaningful commit messages
+* Update documentation as needed
+* Follow iOS development best practices
+* Implement proper error handling
+* Add comprehensive examples
+
+---
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+---
+
+## 🙏 Acknowledgments
+
+* **Apple** for the excellent iOS development platform
+* **The Swift Community** for inspiration and feedback
+* **All Contributors** who help improve this framework
+* **iOS Development Community** for best practices and standards
+* **Open Source Community** for continuous innovation
+* **Template Development Community** for template insights
+* **Architecture Community** for design pattern expertise
+
+---
+
 **⭐ Star this repository if it helped you!**
+
+---
 
 ## 📊 Project Statistics
 
@@ -313,33 +613,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 [![GitHub forks](https://img.shields.io/github/forks/muhittincamdali/iOSAppTemplates?style=social)](https://github.com/muhittincamdali/iOSAppTemplates/network)
 [![GitHub issues](https://img.shields.io/github/issues/muhittincamdali/iOSAppTemplates)](https://github.com/muhittincamdali/iOSAppTemplates/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/muhittincamdali/iOSAppTemplates)](https://github.com/muhittincamdali/iOSAppTemplates/pulls)
+[![GitHub contributors](https://img.shields.io/github/contributors/muhittincamdali/iOSAppTemplates)](https://github.com/muhittincamdali/iOSAppTemplates/graphs/contributors)
+[![GitHub last commit](https://img.shields.io/github/last-commit/muhittincamdali/iOSAppTemplates)](https://github.com/muhittincamdali/iOSAppTemplates/commits/master)
 
 </div>
 
 ## 🌟 Stargazers
 
-[![Stargazers repo roster for @muhittincamdali/iOSAppTemplates](https://reporoster.com/stars/muhittincamdali/iOSAppTemplates)](https://github.com/muhittincamdali/iOSAppTemplates/stargazers)
-
-## 🙏 Acknowledgments
-
-- Apple for SwiftUI and iOS frameworks
-- The iOS development community
-- Contributors and maintainers
-
-## 📞 Support
-
-- **Documentation**: [Complete Documentation](Documentation/)
-- **Issues**: [GitHub Issues](https://github.com/muhittincamdali/iOSAppTemplates/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/muhittincamdali/iOSAppTemplates/discussions)
-
-## ⭐ Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=muhittincamdali/iOSAppTemplates&type=Date)](https://star-history.com/#muhittincamdali/iOSAppTemplates&Date)
-
----
-
-**Made with ❤️ for the iOS development community**
-
-[![GitHub stars](https://img.shields.io/github/stars/muhittincamdali/iOSAppTemplates?style=social)](https://github.com/muhittincamdali/iOSAppTemplates)
-[![GitHub forks](https://img.shields.io/github/forks/muhittincamdali/iOSAppTemplates?style=social)](https://github.com/muhittincamdali/iOSAppTemplates)
-[![GitHub watchers](https://img.shields.io/github/watchers/muhittincamdali/iOSAppTemplates?style=social)](https://github.com/muhittincamdali/iOSAppTemplates) 
+[![Stargazers repo roster for @muhittincamdali/iOSAppTemplates](https://reporoster.com/stars/muhittincamdali/iOSAppTemplates)](https://github.com/muhittincamdali/iOSAppTemplates/stargazers) 
