@@ -303,6 +303,23 @@ git push origin feature/new-template
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+**⭐ Star this repository if it helped you!**
+
+## 📊 Project Statistics
+
+<div align="center">
+
+[![GitHub stars](https://img.shields.io/github/stars/muhittincamdali/iOSAppTemplates?style=social)](https://github.com/muhittincamdali/iOSAppTemplates/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/muhittincamdali/iOSAppTemplates?style=social)](https://github.com/muhittincamdali/iOSAppTemplates/network)
+[![GitHub issues](https://img.shields.io/github/issues/muhittincamdali/iOSAppTemplates)](https://github.com/muhittincamdali/iOSAppTemplates/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/muhittincamdali/iOSAppTemplates)](https://github.com/muhittincamdali/iOSAppTemplates/pulls)
+
+</div>
+
+## 🌟 Stargazers
+
+[![Stargazers repo roster for @muhittincamdali/iOSAppTemplates](https://reporoster.com/stars/muhittincamdali/iOSAppTemplates)](https://github.com/muhittincamdali/iOSAppTemplates/stargazers)
+
 ## 🙏 Acknowledgments
 
 - Apple for SwiftUI and iOS frameworks
