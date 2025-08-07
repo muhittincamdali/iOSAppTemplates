@@ -456,7 +456,6 @@ hybridTemplate.createApp(configuration: hybridConfig) { result in
 
 ```bash
 # Clone the repository
-git clone https://github.com/muhittincamdali/iOSAppTemplates.git
 
 # Navigate to project directory
 cd iOSAppTemplates
@@ -474,7 +473,6 @@ Add the framework to your project:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/muhittincamdali/iOSAppTemplates.git", from: "1.0.0")
 ]
 ```
 
@@ -680,11 +678,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
 
-![GitHub Stars](https://img.shields.io/github/stars/muhittincamdali/iOSAppTemplates?style=for-the-badge&logo=star&logoColor=gold&color=gold&label=Stars)
-![GitHub Forks](https://img.shields.io/github/forks/muhittincamdali/iOSAppTemplates?style=for-the-badge&logo=git&logoColor=white&color=blue&label=Forks)
-![GitHub Issues](https://img.shields.io/github/issues/muhittincamdali/iOSAppTemplates?style=for-the-badge&logo=github&logoColor=white&color=red&label=Issues)
-![GitHub Pull Requests](https://img.shields.io/github/issues-pr/muhittincamdali/iOSAppTemplates?style=for-the-badge&logo=github&logoColor=white&color=green&label=PRs)
-![GitHub License](https://img.shields.io/github/license/muhittincamdali/iOSAppTemplates?style=for-the-badge&logo=github&logoColor=white&color=purple&label=License)
 
 </div>
 
@@ -701,7 +694,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### 🌟 Stargazers Community
 
-[![Stargazers repo roster for @muhittincamdali/iOSAppTemplates](https://reporoster.com/stars/muhittincamdali/iOSAppTemplates)](https://github.com/muhittincamdali/iOSAppTemplates/stargazers)
 
 **⭐ Star this repository if it helped you!**
 
@@ -711,4 +703,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🌟 Stargazers
 
-[![Stargazers repo roster for @muhittincamdali/iOSAppTemplates](https://reporoster.com/stars/muhittincamdali/iOSAppTemplates)](https://github.com/muhittincamdali/iOSAppTemplates/stargazers) 
