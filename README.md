@@ -701,7 +701,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### 🌟 Stargazers Community
 
-[![Stargazers repo roster for @muhittincamdali/iOSAppTemplates](https://reporoster.com/stars/muhittincamdali/iOSAppTemplates)](https://github.com/muhittincamdali/iOSAppTemplates/stargazers)
+[![Stargazers repo roster for @muhittincamdali/iOSAppTemplates](https://starchart.cc/muhittincamdali/iOSAppTemplates.svg)](https://github.com/muhittincamdali/iOSAppTemplates/stargazers)
 
 **⭐ Star this repository if it helped you!**
 
@@ -711,4 +711,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🌟 Stargazers
 
-[![Stargazers repo roster for @muhittincamdali/iOSAppTemplates](https://reporoster.com/stars/muhittincamdali/iOSAppTemplates)](https://github.com/muhittincamdali/iOSAppTemplates/stargazers) 
+[![Stargazers repo roster for @muhittincamdali/iOSAppTemplates](https://starchart.cc/muhittincamdali/iOSAppTemplates.svg)](https://github.com/muhittincamdali/iOSAppTemplates/stargazers) 
