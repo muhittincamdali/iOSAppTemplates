@@ -1,4 +1,5 @@
 # 📱 iOS App Templates
+[![CI](https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml)
 
 <!-- TOC START -->
 ## Table of Contents
