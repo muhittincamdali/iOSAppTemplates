@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-test:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Swift version
+        run: swift --version || true
+
+      - name: Build (SwiftPM if present)
+        shell: bash
+        run: |
+          if [[ -f Package.swift ]]; then
+            swift build -v
+          else
+            echo "No Package.swift, skipping SwiftPM build"
+          fi
+
+      - name: Test (SwiftPM if present)
+        shell: bash
+        run: |
+          if [[ -f Package.swift ]]; then
+            swift test -v
+          else
+            echo "No Package.swift, skipping SwiftPM tests"
+          fi
