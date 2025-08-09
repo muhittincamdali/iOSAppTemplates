@@ -1,5 +1,33 @@
 # Architecture Templates Guide
 
+<!-- TOC START -->
+## Table of Contents
+- [Architecture Templates Guide](#architecture-templates-guide)
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Available Architecture Templates](#available-architecture-templates)
+  - [MVVM Architecture Template](#mvvm-architecture-template)
+  - [Clean Architecture Template](#clean-architecture-template)
+  - [Modular Architecture Template](#modular-architecture-template)
+- [Architecture Patterns](#architecture-patterns)
+  - [MVVM Pattern](#mvvm-pattern)
+  - [Clean Architecture](#clean-architecture)
+  - [Modular Architecture](#modular-architecture)
+- [Best Practices](#best-practices)
+  - [Design Principles](#design-principles)
+  - [Testing Strategy](#testing-strategy)
+- [Customization](#customization)
+  - [Custom Architecture Patterns](#custom-architecture-patterns)
+  - [Extending Existing Patterns](#extending-existing-patterns)
+- [Troubleshooting](#troubleshooting)
+  - [Common Issues](#common-issues)
+- [Support](#support)
+- [Next Steps](#next-steps)
+<!-- TOC END -->
+
+
 ## Overview
 
 This guide provides comprehensive information on how to use and customize architecture templates in the iOS App Templates framework.

@@ -1,5 +1,24 @@
 # App Templates API
 
+<!-- TOC START -->
+## Table of Contents
+- [App Templates API](#app-templates-api)
+- [Overview](#overview)
+- [App Template Types](#app-template-types)
+  - [Social Media App Template](#social-media-app-template)
+  - [E-commerce App Template](#e-commerce-app-template)
+  - [Chat App Template](#chat-app-template)
+- [Usage Examples](#usage-examples)
+  - [Creating a Social Media App](#creating-a-social-media-app)
+  - [Creating an E-commerce App](#creating-an-e-commerce-app)
+- [App Models](#app-models)
+  - [SocialMediaApp](#socialmediaapp)
+  - [EcommerceApp](#ecommerceapp)
+- [Best Practices](#best-practices)
+- [Support](#support)
+<!-- TOC END -->
+
+
 ## Overview
 
 The App Templates API provides comprehensive functionality for creating and managing different types of iOS app templates.

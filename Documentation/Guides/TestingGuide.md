@@ -1,5 +1,47 @@
 # 🧪 Testing Guide
 
+<!-- TOC START -->
+## Table of Contents
+- [🧪 Testing Guide](#-testing-guide)
+- [Overview](#overview)
+- [Table of Contents](#table-of-contents)
+- [Testing Strategy](#testing-strategy)
+  - [Testing Pyramid](#testing-pyramid)
+  - [Test Types](#test-types)
+- [Unit Testing](#unit-testing)
+  - [Test Structure](#test-structure)
+  - [Mocking](#mocking)
+  - [Test Data](#test-data)
+- [Integration Testing](#integration-testing)
+  - [Service Integration](#service-integration)
+  - [Database Integration](#database-integration)
+- [UI Testing](#ui-testing)
+  - [Basic UI Test](#basic-ui-test)
+  - [Accessibility Testing](#accessibility-testing)
+- [Performance Testing](#performance-testing)
+  - [Memory Testing](#memory-testing)
+  - [Performance Benchmarking](#performance-benchmarking)
+- [Test Coverage](#test-coverage)
+  - [Coverage Configuration](#coverage-configuration)
+  - [Coverage Reporting](#coverage-reporting)
+- [Generate coverage report](#generate-coverage-report)
+- [View coverage](#view-coverage)
+- [Testing Tools](#testing-tools)
+  - [XCTest Framework](#xctest-framework)
+  - [Quick and Nimble](#quick-and-nimble)
+  - [OHHTTPStubs](#ohhttpstubs)
+- [Best Practices](#best-practices)
+  - [Test Organization](#test-organization)
+  - [Naming Conventions](#naming-conventions)
+  - [Test Isolation](#test-isolation)
+  - [Test Data Management](#test-data-management)
+  - [Continuous Integration](#continuous-integration)
+- [.github/workflows/tests.yml](#githubworkflowstestsyml)
+- [Test Checklist](#test-checklist)
+- [Resources](#resources)
+<!-- TOC END -->
+
+
 ## Overview
 
 This comprehensive testing guide provides strategies and best practices for implementing effective testing in iOS applications built with iOS App Templates.

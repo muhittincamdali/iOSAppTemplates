@@ -1,5 +1,27 @@
 # UI Templates API
 
+<!-- TOC START -->
+## Table of Contents
+- [UI Templates API](#ui-templates-api)
+- [Overview](#overview)
+- [UI Framework Types](#ui-framework-types)
+  - [SwiftUI Template](#swiftui-template)
+  - [UIKit Template](#uikit-template)
+  - [Hybrid Template](#hybrid-template)
+- [Usage Examples](#usage-examples)
+  - [Creating a SwiftUI App](#creating-a-swiftui-app)
+  - [Creating a UIKit App](#creating-a-uikit-app)
+- [UI Models](#ui-models)
+  - [SwiftUIApp](#swiftuiapp)
+  - [UIKitApp](#uikitapp)
+- [UI Components](#ui-components)
+  - [Custom Components](#custom-components)
+  - [Animation Types](#animation-types)
+- [Best Practices](#best-practices)
+- [Support](#support)
+<!-- TOC END -->
+
+
 ## Overview
 
 The UI Templates API provides comprehensive functionality for creating and managing different UI frameworks and components.

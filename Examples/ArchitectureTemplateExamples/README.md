@@ -1,5 +1,24 @@
 # Architecture Template Examples
 
+<!-- TOC START -->
+## Table of Contents
+- [Architecture Template Examples](#architecture-template-examples)
+- [Overview](#overview)
+- [Architecture Patterns](#architecture-patterns)
+  - [1. MVVM Pattern](#1-mvvm-pattern)
+  - [2. Clean Architecture](#2-clean-architecture)
+  - [3. VIPER Pattern](#3-viper-pattern)
+  - [4. MVC Pattern](#4-mvc-pattern)
+  - [5. Modular Architecture](#5-modular-architecture)
+  - [6. Microservices Architecture](#6-microservices-architecture)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Requirements](#requirements)
+- [Benefits](#benefits)
+- [Support](#support)
+<!-- TOC END -->
+
+
 ## Overview
 
 This directory contains examples demonstrating different architecture patterns and templates available in the iOS App Templates framework.

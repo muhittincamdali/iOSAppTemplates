@@ -1,5 +1,31 @@
 # Customization API
 
+<!-- TOC START -->
+## Table of Contents
+- [Customization API](#customization-api)
+- [Overview](#overview)
+- [Customization Types](#customization-types)
+  - [Template Customization](#template-customization)
+  - [Code Customization](#code-customization)
+  - [UI Customization](#ui-customization)
+- [Usage Examples](#usage-examples)
+  - [Customizing a Template](#customizing-a-template)
+  - [Extending a Template](#extending-a-template)
+- [Customization Models](#customization-models)
+  - [CustomizedTemplate](#customizedtemplate)
+  - [TemplateExtension](#templateextension)
+  - [TemplateModification](#templatemodification)
+- [Customization Options](#customization-options)
+  - [Naming Conventions](#naming-conventions)
+  - [Code Styles](#code-styles)
+  - [Design Patterns](#design-patterns)
+- [Validation](#validation)
+  - [Customization Validation](#customization-validation)
+- [Best Practices](#best-practices)
+- [Support](#support)
+<!-- TOC END -->
+
+
 ## Overview
 
 The Customization API provides comprehensive functionality for customizing and extending iOS app templates.

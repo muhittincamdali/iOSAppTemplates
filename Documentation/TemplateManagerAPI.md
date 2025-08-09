@@ -1,5 +1,25 @@
 # Template Manager API
 
+<!-- TOC START -->
+## Table of Contents
+- [Template Manager API](#template-manager-api)
+- [Overview](#overview)
+- [Core Classes](#core-classes)
+  - [TemplateManager](#templatemanager)
+- [Configuration](#configuration)
+  - [TemplateConfiguration](#templateconfiguration)
+- [Template Types](#template-types)
+  - [TemplateType](#templatetype)
+- [Usage Examples](#usage-examples)
+  - [Basic Template Generation](#basic-template-generation)
+  - [Advanced Configuration](#advanced-configuration)
+- [Error Handling](#error-handling)
+  - [TemplateError](#templateerror)
+- [Best Practices](#best-practices)
+- [Support](#support)
+<!-- TOC END -->
+
+
 ## Overview
 
 The Template Manager API provides the core functionality for managing iOS app templates in the iOS App Templates framework.

@@ -1,5 +1,44 @@
 # 📋 Template Guide
 
+<!-- TOC START -->
+## Table of Contents
+- [📋 Template Guide](#-template-guide)
+- [📋 Table of Contents](#-table-of-contents)
+- [🏗️ Template Structure](#-template-structure)
+  - [**Standard Template Structure**](#standard-template-structure)
+- [🎨 Customization Guide](#-customization-guide)
+  - [**Branding Customization**](#branding-customization)
+    - [**App Colors**](#app-colors)
+    - [**App Fonts**](#app-fonts)
+    - [**App Icons**](#app-icons)
+  - [**Configuration Customization**](#configuration-customization)
+    - [**App Configuration**](#app-configuration)
+    - [**Network Configuration**](#network-configuration)
+    - [**Database Configuration**](#database-configuration)
+- [🚀 Template Features](#-template-features)
+  - [**Common Features**](#common-features)
+  - [**Template-Specific Features**](#template-specific-features)
+    - [**Social Media Template**](#social-media-template)
+    - [**E-commerce Template**](#e-commerce-template)
+    - [**Fitness Template**](#fitness-template)
+- [📱 UI Customization](#-ui-customization)
+  - [**Custom Components**](#custom-components)
+  - [**Theme Support**](#theme-support)
+- [🔧 Advanced Customization](#-advanced-customization)
+  - [**Dependency Management**](#dependency-management)
+  - [**Third-Party Integrations**](#third-party-integrations)
+- [🚀 Deployment](#-deployment)
+  - [**App Store Preparation**](#app-store-preparation)
+  - [**TestFlight Distribution**](#testflight-distribution)
+- [Archive the app](#archive-the-app)
+- [Upload to App Store Connect](#upload-to-app-store-connect)
+  - [**CI/CD Pipeline**](#cicd-pipeline)
+- [GitHub Actions workflow](#github-actions-workflow)
+- [📚 Next Steps](#-next-steps)
+- [🤝 Support](#-support)
+<!-- TOC END -->
+
+
 Complete guide for customizing and using iOS App Templates.
 
 ## 📋 Table of Contents

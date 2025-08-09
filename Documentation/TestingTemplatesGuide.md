@@ -1,5 +1,33 @@
 # Testing Templates Guide
 
+<!-- TOC START -->
+## Table of Contents
+- [Testing Templates Guide](#testing-templates-guide)
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Available Testing Templates](#available-testing-templates)
+  - [Unit Testing Template](#unit-testing-template)
+  - [UI Testing Template](#ui-testing-template)
+  - [Integration Testing Template](#integration-testing-template)
+- [Testing Strategies](#testing-strategies)
+  - [Test-Driven Development (TDD)](#test-driven-development-tdd)
+  - [Behavior-Driven Development (BDD)](#behavior-driven-development-bdd)
+  - [Testing Pyramid](#testing-pyramid)
+- [Best Practices](#best-practices)
+  - [Unit Testing Best Practices](#unit-testing-best-practices)
+  - [UI Testing Best Practices](#ui-testing-best-practices)
+- [Customization](#customization)
+  - [Custom Test Utilities](#custom-test-utilities)
+  - [Custom Test Helpers](#custom-test-helpers)
+- [Troubleshooting](#troubleshooting)
+  - [Common Issues](#common-issues)
+- [Support](#support)
+- [Next Steps](#next-steps)
+<!-- TOC END -->
+
+
 ## Overview
 
 This guide provides comprehensive information on how to use and customize testing templates in the iOS App Templates framework.

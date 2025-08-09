@@ -1,5 +1,30 @@
 # Generation API
 
+<!-- TOC START -->
+## Table of Contents
+- [Generation API](#generation-api)
+- [Overview](#overview)
+- [Generation Types](#generation-types)
+  - [Template Generation](#template-generation)
+  - [Project Generation](#project-generation)
+  - [Code Generation](#code-generation)
+- [Usage Examples](#usage-examples)
+  - [Generating a Complete App](#generating-a-complete-app)
+  - [Generating Code Templates](#generating-code-templates)
+- [Generated Models](#generated-models)
+  - [GeneratedTemplate](#generatedtemplate)
+  - [GeneratedProject](#generatedproject)
+  - [GeneratedFile](#generatedfile)
+- [Generation Options](#generation-options)
+  - [Code Style Options](#code-style-options)
+  - [Documentation Options](#documentation-options)
+- [Error Handling](#error-handling)
+  - [Generation Errors](#generation-errors)
+- [Best Practices](#best-practices)
+- [Support](#support)
+<!-- TOC END -->
+
+
 ## Overview
 
 The Generation API provides comprehensive functionality for generating iOS app templates and project structures.

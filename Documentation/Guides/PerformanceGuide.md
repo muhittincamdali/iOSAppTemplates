@@ -1,5 +1,45 @@
 # ⚡ Performance Guide
 
+<!-- TOC START -->
+## Table of Contents
+- [⚡ Performance Guide](#-performance-guide)
+- [Overview](#overview)
+- [Table of Contents](#table-of-contents)
+- [Performance Fundamentals](#performance-fundamentals)
+  - [Performance Metrics](#performance-metrics)
+  - [Performance Targets](#performance-targets)
+- [Memory Management](#memory-management)
+  - [Automatic Reference Counting (ARC)](#automatic-reference-counting-arc)
+  - [Memory Leaks Prevention](#memory-leaks-prevention)
+  - [Lazy Loading](#lazy-loading)
+- [Network Optimization](#network-optimization)
+  - [Request Batching](#request-batching)
+  - [Response Caching](#response-caching)
+  - [Connection Pooling](#connection-pooling)
+- [UI Performance](#ui-performance)
+  - [View Recycling](#view-recycling)
+  - [Background Processing](#background-processing)
+  - [Image Optimization](#image-optimization)
+- [Database Optimization](#database-optimization)
+  - [Query Optimization](#query-optimization)
+  - [Batch Operations](#batch-operations)
+- [Image Optimization](#image-optimization)
+  - [Lazy Image Loading](#lazy-image-loading)
+  - [Image Compression](#image-compression)
+- [Caching Strategies](#caching-strategies)
+  - [Multi-Level Caching](#multi-level-caching)
+  - [Cache Invalidation](#cache-invalidation)
+- [Profiling Tools](#profiling-tools)
+  - [Instruments](#instruments)
+  - [Memory Profiling](#memory-profiling)
+- [Best Practices](#best-practices)
+  - [Performance Checklist](#performance-checklist)
+  - [Performance Monitoring](#performance-monitoring)
+  - [Performance Testing](#performance-testing)
+- [Resources](#resources)
+<!-- TOC END -->
+
+
 ## Overview
 
 This comprehensive performance guide provides strategies and best practices for optimizing iOS applications built with iOS App Templates.

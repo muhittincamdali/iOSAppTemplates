@@ -1,5 +1,28 @@
 # Configuration API
 
+<!-- TOC START -->
+## Table of Contents
+- [Configuration API](#configuration-api)
+- [Overview](#overview)
+- [Configuration Types](#configuration-types)
+  - [Template Configuration](#template-configuration)
+  - [App Configuration](#app-configuration)
+  - [Build Configuration](#build-configuration)
+- [Usage Examples](#usage-examples)
+  - [Basic Configuration](#basic-configuration)
+  - [Advanced Configuration](#advanced-configuration)
+  - [App-Specific Configuration](#app-specific-configuration)
+- [Configuration Models](#configuration-models)
+  - [iOSVersion](#iosversion)
+  - [DeviceType](#devicetype)
+  - [BuildType](#buildtype)
+- [Validation](#validation)
+  - [Configuration Validation](#configuration-validation)
+- [Best Practices](#best-practices)
+- [Support](#support)
+<!-- TOC END -->
+
+
 ## Overview
 
 The Configuration API provides comprehensive functionality for configuring and customizing iOS app templates.

@@ -1,5 +1,45 @@
 # 🏗️ Architecture Guide
 
+<!-- TOC START -->
+## Table of Contents
+- [🏗️ Architecture Guide](#-architecture-guide)
+- [Overview](#overview)
+- [Table of Contents](#table-of-contents)
+- [Architecture Overview](#architecture-overview)
+  - [Architectural Layers](#architectural-layers)
+  - [Key Principles](#key-principles)
+- [Clean Architecture](#clean-architecture)
+  - [Domain Layer](#domain-layer)
+  - [Data Layer](#data-layer)
+  - [Presentation Layer](#presentation-layer)
+- [MVVM Pattern](#mvvm-pattern)
+  - [Model](#model)
+  - [ViewModel](#viewmodel)
+  - [View](#view)
+- [SOLID Principles](#solid-principles)
+  - [Single Responsibility Principle](#single-responsibility-principle)
+  - [Open/Closed Principle](#openclosed-principle)
+  - [Liskov Substitution Principle](#liskov-substitution-principle)
+  - [Interface Segregation Principle](#interface-segregation-principle)
+  - [Dependency Inversion Principle](#dependency-inversion-principle)
+- [Dependency Injection](#dependency-injection)
+  - [Constructor Injection](#constructor-injection)
+  - [Property Injection](#property-injection)
+  - [Method Injection](#method-injection)
+- [Module Design](#module-design)
+  - [Feature Modules](#feature-modules)
+  - [Coordinator Pattern](#coordinator-pattern)
+- [Testing Architecture](#testing-architecture)
+  - [Unit Testing](#unit-testing)
+  - [Integration Testing](#integration-testing)
+- [Best Practices](#best-practices)
+  - [Architecture Checklist](#architecture-checklist)
+  - [Code Organization](#code-organization)
+  - [Naming Conventions](#naming-conventions)
+- [Resources](#resources)
+<!-- TOC END -->
+
+
 ## Overview
 
 This comprehensive architecture guide provides detailed information about the architectural patterns and design principles used in iOS App Templates.

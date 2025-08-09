@@ -1,5 +1,26 @@
 # Testing Templates API
 
+<!-- TOC START -->
+## Table of Contents
+- [Testing Templates API](#testing-templates-api)
+- [Overview](#overview)
+- [Testing Types](#testing-types)
+  - [Unit Testing Template](#unit-testing-template)
+  - [UI Testing Template](#ui-testing-template)
+  - [Integration Testing Template](#integration-testing-template)
+- [Usage Examples](#usage-examples)
+  - [Creating Unit Tests](#creating-unit-tests)
+  - [Creating UI Tests](#creating-ui-tests)
+- [Test Models](#test-models)
+  - [UnitTestSuite](#unittestsuite)
+  - [UITestSuite](#uitestsuite)
+- [Testing Frameworks](#testing-frameworks)
+  - [Available Frameworks](#available-frameworks)
+- [Best Practices](#best-practices)
+- [Support](#support)
+<!-- TOC END -->
+
+
 ## Overview
 
 The Testing Templates API provides comprehensive functionality for creating and managing different types of testing strategies and templates.

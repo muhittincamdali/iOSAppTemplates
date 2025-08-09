@@ -1,5 +1,26 @@
 # Architecture Templates API
 
+<!-- TOC START -->
+## Table of Contents
+- [Architecture Templates API](#architecture-templates-api)
+- [Overview](#overview)
+- [Architecture Types](#architecture-types)
+  - [MVVM Architecture Template](#mvvm-architecture-template)
+  - [Clean Architecture Template](#clean-architecture-template)
+  - [Modular Architecture Template](#modular-architecture-template)
+- [Usage Examples](#usage-examples)
+  - [Creating an MVVM App](#creating-an-mvvm-app)
+  - [Creating a Clean Architecture App](#creating-a-clean-architecture-app)
+- [Architecture Models](#architecture-models)
+  - [MVVMApp](#mvvmapp)
+  - [CleanArchitectureApp](#cleanarchitectureapp)
+- [Design Patterns](#design-patterns)
+  - [Available Patterns](#available-patterns)
+- [Best Practices](#best-practices)
+- [Support](#support)
+<!-- TOC END -->
+
+
 ## Overview
 
 The Architecture Templates API provides comprehensive functionality for creating and managing different iOS architecture patterns.

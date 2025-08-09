@@ -1,5 +1,26 @@
 # App Template Examples
 
+<!-- TOC START -->
+## Table of Contents
+- [App Template Examples](#app-template-examples)
+- [Overview](#overview)
+- [App Templates](#app-templates)
+  - [1. Social Media App Template](#1-social-media-app-template)
+  - [2. E-commerce App Template](#2-e-commerce-app-template)
+  - [3. News App Template](#3-news-app-template)
+  - [4. Chat App Template](#4-chat-app-template)
+  - [5. Fitness App Template](#5-fitness-app-template)
+  - [6. Travel App Template](#6-travel-app-template)
+  - [7. Finance App Template](#7-finance-app-template)
+  - [8. Education App Template](#8-education-app-template)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Requirements](#requirements)
+- [Customization](#customization)
+- [Support](#support)
+<!-- TOC END -->
+
+
 ## Overview
 
 This directory contains comprehensive examples of different app templates available in the iOS App Templates framework.
