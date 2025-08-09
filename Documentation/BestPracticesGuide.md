@@ -1,5 +1,36 @@
 # Best Practices Guide
 
+<!-- TOC START -->
+## Table of Contents
+- [Best Practices Guide](#best-practices-guide)
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Architecture Best Practices](#architecture-best-practices)
+  - [Clean Architecture](#clean-architecture)
+  - [MVVM Pattern](#mvvm-pattern)
+- [Code Quality Best Practices](#code-quality-best-practices)
+  - [Naming Conventions](#naming-conventions)
+  - [Error Handling](#error-handling)
+  - [Memory Management](#memory-management)
+- [Testing Best Practices](#testing-best-practices)
+  - [Unit Testing](#unit-testing)
+  - [UI Testing](#ui-testing)
+- [Performance Best Practices](#performance-best-practices)
+  - [Image Loading](#image-loading)
+  - [Lazy Loading](#lazy-loading)
+- [Security Best Practices](#security-best-practices)
+  - [Data Protection](#data-protection)
+  - [Network Security](#network-security)
+- [Accessibility Best Practices](#accessibility-best-practices)
+  - [VoiceOver Support](#voiceover-support)
+  - [Dynamic Type](#dynamic-type)
+- [Support](#support)
+- [Next Steps](#next-steps)
+<!-- TOC END -->
+
+
 ## Overview
 
 This guide provides comprehensive information on best practices for iOS development using the iOS App Templates framework.

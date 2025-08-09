@@ -1,5 +1,35 @@
 # 👤 User API Documentation
 
+<!-- TOC START -->
+## Table of Contents
+- [👤 User API Documentation](#-user-api-documentation)
+- [Overview](#overview)
+- [Table of Contents](#table-of-contents)
+- [Authentication](#authentication)
+  - [User Authentication](#user-authentication)
+  - [Implementation](#implementation)
+- [User Management](#user-management)
+  - [User Service](#user-service)
+  - [Implementation](#implementation)
+- [Profile Operations](#profile-operations)
+  - [Profile Management](#profile-management)
+  - [Implementation](#implementation)
+- [Security](#security)
+  - [Token Management](#token-management)
+  - [Implementation](#implementation)
+- [Error Handling](#error-handling)
+  - [User API Errors](#user-api-errors)
+  - [Error Handling Implementation](#error-handling-implementation)
+- [Examples](#examples)
+  - [Basic Usage](#basic-usage)
+  - [Advanced Usage](#advanced-usage)
+  - [Biometric Authentication](#biometric-authentication)
+- [Data Models](#data-models)
+  - [User Models](#user-models)
+  - [Authentication Models](#authentication-models)
+<!-- TOC END -->
+
+
 ## Overview
 
 The User API provides comprehensive functionality for managing user data, authentication, and user-related operations in iOS App Templates.

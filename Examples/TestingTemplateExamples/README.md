@@ -1,5 +1,24 @@
 # Testing Template Examples
 
+<!-- TOC START -->
+## Table of Contents
+- [Testing Template Examples](#testing-template-examples)
+- [Overview](#overview)
+- [Testing Types](#testing-types)
+  - [1. Unit Testing](#1-unit-testing)
+  - [2. Integration Testing](#2-integration-testing)
+  - [3. UI Testing](#3-ui-testing)
+  - [4. Performance Testing](#4-performance-testing)
+  - [5. Security Testing](#5-security-testing)
+  - [6. Accessibility Testing](#6-accessibility-testing)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Requirements](#requirements)
+- [Best Practices](#best-practices)
+- [Support](#support)
+<!-- TOC END -->
+
+
 ## Overview
 
 This directory contains examples demonstrating comprehensive testing strategies and templates available in the iOS App Templates framework.

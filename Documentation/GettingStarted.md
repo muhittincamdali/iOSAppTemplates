@@ -1,5 +1,44 @@
 # 🚀 Getting Started with iOS App Templates
 
+<!-- TOC START -->
+## Table of Contents
+- [🚀 Getting Started with iOS App Templates](#-getting-started-with-ios-app-templates)
+- [📋 Table of Contents](#-table-of-contents)
+- [📦 Installation](#-installation)
+  - [**Prerequisites**](#prerequisites)
+  - [**Clone Repository**](#clone-repository)
+- [Clone the repository](#clone-the-repository)
+- [Navigate to the project](#navigate-to-the-project)
+  - [**Select Template**](#select-template)
+- [List available templates](#list-available-templates)
+- [Navigate to specific template](#navigate-to-specific-template)
+- [🎯 Template Selection](#-template-selection)
+  - [**Social Media App Template**](#social-media-app-template)
+  - [**E-commerce App Template**](#e-commerce-app-template)
+  - [**Fitness App Template**](#fitness-app-template)
+- [⚙️ Customization](#-customization)
+  - [**Branding**](#branding)
+  - [**Configuration**](#configuration)
+  - [**Dependencies**](#dependencies)
+- [🚀 Deployment](#-deployment)
+  - [**App Store Preparation**](#app-store-preparation)
+  - [**TestFlight Distribution**](#testflight-distribution)
+- [Archive the app](#archive-the-app)
+- [Upload to App Store Connect](#upload-to-app-store-connect)
+- [🔧 Troubleshooting](#-troubleshooting)
+  - [**Common Issues**](#common-issues)
+    - [**Build Errors**](#build-errors)
+- [Clean build folder](#clean-build-folder)
+- [Reset package cache](#reset-package-cache)
+    - [**Dependency Issues**](#dependency-issues)
+- [Update Swift Package Manager](#update-swift-package-manager)
+- [Or manually](#or-manually)
+    - [**Code Signing Issues**](#code-signing-issues)
+- [📚 Next Steps](#-next-steps)
+- [🤝 Support](#-support)
+<!-- TOC END -->
+
+
 Quick start guide for using iOS App Templates Collection.
 
 ## 📋 Table of Contents

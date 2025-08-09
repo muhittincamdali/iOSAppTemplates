@@ -1,5 +1,30 @@
 # Basic Examples
 
+<!-- TOC START -->
+## Table of Contents
+- [Basic Examples](#basic-examples)
+- [Overview](#overview)
+- [Examples](#examples)
+  - [1. Simple Template Usage](#1-simple-template-usage)
+  - [2. Hello World Template](#2-hello-world-template)
+  - [3. Configuration Examples](#3-configuration-examples)
+  - [4. Template Generation](#4-template-generation)
+- [Getting Started](#getting-started)
+- [Requirements](#requirements)
+- [Support](#support)
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Installation (SPM)](#installation-spm)
+- [Quick Start](#quick-start)
+- [API Reference](#api-reference)
+- [Usage Examples](#usage-examples)
+- [Performance](#performance)
+- [Security](#security)
+- [Troubleshooting](#troubleshooting)
+- [FAQ](#faq)
+<!-- TOC END -->
+
+
 ## Overview
 
 This directory contains basic examples demonstrating fundamental usage of iOS App Templates framework.

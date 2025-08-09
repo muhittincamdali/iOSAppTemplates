@@ -1,5 +1,33 @@
 # Customization Guide
 
+<!-- TOC START -->
+## Table of Contents
+- [Customization Guide](#customization-guide)
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Customization Types](#customization-types)
+  - [Template Customization](#template-customization)
+  - [Code Customization](#code-customization)
+  - [UI Customization](#ui-customization)
+- [Customization Options](#customization-options)
+  - [Naming Conventions](#naming-conventions)
+  - [Code Styles](#code-styles)
+  - [Architecture Patterns](#architecture-patterns)
+- [Best Practices](#best-practices)
+  - [Template Customization](#template-customization)
+  - [Code Customization](#code-customization)
+- [Advanced Customization](#advanced-customization)
+  - [Custom Extensions](#custom-extensions)
+  - [Custom Validators](#custom-validators)
+- [Troubleshooting](#troubleshooting)
+  - [Common Issues](#common-issues)
+- [Support](#support)
+- [Next Steps](#next-steps)
+<!-- TOC END -->
+
+
 ## Overview
 
 This guide provides comprehensive information on how to customize and extend iOS app templates in the iOS App Templates framework.

@@ -1,5 +1,24 @@
 # UI Template Examples
 
+<!-- TOC START -->
+## Table of Contents
+- [UI Template Examples](#ui-template-examples)
+- [Overview](#overview)
+- [UI Frameworks](#ui-frameworks)
+  - [1. SwiftUI Templates](#1-swiftui-templates)
+  - [2. UIKit Templates](#2-uikit-templates)
+  - [3. Hybrid Templates](#3-hybrid-templates)
+  - [4. Custom UI Components](#4-custom-ui-components)
+  - [5. Animation Templates](#5-animation-templates)
+  - [6. Accessibility Templates](#6-accessibility-templates)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Requirements](#requirements)
+- [Design Principles](#design-principles)
+- [Support](#support)
+<!-- TOC END -->
+
+
 ## Overview
 
 This directory contains examples demonstrating different UI frameworks and template patterns available in the iOS App Templates framework.

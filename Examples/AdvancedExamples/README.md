@@ -1,5 +1,32 @@
 # Advanced Examples
 
+<!-- TOC START -->
+## Table of Contents
+- [Advanced Examples](#advanced-examples)
+- [Overview](#overview)
+- [Examples](#examples)
+  - [1. Complex Template Patterns](#1-complex-template-patterns)
+  - [2. Custom Template Creation](#2-custom-template-creation)
+  - [3. Integration Examples](#3-integration-examples)
+  - [4. Performance Optimization](#4-performance-optimization)
+  - [5. Security Implementation](#5-security-implementation)
+- [Getting Started](#getting-started)
+- [Requirements](#requirements)
+- [Best Practices](#best-practices)
+- [Support](#support)
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Installation (SPM)](#installation-spm)
+- [Quick Start](#quick-start)
+- [API Reference](#api-reference)
+- [Usage Examples](#usage-examples)
+- [Performance](#performance)
+- [Security](#security)
+- [Troubleshooting](#troubleshooting)
+- [FAQ](#faq)
+<!-- TOC END -->
+
+
 ## Overview
 
 This directory contains advanced examples demonstrating complex usage scenarios of iOS App Templates framework.

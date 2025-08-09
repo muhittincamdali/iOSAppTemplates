@@ -1,5 +1,30 @@
 # App Templates Guide
 
+<!-- TOC START -->
+## Table of Contents
+- [App Templates Guide](#app-templates-guide)
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Available App Templates](#available-app-templates)
+  - [Social Media App Template](#social-media-app-template)
+  - [E-commerce App Template](#e-commerce-app-template)
+  - [Chat App Template](#chat-app-template)
+- [Customization](#customization)
+  - [Adding Custom Features](#adding-custom-features)
+  - [Custom UI Components](#custom-ui-components)
+- [Best Practices](#best-practices)
+  - [Architecture](#architecture)
+  - [Performance](#performance)
+  - [Security](#security)
+- [Troubleshooting](#troubleshooting)
+  - [Common Issues](#common-issues)
+- [Support](#support)
+- [Next Steps](#next-steps)
+<!-- TOC END -->
+
+
 ## Overview
 
 This guide provides comprehensive information on how to use and customize app templates in the iOS App Templates framework.

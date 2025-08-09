@@ -1,5 +1,41 @@
 # 🏗️ Architecture Guide
 
+<!-- TOC START -->
+## Table of Contents
+- [🏗️ Architecture Guide](#-architecture-guide)
+- [📋 Table of Contents](#-table-of-contents)
+- [🏗️ Architecture Overview](#-architecture-overview)
+  - [**High-Level Architecture**](#high-level-architecture)
+- [🧹 Clean Architecture](#-clean-architecture)
+  - [**Layer Responsibilities**](#layer-responsibilities)
+    - [**Presentation Layer**](#presentation-layer)
+    - [**Domain Layer**](#domain-layer)
+    - [**Data Layer**](#data-layer)
+    - [**Infrastructure Layer**](#infrastructure-layer)
+  - [**Dependency Rule**](#dependency-rule)
+- [🎯 MVVM Pattern](#-mvvm-pattern)
+  - [**View (SwiftUI)**](#view-swiftui)
+  - [**ViewModel**](#viewmodel)
+  - [**Model (Entity)**](#model-entity)
+- [💉 Dependency Injection](#-dependency-injection)
+  - [**Container Setup**](#container-setup)
+  - [**Environment Objects**](#environment-objects)
+- [🔄 Data Flow](#-data-flow)
+  - [**Request Flow**](#request-flow)
+  - [**Error Handling Flow**](#error-handling-flow)
+  - [**State Management**](#state-management)
+- [🧪 Testing Strategy](#-testing-strategy)
+  - [**Unit Testing**](#unit-testing)
+  - [**Integration Testing**](#integration-testing)
+  - [**UI Testing**](#ui-testing)
+- [📁 Project Structure](#-project-structure)
+  - [**Directory Organization**](#directory-organization)
+  - [**File Naming Conventions**](#file-naming-conventions)
+- [📚 Next Steps](#-next-steps)
+- [🤝 Support](#-support)
+<!-- TOC END -->
+
+
 Complete architecture documentation for iOS App Templates.
 
 ## 📋 Table of Contents

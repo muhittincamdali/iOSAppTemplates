@@ -1,5 +1,35 @@
 # UI Templates Guide
 
+<!-- TOC START -->
+## Table of Contents
+- [UI Templates Guide](#ui-templates-guide)
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Available UI Templates](#available-ui-templates)
+  - [SwiftUI Template](#swiftui-template)
+  - [UIKit Template](#uikit-template)
+  - [Hybrid Template](#hybrid-template)
+- [UI Components](#ui-components)
+  - [Custom Components](#custom-components)
+  - [Animation Components](#animation-components)
+- [Design Principles](#design-principles)
+  - [Responsive Design](#responsive-design)
+  - [User Experience](#user-experience)
+- [Best Practices](#best-practices)
+  - [SwiftUI Best Practices](#swiftui-best-practices)
+  - [UIKit Best Practices](#uikit-best-practices)
+- [Customization](#customization)
+  - [Custom UI Components](#custom-ui-components)
+  - [Theme System](#theme-system)
+- [Troubleshooting](#troubleshooting)
+  - [Common Issues](#common-issues)
+- [Support](#support)
+- [Next Steps](#next-steps)
+<!-- TOC END -->
+
+
 ## Overview
 
 This guide provides comprehensive information on how to use and customize UI templates in the iOS App Templates framework.

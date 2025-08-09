@@ -1,5 +1,38 @@
 # 🔒 Security Guide
 
+<!-- TOC START -->
+## Table of Contents
+- [🔒 Security Guide](#-security-guide)
+- [Overview](#overview)
+- [Table of Contents](#table-of-contents)
+- [Security Principles](#security-principles)
+  - [Defense in Depth](#defense-in-depth)
+  - [Principle of Least Privilege](#principle-of-least-privilege)
+  - [Secure by Default](#secure-by-default)
+- [Data Protection](#data-protection)
+  - [Data Classification](#data-classification)
+  - [Encryption Standards](#encryption-standards)
+- [Network Security](#network-security)
+  - [HTTPS Implementation](#https-implementation)
+  - [Certificate Pinning](#certificate-pinning)
+- [Authentication](#authentication)
+  - [Biometric Authentication](#biometric-authentication)
+  - [Token Management](#token-management)
+- [Authorization](#authorization)
+  - [Role-Based Access Control](#role-based-access-control)
+- [Secure Storage](#secure-storage)
+  - [Keychain Integration](#keychain-integration)
+- [Code Security](#code-security)
+  - [Code Obfuscation](#code-obfuscation)
+  - [Input Validation](#input-validation)
+- [Testing Security](#testing-security)
+  - [Security Testing](#security-testing)
+- [Security Checklist](#security-checklist)
+- [Best Practices](#best-practices)
+- [Resources](#resources)
+<!-- TOC END -->
+
+
 ## Overview
 
 This comprehensive security guide provides best practices and implementation strategies for securing iOS applications built with iOS App Templates.
