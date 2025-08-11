@@ -1,0 +1,44 @@
+name: README Guard
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'README.md'
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore README.md from before-sha
+        run: |
+          set -euo pipefail
+          echo "HEAD: $(git rev-parse HEAD)"
+          echo "BEFORE: ${GITHUB_EVENT_BEFORE:-}"
+          if [ -z "${GITHUB_EVENT_BEFORE:-}" ]; then
+            echo "No before SHA; skipping"
+            exit 0
+          fi
+          BRANCH="chore/readme-revert-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git checkout "$GITHUB_EVENT_BEFORE" -- README.md || exit 0
+          if git diff --quiet README.md; then
+            echo "No README.md diff; exiting"
+            exit 0
+          fi
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          title: "Guard: Revert unauthorized README.md change"
+          body: "Automated revert of README.md to the state before this push."
+          commit-message: "chore: revert README.md to pre-push state"
+          branch: "chore/readme-revert-${{ github.run_id }}"
+          base: "${{ github.ref_name }}"
+          add-paths: |
+            README.md
