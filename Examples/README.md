@@ -1,21 +1,24 @@
-# Examples
+# 💡 Examples
 
-This directory contains practical examples demonstrating how to use iOSAppTemplates effectively.
+Welcome to our comprehensive examples collection! Here you'll find practical implementations and usage patterns for our framework.
 
-## Basic Example
+## 📱 Available Examples
 
-[BasicExample.swift](BasicExample.swift) - Simple setup and basic usage patterns.
+### Basic Example
+- **File**: `BasicExample.swift`
+- **Description**: Simple implementation showing fundamental usage
+- **Difficulty**: Beginner
+- **Use Case**: Quick prototyping and learning
 
-## Advanced Example
+## 🚀 Getting Started
 
-[AdvancedExample.swift](AdvancedExample.swift) - Complex configurations and advanced features.
+1. **Choose an example** that matches your skill level
+2. **Copy the code** into your project
+3. **Customize** according to your needs
+4. **Build and run** to see it in action
 
-## Running Examples
+## 📚 Related Documentation
 
-1. Open the project in Xcode
-2. Select the example target
-3. Build and run
-
-## Customization
-
-Feel free to modify these examples to suit your specific needs. Each example is designed to be educational and practical.
+- [Getting Started](Documentation/GettingStarted.md)
+- [API Reference](Documentation/API.md)
+- [Installation Guide](Documentation/Installation.md)
