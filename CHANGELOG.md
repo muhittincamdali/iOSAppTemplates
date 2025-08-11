@@ -226,4 +226,60 @@ None in this release.
 
 ---
 
-For more information about this release, see the [README.md](README.md) file. 
+For more information about this release, see the [README.md](README.md) file. # iOSAppTemplates - Update 1
+# iOSAppTemplates - Update 2
+# iOSAppTemplates - Update 3
+# iOSAppTemplates - Update 4
+# iOSAppTemplates - Update 5
+# iOSAppTemplates - Update 6
+# iOSAppTemplates - Update 7
+# iOSAppTemplates - Update 8
+# iOSAppTemplates - Update 9
+# iOSAppTemplates - Update 10
+# iOSAppTemplates - Update 11
+# iOSAppTemplates - Update 12
+# iOSAppTemplates - Update 13
+# iOSAppTemplates - Update 14
+# iOSAppTemplates - Update 15
+# iOSAppTemplates - Update 16
+# iOSAppTemplates - Update 17
+# iOSAppTemplates - Update 18
+# iOSAppTemplates - Update 19
+# iOSAppTemplates - Update 20
+# iOSAppTemplates - Update 21
+# iOSAppTemplates - Update 22
+# iOSAppTemplates - Update 23
+# iOSAppTemplates - Update 24
+# iOSAppTemplates - Update 25
+# iOSAppTemplates - Update 26
+# iOSAppTemplates - Update 27
+# iOSAppTemplates - Update 28
+# iOSAppTemplates - Update 29
+# iOSAppTemplates - Update 30
+# iOSAppTemplates - Update 31
+# iOSAppTemplates - Update 32
+# iOSAppTemplates - Update 33
+# iOSAppTemplates - Update 34
+# iOSAppTemplates - Update 35
+# iOSAppTemplates - Update 36
+# iOSAppTemplates - Update 37
+# iOSAppTemplates - Update 38
+# iOSAppTemplates - Update 39
+# iOSAppTemplates - Update 40
+# iOSAppTemplates - Update 41
+# iOSAppTemplates - Update 42
+# iOSAppTemplates - Update 43
+# iOSAppTemplates - Update 44
+# iOSAppTemplates - Update 45
+# iOSAppTemplates - Update 46
+# iOSAppTemplates - Update 47
+# iOSAppTemplates - Update 48
+# iOSAppTemplates - Update 49
+# iOSAppTemplates - Update 50
+# iOSAppTemplates - Update 51
+# iOSAppTemplates - Update 52
+# iOSAppTemplates - Update 53
+# iOSAppTemplates - Update 54
+# iOSAppTemplates - Update 55
+# iOSAppTemplates - Update 56
+# iOSAppTemplates - Update 57
