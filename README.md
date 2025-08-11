@@ -715,3 +715,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🌟 Stargazers
 
 [![Stargazers repo roster for @muhittincamdali/iOSAppTemplates](https://starchart.cc/muhittincamdali/iOSAppTemplates.svg)](https://github.com/muhittincamdali/iOSAppTemplates/stargazers) 
+
+## 🌟 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=muhittincamdali/iOSAppTemplates&type=Date)](https://star-history.com/#muhittincamdali/iOSAppTemplates&Date)
+
