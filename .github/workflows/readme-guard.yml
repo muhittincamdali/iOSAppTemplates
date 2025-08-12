@@ -1,0 +1,23 @@
+name: README Guard
+on:
+  push:
+    branches: [ main, master ]
+    paths: [ 'README.md' ]
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create review PR for README change
+        uses: peter-evans/create-pull-request@v6
+        with:
+          title: "Guard: Review README.md change"
+          body: "Automated guard: Please review README changes."
+          commit-message: "chore: guard README change"
+          branch: "chore/readme-guard-${{ github.run_id }}"
+          base: "${{ github.ref_name }}"
+          add-paths: |
+            README.md
