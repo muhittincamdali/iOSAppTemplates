@@ -3,3 +3,4 @@
 # Example:
 # * @org/maintainers
 README.md @maintainers
+Documentation/** @maintainers
