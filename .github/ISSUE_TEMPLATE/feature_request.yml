@@ -1,18 +1,194 @@
-name: Feature request
-description: Suggest an idea for this project
-labels: [enhancement]
+name: 💡 Feature Request
+description: Suggest a new feature or enhancement for iOS App Templates
+title: "[FEATURE] "
+labels: ["enhancement", "triage"]
+assignees: []
+
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a new feature! Please provide detailed information to help us understand and prioritize your request.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please check the following before submitting
+      options:
+        - label: I have searched existing issues and discussions to avoid duplicates
+          required: true
+        - label: I have read the [Contributing Guidelines](../../CONTRIBUTING.md)
+          required: true
+        - label: This feature aligns with the project's goals and scope
+          required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category
+      description: Which area does this feature request relate to?
+      options:
+        - Templates & Architectures
+        - TCA (The Composable Architecture)
+        - Vision Pro & visionOS
+        - AI/ML Integration
+        - Performance & Optimization
+        - Security & Privacy
+        - Social & Networking
+        - Commerce & Payments
+        - Health & Fitness
+        - Education & Learning
+        - Finance & Banking
+        - Travel & Transportation
+        - Developer Tools & Utilities
+        - Documentation & Guides
+        - Testing & Quality Assurance
+        - CI/CD & DevOps
+        - Other
+    validations:
+      required: true
+
   - type: textarea
     id: problem
     attributes:
-      label: Problem
-      description: Is your feature request related to a problem?
+      label: Problem Statement
+      description: Is your feature request related to a problem? Please describe the issue you're trying to solve.
+      placeholder: "As a [type of user], I'm frustrated when [current situation] because [reason]..."
+    validations:
+      required: true
+
   - type: textarea
     id: solution
     attributes:
-      label: Proposed solution
-      description: Describe the solution you'd like
+      label: Proposed Solution
+      description: Describe the feature you'd like to see implemented
+      placeholder: "I would like to see [specific feature] that would allow users to [specific benefit]..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: benefits
+    attributes:
+      label: Benefits & Use Cases
+      description: Explain the benefits and real-world use cases for this feature
+      placeholder: |
+        - Benefit 1: [description]
+        - Use case 1: [scenario]
+        - Impact: [who benefits and how]
+
   - type: textarea
     id: alternatives
     attributes:
-      label: Alternatives considered
+      label: Alternatives Considered
+      description: Describe any alternative solutions or features you've considered
+      placeholder: "Alternative 1: [description and why it's not ideal]..."
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Implementation Ideas
+      description: If you have ideas about how this could be implemented, please share them
+      placeholder: "This could potentially be implemented by..."
+
+  - type: textarea
+    id: code_example
+    attributes:
+      label: Code Example or Mockup
+      description: Provide a code example, API design, or visual mockup if applicable
+      render: swift
+      placeholder: |
+        // Example API usage
+        import iOSAppTemplates
+        
+        // Your proposed API or implementation idea here
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority Level
+      description: How important is this feature for your use case?
+      options:
+        - High - Critical for my project's success
+        - Medium - Would significantly improve my workflow
+        - Low - Nice to have enhancement
+        - Future - Not urgent, but valuable long-term
+    validations:
+      required: true
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Estimated Complexity
+      description: Based on your understanding, how complex do you think this feature would be to implement?
+      options:
+        - Simple - Minor changes or additions
+        - Moderate - Requires some new components or logic
+        - Complex - Significant architectural changes needed
+        - Unknown - I'm not sure about the technical complexity
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies & Requirements
+      description: Are there any dependencies, third-party libraries, or platform requirements?
+      placeholder: |
+        - Platform requirements: iOS 18.0+, visionOS 2.0+
+        - Dependencies: [list any required libraries]
+        - Hardware requirements: [if any]
+
+  - type: textarea
+    id: breaking_changes
+    attributes:
+      label: Breaking Changes
+      description: Would this feature require any breaking changes to existing APIs?
+      placeholder: "This feature would/would not require breaking changes because..."
+
+  - type: textarea
+    id: documentation
+    attributes:
+      label: Documentation Impact
+      description: What documentation would need to be created or updated?
+      placeholder: |
+        - New guides needed: [list]
+        - API documentation updates: [describe]
+        - Example projects: [describe]
+
+  - type: textarea
+    id: testing
+    attributes:
+      label: Testing Considerations
+      description: How should this feature be tested? What edge cases should be considered?
+      placeholder: |
+        - Unit tests: [describe test scenarios]
+        - Integration tests: [describe]
+        - Edge cases: [list potential issues]
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Any other context, screenshots, links, or information that would be helpful
+      placeholder: |
+        - Related issues: #[number]
+        - External resources: [links]
+        - Screenshots or mockups: [attach files]
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution Interest
+      description: Would you like to contribute to implementing this feature?
+      options:
+        - label: I would like to implement this feature myself
+        - label: I can help with design and planning
+        - label: I can provide testing and feedback
+        - label: I can help with documentation
+        - label: I can provide code review and guidance
+
+  - type: textarea
+    id: timeline
+    attributes:
+      label: Preferred Timeline
+      description: Do you have any timeline requirements or preferences?
+      placeholder: "This feature would be most valuable if implemented by [timeframe] because [reason]..."

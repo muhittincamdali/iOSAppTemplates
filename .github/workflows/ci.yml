@@ -1,13 +1,328 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ main, master, develop ]
   pull_request:
-    branches: [ "main", "master" ]
+    branches: [ main, master ]
+  release:
+    types: [ published ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_16.0.app/Contents/Developer
+  XCODE_VERSION: "16.0"
+  IOS_DEPLOYMENT_TARGET: "18.0"
+  VISIONOS_DEPLOYMENT_TARGET: "2.0"
 
 jobs:
-  noop:
-    runs-on: ubuntu-latest
+  # Swift Package Build & Test
+  swift-package:
+    name: Swift Package Build & Test
+    runs-on: macos-15
+    timeout-minutes: 30
+    
+    strategy:
+      matrix:
+        swift-version: ["6.0"]
+        platform: [iOS, macOS, tvOS, watchOS, visionOS]
+    
     steps:
-      - run: echo "Build temporarily disabled per repository policy"
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Select Xcode Version
+      run: |
+        sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
+        xcodebuild -version
+        swift --version
+    
+    - name: Cache Swift Package Manager
+      uses: actions/cache@v4
+      with:
+        path: |
+          .build
+          Package.resolved
+        key: ${{ runner.os }}-spm-${{ hashFiles('Package.swift', 'Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
+    
+    - name: Resolve Dependencies
+      run: swift package resolve
+    
+    - name: Build Package
+      run: |
+        swift build \
+          --configuration release \
+          --build-tests \
+          --enable-code-coverage
+    
+    - name: Run Tests
+      run: |
+        swift test \
+          --configuration release \
+          --enable-code-coverage \
+          --parallel
+    
+    - name: Generate Code Coverage
+      run: |
+        xcrun llvm-cov export \
+          .build/release/iOSAppTemplatesPackageTests.xctest/Contents/MacOS/iOSAppTemplatesPackageTests \
+          --format="lcov" \
+          --instr-profile .build/release/codecov/default.profdata > coverage.lcov
+    
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: coverage.lcov
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: false
+
+  # iOS Build & Test
+  ios-build:
+    name: iOS Build & UI Tests
+    runs-on: macos-15
+    timeout-minutes: 45
+    
+    strategy:
+      matrix:
+        ios-version: ["18.0", "17.5"]
+        device: ["iPhone 16", "iPhone 15 Pro", "iPad Pro (13-inch)"]
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Select Xcode Version
+      run: sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
+    
+    - name: Install iOS Simulators
+      run: |
+        sudo xcrun simctl list runtimes
+        sudo xcrun simctl create "Test Device" "com.apple.CoreSimulator.SimDeviceType.${{ matrix.device }}" "com.apple.CoreSimulator.SimRuntime.iOS-${{ matrix.ios-version }}"
+    
+    - name: Cache Dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          .build
+          DerivedData
+        key: ${{ runner.os }}-ios-${{ matrix.ios-version }}-${{ hashFiles('Package.swift') }}
+    
+    - name: Build for iOS
+      run: |
+        xcodebuild build \
+          -scheme iOSAppTemplates \
+          -destination "platform=iOS Simulator,name=${{ matrix.device }},OS=${{ matrix.ios-version }}" \
+          -configuration Release \
+          -derivedDataPath DerivedData \
+          CODE_SIGNING_ALLOWED=NO \
+          GCC_TREAT_WARNINGS_AS_ERRORS=YES
+    
+    - name: Run Unit Tests
+      run: |
+        xcodebuild test \
+          -scheme iOSAppTemplates \
+          -destination "platform=iOS Simulator,name=${{ matrix.device }},OS=${{ matrix.ios-version }}" \
+          -configuration Release \
+          -derivedDataPath DerivedData \
+          -enableCodeCoverage YES \
+          CODE_SIGNING_ALLOWED=NO
+
+  # visionOS Build & Test
+  visionos-build:
+    name: visionOS Build & Test
+    runs-on: macos-15
+    timeout-minutes: 30
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Select Xcode Version
+      run: sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
+    
+    - name: Build for visionOS
+      run: |
+        xcodebuild build \
+          -scheme VisionOSTemplates \
+          -destination "platform=visionOS Simulator,name=Apple Vision Pro" \
+          -configuration Release \
+          -derivedDataPath DerivedData \
+          CODE_SIGNING_ALLOWED=NO
+
+  # SwiftLint & Code Quality
+  code-quality:
+    name: Code Quality & Linting
+    runs-on: macos-15
+    timeout-minutes: 15
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Install SwiftLint
+      run: |
+        brew install swiftlint
+        swiftlint version
+    
+    - name: Run SwiftLint
+      run: |
+        swiftlint lint --reporter github-actions-logging
+    
+    - name: Run SwiftFormat Check
+      run: |
+        brew install swiftformat
+        swiftformat --lint .
+
+  # Security Scan
+  security-scan:
+    name: Security Vulnerability Scan
+    runs-on: macos-15
+    timeout-minutes: 20
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Run Trivy Security Scan
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+    
+    - name: Upload Security Scan Results
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  # Performance Benchmarks
+  performance-test:
+    name: Performance Benchmarks
+    runs-on: macos-15
+    timeout-minutes: 30
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Select Xcode Version
+      run: sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
+    
+    - name: Run Performance Tests
+      run: |
+        xcodebuild test \
+          -scheme PerformanceTemplates \
+          -destination "platform=iOS Simulator,name=iPhone 16" \
+          -configuration Release \
+          -derivedDataPath DerivedData \
+          -only-testing:PerformanceTemplatesTests/PerformanceTests \
+          CODE_SIGNING_ALLOWED=NO
+    
+    - name: Extract Performance Metrics
+      run: |
+        xcrun xcresulttool get \
+          --path DerivedData/Logs/Test/*.xcresult \
+          --format json > performance_results.json
+    
+    - name: Upload Performance Results
+      uses: actions/upload-artifact@v4
+      with:
+        name: performance-results
+        path: performance_results.json
+
+  # Documentation Generation
+  documentation:
+    name: Generate Documentation
+    runs-on: macos-15
+    timeout-minutes: 20
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Select Xcode Version
+      run: sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
+    
+    - name: Install DocC
+      run: |
+        swift package resolve
+    
+    - name: Generate Documentation
+      run: |
+        swift package generate-documentation \
+          --target iOSAppTemplates \
+          --output-path ./docs \
+          --hosting-base-path iOSAppTemplates
+    
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs
+
+  # Release Build & Distribution
+  release:
+    name: Release Build & Distribution
+    if: github.event_name == 'release'
+    runs-on: macos-15
+    timeout-minutes: 45
+    needs: [swift-package, ios-build, visionos-build, code-quality, security-scan]
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Select Xcode Version
+      run: sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
+    
+    - name: Build Release Package
+      run: |
+        swift build \
+          --configuration release \
+          --disable-sandbox
+    
+    - name: Create Release Archive
+      run: |
+        tar -czf iOSAppTemplates-${{ github.event.release.tag_name }}.tar.gz \
+          Sources/ \
+          Tests/ \
+          Package.swift \
+          README.md \
+          LICENSE \
+          Documentation/
+    
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./iOSAppTemplates-${{ github.event.release.tag_name }}.tar.gz
+        asset_name: iOSAppTemplates-${{ github.event.release.tag_name }}.tar.gz
+        asset_content_type: application/gzip
+
+  # Notify on Failure
+  notify-failure:
+    name: Notify on Failure
+    if: failure()
+    runs-on: ubuntu-latest
+    needs: [swift-package, ios-build, visionos-build, code-quality, security-scan]
+    
+    steps:
+    - name: Send Slack Notification
+      uses: 8398a7/action-slack@v3
+      with:
+        status: failure
+        channel: '#ios-development'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow
