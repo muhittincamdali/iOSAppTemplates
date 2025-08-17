@@ -185,10 +185,10 @@ struct FeatureFlags {
 
 ## 📚 Documentation
 
-- [Feed Implementation](./Documentation/Feed.md)
-- [Authentication Flow](./Documentation/Authentication.md)
-- [Message Encryption](./Documentation/Encryption.md)
-- [Performance Optimization](./Documentation/Performance.md)
+- [Architecture Guide](../../Documentation/ArchitectureTemplatesGuide.md)
+- [Security Implementation](../../Documentation/SecurityAPI.md)
+- [Best Practices](../../Documentation/BestPracticesGuide.md)
+- [Testing Guide](../../Documentation/TestingTemplatesGuide.md)
 
 ## 🤝 Contributing
 
