@@ -1,463 +1,432 @@
 # Contributing to iOS App Templates
 
-Thank you for your interest in contributing to iOS App Templates! This document provides guidelines and information for contributors.
+First off, thank you for considering contributing to iOS App Templates! It's people like you that make iOS App Templates such a great tool for the iOS development community. 🎉
 
-## Table of Contents
+## 📋 Table of Contents
 
 - [Code of Conduct](#code-of-conduct)
 - [How Can I Contribute?](#how-can-i-contribute)
 - [Development Setup](#development-setup)
-- [Coding Standards](#coding-standards)
-- [Testing](#testing)
-- [Documentation](#documentation)
+- [Development Workflow](#development-workflow)
+- [Style Guidelines](#style-guidelines)
+- [Commit Guidelines](#commit-guidelines)
 - [Pull Request Process](#pull-request-process)
-- [Release Process](#release-process)
+- [Community](#community)
 
-## Code of Conduct
+## 📜 Code of Conduct
 
-This project and everyone participating in it is governed by our Code of Conduct. By participating, you are expected to uphold this code.
+This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [conduct@iosapptemplates.dev](mailto:conduct@iosapptemplates.dev).
 
-## How Can I Contribute?
+## 🤝 How Can I Contribute?
 
 ### Reporting Bugs
 
-- Use the GitHub issue tracker
-- Include detailed reproduction steps
-- Provide system information (iOS version, device, etc.)
-- Include crash logs if applicable
-- Use the bug report template
+Before creating bug reports, please check existing issues to avoid duplicates. When you create a bug report, please include as many details as possible using our [bug report template](.github/ISSUE_TEMPLATE/bug_report.yml).
+
+**Great Bug Reports** tend to have:
+- A quick summary and/or background
+- Steps to reproduce (be specific!)
+- What you expected would happen
+- What actually happens
+- Sample code or project that demonstrates the issue
+- Notes (possibly including why you think this might be happening)
 
 ### Suggesting Enhancements
 
-- Use the GitHub issue tracker
-- Describe the enhancement clearly
-- Explain why this enhancement would be useful
-- Include mockups or examples if applicable
-- Use the enhancement request template
+Enhancement suggestions are tracked as GitHub issues using our [feature request template](.github/ISSUE_TEMPLATE/feature_request.yml).
+
+**Great Enhancement Suggestions** tend to have:
+- A clear and descriptive title
+- A detailed description of the proposed enhancement
+- Concrete examples of how it would be used
+- An explanation of why this enhancement would be useful
+- Mockups or wireframes (if applicable)
 
 ### Contributing Code
 
-- Fork the repository
-- Create a feature branch
-- Make your changes
-- Add tests for new functionality
-- Update documentation
-- Submit a pull request
+#### First Time Contributors
 
-### Improving Documentation
+Unsure where to begin? You can start by looking through these issues:
+- `good first issue` - issues which should only require a few lines of code
+- `help wanted` - issues which need extra attention
+- `documentation` - improvements or additions to documentation
 
+#### Types of Contributions
+
+##### 🚀 New Templates
+We love new template contributions! To add a new template:
+
+1. Create a new directory under `Templates/[Category]/`
+2. Follow our template structure:
+   ```
+   YourTemplate/
+   ├── Sources/
+   │   ├── Models/
+   │   ├── Views/
+   │   ├── ViewModels/
+   │   └── Services/
+   ├── Tests/
+   ├── Resources/
+   ├── README.md
+   └── Template.swift
+   ```
+3. Include comprehensive documentation
+4. Add unit and UI tests
+5. Update the template catalog
+
+##### 🐛 Bug Fixes
+- Write a test that exposes the bug
+- Fix the bug
+- Ensure all tests pass
+- Update documentation if needed
+
+##### 📚 Documentation
 - Fix typos and grammar
-- Add missing information
-- Improve clarity and structure
-- Add code examples
-- Update outdated information
+- Improve clarity of existing docs
+- Add missing documentation
+- Create tutorials and guides
+- Translate documentation
 
-## Development Setup
+##### ⚡ Performance Improvements
+- Profile the performance issue
+- Implement the improvement
+- Provide benchmark results
+- Document the optimization
+
+## 💻 Development Setup
 
 ### Prerequisites
 
-- Xcode 15.0+
-- iOS 15.0+ deployment target
-- Swift 5.9+
-- macOS 13.0+
+```bash
+# Install Xcode (16.0+)
+xcode-select --install
 
-### Getting Started
+# Install SwiftLint
+brew install swiftlint
 
-1. **Fork the repository**
+# Install Swift Format
+brew install swift-format
+
+# Clone the repository
+git clone https://github.com/yourusername/iOSAppTemplates.git
+cd iOSAppTemplates
+```
+
+### Building the Project
+
+```bash
+# Resolve dependencies
+swift package resolve
+
+# Build the project
+swift build
+
+# Run tests
+swift test
+
+# Generate documentation
+swift package generate-documentation
+```
+
+### Setting Up Development Environment
+
+1. **Fork the Repository**
    ```bash
-   git clone https://github.com/your-username/iOSAppTemplates.git
+   # Fork via GitHub UI, then:
+   git clone https://github.com/YOUR_USERNAME/iOSAppTemplates.git
    cd iOSAppTemplates
+   git remote add upstream https://github.com/yourusername/iOSAppTemplates.git
    ```
 
-2. **Install dependencies**
+2. **Create a Branch**
    ```bash
-   # Swift Package Manager (automatic)
-   # No additional setup required
+   git checkout -b feature/your-feature-name
+   # or
+   git checkout -b fix/issue-number
    ```
 
-3. **Open in Xcode**
+3. **Install Git Hooks**
    ```bash
-   open iOSAppTemplates.xcodeproj
+   # Install pre-commit hooks
+   cp .githooks/pre-commit .git/hooks/
+   chmod +x .git/hooks/pre-commit
    ```
 
-4. **Run tests**
-   ```bash
-   xcodebuild test -scheme iOSAppTemplates
-   ```
+## 🔄 Development Workflow
 
-### Project Structure
+### 1. Stay Updated
 
-```
-iOSAppTemplates/
-├── Templates/
-│   ├── SocialMediaApp/
-│   ├── EcommerceApp/
-│   └── FitnessApp/
-├── Documentation/
-│   ├── GettingStarted.md
-│   ├── Architecture.md
-│   ├── TemplateGuide.md
-│   ├── UIComponents.md
-│   └── API.md
-├── Examples/
-│   ├── BasicExample/
-│   ├── AdvancedExample/
-│   └── CustomExample/
-├── Sources/
-│   ├── Core/
-│   ├── UI/
-│   └── Utils/
-├── Tests/
-│   ├── UnitTests/
-│   ├── UITests/
-│   └── IntegrationTests/
-└── Resources/
-    ├── Assets/
-    └── Localization/
+```bash
+# Fetch upstream changes
+git fetch upstream
+git checkout main
+git merge upstream/main
 ```
 
-## Coding Standards
+### 2. Make Your Changes
+
+Follow our coding standards and ensure:
+- All tests pass
+- SwiftLint warnings are resolved
+- Documentation is updated
+- Changelog entry is added (if applicable)
+
+### 3. Test Your Changes
+
+```bash
+# Run all tests
+swift test
+
+# Run specific tests
+swift test --filter YourTestName
+
+# Run SwiftLint
+swiftlint
+
+# Run Swift Format
+swift-format -i Sources/**/*.swift
+```
+
+### 4. Commit Your Changes
+
+Follow our [commit message conventions](#commit-guidelines):
+
+```bash
+git add .
+git commit -m "feat(templates): add new social media template"
+```
+
+### 5. Push Your Branch
+
+```bash
+git push origin feature/your-feature-name
+```
+
+### 6. Create Pull Request
+
+Use our [pull request template](.github/pull_request_template.md) and ensure:
+- PR description clearly describes the changes
+- All CI checks pass
+- Documentation is updated
+- Tests are included
+
+## 🎨 Style Guidelines
 
 ### Swift Style Guide
 
-We follow the [Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/) and [Google Swift Style Guide](https://google.github.io/swift/).
+We follow the [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/) and use SwiftLint for enforcement.
 
-### Key Principles
-
-- **Clarity**: Code should be self-documenting
-- **Consistency**: Follow established patterns
-- **Simplicity**: Prefer simple solutions over complex ones
-- **Performance**: Consider performance implications
-- **Accessibility**: Ensure accessibility compliance
-
-### Naming Conventions
+#### Key Points:
 
 ```swift
-// Types and protocols
-struct UserProfile { }
-protocol DataService { }
+// MARK: - Naming
 
-// Functions and methods
-func fetchUserData() { }
-func calculateTotalPrice() { }
+// Use descriptive names
+let maximumWidgetCount = 100 // Good
+let maxCount = 100 // Avoid
 
-// Variables and constants
-let maximumRetryCount = 3
-var currentUser: User?
+// Use camelCase for functions and variables
+func calculateTotalPrice() -> Double
+var itemCount: Int
 
-// Enums
-enum NetworkError: Error {
-    case timeout
-    case invalidResponse
-}
-```
+// Use PascalCase for types
+struct UserProfile
+enum PaymentMethod
+protocol Downloadable
 
-### Code Organization
+// MARK: - Code Organization
 
-```swift
-// MARK: - Imports
-import SwiftUI
-import Firebase
-
-// MARK: - Protocols
-protocol UserServiceProtocol {
-    func fetchUser(id: String) async throws -> User
-}
-
-// MARK: - Models
-struct User: Identifiable, Codable {
+// Use extensions for protocol conformance
+struct User {
     let id: String
     let name: String
-    let email: String
 }
 
-// MARK: - Services
-class UserService: UserServiceProtocol {
-    func fetchUser(id: String) async throws -> User {
-        // Implementation
-    }
+extension User: Codable {
+    // Codable implementation
 }
 
-// MARK: - ViewModels
-class UserViewModel: ObservableObject {
-    @Published var user: User?
-    @Published var isLoading = false
+// MARK: - Documentation
+
+/// Calculates the total price including tax
+/// - Parameters:
+///   - subtotal: The price before tax
+///   - taxRate: The tax rate as a decimal (e.g., 0.08 for 8%)
+/// - Returns: The total price including tax
+func calculateTotal(subtotal: Double, taxRate: Double) -> Double {
+    subtotal * (1 + taxRate)
+}
+```
+
+### File Organization
+
+```swift
+// 1. Imports
+import SwiftUI
+import Combine
+
+// 2. Protocols
+protocol DataServiceProtocol {
+    // Protocol definition
+}
+
+// 3. Main Type
+struct ContentView: View {
+    // 4. Properties
+    @State private var isLoading = false
+    @StateObject private var viewModel = ContentViewModel()
     
-    func loadUser(id: String) async {
-        // Implementation
-    }
-}
-
-// MARK: - Views
-struct UserView: View {
-    @StateObject private var viewModel = UserViewModel()
-    
+    // 5. Body/Computed Properties
     var body: some View {
-        // Implementation
+        // View implementation
+    }
+    
+    // 6. Methods
+    private func loadData() {
+        // Method implementation
+    }
+}
+
+// 7. Extensions
+extension ContentView {
+    // Additional functionality
+}
+
+// 8. Nested Types
+extension ContentView {
+    struct Configuration {
+        // Nested type
     }
 }
 ```
 
-### Documentation
+## 📝 Commit Guidelines
 
-```swift
-/// A service for managing user data and authentication.
-///
-/// This service provides methods for fetching user information,
-/// handling authentication, and managing user sessions.
-///
-/// ## Usage
-/// ```swift
-/// let userService = UserService()
-/// let user = try await userService.fetchUser(id: "123")
-/// ```
-///
-/// - Note: This service requires a valid authentication token.
-/// - Warning: Do not call this service from the main thread.
-class UserService {
-    
-    /// Fetches user data by ID.
-    ///
-    /// - Parameter id: The unique identifier of the user.
-    /// - Returns: A `User` object containing the user's information.
-    /// - Throws: `NetworkError` if the request fails.
-    func fetchUser(id: String) async throws -> User {
-        // Implementation
-    }
-}
-```
+We use [Conventional Commits](https://www.conventionalcommits.org/) for commit messages.
 
-## Testing
-
-### Test Structure
+### Format
 
 ```
-Tests/
-├── UnitTests/
-│   ├── Models/
-│   ├── Services/
-│   ├── ViewModels/
-│   └── Utils/
-├── UITests/
-│   ├── FlowTests/
-│   ├── ComponentTests/
-│   └── AccessibilityTests/
-└── IntegrationTests/
-    ├── APITests/
-    ├── DatabaseTests/
-    └── PerformanceTests/
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
 ```
 
-### Writing Tests
+### Types
 
-```swift
-import XCTest
-@testable import iOSAppTemplates
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, etc.)
+- `refactor`: Code refactoring
+- `perf`: Performance improvements
+- `test`: Test additions or corrections
+- `build`: Build system changes
+- `ci`: CI/CD changes
+- `chore`: Maintenance tasks
 
-final class UserServiceTests: XCTestCase {
-    
-    var userService: UserService!
-    
-    override func setUp() {
-        super.setUp()
-        userService = UserService()
-    }
-    
-    override func tearDown() {
-        userService = nil
-        super.tearDown()
-    }
-    
-    func testFetchUserSuccess() async throws {
-        // Given
-        let userId = "123"
-        
-        // When
-        let user = try await userService.fetchUser(id: userId)
-        
-        // Then
-        XCTAssertEqual(user.id, userId)
-        XCTAssertNotNil(user.name)
-        XCTAssertNotNil(user.email)
-    }
-    
-    func testFetchUserFailure() async {
-        // Given
-        let invalidUserId = ""
-        
-        // When & Then
-        do {
-            _ = try await userService.fetchUser(id: invalidUserId)
-            XCTFail("Expected error to be thrown")
-        } catch {
-            XCTAssertTrue(error is NetworkError)
-        }
-    }
-}
+### Examples
+
+```bash
+# Feature
+feat(templates): add new e-commerce template with payment integration
+
+# Bug Fix
+fix(auth): resolve token refresh issue in authentication flow
+
+# Documentation
+docs(readme): update installation instructions for Swift 6.0
+
+# Performance
+perf(feed): optimize image loading with lazy loading
+
+# Breaking Change
+feat(api)!: update API client to v2.0
+
+BREAKING CHANGE: API client now requires Swift 6.0
 ```
 
-### Test Coverage
-
-- Aim for at least 80% code coverage
-- Test all public APIs
-- Test error conditions
-- Test edge cases
-- Test performance critical paths
-
-## Documentation
-
-### Documentation Standards
-
-- Use clear, concise language
-- Include code examples
-- Provide step-by-step instructions
-- Include screenshots when helpful
-- Keep documentation up to date
-
-### Documentation Structure
-
-```
-Documentation/
-├── GettingStarted.md
-├── Architecture.md
-├── TemplateGuide.md
-├── UIComponents.md
-├── API.md
-├── Examples/
-│   ├── BasicExample.md
-│   ├── AdvancedExample.md
-│   └── CustomExample.md
-└── Guides/
-    ├── Deployment.md
-    ├── Testing.md
-    └── Troubleshooting.md
-```
-
-## Pull Request Process
+## 🚀 Pull Request Process
 
 ### Before Submitting
 
-1. **Ensure tests pass**
-   ```bash
-   xcodebuild test -scheme iOSAppTemplates
-   ```
+1. **Update Documentation** - Include relevant documentation changes
+2. **Add Tests** - Ensure adequate test coverage
+3. **Run Tests Locally** - All tests must pass
+4. **Update CHANGELOG** - Add entry for significant changes
+5. **Resolve Conflicts** - Merge latest main branch
 
-2. **Check code style**
-   ```bash
-   swiftlint lint
-   ```
+### PR Checklist
 
-3. **Update documentation**
-   - Update README if needed
-   - Add inline documentation
-   - Update API documentation
-
-4. **Test on different devices**
-   - iPhone simulator
-   - iPad simulator
-   - Different iOS versions
-
-### Pull Request Template
-
-```markdown
-## Description
-Brief description of changes
-
-## Type of Change
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Breaking change
-- [ ] Documentation update
-
-## Testing
-- [ ] Unit tests pass
-- [ ] UI tests pass
-- [ ] Manual testing completed
-
-## Checklist
 - [ ] Code follows style guidelines
 - [ ] Self-review completed
 - [ ] Documentation updated
 - [ ] Tests added/updated
-- [ ] No breaking changes
-
-## Screenshots (if applicable)
-Add screenshots here
-
-## Additional Notes
-Any additional information
-```
+- [ ] All tests pass
+- [ ] SwiftLint passes
+- [ ] No merge conflicts
+- [ ] PR template completed
 
 ### Review Process
 
-1. **Automated checks**
-   - CI/CD pipeline
-   - Code coverage
-   - Style checks
+1. **Automated Checks** - CI/CD must pass
+2. **Code Review** - At least one maintainer approval
+3. **Testing** - Manual testing if applicable
+4. **Documentation Review** - Docs team review if needed
+5. **Merge** - Squash and merge to main
 
-2. **Manual review**
-   - Code quality
-   - Architecture decisions
-   - Performance implications
-   - Security considerations
+### After Merge
 
-3. **Testing**
-   - Functionality testing
-   - Integration testing
-   - Performance testing
+- Delete your branch
+- Update your local repository
+- Celebrate your contribution! 🎉
 
-## Release Process
+## 👥 Community
 
-### Versioning
+### Communication Channels
 
-We follow [Semantic Versioning](https://semver.org/):
+- **GitHub Discussions** - General discussions and questions
+- **Discord Server** - Real-time chat and support
+- **Twitter** - Updates and announcements
+- **Stack Overflow** - Technical questions (tag: `ios-app-templates`)
 
-- **MAJOR**: Breaking changes
-- **MINOR**: New features (backward compatible)
-- **PATCH**: Bug fixes (backward compatible)
+### Getting Help
 
-### Release Checklist
+- Review existing documentation
+- Search existing issues and discussions
+- Ask in Discord `#help` channel
+- Create a discussion for broader topics
+- Open an issue for bugs or features
 
-- [ ] All tests pass
-- [ ] Documentation updated
-- [ ] CHANGELOG.md updated
-- [ ] Version number updated
-- [ ] Release notes prepared
-- [ ] Tag created
-- [ ] Release published
+### Recognition
 
-### Creating a Release
-
-1. **Update version**
-   ```bash
-   # Update version in project files
-   # Update CHANGELOG.md
-   ```
-
-2. **Create tag**
-   ```bash
-   git tag -a v1.0.0 -m "Release version 1.0.0"
-   git push origin v1.0.0
-   ```
-
-3. **Create GitHub release**
-   - Go to GitHub releases
-   - Create new release
-   - Add release notes
-   - Upload assets
-
-## Getting Help
-
-- **Issues**: Use GitHub issues
-- **Discussions**: Use GitHub discussions
-- **Documentation**: Check the docs folder
-- **Examples**: Check the examples folder
-
-## Recognition
-
-Contributors will be recognized in:
-- README.md contributors section
+Contributors are recognized in:
+- [Contributors list](https://github.com/yourusername/iOSAppTemplates/contributors)
 - Release notes
-- GitHub contributors page
+- Annual contributor spotlight
+- Special badges in Discord
 
-Thank you for contributing to iOS App Templates! 
+## 📄 License
+
+By contributing, you agree that your contributions will be licensed under the MIT License.
+
+## 🙏 Acknowledgments
+
+Thank you to all our contributors! Your efforts make this project possible.
+
+Special thanks to:
+- All template contributors
+- Documentation writers
+- Bug reporters and fixers
+- Community moderators
+- Everyone who spreads the word
+
+---
+
+<div align="center">
+  <strong>Happy Contributing! 🚀</strong>
+  <br>
+  <em>Together, we're building the best iOS development toolkit</em>
+</div>

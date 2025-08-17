@@ -1,26 +1,188 @@
-name: Bug report
-description: Create a report to help us improve
-labels: [bug]
+name: 🐛 Bug Report
+description: Report a bug or issue with iOS App Templates
+title: "[BUG] "
+labels: ["bug", "triage"]
+assignees: []
+
 body:
-  - type: textarea
-    id: description
+  - type: markdown
     attributes:
-      label: Description
-      description: A clear and concise description of what the bug is
-    validations:
-      required: true
-  - type: textarea
-    id: steps
+      value: |
+        Thank you for reporting a bug! Please fill out the information below to help us resolve the issue quickly.
+
+  - type: checkboxes
+    id: checklist
     attributes:
-      label: Steps To Reproduce
-      description: Steps to reproduce the behavior
+      label: Pre-submission Checklist
+      description: Please check the following before submitting
+      options:
+        - label: I have searched existing issues to avoid duplicates
+          required: true
+        - label: I have read the [Contributing Guidelines](../../CONTRIBUTING.md)
+          required: true
+        - label: I am using the latest version of iOS App Templates
+          required: true
+
   - type: input
     id: version
     attributes:
-      label: Version
-      description: Library/app version if applicable
+      label: iOS App Templates Version
+      description: Which version are you using?
+      placeholder: "e.g., 2.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: template
+    attributes:
+      label: Affected Template
+      description: Which template is experiencing the issue?
+      options:
+        - TCA Templates
+        - Vision Pro Templates  
+        - AI/ML Templates
+        - Performance Templates
+        - Security Templates
+        - Social Templates
+        - Commerce Templates
+        - Health Templates
+        - Education Templates
+        - Finance Templates
+        - Travel Templates
+        - Other/Multiple
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: Which platform(s) are affected?
+      multiple: true
+      options:
+        - iOS 18.0+
+        - iOS 17.x
+        - visionOS 2.0+
+        - macOS 15.0+
+        - tvOS 18.0+
+        - watchOS 11.0+
+    validations:
+      required: true
+
+  - type: dropdown
+    id: xcode
+    attributes:
+      label: Xcode Version
+      description: Which Xcode version are you using?
+      options:
+        - Xcode 16.0
+        - Xcode 15.4
+        - Xcode 15.3
+        - Xcode 15.2
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of the bug
+      placeholder: Describe what happened and what you expected to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Step-by-step instructions to reproduce the issue
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should have happened?
+      placeholder: Describe the expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Describe what actually happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Code Sample
+      description: Minimal code sample that reproduces the issue
+      render: swift
+      placeholder: |
+        import SwiftUI
+        import iOSAppTemplates
+        
+        // Your code here
+
   - type: textarea
     id: logs
     attributes:
-      label: Logs
-      description: Paste relevant logs
+      label: Console Output/Error Messages
+      description: Any relevant console output, error messages, or crash logs
+      render: shell
+      placeholder: Paste console output here
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots/Videos
+      description: If applicable, add screenshots or videos to help explain the problem
+      placeholder: Drag and drop images or videos here
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is this issue?
+      options:
+        - Critical - App crashes or unusable
+        - High - Major feature broken
+        - Medium - Minor feature issue
+        - Low - Cosmetic/polish issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Workaround
+      description: Have you found any workaround for this issue?
+      placeholder: Describe any workaround you've found
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context about the problem
+      placeholder: Add any other context, environment details, or relevant information
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Would you like to contribute a fix?
+      options:
+        - label: I would like to work on fixing this issue
+        - label: I can provide additional testing
+        - label: I can help with documentation updates
