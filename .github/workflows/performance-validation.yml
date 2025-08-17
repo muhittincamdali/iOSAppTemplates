@@ -1,4 +1,4 @@
-name: Performance Validation - GLOBAL_AI_STANDARDS
+name: Performance Validation - ENTERPRISE_STANDARDS
 
 on:
   push:
@@ -128,7 +128,7 @@ jobs:
           
     - name: Performance Validation Gate
       run: |
-        echo "🎯 GLOBAL_AI_STANDARDS Performance Validation"
+        echo "🎯 ENTERPRISE_STANDARDS Performance Validation"
         echo "Platform: ${{ matrix.platform }}"
         echo "Configuration: ${{ matrix.configuration }}"
         echo ""
@@ -276,7 +276,7 @@ jobs:
         echo "- No significant regressions detected"
 
   compliance-report:
-    name: GLOBAL_AI_STANDARDS Compliance Report
+    name: ENTERPRISE_STANDARDS Compliance Report
     runs-on: macos-15
     needs: [performance-benchmarks, memory-profiling, battery-efficiency]
     if: always()
@@ -290,7 +290,7 @@ jobs:
         
     - name: Generate Compliance Report
       run: |
-        echo "# 📊 GLOBAL_AI_STANDARDS Performance Compliance Report" > compliance-report.md
+        echo "# 📊 ENTERPRISE_STANDARDS Performance Compliance Report" > compliance-report.md
         echo "" >> compliance-report.md
         echo "**Generated**: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> compliance-report.md
         echo "**Commit**: ${{ github.sha }}" >> compliance-report.md
@@ -313,12 +313,12 @@ jobs:
         
         echo "## 🎯 Overall Compliance Score: 100%" >> compliance-report.md
         echo "" >> compliance-report.md
-        echo "All GLOBAL_AI_STANDARDS performance requirements have been met successfully." >> compliance-report.md
+        echo "All ENTERPRISE_STANDARDS performance requirements have been met successfully." >> compliance-report.md
         
     - name: Upload Compliance Report
       uses: actions/upload-artifact@v4
       with:
-        name: global-ai-standards-compliance-report
+        name: enterprise-standards-compliance-report
         path: compliance-report.md
         retention-days: 90
         

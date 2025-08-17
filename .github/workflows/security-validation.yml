@@ -1,4 +1,4 @@
-name: Security Validation - GLOBAL_AI_STANDARDS
+name: Security Validation - ENTERPRISE_STANDARDS
 
 on:
   push:
@@ -74,7 +74,7 @@ jobs:
           
     - name: Security Validation Gate
       run: |
-        echo "🔐 GLOBAL_AI_STANDARDS Security Validation"
+        echo "🔐 ENTERPRISE_STANDARDS Security Validation"
         echo "Platform: ${{ matrix.platform }}"
         echo "Configuration: ${{ matrix.configuration }}"
         echo ""
@@ -302,7 +302,7 @@ jobs:
         
     - name: Generate Security Compliance Report
       run: |
-        echo "# 🔒 GLOBAL_AI_STANDARDS Security Compliance Report" > security-compliance-report.md
+        echo "# 🔒 ENTERPRISE_STANDARDS Security Compliance Report" > security-compliance-report.md
         echo "" >> security-compliance-report.md
         echo "**Generated**: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> security-compliance-report.md
         echo "**Commit**: ${{ github.sha }}" >> security-compliance-report.md
@@ -346,7 +346,7 @@ jobs:
         
         echo "## 🎯 Overall Security Score: 97.5%" >> security-compliance-report.md
         echo "" >> security-compliance-report.md
-        echo "**Excellence in Security**: All GLOBAL_AI_STANDARDS security requirements exceeded." >> security-compliance-report.md
+        echo "**Excellence in Security**: All ENTERPRISE_STANDARDS security requirements exceeded." >> security-compliance-report.md
         echo "" >> security-compliance-report.md
         echo "### 🔧 Recommendations" >> security-compliance-report.md
         echo "1. **Implement behavioral anomaly detection** for advanced threat detection" >> security-compliance-report.md

@@ -11,7 +11,7 @@ import RealityKit
 @testable import VisionOSTemplates
 
 /// Comprehensive test suite for visionOS Templates
-/// GLOBAL_AI_STANDARDS Compliant: >95% test coverage
+/// Enterprise Standards Compliant: >95% test coverage
 @Suite("VisionOS Templates Tests")
 final class VisionOSTemplatesTests: XCTestCase {
     

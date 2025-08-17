@@ -11,7 +11,7 @@ import QuartzCore
 import UIKit
 @testable import iOSAppTemplates
 
-/// GLOBAL_AI_STANDARDS Performance Validation Suite
+/// Enterprise Standards Performance Validation Suite
 /// Validates all performance requirements for enterprise compliance
 @Suite("Performance Benchmark Tests")
 final class PerformanceBenchmarkTests: XCTestCase {
@@ -22,7 +22,7 @@ final class PerformanceBenchmarkTests: XCTestCase {
     private var memoryTracker: MemoryTracker!
     private var animationProfiler: AnimationProfiler!
     
-    // MARK: - GLOBAL_AI_STANDARDS Performance Thresholds
+    // MARK: - Enterprise Standards Performance Thresholds
     
     private let performanceThresholds = PerformanceThresholds(
         coldLaunchTime: 1.0,        // <1 second
@@ -56,7 +56,7 @@ final class PerformanceBenchmarkTests: XCTestCase {
     
     // MARK: - Launch Performance Tests
     
-    @Test("Cold app launch completes under 1 second - GLOBAL_AI_STANDARDS")
+    @Test("Cold app launch completes under 1 second - Enterprise Standards")
     func testColdLaunchPerformance() async throws {
         // Given
         let appDelegate = TestAppDelegate()
@@ -74,7 +74,7 @@ final class PerformanceBenchmarkTests: XCTestCase {
         let endTime = CFAbsoluteTimeGetCurrent()
         let launchTime = endTime - startTime
         
-        // Then - Validate GLOBAL_AI_STANDARDS requirement
+        // Then - Validate Enterprise Standards requirement
         #expect(launchTime < performanceThresholds.coldLaunchTime, 
                 "Cold launch time \(String(format: "%.3f", launchTime))s exceeds \(performanceThresholds.coldLaunchTime)s threshold")
         
@@ -86,7 +86,7 @@ final class PerformanceBenchmarkTests: XCTestCase {
         )
     }
     
-    @Test("Hot app launch completes under 300ms - GLOBAL_AI_STANDARDS")
+    @Test("Hot app launch completes under 300ms - Enterprise Standards")
     func testHotLaunchPerformance() async throws {
         // Given - App already initialized (simulated warm state)
         let appDelegate = TestAppDelegate()
@@ -112,7 +112,7 @@ final class PerformanceBenchmarkTests: XCTestCase {
         )
     }
     
-    @Test("App launch memory footprint under 100MB - GLOBAL_AI_STANDARDS")
+    @Test("App launch memory footprint under 100MB - Enterprise Standards")
     func testLaunchMemoryFootprint() async throws {
         // Given
         let initialMemory = memoryTracker.currentUsage()
@@ -139,7 +139,7 @@ final class PerformanceBenchmarkTests: XCTestCase {
     
     // MARK: - Animation Performance Tests
     
-    @Test("UI animations maintain 120fps - GLOBAL_AI_STANDARDS")
+    @Test("UI animations maintain 120fps - Enterprise Standards")
     func testAnimationPerformance() async throws {
         // Given
         let animationDuration: TimeInterval = 1.0
@@ -178,7 +178,7 @@ final class PerformanceBenchmarkTests: XCTestCase {
         await performanceMonitor.recordAnimationMetrics(animationMetrics)
     }
     
-    @Test("Scroll performance maintains 120fps - GLOBAL_AI_STANDARDS")
+    @Test("Scroll performance maintains 120fps - Enterprise Standards")
     func testScrollPerformance() async throws {
         // Given
         let tableView = UITableView(frame: CGRect(x: 0, y: 0, width: 375, height: 667))
@@ -439,7 +439,7 @@ final class PerformanceBenchmarkTests: XCTestCase {
                 "Critical performance issues found: \(report.criticalIssues)")
         
         // Log detailed report
-        print("📊 GLOBAL_AI_STANDARDS Performance Report:")
+        print("📊 Enterprise Standards Performance Report:")
         print("Score: \(String(format: "%.1f", report.overallScore))%")
         print("Launch Performance: \(report.launchScore)%")
         print("Animation Performance: \(report.animationScore)%")

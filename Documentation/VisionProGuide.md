@@ -1,8 +1,8 @@
-# 🥽 Vision Pro Development Guide - GLOBAL_AI_STANDARDS
+# 🥽 Vision Pro Development Guide
 
 ## 📋 Overview
 
-Complete guide for developing **spatial computing applications** on visionOS 2.0+ following GLOBAL_AI_STANDARDS with **944+ lines** of production-ready spatial code.
+Complete guide for developing **spatial computing applications** on visionOS 2.0+ with **944+ lines** of production-ready spatial code.
 
 ## ✨ What You'll Build
 
@@ -835,7 +835,7 @@ class SpatialAudioManager {
 }
 ```
 
-## 🎯 GLOBAL_AI_STANDARDS Compliance
+## 🎯 Performance Standards Compliance
 
 ### visionOS Performance Targets
 - ✅ **Frame Rate**: 90fps minimum (120fps preferred)

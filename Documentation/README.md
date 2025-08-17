@@ -1,79 +1,44 @@
 # iOS App Templates Documentation
 
-<<<<<<< HEAD
-- [](&)Documentation/API-Reference.md
-- [](&)Documentation/API.md
-- [](&)Documentation/API/UserAPI.md
-- [](&)Documentation/AppTemplatesAPI.md
-- [](&)Documentation/AppTemplatesGuide.md
-- [](&)Documentation/Architecture.md
-- [](&)Documentation/ArchitectureTemplatesAPI.md
-- [](&)Documentation/ArchitectureTemplatesGuide.md
-- [](&)Documentation/Best-Practices.md
-- [](&)Documentation/BestPracticesGuide.md
-- [](&)Documentation/ConfigurationAPI.md
-- [](&)Documentation/CustomizationAPI.md
-- [](&)Documentation/CustomizationGuide.md
-- [](&)Documentation/GenerationAPI.md
-- [](&)Documentation/Getting-Started.md
-- [](&)Documentation/GettingStarted.md
-- [](&)Documentation/Guides/ArchitectureGuide.md
-- [](&)Documentation/Guides/PerformanceGuide.md
-- [](&)Documentation/Guides/SecurityGuide.md
-- [](&)Documentation/Guides/TestingGuide.md
-- [](&)Documentation/Installation.md
-- [](&)Documentation/TemplateGuide.md
-- [](&)Documentation/TemplateManagerAPI.md
-- [](&)Documentation/TestingTemplatesAPI.md
-- [](&)Documentation/TestingTemplatesGuide.md
-- [](&)Documentation/Troubleshooting.md
-- [](&)Documentation/UIComponents.md
-- [](&)Documentation/UITemplatesAPI.md
-- [](&)Documentation/UITemplatesGuide.md
-=======
 Welcome to the comprehensive documentation for iOS App Templates - a world-class collection of production-ready iOS application templates.
 
 ## 📚 Documentation Structure
 
 ### 🚀 Getting Started
-- [Installation Guide](./Guides/Installation.md) - Setup instructions and requirements
-- [Quick Start](./Guides/QuickStart.md) - Build your first app in 5 minutes
-- [Project Setup](./Guides/ProjectSetup.md) - Configure your development environment
+- [Quick Start Guide](./Guides/QuickStart.md) - Build your first app in 5 minutes
+- [First App Tutorial](./FirstApp.md) - Complete walkthrough with code examples
 
 ### 🏗️ Architecture
-- [Architecture Overview](./Architecture/Overview.md) - System design and principles
-- [Clean Architecture](./Architecture/CleanArchitecture.md) - SOLID principles implementation
-- [TCA Architecture](./Architecture/TCA.md) - The Composable Architecture patterns
-- [Design Patterns](./Architecture/DesignPatterns.md) - Common patterns and best practices
+- [Architecture API Reference](./ArchitectureAPI.md) - Complete architecture patterns
+- [Architecture Templates Guide](./ArchitectureTemplatesGuide.md) - Implementation guide
+- [Best Practices Guide](./BestPracticesGuide.md) - SOLID principles and patterns
 
 ### 📱 Templates
-- [Template Catalog](./Templates/Catalog.md) - Complete list of available templates
-- [TCA Templates](./Templates/TCA.md) - Composable Architecture templates
-- [Vision Pro Templates](./Templates/VisionPro.md) - visionOS and spatial computing
-- [AI/ML Templates](./Templates/AIML.md) - Machine learning integrated apps
-- [Performance Templates](./Templates/Performance.md) - High-performance patterns
-- [Security Templates](./Templates/Security.md) - Security-first implementations
+- [Template Guide](./TemplateGuide.md) - Complete template catalog and usage
+- [UI Templates Guide](./UITemplatesGuide.md) - UI component library
+- [Vision Pro Guide](./VisionProGuide.md) - visionOS and spatial computing
+- [Security API](./SecurityAPI.md) - Enterprise security implementation
+- [Testing Templates Guide](./TestingTemplatesGuide.md) - Testing patterns and examples
 
 ### 🛠️ API Reference
-- [Core APIs](./API/Core.md) - Foundation framework APIs
-- [UI Components](./API/UIComponents.md) - Reusable UI components
-- [Networking](./API/Networking.md) - Network layer documentation
-- [Data Layer](./API/DataLayer.md) - Data management APIs
-- [Extensions](./API/Extensions.md) - Swift extensions and utilities
+- [API Reference](./API-Reference.md) - Complete API documentation
+- [UI Components](./UIComponents.md) - Reusable UI component library
+- [Architecture Templates API](./ArchitectureTemplatesAPI.md) - Architecture patterns API
+- [Template Manager API](./TemplateManagerAPI.md) - Template management system
+- [Configuration API](./ConfigurationAPI.md) - Configuration and setup APIs
 
 ### 💡 Examples
-- [Basic Examples](./Examples/Basic.md) - Simple implementation examples
-- [Advanced Examples](./Examples/Advanced.md) - Complex use cases
-- [Integration Examples](./Examples/Integration.md) - Third-party integrations
-- [Migration Examples](./Examples/Migration.md) - Migrating existing projects
+- [First App Tutorial](./FirstApp.md) - Build a complete social media app
+- [Vision Pro Guide](./VisionProGuide.md) - Spatial computing examples
+- [Template Guide](./TemplateGuide.md) - Using templates effectively
 
 ### 📖 Guides
-- [Best Practices](./Guides/BestPractices.md) - iOS development best practices
-- [Performance Guide](./Guides/Performance.md) - Optimization techniques
-- [Security Guide](./Guides/Security.md) - Security implementation guide
-- [Testing Guide](./Guides/Testing.md) - Unit, integration, and UI testing
-- [Accessibility Guide](./Guides/Accessibility.md) - Building inclusive apps
-- [Localization Guide](./Guides/Localization.md) - Multi-language support
+- [Best Practices Guide](./BestPracticesGuide.md) - iOS development best practices
+- [Performance Guide](./Guides/PerformanceGuide.md) - Optimization techniques
+- [Security Guide](./Guides/SecurityGuide.md) - Security implementation
+- [Testing Guide](./Guides/TestingGuide.md) - Complete testing strategies
+- [Architecture Guide](./Guides/ArchitectureGuide.md) - Architecture patterns
+- [Quick Start](./Guides/QuickStart.md) - Getting started quickly
 
 ### 🤝 Contributing
 - [Contributing Guidelines](../CONTRIBUTING.md) - How to contribute
@@ -81,30 +46,29 @@ Welcome to the comprehensive documentation for iOS App Templates - a world-class
 - [Development Workflow](./Guides/Development.md) - Development process
 
 ### 🔧 Advanced Topics
-- [Custom Templates](./Guides/CustomTemplates.md) - Creating your own templates
-- [CI/CD Integration](./Guides/CICD.md) - Continuous integration setup
-- [App Store Deployment](./Guides/AppStore.md) - Publishing to App Store
-- [Enterprise Distribution](./Guides/Enterprise.md) - Enterprise deployment
+- [Customization Guide](./CustomizationGuide.md) - Customizing templates
+- [Customization API](./CustomizationAPI.md) - Advanced customization APIs
+- [Generation API](./GenerationAPI.md) - Code generation system
 
 ## 🎯 Quick Links
 
 ### For Beginners
-1. [Installation Guide](./Guides/Installation.md)
-2. [Quick Start Tutorial](./Guides/QuickStart.md)
-3. [Basic Examples](./Examples/Basic.md)
-4. [Template Catalog](./Templates/Catalog.md)
+1. [Quick Start Guide](./Guides/QuickStart.md)
+2. [First App Tutorial](./FirstApp.md)
+3. [Template Guide](./TemplateGuide.md)
+4. [UI Components](./UIComponents.md)
 
 ### For Advanced Users
-1. [Architecture Overview](./Architecture/Overview.md)
-2. [Custom Templates](./Guides/CustomTemplates.md)
-3. [Performance Optimization](./Guides/Performance.md)
-4. [Advanced Examples](./Examples/Advanced.md)
+1. [Architecture API](./ArchitectureAPI.md)
+2. [Customization Guide](./CustomizationGuide.md)
+3. [Performance Guide](./Guides/PerformanceGuide.md)
+4. [Vision Pro Guide](./VisionProGuide.md)
 
 ### For Contributors
 1. [Contributing Guidelines](../CONTRIBUTING.md)
-2. [Development Workflow](./Guides/Development.md)
-3. [API Documentation](./API/Core.md)
-4. [Testing Guide](./Guides/Testing.md)
+2. [API Reference](./API-Reference.md)
+3. [Testing Guide](./Guides/TestingGuide.md)
+4. [Architecture Guide](./Guides/ArchitectureGuide.md)
 
 ## 📊 Template Categories
 
@@ -135,10 +99,10 @@ Welcome to the comprehensive documentation for iOS App Templates - a world-class
 
 Looking for something specific? Use these indexes:
 
-- [API Index](./API/Index.md) - Complete API reference
-- [Code Examples Index](./Examples/Index.md) - All code examples
-- [Template Features Matrix](./Templates/Features.md) - Feature comparison
-- [Troubleshooting Guide](./Guides/Troubleshooting.md) - Common issues
+- [API Reference](./API-Reference.md) - Complete API documentation
+- [Template Guide](./TemplateGuide.md) - All templates and features
+- [UI Components](./UIComponents.md) - Component library reference
+- [Security API](./SecurityAPI.md) - Security implementation reference
 
 ## 📝 Version History
 
@@ -166,4 +130,3 @@ This project is licensed under the MIT License. See [LICENSE](../LICENSE) for de
   <a href="https://twitter.com/iOSAppTemplates">Twitter</a> •
   <a href="https://iosapptemplates.dev">Website</a>
 </div>
->>>>>>> 6ab4809 (feat: 🚀 Achieve 100% GLOBAL_AI_STANDARDS_GITHUB.md compliance)

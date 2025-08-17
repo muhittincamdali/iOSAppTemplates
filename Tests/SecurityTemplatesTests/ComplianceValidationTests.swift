@@ -10,7 +10,7 @@ import Testing
 import Foundation
 @testable import SecurityTemplates
 
-/// Enterprise compliance validation tests for GLOBAL_AI_STANDARDS
+/// Enterprise compliance validation tests for Enterprise Standards
 /// Covers GDPR, HIPAA, SOX, PCI DSS, and other regulatory frameworks
 @Suite("Compliance Validation Tests")
 final class ComplianceValidationTests: XCTestCase {

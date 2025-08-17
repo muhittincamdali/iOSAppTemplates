@@ -12,7 +12,7 @@ import UIKit
 /// Shared utilities for performance testing across all test suites
 public final class PerformanceTestUtilities: @unchecked Sendable {
     
-    // MARK: - GLOBAL_AI_STANDARDS Performance Thresholds
+    // MARK: - Enterprise Standards Performance Thresholds
     
     public static let globalStandards = GlobalPerformanceStandards(
         coldLaunchThreshold: 1.0,      // 1 second
@@ -216,7 +216,7 @@ public final class PerformanceTestUtilities: @unchecked Sendable {
     
     // MARK: - Validation Helpers
     
-    /// Validate performance against GLOBAL_AI_STANDARDS
+    /// Validate performance against Enterprise Standards
     public static func validatePerformance(
         duration: TimeInterval,
         against threshold: TimeInterval,

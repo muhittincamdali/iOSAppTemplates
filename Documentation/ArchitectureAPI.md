@@ -1,8 +1,8 @@
-# 🏗️ Architecture API - GLOBAL_AI_STANDARDS Compliant
+# 🏗️ Architecture API - Enterprise Standards Compliant
 
 ## 📋 Overview
 
-Complete architecture patterns reference following GLOBAL_AI_STANDARDS with **26,633+ lines** of production-ready code.
+Complete architecture patterns reference following Enterprise Standards with **26,633+ lines** of production-ready code.
 
 ## 🎯 Architecture Patterns
 
@@ -132,7 +132,7 @@ class UsersViewModel {
 
 ## 📊 Performance Standards
 
-| **Metric** | **GLOBAL_AI_STANDARDS** | **Achievement** |
+| **Metric** | **Enterprise Standards** | **Achievement** |
 |------------|-------------------------|-----------------|
 | Launch Time | <1s | ✅ **0.8s** |
 | Memory Usage | <75MB | ✅ **<75MB** |

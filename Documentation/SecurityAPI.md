@@ -1,8 +1,8 @@
-# 🔒 Security API - GLOBAL_AI_STANDARDS Compliant
+# 🔒 Security API
 
 ## 📋 Overview
 
-Enterprise-grade security implementation following GLOBAL_AI_STANDARDS with **bank-level encryption** and **zero-trust architecture**.
+Enterprise-grade security implementation with **bank-level encryption** and **zero-trust architecture**.
 
 ## 🛡️ Security Framework
 

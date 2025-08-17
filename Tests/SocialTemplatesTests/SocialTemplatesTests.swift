@@ -10,7 +10,7 @@ import Testing
 @testable import SocialTemplates
 
 /// Comprehensive test suite for Social Media Templates
-/// GLOBAL_AI_STANDARDS Compliant: >95% test coverage
+/// Enterprise Standards Compliant: >95% test coverage
 @Suite("Social Templates Tests")
 final class SocialTemplatesTests: XCTestCase {
     

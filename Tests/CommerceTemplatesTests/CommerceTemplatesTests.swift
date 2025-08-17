@@ -10,7 +10,7 @@ import Testing
 @testable import CommerceTemplates
 
 /// Comprehensive test suite for E-commerce Templates
-/// GLOBAL_AI_STANDARDS Compliant: >95% test coverage
+/// Enterprise Standards Compliant: >95% test coverage
 @Suite("Commerce Templates Tests")
 final class CommerceTemplatesTests: XCTestCase {
     

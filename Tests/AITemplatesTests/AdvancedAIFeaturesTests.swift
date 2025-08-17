@@ -16,7 +16,7 @@ import Speech
 @testable import AITemplates
 
 /// Advanced AI and Machine Learning features test suite
-/// GLOBAL_AI_STANDARDS Compliant: Enterprise AI/ML capabilities
+/// Enterprise Standards Compliant: Enterprise AI/ML capabilities
 @Suite("Advanced AI Features Tests")
 final class AdvancedAIFeaturesTests: XCTestCase {
     

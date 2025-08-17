@@ -12,7 +12,7 @@ import LocalAuthentication
 @testable import SecurityTemplates
 
 /// Comprehensive test suite for Security Templates
-/// GLOBAL_AI_STANDARDS Compliant: >95% test coverage
+/// Enterprise Standards Compliant: >95% test coverage
 @Suite("Security Templates Tests")
 final class SecurityTemplatesTests: XCTestCase {
     

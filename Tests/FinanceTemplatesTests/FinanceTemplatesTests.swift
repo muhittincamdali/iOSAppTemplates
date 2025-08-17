@@ -10,7 +10,7 @@ import Testing
 @testable import FinanceTemplates
 
 /// Comprehensive test suite for Finance Templates
-/// GLOBAL_AI_STANDARDS Compliant: >95% test coverage
+/// Enterprise Standards Compliant: >95% test coverage
 @Suite("Finance Templates Tests")
 final class FinanceTemplatesTests: XCTestCase {
     

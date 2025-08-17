@@ -10,7 +10,7 @@ import Testing
 @testable import TravelTemplates
 
 /// Comprehensive test suite for Travel & Booking Templates
-/// GLOBAL_AI_STANDARDS Compliant: >95% test coverage
+/// Enterprise Standards Compliant: >95% test coverage
 @Suite("Travel Templates Tests")
 final class TravelTemplatesTests: XCTestCase {
     

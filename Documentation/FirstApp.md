@@ -1,8 +1,8 @@
-# 📱 First App Tutorial - GLOBAL_AI_STANDARDS
+# 📱 First App Tutorial
 
 ## 🎯 Build Your First World-Class iOS App in 15 Minutes
 
-Create a production-ready social media app with **26,633+ lines** of GLOBAL_AI_STANDARDS compliant code.
+Create a production-ready social media app with **26,633+ lines** of production-ready code.
 
 ## ✨ What You'll Build
 
@@ -54,12 +54,12 @@ struct MySocialApp: App {
 }
 ```
 
-### Configure GLOBAL_AI_STANDARDS
+### Configure App Settings
 ```swift
 import iOSAppTemplates
 
 // Configure for maximum performance
-let configuration = GlobalAIConfiguration(
+let configuration = AppConfiguration(
     securityLevel: .bankLevel,           // Bank-level security
     targetFrameRate: 120,               // 120fps target
     maxLaunchTime: 1.0,                 // <1s launch time
@@ -327,7 +327,7 @@ class PerformanceMonitor: ObservableObject {
             self.metrics.launchTime = launchTime
             
             if launchTime < 1.0 {
-                self.logger.info("✅ Launch time: \(launchTime)s - GLOBAL_AI_STANDARDS compliant")
+                self.logger.info("✅ Launch time: \(launchTime)s - Performance target met")
             } else {
                 self.logger.warning("⚠️ Launch time: \(launchTime)s - Exceeds 1s target")
             }
@@ -339,7 +339,7 @@ class PerformanceMonitor: ObservableObject {
         metrics.memoryUsage = memoryUsage
         
         if memoryUsage < 75 {
-            logger.info("✅ Memory usage: \(memoryUsage)MB - GLOBAL_AI_STANDARDS compliant")
+            logger.info("✅ Memory usage: \(memoryUsage)MB - Performance target met")
         } else {
             logger.warning("⚠️ Memory usage: \(memoryUsage)MB - Exceeds 75MB target")
         }
@@ -478,7 +478,7 @@ xcodebuild test -scheme MySocialApp -destination "platform=iOS Simulator,name=iP
 2. Select your device in Xcode
 3. Click **Run** (⌘R)
 
-## 📊 Step 8: Verify GLOBAL_AI_STANDARDS Compliance
+## 📊 Step 8: Verify Performance Standards Compliance
 
 ### Performance Checklist
 - ✅ **Launch Time**: <1s (Target: 0.8s)

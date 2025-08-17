@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import QuartzCore
 
-/// GLOBAL_AI_STANDARDS Performance Monitor
+/// Enterprise Standards Performance Monitor
 /// Enterprise-grade performance monitoring and validation system
 public final class PerformanceMonitor: @unchecked Sendable {
     

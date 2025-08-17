@@ -343,7 +343,7 @@ let package = Package(
             path: "Tests/SecurityTemplatesTests"
         ),
         
-        // Performance Benchmark Tests - GLOBAL_AI_STANDARDS Compliance
+        // Performance Benchmark Tests - Enterprise Standards Compliance
         .testTarget(
             name: "PerformanceBenchmarkTests",
             dependencies: [

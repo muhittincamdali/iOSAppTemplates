@@ -11,7 +11,7 @@ import ComposableArchitecture
 @testable import TCATemplates
 
 /// Comprehensive test suite for TCA (The Composable Architecture) Templates
-/// GLOBAL_AI_STANDARDS Compliant: >95% test coverage
+/// Enterprise Standards Compliant: >95% test coverage
 @Suite("TCA Templates Tests")
 final class TCATemplatesTests: XCTestCase {
     
