@@ -23,8 +23,6 @@ env:
   SWIFT_VERSION: "6.0"
   MIN_CODE_LINES: "15000"
   MIN_TEST_COVERAGE: "95"
-  ENTERPRISE_STANDARDS_MIN_LINES: "15000"
-  ENTERPRISE_STANDARDS_MIN_COVERAGE: "95"
 
 jobs:
   # Code Quality Pre-Validation
@@ -58,7 +56,7 @@ jobs:
         echo "total_lines=$TOTAL_LINES" >> $GITHUB_OUTPUT
         echo "swift_lines=$SWIFT_LINES" >> $GITHUB_OUTPUT
         
-        if [ $TOTAL_LINES -lt $ENTERPRISE_STANDARDS_MIN_LINES ]; then
+        if [ $TOTAL_LINES -lt $MIN_CODE_LINES ]; then
           echo "❌ Code volume ($TOTAL_LINES) below ENTERPRISE_STANDARDS minimum ($ENTERPRISE_STANDARDS_MIN_LINES)"
           exit 1
         else

@@ -505,10 +505,10 @@ You've successfully built a world-class iOS app that:
 
 ## 📚 Next Steps
 
-- [Advanced Features Guide](AdvancedFeatures.md)
-- [Performance Optimization](Performance.md)
+- [Architecture Templates Guide](ArchitectureTemplatesGuide.md)
+- [Best Practices Guide](BestPracticesGuide.md)
 - [Security Best Practices](SecurityAPI.md)
-- [Deployment Guide](Deployment.md)
-- [App Store Submission](AppStoreGuide.md)
+- [Testing Guide](TestingTemplatesGuide.md)
+- [UI Templates Guide](UITemplatesGuide.md)
 
 **Your app is now ready for the App Store! 🚀**

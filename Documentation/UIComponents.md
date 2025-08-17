@@ -686,10 +686,10 @@ CustomActionSheet(
 
 ## 📚 Next Steps
 
-1. **Read [Getting Started](GettingStarted.md)** for quick setup
-2. **Check [Architecture Guide](Architecture.md)** for architecture patterns
+1. **Read [Quick Start Guide](Guides/QuickStart.md)** for quick setup
+2. **Check [Architecture Guide](ArchitectureTemplatesGuide.md)** for architecture patterns
 3. **Explore [Template Guide](TemplateGuide.md)** for template usage
-4. **See [API Reference](API.md)** for complete documentation
+4. **See [API Reference](API-Reference.md)** for complete documentation
 
 ## 🤝 Support
 

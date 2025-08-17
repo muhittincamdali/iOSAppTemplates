@@ -1,4 +1,4 @@
-name: Performance Validation - ENTERPRISE_STANDARDS
+name: Performance Validation
 
 on:
   push:
@@ -128,7 +128,7 @@ jobs:
           
     - name: Performance Validation Gate
       run: |
-        echo "🎯 ENTERPRISE_STANDARDS Performance Validation"
+        echo "🎯 Performance Validation"
         echo "Platform: ${{ matrix.platform }}"
         echo "Configuration: ${{ matrix.configuration }}"
         echo ""
@@ -276,7 +276,7 @@ jobs:
         echo "- No significant regressions detected"
 
   compliance-report:
-    name: ENTERPRISE_STANDARDS Compliance Report
+    name: Performance Compliance Report
     runs-on: macos-15
     needs: [performance-benchmarks, memory-profiling, battery-efficiency]
     if: always()

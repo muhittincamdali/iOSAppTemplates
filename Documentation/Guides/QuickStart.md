@@ -465,16 +465,16 @@ extension Post {
 ## 🎯 Next Steps
 
 ### Essential Guides
-1. [Architecture Overview](../Architecture/Overview.md) - Understand app structure
-2. [Template Catalog](../Templates/Catalog.md) - Explore all templates
-3. [Customization Guide](./Customization.md) - Deep customization
-4. [API Integration](./APIIntegration.md) - Connect to backend
+1. [Architecture Guide](../ArchitectureTemplatesGuide.md) - Understand app structure
+2. [Template Guide](../TemplateGuide.md) - Explore all templates
+3. [Customization Guide](../CustomizationGuide.md) - Deep customization
+4. [API Reference](../API-Reference.md) - Connect to backend
 
 ### Advanced Topics
-1. [Performance Optimization](./Performance.md)
-2. [Security Best Practices](./Security.md)
-3. [App Store Deployment](./AppStore.md)
-4. [Analytics Integration](./Analytics.md)
+1. [Performance Guide](./PerformanceGuide.md)
+2. [Security Guide](./SecurityGuide.md)
+3. [Architecture Guide](./ArchitectureGuide.md)
+4. [Testing Guide](./TestingGuide.md)
 
 ## 💡 Pro Tips
 
