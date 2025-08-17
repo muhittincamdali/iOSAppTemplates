@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,10 +6,11 @@ import PackageDescription
 let package = Package(
     name: "iOSAppTemplates",
     platforms: [
-        .iOS(.v15),
-        .macOS(.v12),
-        .tvOS(.v15),
-        .watchOS(.v8)
+        .iOS(.v18),
+        .macOS(.v15),
+        .tvOS(.v18),
+        .watchOS(.v11),
+        .visionOS(.v2)
     ],
     products: [
         // Main library
@@ -50,26 +51,57 @@ let package = Package(
         .library(
             name: "TravelTemplates",
             targets: ["TravelTemplates"]
+        ),
+        
+        // Modern Architecture Templates
+        .library(
+            name: "TCATemplates",
+            targets: ["TCATemplates"]
+        ),
+        .library(
+            name: "VisionOSTemplates",
+            targets: ["VisionOSTemplates"]
+        ),
+        .library(
+            name: "AITemplates",
+            targets: ["AITemplates"]
+        ),
+        .library(
+            name: "PerformanceTemplates",
+            targets: ["PerformanceTemplates"]
+        ),
+        .library(
+            name: "SecurityTemplates",
+            targets: ["SecurityTemplates"]
         )
     ],
     dependencies: [
-        // SwiftUI for UI components
-        .package(url: "https://github.com/apple/swift-markdown", from: "0.3.0"),
+        // Modern Swift
+        .package(url: "https://github.com/apple/swift-markdown", from: "0.5.0"),
+        .package(url: "https://github.com/apple/swift-async-algorithms", from: "1.0.0"),
+        .package(url: "https://github.com/apple/swift-collections", from: "1.1.0"),
+        
+        // Architecture
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.15.0"),
+        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.4.0"),
         
         // Networking
-        .package(url: "https://github.com/Alamofire/Alamofire", from: "5.8.0"),
+        .package(url: "https://github.com/Alamofire/Alamofire", from: "5.9.0"),
         
-        // Firebase (optional)
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.0.0"),
+        // Firebase
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "11.0.0"),
         
-        // Charts
-        .package(url: "https://github.com/danielgindi/Charts", from: "5.0.0"),
+        // UI & Visualization
+        .package(url: "https://github.com/danielgindi/Charts", from: "5.1.0"),
+        .package(url: "https://github.com/onevcat/Kingfisher", from: "8.0.0"),
         
-        // Image loading
-        .package(url: "https://github.com/onevcat/Kingfisher", from: "7.0.0"),
+        // Code Quality
+        .package(url: "https://github.com/realm/SwiftLint", from: "0.56.0"),
         
-        // Code quality
-        .package(url: "https://github.com/realm/SwiftLint", from: "0.50.0")
+        // Vision Pro - RealityKit is a system framework, removing external dependency
+        
+        // AI/ML
+        .package(url: "https://github.com/apple/ml-stable-diffusion", from: "1.0.0")
     ],
     targets: [
         // Main target
@@ -180,6 +212,51 @@ let package = Package(
             path: "Sources/TravelTemplates"
         ),
         
+        // Modern Architecture targets
+        .target(
+            name: "TCATemplates",
+            dependencies: [
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .product(name: "Dependencies", package: "swift-dependencies")
+            ],
+            path: "Sources/TCATemplates"
+        ),
+        
+        .target(
+            name: "VisionOSTemplates",
+            dependencies: [
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
+            ],
+            path: "Sources/VisionOSTemplates"
+        ),
+        
+        .target(
+            name: "AITemplates",
+            dependencies: [
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .product(name: "StableDiffusion", package: "ml-stable-diffusion")
+            ],
+            path: "Sources/AITemplates"
+        ),
+        
+        .target(
+            name: "PerformanceTemplates",
+            dependencies: [
+                .product(name: "Collections", package: "swift-collections"),
+                .product(name: "AsyncAlgorithms", package: "swift-async-algorithms")
+            ],
+            path: "Sources/PerformanceTemplates"
+        ),
+        
+        .target(
+            name: "SecurityTemplates",
+            dependencies: [
+                .product(name: "Alamofire", package: "Alamofire"),
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
+            ],
+            path: "Sources/SecurityTemplates"
+        ),
+        
         // Test targets
         .testTarget(
             name: "iOSAppTemplatesTests",
@@ -233,6 +310,37 @@ let package = Package(
             name: "TravelTemplatesTests",
             dependencies: ["TravelTemplates"],
             path: "Tests/TravelTemplatesTests"
+        ),
+        
+        // Modern Architecture test targets
+        .testTarget(
+            name: "TCATemplatesTests",
+            dependencies: ["TCATemplates"],
+            path: "Tests/TCATemplatesTests"
+        ),
+        
+        .testTarget(
+            name: "VisionOSTemplatesTests",
+            dependencies: ["VisionOSTemplates"],
+            path: "Tests/VisionOSTemplatesTests"
+        ),
+        
+        .testTarget(
+            name: "AITemplatesTests",
+            dependencies: ["AITemplates"],
+            path: "Tests/AITemplatesTests"
+        ),
+        
+        .testTarget(
+            name: "PerformanceTemplatesTests",
+            dependencies: ["PerformanceTemplates"],
+            path: "Tests/PerformanceTemplatesTests"
+        ),
+        
+        .testTarget(
+            name: "SecurityTemplatesTests",
+            dependencies: ["SecurityTemplates"],
+            path: "Tests/SecurityTemplatesTests"
         )
     ]
 ) 

@@ -1,0 +1,265 @@
+# SwiftLint Configuration for iOS App Templates
+# Modern Swift 6.0 and iOS 18 compatible rules
+
+disabled_rules:
+  - trailing_whitespace
+  - todo
+  - line_length
+
+opt_in_rules:
+  - array_init
+  - attributes
+  - closure_end_indentation
+  - closure_spacing
+  - collection_alignment
+  - conditional_returns_on_newline
+  - contains_over_filter_count
+  - contains_over_filter_is_empty
+  - contains_over_first_not_nil
+  - contains_over_range_nil_comparison
+  - discouraged_object_literal
+  - empty_collection_literal
+  - empty_count
+  - empty_string
+  - empty_xctest_method
+  - enum_case_associated_values_count
+  - explicit_init
+  - extension_access_modifier
+  - fallthrough
+  - fatal_error_message
+  - file_header
+  - file_name
+  - first_where
+  - flatmap_over_map_reduce
+  - force_unwrapping
+  - function_default_parameter_at_end
+  - identical_operands
+  - implicit_return
+  - joined_default_parameter
+  - last_where
+  - legacy_random
+  - literal_expression_end_indentation
+  - modifier_order
+  - multiline_arguments
+  - multiline_function_chains
+  - multiline_literal_brackets
+  - multiline_parameters
+  - multiline_parameters_brackets
+  - nimble_operator
+  - nslocalizedstring_key
+  - number_separator
+  - object_literal
+  - operator_usage_whitespace
+  - overridden_super_call
+  - override_in_extension
+  - pattern_matching_keywords
+  - prefer_self_type_over_type_of_self
+  - prefer_zero_over_explicit_init
+  - prefixed_toplevel_constant
+  - prohibited_super_call
+  - quick_discouraged_call
+  - quick_discouraged_focused_test
+  - quick_discouraged_pending_test
+  - reduce_into
+  - redundant_nil_coalescing
+  - redundant_type_annotation
+  - required_enum_case
+  - single_test_class
+  - sorted_first_last
+  - sorted_imports
+  - static_operator
+  - strong_iboutlet
+  - switch_case_on_newline
+  - toggle_bool
+  - trailing_closure
+  - unavailable_function
+  - unneeded_parentheses_in_closure_argument
+  - unowned_variable_capture
+  - untyped_error_in_catch
+  - vertical_parameter_alignment_on_call
+  - vertical_whitespace_closing_braces
+  - vertical_whitespace_opening_braces
+  - xct_specific_matcher
+  - yoda_condition
+
+# Custom Rules
+custom_rules:
+  no_objcMembers:
+    name: "@objcMembers"
+    regex: "@objcMembers"
+    message: "Avoid @objcMembers"
+    severity: warning
+
+# File Configuration
+included:
+  - Sources
+  - Tests
+  - Examples
+  - Templates
+
+excluded:
+  - .build
+  - DerivedData
+  - Package.swift
+  - .git
+  - docs
+  - Documentation
+
+# Rule Configuration
+line_length:
+  warning: 120
+  error: 200
+  ignores_urls: true
+  ignores_function_declarations: true
+  ignores_comments: true
+
+file_length:
+  warning: 400
+  error: 1000
+
+function_body_length:
+  warning: 50
+  error: 100
+
+function_parameter_count:
+  warning: 5
+  error: 8
+
+type_body_length:
+  warning: 300
+  error: 500
+
+cyclomatic_complexity:
+  warning: 10
+  error: 20
+
+nesting:
+  type_level:
+    warning: 3
+  statement_level:
+    warning: 5
+
+identifier_name:
+  min_length:
+    warning: 2
+    error: 1
+  max_length:
+    warning: 40
+    error: 60
+  excluded:
+    - id
+    - x
+    - y
+    - z
+
+type_name:
+  min_length:
+    warning: 3
+    error: 2
+  max_length:
+    warning: 40
+    error: 50
+
+# Swift 6.0 specific configurations
+large_tuple:
+  warning: 3
+  error: 4
+
+collection_alignment:
+  align_colons: true
+
+multiline_arguments:
+  first_argument_location: next_line
+  only_enforce_after_first_closure_on_first_line: true
+
+multiline_parameters:
+  allows_single_line: true
+
+switch_case_alignment:
+  indented_cases: true
+
+vertical_whitespace:
+  max_empty_lines: 2
+
+# SwiftUI specific rules
+swiftui_state:
+  severity: warning
+
+# TCA specific allowances
+force_unwrapping:
+  severity: warning
+
+# Performance rules
+empty_count:
+  severity: warning
+
+contains_over_first_not_nil:
+  severity: warning
+
+# Modern Swift patterns
+implicit_return:
+  included:
+    - closure
+    - function
+    - getter
+
+# Test specific rules
+xct_specific_matcher:
+  severity: warning
+
+# Documentation rules
+missing_docs:
+  severity: warning
+  declarations:
+    - public
+    - open
+
+# File organization
+file_header:
+  required_pattern: |
+                    \/\/
+                    \/\/ .*\.swift
+                    \/\/ iOS App Templates
+                    \/\/
+                    \/\/ Created on \d{1,2}\/\d{1,2}\/\d{4}\.
+                    \/\/
+
+# Modern Swift 6 features
+redundant_type_annotation:
+  consider_default_literal_types_redundant: true
+
+# Concurrency rules (Swift 6.0)
+unowned_variable_capture:
+  severity: error
+
+# Security rules
+force_try:
+  severity: warning
+
+# Performance optimizations
+reduce_into:
+  severity: warning
+
+sorted_imports:
+  severity: warning
+
+# Code organization
+extension_access_modifier:
+  severity: warning
+
+# Modern API usage
+legacy_random:
+  severity: error
+
+# SwiftUI best practices
+trailing_closure:
+  only_single_muted_parameter: true
+
+# Error handling
+untyped_error_in_catch:
+  severity: warning
+
+# Naming conventions
+enum_case_associated_values_count:
+  warning: 5
+  error: 8
