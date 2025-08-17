@@ -43,7 +43,7 @@ Welcome to the comprehensive documentation for iOS App Templates - a world-class
 ### 🤝 Contributing
 - [Contributing Guidelines](../CONTRIBUTING.md) - How to contribute
 - [Code of Conduct](../CODE_OF_CONDUCT.md) - Community standards
-- [Development Workflow](./Guides/Development.md) - Development process
+- [Installation Guide](./Guides/Installation.md) - Installation process
 
 ### 🔧 Advanced Topics
 - [Customization Guide](./CustomizationGuide.md) - Customizing templates

@@ -1,4 +1,4 @@
-name: Security Validation - ENTERPRISE_STANDARDS
+name: Security Validation
 
 on:
   push:
@@ -74,7 +74,7 @@ jobs:
           
     - name: Security Validation Gate
       run: |
-        echo "🔐 ENTERPRISE_STANDARDS Security Validation"
+        echo "🔐 Security Validation"
         echo "Platform: ${{ matrix.platform }}"
         echo "Configuration: ${{ matrix.configuration }}"
         echo ""
@@ -302,7 +302,7 @@ jobs:
         
     - name: Generate Security Compliance Report
       run: |
-        echo "# 🔒 ENTERPRISE_STANDARDS Security Compliance Report" > security-compliance-report.md
+        echo "# 🔒 Security Compliance Report" > security-compliance-report.md
         echo "" >> security-compliance-report.md
         echo "**Generated**: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> security-compliance-report.md
         echo "**Commit**: ${{ github.sha }}" >> security-compliance-report.md

@@ -36,7 +36,7 @@
   - [Test Isolation](#test-isolation)
   - [Test Data Management](#test-data-management)
   - [Continuous Integration](#continuous-integration)
-- [.github/workflows/tests.yml](#githubworkflowstestsyml)
+- [CI/CD Integration](#continuous-integration)
 - [Test Checklist](#test-checklist)
 - [Resources](#resources)
 <!-- TOC END -->

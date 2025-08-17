@@ -2,7 +2,7 @@
 
 A comprehensive guide to installing and setting up iOS App Templates in your development environment.
 
-## =Ë Prerequisites
+## =ï¿½ Prerequisites
 
 ### System Requirements
 - **macOS**: 14.0 (Sonoma) or later
@@ -24,13 +24,13 @@ A comprehensive guide to installing and setting up iOS App Templates in your dev
 - GitHub Account (for repository access)
 - App Store Connect access (for distribution)
 
-## =€ Installation Methods
+## =ï¿½ Installation Methods
 
 ### Method 1: Swift Package Manager (Recommended)
 
 #### Via Xcode UI
 1. Open your project in Xcode
-2. Navigate to **File ’ Add Package Dependencies**
+2. Navigate to **File ï¿½ Add Package Dependencies**
 3. Enter the repository URL:
    ```
    https://github.com/yourusername/iOSAppTemplates.git
@@ -111,7 +111,7 @@ xcodegen generate --spec project.yml
 
 # Or use Xcode template
 open -a Xcode
-# File ’ New ’ Project ’ iOS App Templates
+# File ï¿½ New ï¿½ Project ï¿½ iOS App Templates
 ```
 
 ### 2. Environment Configuration
@@ -156,7 +156,7 @@ Add required permissions and configurations:
 </array>
 ```
 
-## <¯ Quick Start Examples
+## <ï¿½ Quick Start Examples
 
 ### Basic iOS App
 
@@ -244,7 +244,7 @@ ANALYTICS_ID=your_analytics_id
 ```
 
 3. Load in Xcode scheme:
-- Edit Scheme ’ Run ’ Arguments ’ Environment Variables
+- Edit Scheme ï¿½ Run ï¿½ Arguments ï¿½ Environment Variables
 - Add your key-value pairs
 
 ### Using Xcode Config Files
@@ -256,10 +256,10 @@ BASE_URL = https://api.example.com
 ```
 
 2. Reference in build settings:
-- Project ’ Build Settings ’ User-Defined
+- Project ï¿½ Build Settings ï¿½ User-Defined
 - Add entries from config file
 
-## >ê Verification
+## >ï¿½ Verification
 
 ### Build Test
 
@@ -321,7 +321,7 @@ swift package resolve
 swift package update
 
 # Or in Xcode
-File ’ Packages ’ Update to Latest Package Versions
+File ï¿½ Packages ï¿½ Update to Latest Package Versions
 ```
 
 #### Build Errors
@@ -330,14 +330,14 @@ File ’ Packages ’ Update to Latest Package Versions
 xcodebuild clean
 
 # Or in Xcode
-Product ’ Clean Build Folder (çK)
+Product ï¿½ Clean Build Folder (ï¿½K)
 ```
 
 ### Platform-Specific Issues
 
 #### visionOS Simulator Not Available
 1. Install visionOS runtime:
-   - Xcode ’ Settings ’ Platforms
+   - Xcode ï¿½ Settings ï¿½ Platforms
    - Download visionOS simulator
 
 #### iOS 18 Features Not Working
@@ -345,14 +345,14 @@ Product ’ Clean Build Folder (çK)
 2. Update deployment target in project settings
 3. Check Swift language version is 6.0
 
-## =Ú Next Steps
+## =ï¿½ Next Steps
 
 1. [Quick Start Guide](./QuickStart.md) - Build your first app
-2. [Architecture Overview](../Architecture/Overview.md) - Understand the structure
-3. [Template Catalog](../Templates/Catalog.md) - Explore available templates
-4. [Best Practices](./BestPractices.md) - Learn iOS development best practices
+2. [Architecture Guide](../ArchitectureTemplatesGuide.md) - Understand the structure
+3. [Template Guide](../TemplateGuide.md) - Explore available templates
+4. [Best Practices](../BestPracticesGuide.md) - Learn iOS development best practices
 
-## <˜ Getting Help
+## <ï¿½ Getting Help
 
 - **Documentation**: [Full Documentation](../README.md)
 - **Issues**: [GitHub Issues](https://github.com/yourusername/iOSAppTemplates/issues)
@@ -362,5 +362,5 @@ Product ’ Clean Build Folder (çK)
 ---
 
 <div align="center">
-  <strong>Happy Coding! =€</strong>
+  <strong>Happy Coding! =ï¿½</strong>
 </div>

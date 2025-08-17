@@ -362,10 +362,10 @@ jobs:
 
 ## 📚 Next Steps
 
-1. **Read [Getting Started](GettingStarted.md)** for quick setup
-2. **Explore [Architecture Guide](Architecture.md)** for system design
+1. **Read [Quick Start Guide](Guides/QuickStart.md)** for quick setup
+2. **Explore [Architecture Guide](ArchitectureTemplatesGuide.md)** for system design
 3. **Check [UI Components](UIComponents.md)** for component library
-4. **Review [API Reference](API.md)** for complete documentation
+4. **Review [API Reference](API-Reference.md)** for complete documentation
 
 ## 🤝 Support
 
