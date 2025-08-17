@@ -1,4 +1,4 @@
-name: CI/CD Pipeline - ENTERPRISE_STANDARDS
+name: CI/CD Pipeline
 
 on:
   push:
@@ -21,13 +21,15 @@ env:
   IOS_DEPLOYMENT_TARGET: "18.0"
   VISIONOS_DEPLOYMENT_TARGET: "2.0"
   SWIFT_VERSION: "6.0"
+  MIN_CODE_LINES: "15000"
+  MIN_TEST_COVERAGE: "95"
   ENTERPRISE_STANDARDS_MIN_LINES: "15000"
   ENTERPRISE_STANDARDS_MIN_COVERAGE: "95"
 
 jobs:
-  # ENTERPRISE_STANDARDS Pre-Validation
-  enterprise-standards-validation:
-    name: 🎯 ENTERPRISE_STANDARDS Pre-Validation
+  # Code Quality Pre-Validation
+  code-quality-validation:
+    name: 🎯 Code Quality Pre-Validation
     runs-on: macos-15
     timeout-minutes: 15
     outputs:
@@ -43,7 +45,7 @@ jobs:
     - name: Code Volume Analysis
       id: code-analysis
       run: |
-        echo "📊 Analyzing code volume for ENTERPRISE_STANDARDS compliance"
+        echo "📊 Analyzing code volume for compliance"
         
         # Count Swift source code lines
         SWIFT_LINES=$(find Sources Tests -name "*.swift" -exec wc -l {} + | tail -1 | awk '{print $1}')
@@ -96,7 +98,7 @@ jobs:
     name: 📦 Swift Package Build & Test
     runs-on: macos-15
     timeout-minutes: 45
-    needs: enterprise-standards-validation
+    needs: code-quality-validation
     
     strategy:
       fail-fast: false
@@ -563,7 +565,7 @@ jobs:
     name: 📋 Code Quality & ENTERPRISE_STANDARDS Compliance
     runs-on: macos-15
     timeout-minutes: 30
-    needs: enterprise-standards-validation
+    needs: code-quality-validation
     
     steps:
     - name: Checkout Repository
@@ -1628,7 +1630,7 @@ jobs:
         echo "Actor: ${{ github.actor }}"
         
         # Determine failure category
-        if [[ "${{ needs.enterprise-standards-validation.result }}" == "failure" ]]; then
+        if [[ "${{ needs.code-quality-validation.result }}" == "failure" ]]; then
           echo "❌ ENTERPRISE_STANDARDS validation failed"
           FAILURE_CATEGORY="Standards Compliance"
         elif [[ "${{ needs.swift-package.result }}" == "failure" ]]; then
@@ -1662,7 +1664,7 @@ jobs:
         
         | Job | Status | Duration |
         |-----|---------|----------|
-        | ENTERPRISE_STANDARDS Validation | ${{ needs.enterprise-standards-validation.result }} | N/A |
+        | ENTERPRISE_STANDARDS Validation | ${{ needs.code-quality-validation.result }} | N/A |
         | Swift Package Build | ${{ needs.swift-package.result }} | N/A |
         | iOS Build | ${{ needs.ios-build.result }} | N/A |
         | visionOS Build | ${{ needs.visionos-build.result }} | N/A |

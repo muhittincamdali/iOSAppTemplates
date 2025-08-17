@@ -1,8 +1,8 @@
-# 🔒 Security API - ENTERPRISE_STANDARDS Compliant
+# 🔒 Security API
 
 ## 📋 Overview
 
-Enterprise-grade security implementation following ENTERPRISE_STANDARDS with **bank-level encryption** and **zero-trust architecture**.
+Enterprise-grade security implementation with **bank-level encryption** and **zero-trust architecture**.
 
 ## 🛡️ Security Framework
 

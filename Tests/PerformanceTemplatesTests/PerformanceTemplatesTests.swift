@@ -10,7 +10,7 @@ import Testing
 @testable import PerformanceTemplates
 
 /// Comprehensive test suite for Performance Optimization Templates
-/// ENTERPRISE_STANDARDS Compliant: >95% test coverage
+/// Enterprise Standards Compliant: >95% test coverage
 @Suite("Performance Templates Tests")
 final class PerformanceTemplatesTests: XCTestCase {
     

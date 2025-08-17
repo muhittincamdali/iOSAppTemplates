@@ -13,7 +13,7 @@ import NaturalLanguage
 @testable import AITemplates
 
 /// Comprehensive test suite for AI and Machine Learning Templates
-/// ENTERPRISE_STANDARDS Compliant: >95% test coverage
+/// Enterprise Standards Compliant: >95% test coverage
 @Suite("AI Templates Tests")
 final class AITemplatesTests: XCTestCase {
     
