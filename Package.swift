@@ -341,6 +341,16 @@ let package = Package(
             name: "SecurityTemplatesTests",
             dependencies: ["SecurityTemplates"],
             path: "Tests/SecurityTemplatesTests"
+        ),
+        
+        // Performance Benchmark Tests - GLOBAL_AI_STANDARDS Compliance
+        .testTarget(
+            name: "PerformanceBenchmarkTests",
+            dependencies: [
+                "iOSAppTemplates",
+                "PerformanceTemplates"
+            ],
+            path: "Tests/PerformanceBenchmarkTests"
         )
     ]
 ) 
