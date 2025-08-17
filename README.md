@@ -770,25 +770,25 @@ class PerformanceTests: XCTestCase {
 - [5-Minute Setup](Documentation/Guides/QuickStart.md)
 - [First App Tutorial](Documentation/FirstApp.md)
 - [Vision Pro Guide](Documentation/VisionProGuide.md)
-- [AI Integration](Documentation/AIIntegration.md)
+- [Architecture Patterns](Documentation/ArchitectureTemplatesGuide.md)
 
 </td>
 <td width="25%">
 
 ### 🏗️ **Architecture Guides**
-- [TCA Implementation](Documentation/TCAGuide.md)
-- [Clean Architecture](Documentation/CleanArchitecture.md)
-- [Modular Design](Documentation/ModularDesign.md)
-- [Performance Optimization](Documentation/Performance.md)
+- [Template Guide](Documentation/TemplateGuide.md)
+- [Best Practices](Documentation/BestPracticesGuide.md)
+- [Architecture Templates](Documentation/ArchitectureTemplatesAPI.md)
+- [UI Templates](Documentation/UITemplatesGuide.md)
 
 </td>
 <td width="25%">
 
 ### 🎨 **Design System**
 - [UI Components](Documentation/UIComponents.md)
-- [Design Tokens](Documentation/DesignTokens.md)
-- [Accessibility](Documentation/Accessibility.md)
-- [Best Practices](Documentation/Best-Practices.md)
+- [Customization Guide](Documentation/CustomizationGuide.md)
+- [Testing Templates](Documentation/TestingTemplatesGuide.md)
+- [Best Practices](Documentation/BestPracticesGuide.md)
 
 </td>
 </tr>
