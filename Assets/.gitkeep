@@ -1,0 +1,9 @@
+# Assets Directory
+
+Bu klasöre eklenecek dosyalar:
+- banner.png (800x400 px önerilen - proje banner'ı)
+- demo.gif (300px genişlik - uygulama demosu)
+
+Görsel oluşturmak için:
+1. Figma veya Canva kullanabilirsin
+2. Ya da Xcode Simulator'dan screen recording yapıp GIF'e çevirebilirsin
