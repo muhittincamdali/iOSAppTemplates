@@ -1,861 +1,242 @@
-# 🏆 iOS App Templates - World's Most Advanced iOS Development Framework
+# iOS App Templates
 
-<div align="center">
+<p align="center">
+  <img src="Assets/banner.png" alt="iOS App Templates" width="800">
+</p>
 
-![iOS App Templates Hero](https://github.com/muhittincamdali/iOSAppTemplates/assets/hero-banner.png)
+<p align="center">
+  <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-5.9+-F05138?style=flat&logo=swift&logoColor=white" alt="Swift 5.9+"></a>
+  <a href="https://developer.apple.com/ios/"><img src="https://img.shields.io/badge/iOS-15.0+-000000?style=flat&logo=apple&logoColor=white" alt="iOS 15.0+"></a>
+  <a href="https://developer.apple.com/visionos/"><img src="https://img.shields.io/badge/visionOS-1.0+-007AFF?style=flat&logo=apple&logoColor=white" alt="visionOS"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License"></a>
+  <a href="https://github.com/muhittincamdali/iOSAppTemplates/actions"><img src="https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+</p>
 
-[![Swift 6.0](https://img.shields.io/badge/Swift-6.0-FA7343?style=for-the-badge&logo=swift&logoColor=white)](https://swift.org)
-[![iOS 18.0+](https://img.shields.io/badge/iOS-18.0+-000000?style=for-the-badge&logo=ios&logoColor=white)](https://developer.apple.com/ios/)
-[![visionOS 2.0+](https://img.shields.io/badge/visionOS-2.0+-007AFF?style=for-the-badge&logo=apple&logoColor=white)](https://developer.apple.com/visionos/)
-[![Xcode 16.0+](https://img.shields.io/badge/Xcode-16.0+-147EFB?style=for-the-badge&logo=xcode&logoColor=white)](https://developer.apple.com/xcode/)
-[![SwiftUI 6](https://img.shields.io/badge/SwiftUI-6.0-2196F3?style=for-the-badge&logo=swift&logoColor=white)](https://developer.apple.com/swiftui/)
+<p align="center">
+  <b>Production-ready iOS app templates with Clean Architecture, MVVM, and TCA patterns.</b>
+</p>
 
-[![GitHub Stars](https://img.shields.io/github/stars/muhittincamdali/iOSAppTemplates?style=for-the-badge&logo=star&logoColor=gold&color=gold&label=⭐%20Stars)](https://github.com/muhittincamdali/iOSAppTemplates/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/muhittincamdali/iOSAppTemplates?style=for-the-badge&logo=git&logoColor=white&color=blue&label=🔀%20Forks)](https://github.com/muhittincamdali/iOSAppTemplates/network)
-[![License](https://img.shields.io/github/license/muhittincamdali/iOSAppTemplates?style=for-the-badge&logo=github&logoColor=white&color=purple&label=📄%20License)](LICENSE)
-[![CI Status](https://img.shields.io/github/actions/workflow/status/muhittincamdali/iOSAppTemplates/ci.yml?style=for-the-badge&logo=github&logoColor=white&label=🔥%20CI)](https://github.com/muhittincamdali/iOSAppTemplates/actions)
-[![Code Coverage](https://img.shields.io/badge/Coverage-98%25-brightgreen?style=for-the-badge&logo=codecov&logoColor=white)](https://codecov.io/gh/muhittincamdali/iOSAppTemplates)
-
-**🚀 The Ultimate iOS Development Accelerator**
-
-**⚡ From Idea to App Store in Days, Not Months**
-
-**✅ 39,000+ Lines of Production-Ready Swift Code**
-
-[📱 **Get Started**](#-quick-start) • [🎨 **Templates**](#-template-gallery) • [📖 **Docs**](Documentation/)
-
-</div>
+<p align="center">
+  <a href="#templates">Templates</a> •
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#architecture">Architecture</a> •
+  <a href="Documentation/">Documentation</a>
+</p>
 
 ---
 
-## ⚡ What Makes This Revolutionary?
+## Demo
 
-<div align="center">
+<p align="center">
+  <img src="Assets/demo.gif" alt="Demo" width="300">
+</p>
 
-| **Feature** | **Industry Standard** | **iOS App Templates** | **Improvement** |
-|:---|:---:|:---:|:---:|
-| 🚀 **Setup Time** | 2-3 weeks | 5 minutes | **99% faster** |
-| 📱 **iOS 18 Ready** | Basic support | Full integration | **100% modern** |
-| 🥽 **Vision Pro** | Not available | Native support | **Industry first** |
-| 🤖 **AI Integration** | Manual setup | Built-in Core ML | **Zero config** |
-| 📊 **Performance** | Good | Sub-100ms launch | **Lightning fast** |
-| 🔒 **Security** | Basic | Bank-level | **Enterprise grade** |
-| 🧪 **Test Coverage** | 60-80% | 98%+ | **Production ready** |
+## Templates
 
-</div>
+| Category | Templates | Description |
+|----------|-----------|-------------|
+| **Social** | Feed, Profile, Chat, Stories | Complete social networking features |
+| **E-Commerce** | Product List, Cart, Checkout, Orders | Full shopping experience |
+| **Finance** | Dashboard, Transactions, Cards | Banking & fintech apps |
+| **Health** | Tracker, Workouts, Nutrition | HealthKit integration |
+| **Education** | Courses, Quiz, Progress | Learning platform |
+| **Travel** | Search, Booking, Itinerary | Travel & booking apps |
+| **AI** | Chat, Image Gen, Voice | Core ML integration |
+| **Productivity** | Tasks, Calendar, Notes | GTD apps |
 
----
+## Quick Start
 
-## 🎨 Template Gallery
+### Swift Package Manager
 
-<div align="center">
-
-### **25+ Professional Templates** • **8 Categories** • **3 Architectures** • **iOS 18 Ready**
-
-</div>
-
-<table>
-<tr>
-<td width="50%">
-
-### 📱 **Core Templates**
-- 🌐 **Social Media** • Complete platform
-- 🛒 **E-commerce** • Full shopping experience  
-- 💬 **Messaging** • Real-time chat
-- 📰 **News & Media** • Content platform
-- 💪 **Fitness & Health** • HealthKit integration
-- ✈️ **Travel & Booking** • Complete solution
-- 💰 **Finance & Banking** • Secure transactions
-- 📚 **Education & Learning** • Interactive platform
-
-</td>
-<td width="50%">
-
-### 🔮 **Next-Gen Templates**
-- 🥽 **Vision Pro Apps** • Spatial computing
-- 🤖 **AI-Powered Apps** • Core ML integration
-- 🎮 **Gaming & AR** • RealityKit ready
-- 🏢 **Enterprise Solutions** • Business-grade
-- 🎵 **Media & Entertainment** • Rich content
-- 🏥 **Healthcare** • HIPAA compliant
-- 🚗 **IoT & Connected** • Smart devices
-- 📈 **Analytics & Dashboard** • Data visualization
-
-</td>
-</tr>
-</table>
-
----
-
-## 🏗️ Architecture Excellence
-
-<div align="center">
-
-### **Modern Architecture Patterns for 2024**
-
-</div>
-
-<table>
-<tr>
-<td width="33%">
-
-### 🧩 **TCA (The Composable Architecture)**
 ```swift
-@Reducer
-struct FeatureReducer {
-    @ObservableState
-    struct State {
-        var isLoading = false
-        var items: [Item] = []
-    }
-    
-    enum Action {
-        case loadItems
-        case itemsLoaded([Item])
-    }
-    
-    var body: some Reducer<State, Action> {
-        Reduce { state, action in
-            switch action {
-            case .loadItems:
-                state.isLoading = true
-                return .send(.itemsLoaded(mockData))
-            case .itemsLoaded(let items):
-                state.isLoading = false
-                state.items = items
-                return .none
-            }
-        }
-    }
-}
-```
-
-</td>
-<td width="33%">
-
-### 🔄 **MVVM + Clean Architecture**
-```swift
-// Domain Layer
-protocol UserRepository {
-    func getUsers() async throws -> [User]
-}
-
-// Data Layer
-class NetworkUserRepository: UserRepository {
-    func getUsers() async throws -> [User] {
-        // Network implementation
-    }
-}
-
-// Presentation Layer
-@Observable
-class UsersViewModel {
-    private let userRepository: UserRepository
-    var users: [User] = []
-    var isLoading = false
-    
-    init(userRepository: UserRepository) {
-        self.userRepository = userRepository
-    }
-    
-    func loadUsers() async {
-        isLoading = true
-        defer { isLoading = false }
-        
-        do {
-            users = try await userRepository.getUsers()
-        } catch {
-            // Handle error
-        }
-    }
-}
-```
-
-</td>
-<td width="33%">
-
-### ⚡ **Modular + SPM**
-```swift
-// Package.swift structure
-products: [
-    .library(name: "CoreModule", targets: ["Core"]),
-    .library(name: "FeatureAuth", targets: ["Auth"]),
-    .library(name: "FeatureFeed", targets: ["Feed"]),
-    .library(name: "NetworkLayer", targets: ["Network"]),
-    .library(name: "UIComponents", targets: ["UI"])
+dependencies: [
+    .package(url: "https://github.com/muhittincamdali/iOSAppTemplates.git", from: "1.0.0")
 ]
-
-// Modular dependency injection
-@main
-struct MyApp: App {
-    let container = DependencyContainer()
-    
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environmentObject(container.userService)
-                .environmentObject(container.networkService)
-        }
-    }
-}
 ```
 
-</td>
-</tr>
-</table>
+### Usage
 
----
-
-## 🥽 Vision Pro & iOS 18 Integration
-
-<div align="center">
-
-### **Industry's First Complete visionOS Template Collection**
-
-</div>
-
-<table>
-<tr>
-<td width="50%">
-
-### **Spatial Computing Templates**
-```swift
-import SwiftUI
-import RealityKit
-
-struct SpatialSocialApp: App {
-    var body: some Scene {
-        WindowGroup {
-            SpatialSocialView()
-        }
-        .windowStyle(.volumetric)
-        
-        ImmersiveSpace(id: "socialSpace") {
-            SocialImmersiveView()
-        }
-        .immersionStyle(selection: .constant(.mixed), 
-                       in: .mixed)
-    }
-}
-
-struct SpatialSocialView: View {
-    @State private var posts: [Post] = []
-    
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                LazyVStack(spacing: 20) {
-                    ForEach(posts) { post in
-                        PostCard3D(post: post)
-                            .frame(depth: 50)
-                            .hoverEffect(.highlight)
-                    }
-                }
-            }
-            .navigationTitle("Social Space")
-        }
-    }
-}
-```
-
-</td>
-<td width="50%">
-
-### **iOS 18 Features Integration**
-```swift
-// Interactive Widgets
-struct InteractiveWidgetView: View {
-    var body: some View {
-        VStack {
-            Text("Quick Actions")
-                .font(.headline)
-            
-            Button("Order Coffee") {
-                // Direct widget action
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            
-            ProgressView(value: 0.7)
-                .progressViewStyle(.linear)
-        }
-        .containerBackground(.fill.tertiary, for: .widget)
-    }
-}
-
-// Live Activities
-struct DeliveryActivityAttributes: ActivityAttributes {
-    public struct ContentState: Codable, Hashable {
-        var estimatedDeliveryTime: Date
-        var currentStatus: String
-    }
-    
-    var orderNumber: String
-}
-
-// Apple Intelligence Ready
-struct SmartSuggestionsView: View {
-    @State private var suggestions: [Suggestion] = []
-    
-    var body: some View {
-        ForEach(suggestions) { suggestion in
-            SuggestionCard(suggestion)
-                .aiEnhanced() // Custom modifier for AI features
-        }
-    }
-}
-```
-
-</td>
-</tr>
-</table>
-
----
-
-## 🤖 AI & Machine Learning Integration
-
-<div align="center">
-
-### **Built-in Core ML & Apple Intelligence Support**
-
-</div>
-
-<table>
-<tr>
-<td width="50%">
-
-### **Smart Recommendations**
-```swift
-import CoreML
-import CreateML
-
-class SmartRecommendationEngine {
-    private var model: MLModel?
-    
-    init() {
-        loadModel()
-    }
-    
-    private func loadModel() {
-        guard let modelURL = Bundle.main.url(
-            forResource: "RecommendationModel", 
-            withExtension: "mlmodelc"
-        ) else { return }
-        
-        model = try? MLModel(contentsOf: modelURL)
-    }
-    
-    func getRecommendations(
-        for user: User
-    ) async -> [Recommendation] {
-        guard let model = model else { return [] }
-        
-        // Prepare input features
-        let features = prepareFeatures(from: user)
-        
-        // Run prediction
-        guard let prediction = try? model.prediction(
-            from: features
-        ) else { return [] }
-        
-        return parseRecommendations(from: prediction)
-    }
-}
-```
-
-</td>
-<td width="50%">
-
-### **On-Device Image Analysis**
-```swift
-import Vision
-import CoreImage
-
-class ImageAnalysisService {
-    func analyzeImage(_ image: UIImage) async -> ImageAnalysis {
-        return await withCheckedContinuation { continuation in
-            guard let cgImage = image.cgImage else {
-                continuation.resume(returning: ImageAnalysis.empty)
-                return
-            }
-            
-            // Object Detection
-            let objectRequest = VNDetectRectanglesRequest { request, error in
-                let objects = request.results as? [VNRectangleObservation] ?? []
-                
-                // Text Recognition
-                let textRequest = VNRecognizeTextRequest { textRequest, textError in
-                    let texts = textRequest.results as? [VNRecognizedTextObservation] ?? []
-                    
-                    let analysis = ImageAnalysis(
-                        objects: objects,
-                        recognizedTexts: texts,
-                        confidence: objects.first?.confidence ?? 0
-                    )
-                    
-                    continuation.resume(returning: analysis)
-                }
-                
-                let handler = VNImageRequestHandler(cgImage: cgImage)
-                try? handler.perform([textRequest])
-            }
-            
-            let handler = VNImageRequestHandler(cgImage: cgImage)
-            try? handler.perform([objectRequest])
-        }
-    }
-}
-```
-
-</td>
-</tr>
-</table>
-
----
-
-## 🚀 Lightning-Fast Setup
-
-<div align="center">
-
-### **From Zero to App Store in 5 Minutes**
-
-</div>
-
-### **1. Installation**
-```bash
-# Via Swift Package Manager (Recommended)
-https://github.com/muhittincamdali/iOSAppTemplates.git
-
-# Via CocoaPods
-pod 'iOSAppTemplates'
-
-# Via Carthage
-github "muhittincamdali/iOSAppTemplates"
-```
-
-### **2. Choose Your Template**
 ```swift
 import iOSAppTemplates
 
-// Template Selection
-let templateManager = TemplateManager()
-
-// Browse available templates
-let socialTemplates = templateManager.getTemplates(category: .social)
-let visionProTemplates = templateManager.getTemplates(platform: .visionOS)
-let aiTemplates = templateManager.getTemplates(features: [.aiIntegration])
-
-// Quick setup for social media app
+// Social Media App
 let socialApp = SocialMediaTemplate()
-    .withArchitecture(.tca)
-    .withPlatforms([.iOS, .visionOS])
-    .withFeatures([.realTimeMessaging, .aiRecommendations])
-    .withSecurity(.enterpriseGrade)
+    .withFeatures([.feed, .stories, .messaging, .profile])
+    .withArchitecture(.mvvm)
+    .build()
 
-// Generate project
-socialApp.generate(to: "MySocialApp") { result in
-    switch result {
-    case .success(let project):
-        print("🎉 Generated: \(project.name)")
-        print("📱 Platforms: \(project.platforms)")
-        print("🏗️ Architecture: \(project.architecture)")
-        // Project ready for development!
-    case .failure(let error):
-        print("❌ Error: \(error)")
-    }
-}
+// E-Commerce App  
+let shopApp = ECommerceTemplate()
+    .withFeatures([.productList, .cart, .checkout, .orders])
+    .withPayment([.applePay, .stripe])
+    .build()
+
+// Finance App
+let financeApp = FinanceTemplate()
+    .withFeatures([.dashboard, .transactions, .cards])
+    .withSecurity(.biometric)
+    .build()
 ```
 
-### **3. Customize & Deploy**
-```swift
-// Customize generated project
-let customization = ProjectCustomization()
-    .brandColors(.blue, .white)
-    .appIcon("MyAppIcon")
-    .bundleIdentifier("com.company.mysocialapp")
-    .displayName("My Social App")
+## Architecture
 
-// Apply customizations
-project.apply(customization)
-
-// Ready for Xcode!
-project.openInXcode()
+```
+┌─────────────────────────────────────────────────────┐
+│                   Presentation                       │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐          │
+│  │   View   │  │ ViewModel│  │Coordinator│          │
+│  └──────────┘  └──────────┘  └──────────┘          │
+├─────────────────────────────────────────────────────┤
+│                     Domain                           │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐          │
+│  │ Use Case │  │  Entity  │  │Repository│          │
+│  │          │  │          │  │ Protocol │          │
+│  └──────────┘  └──────────┘  └──────────┘          │
+├─────────────────────────────────────────────────────┤
+│                      Data                            │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐          │
+│  │Repository│  │  Network │  │  Storage │          │
+│  │   Impl   │  │  Service │  │  Service │          │
+│  └──────────┘  └──────────┘  └──────────┘          │
+└─────────────────────────────────────────────────────┘
 ```
 
----
+### Supported Patterns
 
-## 📊 Performance Benchmarks
+- **MVVM-C** — Model-View-ViewModel with Coordinator
+- **TCA** — The Composable Architecture
+- **Clean Architecture** — Domain-driven design
 
-<div align="center">
+## Project Structure
 
-### **Industry-Leading Performance Metrics**
+```
+iOSAppTemplates/
+├── Sources/
+│   ├── Core/                  # Shared utilities
+│   ├── SocialTemplates/       # Social media templates
+│   ├── CommerceTemplates/     # E-commerce templates
+│   ├── FinanceTemplates/      # Finance templates
+│   ├── HealthTemplates/       # Health & fitness
+│   ├── EducationTemplates/    # Education templates
+│   ├── TravelTemplates/       # Travel & booking
+│   ├── AITemplates/           # AI-powered templates
+│   └── ProductivityTemplates/ # Productivity apps
+├── Examples/                  # Sample implementations
+├── Tests/                     # Unit & UI tests
+└── Documentation/             # Guides & API docs
+```
 
-</div>
+## Examples
 
-| **Metric** | **Industry Standard** | **iOS App Templates** | **Enterprise Standards** |
-|:---|:---:|:---:|:---:|
-| 🚀 **Cold Launch Time** | 2.5s | **0.8s** | <1s (✅ **Achieved**) |
-| 📱 **Memory Usage** | 150MB | **75MB** | <75MB (✅ **Achieved**) |
-| 🔋 **Battery Impact** | 5%/hour | **1.5%/hour** | <2%/hour (✅ **Achieved**) |
-| 📦 **App Size** | 80MB | **35MB** | <35MB (✅ **Achieved**) |
-| 🔄 **Frame Rate** | 55fps | **120fps** | 120fps (✅ **Perfect**) |
-| 🌐 **Network Efficiency** | 2MB/session | **400KB** | <400KB (✅ **Achieved**) |
-| 💎 **Code Quality** | 60-80% | **26,633 lines** | 15,000+ (✅ **177% Exceeded**) |
-| ⚡ **Time to Interactive** | 3.2s | **1.1s** | <1.5s (✅ **Achieved**) |
+### Social Feed
 
----
-
-## 🔒 Enterprise-Grade Security
-
-<div align="center">
-
-### **Bank-Level Security Built-In**
-
-</div>
-
-<table>
-<tr>
-<td width="50%">
-
-### **Security Features**
-- 🔐 **AES-256 Encryption** • Military grade
-- 🔑 **Biometric Authentication** • Face ID / Touch ID
-- 📱 **App Transport Security** • TLS 1.3
-- 🛡️ **Certificate Pinning** • Network protection
-- 🔒 **Keychain Integration** • Secure storage
-- 👤 **Zero-Trust Architecture** • Verify everything
-- 📋 **GDPR Compliant** • Privacy by design
-- 🏥 **HIPAA Ready** • Healthcare approved
-
-</td>
-<td width="50%">
-
-### **Security Implementation**
 ```swift
-// Biometric Authentication
-import LocalAuthentication
-
-class BiometricAuthManager {
-    func authenticate() async -> Bool {
-        let context = LAContext()
-        
-        guard context.canEvaluatePolicy(
-            .deviceOwnerAuthenticationWithBiometrics, 
-            error: nil
-        ) else { return false }
-        
-        do {
-            return try await context.evaluatePolicy(
-                .deviceOwnerAuthenticationWithBiometrics,
-                localizedReason: "Authenticate to access your account"
-            )
-        } catch {
-            return false
+struct FeedView: View {
+    @StateObject private var viewModel = FeedViewModel()
+    
+    var body: some View {
+        ScrollView {
+            LazyVStack(spacing: 16) {
+                ForEach(viewModel.posts) { post in
+                    PostCard(post: post)
+                        .onTapGesture {
+                            viewModel.openPost(post)
+                        }
+                }
+            }
+            .padding()
+        }
+        .refreshable {
+            await viewModel.refresh()
         }
     }
 }
-
-// Secure Network Layer
-class SecureNetworkManager {
-    private let session: URLSession
-    
-    init() {
-        let configuration = URLSessionConfiguration.default
-        configuration.tlsMinimumSupportedProtocolVersion = .TLSv13
-        
-        session = URLSession(
-            configuration: configuration,
-            delegate: CertificatePinningDelegate(),
-            delegateQueue: nil
-        )
-    }
-}
 ```
 
-</td>
-</tr>
-</table>
+### E-Commerce Cart
 
----
-
-## 🧪 Testing & Quality Assurance
-
-<div align="center">
-
-### **98%+ Test Coverage • Zero-Defect Guarantee**
-
-</div>
-
-<table>
-<tr>
-<td width="33%">
-
-### **Unit Testing**
 ```swift
-import XCTest
-import Testing // iOS 18 Testing Framework
-
-@Suite("Social Media Tests")
-struct SocialMediaTests {
+struct CartView: View {
+    @StateObject private var viewModel = CartViewModel()
     
-    @Test("User registration succeeds")
-    func userRegistration() async throws {
-        let authService = MockAuthService()
-        let user = User(email: "test@example.com")
-        
-        let result = try await authService.register(user)
-        
-        #expect(result.isSuccess)
-        #expect(result.user?.email == "test@example.com")
-    }
-    
-    @Test("Post creation with validation")
-    func postCreation() async throws {
-        let postService = MockPostService()
-        let post = Post(content: "Hello World!")
-        
-        let result = try await postService.create(post)
-        
-        #expect(result.isSuccess)
-        #expect(result.post?.content == "Hello World!")
-    }
-}
-```
-
-</td>
-<td width="33%">
-
-### **UI Testing**
-```swift
-import XCTest
-
-class SocialMediaUITests: XCTestCase {
-    
-    func testUserFlow() throws {
-        let app = XCUIApplication()
-        app.launch()
-        
-        // Test login flow
-        app.textFields["Email"].tap()
-        app.textFields["Email"].typeText("user@example.com")
-        
-        app.secureTextFields["Password"].tap()
-        app.secureTextFields["Password"].typeText("password123")
-        
-        app.buttons["Sign In"].tap()
-        
-        // Verify home screen
-        XCTAssertTrue(app.navigationBars["Home"].exists)
-        XCTAssertTrue(app.scrollViews["Feed"].exists)
-        
-        // Test post creation
-        app.buttons["Create Post"].tap()
-        app.textViews["Post Content"].typeText("Hello World!")
-        app.buttons["Share"].tap()
-        
-        // Verify post appears
-        XCTAssertTrue(app.staticTexts["Hello World!"].exists)
-    }
-}
-```
-
-</td>
-<td width="33%">
-
-### **Performance Testing**
-```swift
-import XCTest
-
-class PerformanceTests: XCTestCase {
-    
-    func testLaunchPerformance() throws {
-        measure(metrics: [XCTApplicationLaunchMetric()]) {
-            XCUIApplication().launch()
-        }
-    }
-    
-    func testScrollPerformance() throws {
-        let app = XCUIApplication()
-        app.launch()
-        
-        let scrollView = app.scrollViews["Feed"]
-        
-        measure(metrics: [XCTOSSignpostMetric.scrollDecelerationMetric]) {
-            scrollView.swipeUp(velocity: .fast)
-            scrollView.swipeDown(velocity: .fast)
-        }
-    }
-    
-    func testMemoryUsage() throws {
-        let app = XCUIApplication()
-        
-        measure(metrics: [XCTMemoryMetric()]) {
-            app.launch()
+    var body: some View {
+        List {
+            ForEach(viewModel.items) { item in
+                CartItemRow(item: item)
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            viewModel.remove(item)
+                        } label: {
+                            Label("Remove", systemImage: "trash")
+                        }
+                    }
+            }
             
-            // Simulate heavy usage
-            for _ in 0..<100 {
-                app.buttons["Load More"].tap()
-                app.swipeUp()
+            Section {
+                HStack {
+                    Text("Total")
+                        .font(.headline)
+                    Spacer()
+                    Text(viewModel.total, format: .currency(code: "USD"))
+                        .font(.title2.bold())
+                }
             }
         }
     }
 }
 ```
 
-</td>
-</tr>
-</table>
+## Requirements
 
----
+| Platform | Version |
+|----------|---------|
+| iOS | 15.0+ |
+| macOS | 12.0+ |
+| visionOS | 1.0+ |
+| Swift | 5.9+ |
+| Xcode | 15.0+ |
 
-## 📊 Quality Metrics - Enterprise Standards Compliance
+## Installation
 
-<div align="center">
+### Xcode
 
-### **Code Quality Standards (World-Class)**
+1. File → Add Package Dependencies
+2. Enter: `https://github.com/muhittincamdali/iOSAppTemplates.git`
+3. Select version and add
 
-</div>
+### Manual
 
-| **Metric** | **Industry Standard** | **Enterprise Standards** | **Achievement** |
-|--------|------------------|--------------|-------------|
-| **📏 Code Volume** | 5K-10K lines | **≥15,000 lines** | ✅ **26,633 lines** |
-| **🧪 Test Coverage** | 80% | **≥95%** | ✅ **97%** |
-| **📖 Code Documentation** | 60% | **100%** | ✅ **100%** |
-| **🔄 Cyclomatic Complexity** | <15 | **<8** | ✅ **6.2** |
-| **⚡ Technical Debt Ratio** | <5% | **<1%** | ✅ **0.8%** |
-| **🏗️ Maintainability Index** | >65 | **>85** | ✅ **92** |
-| **🎯 Architecture Pattern** | Basic MVVM | **MVVM-C + Clean** | ✅ **TCA + MVVM-C** |
-| **📱 Platform Support** | iOS only | **Multi-platform** | ✅ **iOS 18 + visionOS 2** |
-| **🔒 Security Level** | Basic | **Enterprise-grade** | ✅ **Bank-level** |
-| **⚡ Performance** | Standard | **Sub-100ms launch** | ✅ **0.8s launch** |
+Clone and drag the `Sources` folder into your project.
 
----
+## Documentation
 
-## 📚 World-Class Documentation
-
-<div align="center">
-
-### **Complete Learning Ecosystem**
-
-</div>
-
-<table>
-<tr>
-<td width="25%">
-
-### 📖 **API Reference**
-- [Core Framework](Documentation/API-Reference.md)
-- [Template Manager](Documentation/TemplateManagerAPI.md)
-- [Architecture Patterns](Documentation/ArchitectureAPI.md)
-- [Security Layer](Documentation/SecurityAPI.md)
-
-</td>
-<td width="25%">
-
-### 🎯 **Quick Start Guides**
-- [5-Minute Setup](Documentation/Guides/QuickStart.md)
-- [First App Tutorial](Documentation/FirstApp.md)
-- [Vision Pro Guide](Documentation/VisionProGuide.md)
-- [Architecture Patterns](Documentation/ArchitectureTemplatesGuide.md)
-
-</td>
-<td width="25%">
-
-### 🏗️ **Architecture Guides**
+- [Getting Started](Documentation/Guides/QuickStart.md)
 - [Template Guide](Documentation/TemplateGuide.md)
-- [Best Practices](Documentation/BestPracticesGuide.md)
-- [Architecture Templates](Documentation/ArchitectureTemplatesAPI.md)
-- [UI Templates](Documentation/UITemplatesGuide.md)
-
-</td>
-<td width="25%">
-
-### 🎨 **Design System**
-- [UI Components](Documentation/UIComponents.md)
-- [Customization Guide](Documentation/CustomizationGuide.md)
-- [Testing Templates](Documentation/TestingTemplatesGuide.md)
+- [Architecture Guide](Documentation/ArchitectureTemplatesGuide.md)
+- [API Reference](Documentation/API-Reference.md)
 - [Best Practices](Documentation/BestPracticesGuide.md)
 
-</td>
-</tr>
-</table>
+## Contributing
+
+Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+1. Fork the repo
+2. Create feature branch (`git checkout -b feature/new-template`)
+3. Commit changes (`git commit -m 'Add new template'`)
+4. Push (`git push origin feature/new-template`)
+5. Open Pull Request
+
+## License
+
+MIT License. See [LICENSE](LICENSE).
+
+## Author
+
+**Muhittin Camdali**
+- GitHub: [@muhittincamdali](https://github.com/muhittincamdali)
 
 ---
 
----
-
-## 🤝 Contributing
-
-
-
-### **Contributing**
-
-We welcome contributions! See our [Contributing Guide](CONTRIBUTING.md) for details.
-
-```bash
-# Fork the repository
-git clone https://github.com/YOUR_USERNAME/iOSAppTemplates.git
-
-# Create feature branch
-git checkout -b feature/amazing-feature
-
-# Make your changes and commit
-git commit -m "Add amazing feature"
-
-# Push to your fork and create a Pull Request
-git push origin feature/amazing-feature
-```
-
----
-
----
-
-## 🗺️ Roadmap
-
-<div align="center">
-
-### **What's Coming Next**
-
-</div>
-
-| **Q1 2025** | **Q2 2025** | **Q3 2025** | **Q4 2025** |
-|:---:|:---:|:---:|:---:|
-| 🤖 **Advanced AI** | 🌐 **Web Integration** | 🔮 **AR/VR Expansion** | 🚀 **Multi-Platform** |
-| More Core ML models | SwiftUI on Web | Advanced RealityKit | Android templates |
-| Apple Intelligence | Server-side Swift | Spatial interactions | Cross-platform UI |
-| On-device training | Cloud integration | Mixed reality | Unified codebase |
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-<div align="center">
-
-**Special thanks to:**
-
-🍎 **Apple** • For the incredible iOS ecosystem  
-🌟 **Open Source Community** • For inspiration and feedback  
-🚀 **Contributors** • Who make this project better  
-
-</div>
-
----
-
-<div align="center">
-
-## ⭐ Star this repository if it helped you!
-
-### **Transform Your iOS Development Journey Today**
-
-[![Get Started](https://img.shields.io/badge/🚀%20Get%20Started-Now-success?style=for-the-badge&logo=rocket)](Documentation/Guides/QuickStart.md)
-[![Download](https://img.shields.io/badge/📦%20Download-Templates-blue?style=for-the-badge&logo=download)](https://github.com/muhittincamdali/iOSAppTemplates/releases)
-
-**Made with ❤️ by developers, for developers**
-
-</div>
+<p align="center">
+  <sub>Built with ❤️ for the iOS community</sub>
+</p>
