@@ -1,2 +1,8 @@
 blank_issues_enabled: false
-contact_links: []
+contact_links:
+  - name: 📖 Documentation
+    url: https://github.com/muhittincamdali/iOSAppTemplates#readme
+    about: Check out the documentation first
+  - name: 💬 Discussions
+    url: https://github.com/muhittincamdali/iOSAppTemplates/discussions
+    about: Ask questions and discuss ideas
