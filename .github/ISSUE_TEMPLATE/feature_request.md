@@ -1,28 +1,22 @@
 ---
-name: ✨ Feature Request
+name: Feature Request
 about: Suggest an idea for this project
-title: "[FEATURE] "
+title: '[FEATURE] '
 labels: enhancement
-assignees: muhittincamdali
+assignees: ''
 ---
 
-## 🚀 Feature Description
-A clear and concise description of the feature you'd like.
+## Problem Statement
+A clear description of the problem. Ex. I'm always frustrated when [...]
 
-## 💡 Motivation
-Why is this feature important? What problem does it solve?
+## Proposed Solution
+A clear description of what you want to happen.
 
-## 📋 Proposed Solution
-Describe the solution you'd like.
+## Alternatives Considered
+Any alternative solutions or features you've considered.
 
-## 🔄 Alternatives Considered
-Describe any alternative solutions or features you've considered.
+## Use Case
+Describe how this feature would be used.
 
-## 📝 Additional Context
-Add any other context or screenshots about the feature request here.
-
-## ✅ Acceptance Criteria
-- [ ] Criteria 1
-- [ ] Criteria 2
-- [ ] Criteria 3
-
+## Additional Context
+Any other context, mockups, or screenshots about the feature request.
