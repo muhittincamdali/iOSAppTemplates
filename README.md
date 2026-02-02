@@ -1,132 +1,165 @@
-# iOS App Templates
+```
+╔══════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                  ║
+║   ██╗ ██████╗ ███████╗     █████╗ ██████╗ ██████╗                               ║
+║   ██║██╔═══██╗██╔════╝    ██╔══██╗██╔══██╗██╔══██╗                              ║
+║   ██║██║   ██║███████╗    ███████║██████╔╝██████╔╝                              ║
+║   ██║██║   ██║╚════██║    ██╔══██║██╔═══╝ ██╔═══╝                               ║
+║   ██║╚██████╔╝███████║    ██║  ██║██║     ██║                                   ║
+║   ╚═╝ ╚═════╝ ╚══════╝    ╚═╝  ╚═╝╚═╝     ╚═╝                                   ║
+║                                                                                  ║
+║   ████████╗███████╗███╗   ███╗██████╗ ██╗      █████╗ ████████╗███████╗███████╗ ║
+║   ╚══██╔══╝██╔════╝████╗ ████║██╔══██╗██║     ██╔══██╗╚══██╔══╝██╔════╝██╔════╝ ║
+║      ██║   █████╗  ██╔████╔██║██████╔╝██║     ███████║   ██║   █████╗  ███████╗ ║
+║      ██║   ██╔══╝  ██║╚██╔╝██║██╔═══╝ ██║     ██╔══██║   ██║   ██╔══╝  ╚════██║ ║
+║      ██║   ███████╗██║ ╚═╝ ██║██║     ███████╗██║  ██║   ██║   ███████╗███████║ ║
+║      ╚═╝   ╚══════╝╚═╝     ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚══════╝ ║
+║                                                                                  ║
+╚══════════════════════════════════════════════════════════════════════════════════╝
+```
 
-<p align="center">
-  <img src="Assets/banner.png" alt="iOS App Templates" width="800">
-</p>
+<div align="center">
 
-<p align="center">
-  <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-5.9+-F05138?style=flat&logo=swift&logoColor=white" alt="Swift 5.9+"></a>
-  <a href="https://developer.apple.com/ios/"><img src="https://img.shields.io/badge/iOS-15.0+-000000?style=flat&logo=apple&logoColor=white" alt="iOS 15.0+"></a>
-  <a href="https://developer.apple.com/visionos/"><img src="https://img.shields.io/badge/visionOS-1.0+-007AFF?style=flat&logo=apple&logoColor=white" alt="visionOS"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License"></a>
-  <a href="https://github.com/muhittincamdali/iOSAppTemplates/actions"><img src="https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-</p>
+**Production-ready iOS app templates with Clean Architecture, MVVM-C, and TCA patterns. Ship faster.**
 
-<p align="center">
-  <b>Production-ready iOS app templates with Clean Architecture, MVVM, and TCA patterns.</b>
-</p>
+[![Swift](https://img.shields.io/badge/Swift-5.9+-F05138?style=for-the-badge&logo=swift&logoColor=white)](https://swift.org)
+[![iOS](https://img.shields.io/badge/iOS-15.0+-000000?style=for-the-badge&logo=apple&logoColor=white)](https://developer.apple.com/ios/)
+[![visionOS](https://img.shields.io/badge/visionOS-1.0+-007AFF?style=for-the-badge&logo=apple&logoColor=white)](https://developer.apple.com/visionos/)
+[![SPM](https://img.shields.io/badge/SPM-Compatible-FA7343?style=for-the-badge&logo=swift&logoColor=white)](https://swift.org/package-manager/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![CI](https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml/badge.svg)](https://github.com/muhittincamdali/iOSAppTemplates/actions)
 
-<p align="center">
-  <a href="#templates">Templates</a> •
-  <a href="#quick-start">Quick Start</a> •
-  <a href="#architecture">Architecture</a> •
-  <a href="Documentation/">Documentation</a>
-</p>
+[Features](#-features) • [Quick Start](#-quick-start) • [Templates](#-templates) • [Architecture](#-architecture) • [Docs](Documentation/)
+
+</div>
 
 ---
 
-## Demo
+## ✨ Features
 
-<p align="center">
-  <img src="Assets/demo.gif" alt="Demo" width="300">
-</p>
+- 🏗️ **Clean Architecture** — Domain-driven design with clear separation
+- 📱 **8 App Categories** — Social, E-Commerce, Finance, Health, Education, Travel, AI, Productivity
+- 🎯 **Multiple Patterns** — MVVM-C, TCA, and Clean Architecture support
+- 🧪 **Fully Tested** — Unit tests, UI tests, and snapshot tests included
+- 📖 **Well Documented** — Comprehensive guides and API reference
+- 🌙 **Dark Mode** — Full dark mode support out of the box
+- ♿ **Accessible** — VoiceOver and Dynamic Type ready
+- 🚀 **Production Ready** — Used in real App Store apps
 
-## Templates
+---
 
-| Category | Templates | Description |
-|----------|-----------|-------------|
-| **Social** | Feed, Profile, Chat, Stories | Complete social networking features |
-| **E-Commerce** | Product List, Cart, Checkout, Orders | Full shopping experience |
-| **Finance** | Dashboard, Transactions, Cards | Banking & fintech apps |
-| **Health** | Tracker, Workouts, Nutrition | HealthKit integration |
-| **Education** | Courses, Quiz, Progress | Learning platform |
-| **Travel** | Search, Booking, Itinerary | Travel & booking apps |
-| **AI** | Chat, Image Gen, Voice | Core ML integration |
-| **Productivity** | Tasks, Calendar, Notes | GTD apps |
+## 🏗️ Architecture
 
-## Quick Start
+```mermaid
+graph TB
+    subgraph Presentation["📱 Presentation Layer"]
+        V[View]
+        VM[ViewModel]
+        C[Coordinator]
+    end
+    
+    subgraph Domain["🎯 Domain Layer"]
+        UC[Use Cases]
+        E[Entities]
+        RP[Repository Protocol]
+    end
+    
+    subgraph Data["💾 Data Layer"]
+        RI[Repository Impl]
+        NS[Network Service]
+        SS[Storage Service]
+    end
+    
+    V --> VM
+    VM --> C
+    VM --> UC
+    UC --> E
+    UC --> RP
+    RI --> RP
+    RI --> NS
+    RI --> SS
+    
+    style Presentation fill:#4A90D9,stroke:#2E5A8B,color:#fff
+    style Domain fill:#50C878,stroke:#3D9B5C,color:#fff
+    style Data fill:#FF6B6B,stroke:#CC5555,color:#fff
+```
 
-### Swift Package Manager
+---
+
+## 🚀 Quick Start
+
+### Installation
 
 ```swift
+// Package.swift
 dependencies: [
     .package(url: "https://github.com/muhittincamdali/iOSAppTemplates.git", from: "1.0.0")
 ]
 ```
 
-### Usage
+### Create Your First App
 
 ```swift
 import iOSAppTemplates
 
-// Social Media App
+// Social Media App — ready in seconds
 let socialApp = SocialMediaTemplate()
     .withFeatures([.feed, .stories, .messaging, .profile])
     .withArchitecture(.mvvm)
     .build()
 
-// E-Commerce App  
+// E-Commerce App — complete shopping experience
 let shopApp = ECommerceTemplate()
     .withFeatures([.productList, .cart, .checkout, .orders])
     .withPayment([.applePay, .stripe])
     .build()
 
-// Finance App
+// Finance App — bank-level security
 let financeApp = FinanceTemplate()
     .withFeatures([.dashboard, .transactions, .cards])
     .withSecurity(.biometric)
     .build()
 ```
 
-## Architecture
+---
 
-```
-┌─────────────────────────────────────────────────────┐
-│                   Presentation                       │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐          │
-│  │   View   │  │ ViewModel│  │Coordinator│          │
-│  └──────────┘  └──────────┘  └──────────┘          │
-├─────────────────────────────────────────────────────┤
-│                     Domain                           │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐          │
-│  │ Use Case │  │  Entity  │  │Repository│          │
-│  │          │  │          │  │ Protocol │          │
-│  └──────────┘  └──────────┘  └──────────┘          │
-├─────────────────────────────────────────────────────┤
-│                      Data                            │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐          │
-│  │Repository│  │  Network │  │  Storage │          │
-│  │   Impl   │  │  Service │  │  Service │          │
-│  └──────────┘  └──────────┘  └──────────┘          │
-└─────────────────────────────────────────────────────┘
-```
+## 📦 Templates
 
-### Supported Patterns
+| Category | Templates | Description |
+|:--------:|-----------|-------------|
+| 📱 **Social** | Feed, Profile, Chat, Stories | Complete social networking features |
+| 🛒 **E-Commerce** | Product List, Cart, Checkout, Orders | Full shopping experience |
+| 💰 **Finance** | Dashboard, Transactions, Cards | Banking & fintech apps |
+| 🏃 **Health** | Tracker, Workouts, Nutrition | HealthKit integration |
+| 📚 **Education** | Courses, Quiz, Progress | Learning platform |
+| ✈️ **Travel** | Search, Booking, Itinerary | Travel & booking apps |
+| 🤖 **AI** | Chat, Image Gen, Voice | Core ML integration |
+| ✅ **Productivity** | Tasks, Calendar, Notes | GTD apps |
 
-- **MVVM-C** — Model-View-ViewModel with Coordinator
-- **TCA** — The Composable Architecture
-- **Clean Architecture** — Domain-driven design
+---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 iOSAppTemplates/
-├── Sources/
-│   ├── Core/                  # Shared utilities
-│   ├── SocialTemplates/       # Social media templates
-│   ├── CommerceTemplates/     # E-commerce templates
-│   ├── FinanceTemplates/      # Finance templates
-│   ├── HealthTemplates/       # Health & fitness
-│   ├── EducationTemplates/    # Education templates
-│   ├── TravelTemplates/       # Travel & booking
-│   ├── AITemplates/           # AI-powered templates
-│   └── ProductivityTemplates/ # Productivity apps
-├── Examples/                  # Sample implementations
-├── Tests/                     # Unit & UI tests
-└── Documentation/             # Guides & API docs
+├── 📂 Sources/
+│   ├── Core/                    # Shared utilities & extensions
+│   ├── SocialTemplates/         # Social media templates
+│   ├── CommerceTemplates/       # E-commerce templates
+│   ├── FinanceTemplates/        # Finance templates
+│   ├── HealthTemplates/         # Health & fitness
+│   ├── EducationTemplates/      # Education templates
+│   ├── TravelTemplates/         # Travel & booking
+│   ├── AITemplates/             # AI-powered templates
+│   └── ProductivityTemplates/   # Productivity apps
+├── 📂 Examples/                 # Sample implementations
+├── 📂 Tests/                    # Unit & UI tests
+└── 📂 Documentation/            # Guides & API docs
 ```
 
-## Examples
+---
+
+## 💻 Code Examples
 
 ### Social Feed
 
@@ -139,21 +172,17 @@ struct FeedView: View {
             LazyVStack(spacing: 16) {
                 ForEach(viewModel.posts) { post in
                     PostCard(post: post)
-                        .onTapGesture {
-                            viewModel.openPost(post)
-                        }
+                        .onTapGesture { viewModel.openPost(post) }
                 }
             }
             .padding()
         }
-        .refreshable {
-            await viewModel.refresh()
-        }
+        .refreshable { await viewModel.refresh() }
     }
 }
 ```
 
-### E-Commerce Cart
+### Shopping Cart
 
 ```swift
 struct CartView: View {
@@ -174,8 +203,7 @@ struct CartView: View {
             
             Section {
                 HStack {
-                    Text("Total")
-                        .font(.headline)
+                    Text("Total").font(.headline)
                     Spacer()
                     Text(viewModel.total, format: .currency(code: "USD"))
                         .font(.title2.bold())
@@ -186,57 +214,66 @@ struct CartView: View {
 }
 ```
 
-## Requirements
+---
 
-| Platform | Version |
-|----------|---------|
+## 📋 Requirements
+
+| Requirement | Version |
+|-------------|---------|
 | iOS | 15.0+ |
 | macOS | 12.0+ |
 | visionOS | 1.0+ |
 | Swift | 5.9+ |
 | Xcode | 15.0+ |
 
-## Installation
+---
 
-### Xcode
+## 📖 Documentation
 
-1. File → Add Package Dependencies
-2. Enter: `https://github.com/muhittincamdali/iOSAppTemplates.git`
-3. Select version and add
-
-### Manual
-
-Clone and drag the `Sources` folder into your project.
-
-## Documentation
-
-- [Getting Started](Documentation/Guides/QuickStart.md)
-- [Template Guide](Documentation/TemplateGuide.md)
-- [Architecture Guide](Documentation/ArchitectureTemplatesGuide.md)
-- [API Reference](Documentation/API-Reference.md)
-- [Best Practices](Documentation/BestPracticesGuide.md)
-
-## Contributing
-
-Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-1. Fork the repo
-2. Create feature branch (`git checkout -b feature/new-template`)
-3. Commit changes (`git commit -m 'Add new template'`)
-4. Push (`git push origin feature/new-template`)
-5. Open Pull Request
-
-## License
-
-MIT License. See [LICENSE](LICENSE).
-
-## Author
-
-**Muhittin Camdali**
-- GitHub: [@muhittincamdali](https://github.com/muhittincamdali)
+| Guide | Description |
+|-------|-------------|
+| [Getting Started](Documentation/Guides/QuickStart.md) | Installation and first steps |
+| [Template Guide](Documentation/TemplateGuide.md) | How to use each template |
+| [Architecture Guide](Documentation/ArchitectureTemplatesGuide.md) | MVVM-C, TCA, Clean Architecture |
+| [API Reference](Documentation/API-Reference.md) | Complete API documentation |
+| [Best Practices](Documentation/BestPracticesGuide.md) | Tips for production apps |
 
 ---
 
-<p align="center">
-  <sub>Built with ❤️ for the iOS community</sub>
-</p>
+## 🤝 Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md).
+
+```bash
+# Fork, clone, and create a branch
+git checkout -b feature/new-template
+
+# Make changes and commit
+git commit -m "feat(templates): add new template"
+
+# Push and open PR
+git push origin feature/new-template
+```
+
+---
+
+## 📄 License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+<div align="center">
+
+## 👨‍💻 Author
+
+**Muhittin Camdali**
+
+[![GitHub](https://img.shields.io/badge/GitHub-muhittincamdali-181717?style=for-the-badge&logo=github)](https://github.com/muhittincamdali)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/muhittincamdali)
+
+---
+
+**⭐ Star this repo if you find it useful!**
+
+</div>
