@@ -27,7 +27,7 @@
 [![visionOS](https://img.shields.io/badge/visionOS-1.0+-007AFF?style=for-the-badge&logo=apple&logoColor=white)](https://developer.apple.com/visionos/)
 [![SPM](https://img.shields.io/badge/SPM-Compatible-FA7343?style=for-the-badge&logo=swift&logoColor=white)](https://swift.org/package-manager/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![CI](https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml/badge.svg)](https://github.com/muhittincamdali/iOSAppTemplates/actions)
+[![CI](https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/muhittincamdali/iOSAppTemplates/actions)
 
 [Features](#-features) • [Quick Start](#-quick-start) • [Templates](#-templates) • [Architecture](#-architecture) • [Docs](Documentation/)
 
@@ -275,5 +275,15 @@ MIT License — see [LICENSE](LICENSE) for details.
 ---
 
 **⭐ Star this repo if you find it useful!**
+
+---
+
+## 🙏 Contributors
+
+Thanks to all the amazing people who have contributed!
+
+<a href="https://github.com/muhittincamdali/iOSAppTemplates/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=muhittincamdali/iOSAppTemplates" />
+</a>
 
 </div>
