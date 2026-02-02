@@ -356,7 +356,7 @@ jobs:
         echo "5. **Security awareness training** for development team" >> security-compliance-report.md
         
     - name: Upload Security Compliance Report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: security-compliance-report
         path: security-compliance-report.md

@@ -145,7 +145,7 @@ jobs:
         
     - name: Upload Performance Artifacts
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: performance-results-${{ matrix.platform }}-${{ matrix.configuration }}
         path: |
@@ -316,7 +316,7 @@ jobs:
         echo "All ENTERPRISE_STANDARDS performance requirements have been met successfully." >> compliance-report.md
         
     - name: Upload Compliance Report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: enterprise-standards-compliance-report
         path: compliance-report.md
