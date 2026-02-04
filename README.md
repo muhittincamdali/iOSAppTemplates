@@ -41,6 +41,20 @@
 
 ---
 
+## 📋 Table of Contents
+
+- [Features](#-features)
+- [Quick Start](#-quick-start)
+- [Templates](#-templates)
+- [Architecture](#-architecture)
+- [Installation](#installation)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
+- [Star History](#-star-history)
+
+---
+
 ## ✨ Features
 
 - 🏗️ **Clean Architecture** — Domain-driven design with clear separation
