@@ -141,20 +141,41 @@ let financeApp = FinanceTemplate()
     .build()
 ```
 
+### 🛠️ Template Generator CLI
+
+Generate a complete project with one command:
+
+```bash
+# Interactive mode
+swift Scripts/TemplateGenerator.swift --interactive
+
+# Direct generation
+swift Scripts/TemplateGenerator.swift -t ecommerce -n "MyShop" -o ~/Desktop
+
+# List all templates
+swift Scripts/TemplateGenerator.swift --list
+```
+
+Available templates: `ecommerce`, `social`, `news`, `fitness`, `finance`, `education`, `food`, `travel`, `music`, `productivity`
+
 ---
 
-## 📦 Templates
+## 📦 Templates (10 Complete Apps!)
 
-| Category | Templates | Description |
-|:--------:|-----------|-------------|
-| 📱 **Social** | Feed, Profile, Chat, Stories | Complete social networking features |
-| 🛒 **E-Commerce** | Product List, Cart, Checkout, Orders | Full shopping experience |
-| 💰 **Finance** | Dashboard, Transactions, Cards | Banking & fintech apps |
-| 🏃 **Health** | Tracker, Workouts, Nutrition | HealthKit integration |
-| 📚 **Education** | Courses, Quiz, Progress | Learning platform |
-| ✈️ **Travel** | Search, Booking, Itinerary | Travel & booking apps |
-| 🤖 **AI** | Chat, Image Gen, Voice | Core ML integration |
-| ✅ **Productivity** | Tasks, Calendar, Notes | GTD apps |
+| Category | Screens | Key Features | Status |
+|:--------:|:-------:|--------------|:------:|
+| 🛒 **E-Commerce** | 16+ | Products, Cart, Checkout, Orders, Reviews, Wishlist | ✅ Complete |
+| 📱 **Social Media** | 16+ | Feed, Stories, Reels, Messages, Profile, Notifications | ✅ Complete |
+| 📰 **News/Blog** | 14+ | Articles, Categories, Bookmarks, Reader Mode, Search | ✅ Complete |
+| 🏃 **Fitness/Health** | 15+ | Workouts, Activity, Nutrition, Progress, Achievements | ✅ Complete |
+| 💰 **Finance** | 15+ | Dashboard, Cards, Transactions, Budget, Investments | ✅ Complete |
+| 📚 **Education** | 14+ | Courses, Lessons, Quizzes, Progress, Certificates | ✅ Complete |
+| 🍕 **Food Delivery** | 17+ | Restaurants, Menu, Cart, Orders, Live Tracking | ✅ Complete |
+| ✈️ **Travel** | 12+ | Destinations, Flights, Hotels, Bookings, Itinerary | ✅ Complete |
+| 🎵 **Music/Podcast** | 14+ | Player, Playlists, Library, Podcasts, Search | ✅ Complete |
+| ✅ **Productivity** | 12+ | Tasks, Projects, Notes, Focus Mode, Habits | ✅ Complete |
+
+> **Every template includes:** Dark Mode, Accessibility, Sample Data, Working Navigation, No Placeholders!
 
 ---
 
