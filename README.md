@@ -26,8 +26,9 @@
 
 <div align="center">
 
-**Production-ready iOS app templates with Clean Architecture, MVVM-C, and TCA patterns. Ship faster.**
+**10 production-ready iOS app templates with Clean Architecture, MVVM-C, and TCA patterns.<br/>Stop building boilerplate. Start shipping features.**
 
+[![Stars](https://img.shields.io/github/stars/muhittincamdali/iOSAppTemplates?style=for-the-badge&color=yellow&label=⭐%20Stars)](https://github.com/muhittincamdali/iOSAppTemplates/stargazers)
 [![Swift](https://img.shields.io/badge/Swift-5.9+-F05138?style=for-the-badge&logo=swift&logoColor=white)](https://swift.org)
 [![iOS](https://img.shields.io/badge/iOS-15.0+-000000?style=for-the-badge&logo=apple&logoColor=white)](https://developer.apple.com/ios/)
 [![visionOS](https://img.shields.io/badge/visionOS-1.0+-007AFF?style=for-the-badge&logo=apple&logoColor=white)](https://developer.apple.com/visionos/)
@@ -35,36 +36,36 @@
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![CI](https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/muhittincamdali/iOSAppTemplates/actions)
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Templates](#-templates) • [Architecture](#-architecture) • [Docs](Documentation/)
+[Features](#-features) • [Quick Start](#-quick-start) • [Templates](#-templates) • [Architecture](#-architecture) • [Who Is This For?](#-who-is-this-for) • [Docs](Documentation/)
 
 </div>
 
 ---
 
-## 📋 Table of Contents
+## 👤 Who Is This For?
 
-- [Features](#-features)
-- [Quick Start](#-quick-start)
-- [Templates](#-templates)
-- [Architecture](#-architecture)
-- [Installation](#installation)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
-- [License](#license)
-- [Star History](#-star-history)
+| You are... | This helps you... |
+|---|---|
+| 🧑‍💻 **Solo indie developer** | Skip weeks of setup. Get a working app skeleton with auth, networking, and navigation in minutes. |
+| 👥 **Small team / startup** | Align the whole team on architecture from day one. Every template follows the same conventions. |
+| 📚 **Student / learner** | Study real-world patterns (MVVM-C, TCA, Clean Architecture) in complete, runnable projects. |
+| 🏢 **Agency developer** | Pitch faster. Prototype client apps with full-featured templates, then customize. |
+| 🔄 **Switching from UIKit** | Every template is 100% SwiftUI with modern concurrency. Learn by reading production-quality code. |
 
 ---
 
 ## ✨ Features
 
 - 🏗️ **Clean Architecture** — Domain-driven design with clear separation
-- 📱 **8 App Categories** — Social, E-Commerce, Finance, Health, Education, Travel, AI, Productivity
+- 📱 **10 App Categories** — E-Commerce, Social, News, Fitness, Finance, Education, Food, Travel, Music, Productivity
 - 🎯 **Multiple Patterns** — MVVM-C, TCA, and Clean Architecture support
 - 🧪 **Fully Tested** — Unit tests, UI tests, and snapshot tests included
 - 📖 **Well Documented** — Comprehensive guides and API reference
 - 🌙 **Dark Mode** — Full dark mode support out of the box
 - ♿ **Accessible** — VoiceOver and Dynamic Type ready
 - 🚀 **Production Ready** — Used in real App Store apps
+- 🛠️ **CLI Generator** — One command to scaffold a new project
+- 📱 **150+ Screens** — Total across all templates
 
 ---
 
@@ -108,7 +109,7 @@ graph TB
 
 ## 🚀 Quick Start
 
-### Installation
+### Option 1: Swift Package Manager
 
 ```swift
 // Package.swift
@@ -117,7 +118,28 @@ dependencies: [
 ]
 ```
 
-### Create Your First App
+### Option 2: Template Generator CLI (Recommended)
+
+Generate a complete, ready-to-run Xcode project in seconds:
+
+```bash
+# Clone the repo
+git clone https://github.com/muhittincamdali/iOSAppTemplates.git
+cd iOSAppTemplates
+
+# Interactive mode — pick a template, name your app, done
+swift Scripts/TemplateGenerator.swift --interactive
+
+# Or generate directly
+swift Scripts/TemplateGenerator.swift -t ecommerce -n "MyShop" -o ~/Desktop
+
+# See all available templates
+swift Scripts/TemplateGenerator.swift --list
+```
+
+Available templates: `ecommerce` · `social` · `news` · `fitness` · `finance` · `education` · `food` · `travel` · `music` · `productivity`
+
+### Option 3: Use as Code Reference
 
 ```swift
 import iOSAppTemplates
@@ -141,41 +163,24 @@ let financeApp = FinanceTemplate()
     .build()
 ```
 
-### 🛠️ Template Generator CLI
-
-Generate a complete project with one command:
-
-```bash
-# Interactive mode
-swift Scripts/TemplateGenerator.swift --interactive
-
-# Direct generation
-swift Scripts/TemplateGenerator.swift -t ecommerce -n "MyShop" -o ~/Desktop
-
-# List all templates
-swift Scripts/TemplateGenerator.swift --list
-```
-
-Available templates: `ecommerce`, `social`, `news`, `fitness`, `finance`, `education`, `food`, `travel`, `music`, `productivity`
-
 ---
 
 ## 📦 Templates (10 Complete Apps!)
 
-| Category | Screens | Key Features | Status |
-|:--------:|:-------:|--------------|:------:|
-| 🛒 **E-Commerce** | 16+ | Products, Cart, Checkout, Orders, Reviews, Wishlist | ✅ Complete |
-| 📱 **Social Media** | 16+ | Feed, Stories, Reels, Messages, Profile, Notifications | ✅ Complete |
-| 📰 **News/Blog** | 14+ | Articles, Categories, Bookmarks, Reader Mode, Search | ✅ Complete |
-| 🏃 **Fitness/Health** | 15+ | Workouts, Activity, Nutrition, Progress, Achievements | ✅ Complete |
-| 💰 **Finance** | 15+ | Dashboard, Cards, Transactions, Budget, Investments | ✅ Complete |
-| 📚 **Education** | 14+ | Courses, Lessons, Quizzes, Progress, Certificates | ✅ Complete |
-| 🍕 **Food Delivery** | 17+ | Restaurants, Menu, Cart, Orders, Live Tracking | ✅ Complete |
-| ✈️ **Travel** | 12+ | Destinations, Flights, Hotels, Bookings, Itinerary | ✅ Complete |
-| 🎵 **Music/Podcast** | 14+ | Player, Playlists, Library, Podcasts, Search | ✅ Complete |
-| ✅ **Productivity** | 12+ | Tasks, Projects, Notes, Focus Mode, Habits | ✅ Complete |
+| # | Category | Screens | Key Features | Status |
+|:-:|:--------:|:-------:|--------------|:------:|
+| 1 | 🛒 **E-Commerce** | 16+ | Products, Cart, Checkout, Orders, Reviews, Wishlist | ✅ Complete |
+| 2 | 📱 **Social Media** | 16+ | Feed, Stories, Reels, Messages, Profile, Notifications | ✅ Complete |
+| 3 | 📰 **News / Blog** | 14+ | Articles, Categories, Bookmarks, Reader Mode, Search | ✅ Complete |
+| 4 | 🏃 **Fitness / Health** | 15+ | Workouts, Activity, Nutrition, Progress, Achievements | ✅ Complete |
+| 5 | 💰 **Finance** | 15+ | Dashboard, Cards, Transactions, Budget, Investments | ✅ Complete |
+| 6 | 📚 **Education** | 14+ | Courses, Lessons, Quizzes, Progress, Certificates | ✅ Complete |
+| 7 | 🍕 **Food Delivery** | 17+ | Restaurants, Menu, Cart, Orders, Live Tracking | ✅ Complete |
+| 8 | ✈️ **Travel** | 12+ | Destinations, Flights, Hotels, Bookings, Itinerary | ✅ Complete |
+| 9 | 🎵 **Music / Podcast** | 14+ | Player, Playlists, Library, Podcasts, Search | ✅ Complete |
+| 10 | ✅ **Productivity** | 12+ | Tasks, Projects, Notes, Focus Mode, Habits | ✅ Complete |
 
-> **Every template includes:** Dark Mode, Accessibility, Sample Data, Working Navigation, No Placeholders!
+> **Every template includes:** Dark Mode · Accessibility · Sample Data · Working Navigation · No Placeholders
 
 ---
 
@@ -190,7 +195,7 @@ iOSAppTemplates/
 │   ├── FinanceTemplates/        # Finance templates
 │   ├── HealthTemplates/         # Health & fitness
 │   ├── EducationTemplates/      # Education templates
-│   ├── TravelTemplates/         # Travel & booking
+│   ├── TravelTemplates/        # Travel & booking
 │   ├── AITemplates/             # AI-powered templates
 │   └── ProductivityTemplates/   # Productivity apps
 ├── 📂 Examples/                 # Sample implementations
