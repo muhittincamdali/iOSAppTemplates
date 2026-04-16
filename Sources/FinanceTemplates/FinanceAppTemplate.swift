@@ -8,6 +8,14 @@ import Foundation
 import Combine
 import LocalAuthentication
 
+private func evaluateFinanceBiometricPolicy(reason: String) async throws -> Bool {
+    let context = LAContext()
+    return try await context.evaluatePolicy(
+        .deviceOwnerAuthenticationWithBiometrics,
+        localizedReason: reason
+    )
+}
+
 // MARK: - Models
 
 public struct BankAccount: Identifiable, Codable {
@@ -418,9 +426,8 @@ public class FinanceStore: ObservableObject {
         }
         
         do {
-            let success = try await context.evaluatePolicy(
-                .deviceOwnerAuthenticationWithBiometrics,
-                localizedReason: "Authenticate to access your finances"
+            let success = try await evaluateFinanceBiometricPolicy(
+                reason: "Authenticate to access your finances"
             )
             await MainActor.run {
                 self.isAuthenticated = success
