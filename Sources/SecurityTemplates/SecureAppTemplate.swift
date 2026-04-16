@@ -14,6 +14,32 @@ public struct SecureAppTemplate {
     public init() {}
 }
 
+private struct BiometricAvailabilityResult {
+    let canUseBiometrics: Bool
+    let biometricType: LABiometryType
+    let errorMessage: String?
+}
+
+private func makeBiometricAvailabilityResult() -> BiometricAvailabilityResult {
+    let context = LAContext()
+    var error: NSError?
+    let canUseBiometrics = context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
+
+    return BiometricAvailabilityResult(
+        canUseBiometrics: canUseBiometrics,
+        biometricType: context.biometryType,
+        errorMessage: error?.localizedDescription
+    )
+}
+
+private func evaluateBiometricPolicy(reason: String) async throws -> Bool {
+    let context = LAContext()
+    return try await context.evaluatePolicy(
+        .deviceOwnerAuthenticationWithBiometrics,
+        localizedReason: reason
+    )
+}
+
 // MARK: - Biometric Authentication Manager
 
 @Observable
@@ -23,20 +49,15 @@ public class BiometricAuthManager {
     public var canUseBiometrics = false
     public var authenticationError: String?
     
-    private let context = LAContext()
-    
     public init() {
         checkBiometricAvailability()
     }
     
     public func checkBiometricAvailability() {
-        var error: NSError?
-        canUseBiometrics = context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
-        biometricType = context.biometryType
-        
-        if let error = error {
-            authenticationError = error.localizedDescription
-        }
+        let availability = makeBiometricAvailabilityResult()
+        canUseBiometrics = availability.canUseBiometrics
+        biometricType = availability.biometricType
+        authenticationError = availability.errorMessage
     }
     
     @MainActor
@@ -47,10 +68,7 @@ public class BiometricAuthManager {
         }
         
         do {
-            let result = try await context.evaluatePolicy(
-                .deviceOwnerAuthenticationWithBiometrics,
-                localizedReason: reason
-            )
+            let result = try await evaluateBiometricPolicy(reason: reason)
             
             isAuthenticated = result
             authenticationError = nil
