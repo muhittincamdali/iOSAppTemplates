@@ -1,92 +1,175 @@
-# 📚 API Reference - Enterprise Standards Compliant
+# API Reference
 
-## 🎯 Framework Overview
+Bu sayfa root package tarafinda dogrudan gorunen stabil surface'i ozetler. Daha genis app/template API'leri icin ilgili `Sources/*Templates/*.swift` dosyalarini incele.
 
-**26,633+ lines of production-ready Swift code** following Enterprise Standards architecture patterns.
+## Canonical Entry Points
 
-### Core Classes
+Root package icin en onemli public tipler:
 
-### iOSAppTemplates Framework
-The main entry point for the world's most advanced iOS development framework.
+- `iOSAppTemplates`
+- `TemplateManager`
+- `AppTemplate`
+- `TemplateCategory`
+- `TemplateComplexity`
+- `TemplateError`
+
+Kaynak:
+- `Sources/iOSAppTemplates/iOSAppTemplates.swift`
+
+## iOSAppTemplates
+
+Package-level bootstrap helper:
 
 ```swift
-/// Main framework class implementing Enterprise Standards
-/// - Code Volume: 26,633+ lines (177% above minimum requirement)
-/// - Architecture: MVVM-C + Clean Architecture + TCA
-/// - Performance: <1s launch time, 120fps rendering
-public class iOSAppTemplates {
-    
-    /// Initialize with Enterprise Standards configuration
-    public init()
-    
-    /// Configure enterprise-grade settings
-    /// - Security: Bank-level encryption (AES-256)
-    /// - Performance: Sub-100ms response times
-    /// - Testing: 97% coverage across all layers
-    public func configure()
-    
-    /// Reset framework to initial state
-    public func reset()
-    
-    /// Template Manager for 15+ app categories
-    public static let templateManager: TemplateManager
-    
-    /// Performance monitor with real-time metrics
-    public static let performanceMonitor: PerformanceMonitor
+import iOSAppTemplates
+
+iOSAppTemplates.initialize()
+iOSAppTemplates.configure(
+    templatesEnabled: true,
+    documentationEnabled: true,
+    examplesEnabled: true
+)
+```
+
+Public members:
+
+```swift
+public struct iOSAppTemplates {
+    public static let version: String
+    public static func initialize()
+    public static func configure(
+        templatesEnabled: Bool = true,
+        documentationEnabled: Bool = true,
+        examplesEnabled: Bool = true
+    )
 }
 ```
 
-## 🛡️ Enterprise Configuration
+Not:
+- Bu `configure` cagrisi runtime feature toggles benzeri hafif bir helper'dir.
+- Security/performance/test guarantees vermez.
 
-### Enterprise Standards Configuration
+## TemplateManager
+
+Root package icindeki canonical discovery surface:
 
 ```swift
-/// Enterprise-grade configuration following Enterprise Standards
-public struct GlobalAIConfiguration {
-    
-    /// Security Settings (Bank-level)
-    public var securityLevel: SecurityLevel = .enterprise
-    public var biometricEnabled: Bool = true
-    public var encryptionType: EncryptionType = .aes256
-    
-    /// Performance Requirements
-    public var maxLaunchTime: TimeInterval = 1.0  // <1s requirement
-    public var targetFrameRate: Int = 120         // 120fps target
-    public var maxMemoryUsage: Int = 75          // <75MB requirement
-    
-    /// Code Quality Standards
-    public var minTestCoverage: Double = 0.95    // ≥95% requirement
-    public var maxComplexity: Int = 8            // <8 complexity
-    public var minCodeVolume: Int = 15000        // ≥15,000 lines
-    
-    /// Architecture Patterns
-    public var architecturePattern: ArchitecturePattern = .mvvmCleanTCA
-    public var dependencyInjection: Bool = true
-    public var protocolOriented: Bool = true
-    
-    /// Platform Support
-    public var supportedPlatforms: [Platform] = [.iOS18, .visionOS2, .macOS15]
-    public var swiftVersion: SwiftVersion = .swift6
-}
+@MainActor
+public class TemplateManager: ObservableObject {
+    public static let shared: TemplateManager
 
-public enum SecurityLevel {
-    case basic, enterprise, bankLevel
-}
+    @Published public var availableTemplates: [AppTemplate] { get }
+    @Published public var selectedTemplate: AppTemplate? { get }
 
-public enum EncryptionType {
-    case aes128, aes256, chaChaPoly
-}
-
-public enum ArchitecturePattern {
-    case mvc, mvvm, mvvmC, mvvmClean, mvvmCleanTCA
+    public func loadTemplates()
+    public func getTemplate(id: String) -> AppTemplate?
+    public func getTemplates(category: TemplateCategory) -> [AppTemplate]
+    public func getTemplates(complexity: TemplateComplexity) -> [AppTemplate]
+    public func searchTemplates(query: String) -> [AppTemplate]
+    public func selectTemplate(_ template: AppTemplate)
+    public func clearSelection()
 }
 ```
 
-## Error Handling
+Ornek:
 
 ```swift
-public enum iOSAppTemplatesError: Error {
-    case configurationFailed
-    case initializationError
-    case runtimeError(String)
+let manager = TemplateManager.shared
+let commerceTemplates = manager.getTemplates(category: .commerce)
+let allTemplates = manager.searchTemplates(query: "")
+let socialMatch = manager.searchTemplates(query: "social")
+```
+
+Current truth:
+- Root `TemplateManager` bugun package icinde `3` curated top-level template kaydi expose eder:
+  - `Social Media App`
+  - `E-commerce App`
+  - `Fitness App`
+- Daha genis template family surface'i `Sources/*Templates` altindadir.
+
+## AppTemplate
+
+`TemplateManager` tarafindan donen hafif metadata modeli:
+
+```swift
+public struct AppTemplate: Identifiable, Codable {
+    public let id: String
+    public let name: String
+    public let description: String
+    public let category: TemplateCategory
+    public let features: [String]
+    public let technologies: [String]
+    public let complexity: TemplateComplexity
+    public let estimatedTime: String
 }
+```
+
+## TemplateCategory
+
+Root package discovery icin kullanilan kategori enum'u:
+
+```swift
+public enum TemplateCategory: String, CaseIterable, Codable {
+    case social
+    case commerce
+    case health
+    case productivity
+    case entertainment
+    case education
+    case finance
+    case travel
+}
+```
+
+Bu enum ayrica basit `icon` ve `color` helper'lari da expose eder.
+
+## TemplateComplexity
+
+```swift
+public enum TemplateComplexity: String, CaseIterable, Codable {
+    case beginner
+    case intermediate
+    case advanced
+    case expert
+}
+```
+
+Her seviye icin:
+- `description`
+- `estimatedExperience`
+helper'lari vardir.
+
+## TemplateError
+
+```swift
+public enum TemplateError: LocalizedError {
+    case templateNotFound(String)
+    case invalidTemplate(String)
+    case generationFailed(String)
+    case configurationError(String)
+}
+```
+
+## Template Family APIs
+
+Repo sadece root metadata surface'den ibaret degil. Daha genis product-lane API'leri ilgili source dosyalarinda:
+
+- `Sources/SocialTemplates/SocialTemplates.swift`
+- `Sources/CommerceTemplates/CommerceTemplates.swift`
+- `Sources/HealthTemplates/HealthTemplates.swift`
+- `Sources/FinanceTemplates/FinanceTemplates.swift`
+- `Sources/ProductivityTemplates/ProductivityTemplates.swift`
+- `Sources/EducationTemplates/EducationTemplates.swift`
+- `Sources/TravelTemplates/TravelTemplates.swift`
+- `Sources/FoodTemplates/FoodDeliveryTemplate.swift`
+- `Sources/AITemplates/SmartPhotoTemplate.swift`
+- `Sources/VisionOSTemplates/SpatialSocialTemplate.swift`
+
+Bu family'ler:
+- domain models
+- stores/managers
+- SwiftUI views
+- sample data
+icerir.
+
+Ancak hepsi ayni maturity seviyesinde degildir; "complete app" claim'i icin [Complete-App-Standard.md](./Complete-App-Standard.md) referans alinmalidir.

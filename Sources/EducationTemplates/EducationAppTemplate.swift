@@ -336,6 +336,7 @@ public struct LearningStreak: Codable {
 
 // MARK: - Sample Data
 
+@MainActor
 public enum EducationSampleData {
     public static let instructors: [Instructor] = [
         Instructor(name: "Dr. Sarah Chen", title: "Senior Software Engineer at Google", bio: "10+ years of experience in iOS development", coursesCount: 8, studentsCount: 45000, rating: 4.9),
@@ -345,11 +346,11 @@ public enum EducationSampleData {
     ]
     
     public static let courses: [Course] = [
-        Course(title: "iOS Development Masterclass", subtitle: "Build 20+ Apps with SwiftUI", description: "Complete guide to iOS development from beginner to advanced. Learn SwiftUI, UIKit, Core Data, and more.", instructor: instructors[0], category: .programming, level: .beginner, duration: 36000, lessonsCount: 45, rating: 4.9, studentsCount: 12500, price: 99.99, tags: ["SwiftUI", "iOS", "Xcode", "Swift"], isEnrolled: true, progress: 0.35),
+        Course(title: "iOS Development Masterclass", subtitle: "Build 20+ Apps with SwiftUI", description: "Complete guide to iOS development from beginner to advanced. Learn SwiftUI, UIKit, Core Data, and more.", instructor: instructors[0], category: .programming, level: .beginner, duration: 36000, lessonsCount: 45, rating: 4.9, studentsCount: 12500, price: 99.99, tags: ["SwiftUI", "iOS", "Xcode", "Swift"], progress: 0.35, isEnrolled: true),
         Course(title: "UI/UX Design Fundamentals", subtitle: "Design Beautiful Interfaces", description: "Master the principles of user interface and experience design.", instructor: instructors[1], category: .design, level: .beginner, duration: 18000, lessonsCount: 28, rating: 4.8, studentsCount: 8900, price: 79.99, tags: ["Figma", "Design", "UX"]),
         Course(title: "Machine Learning with Python", subtitle: "From Zero to Hero", description: "Comprehensive machine learning course covering all major algorithms.", instructor: instructors[2], category: .dataScience, level: .intermediate, duration: 28800, lessonsCount: 35, rating: 4.7, studentsCount: 15600, price: 129.99, tags: ["Python", "ML", "AI"]),
         Course(title: "Digital Marketing Strategy", subtitle: "Grow Your Business Online", description: "Learn proven strategies to market your business effectively.", instructor: instructors[3], category: .marketing, level: .beginner, duration: 14400, lessonsCount: 22, rating: 4.6, studentsCount: 9800, price: 59.99, tags: ["Marketing", "SEO", "Social Media"]),
-        Course(title: "Advanced Swift Programming", subtitle: "Master Swift 5.9", description: "Deep dive into Swift programming language features.", instructor: instructors[0], category: .programming, level: .advanced, duration: 21600, lessonsCount: 32, rating: 4.8, studentsCount: 6700, price: 89.99, tags: ["Swift", "iOS", "Advanced"], isEnrolled: true, progress: 0.65)
+        Course(title: "Advanced Swift Programming", subtitle: "Master Swift 5.9", description: "Deep dive into Swift programming language features.", instructor: instructors[0], category: .programming, level: .advanced, duration: 21600, lessonsCount: 32, rating: 4.8, studentsCount: 6700, price: 89.99, tags: ["Swift", "iOS", "Advanced"], progress: 0.65, isEnrolled: true)
     ]
     
     public static let lessons: [Lesson] = [
@@ -510,7 +511,7 @@ public struct LearnView: View {
             }
             .navigationTitle("Learn")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {} label: {
                         Image(systemName: "bell")
                     }
@@ -544,7 +545,7 @@ struct DailyGoalCard: View {
                 
                 ZStack {
                     Circle()
-                        .stroke(Color(.systemGray4), lineWidth: 8)
+                        .stroke(Color.gray.opacity(0.35), lineWidth: 8)
                     
                     Circle()
                         .trim(from: 0, to: min(progress, 1))
@@ -584,7 +585,7 @@ struct DailyGoalCard: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .padding(.horizontal)
     }
@@ -646,7 +647,7 @@ struct StreakCard: View {
             .frame(maxWidth: .infinity)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .padding(.horizontal)
     }
@@ -816,7 +817,7 @@ struct CourseRowCard: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
     }
 }
@@ -837,7 +838,7 @@ struct ExploreCourseView: View {
                         TextField("Search courses...", text: $store.searchQuery)
                     }
                     .padding(12)
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(12)
                     .padding(.horizontal)
                     
@@ -864,7 +865,7 @@ struct ExploreCourseView: View {
                                     }
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(store.selectedCategory == category ? category.color.opacity(0.2) : Color(.systemGray6))
+                                    .background(store.selectedCategory == category ? category.color.opacity(0.2) : Color.gray.opacity(0.08))
                                     .cornerRadius(12)
                                 }
                                 .foregroundColor(.primary)
@@ -989,13 +990,13 @@ public struct CourseDetailView: View {
                         }
                     }
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(16)
                     
                     // Instructor
                     HStack(spacing: 12) {
                         Circle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.gray.opacity(0.12))
                             .frame(width: 50, height: 50)
                             .overlay(
                                 Text(course.instructor.name.prefix(1))
@@ -1020,7 +1021,7 @@ public struct CourseDetailView: View {
                         .font(.caption)
                     }
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(16)
                     
                     // Tabs
@@ -1046,7 +1047,7 @@ public struct CourseDetailView: View {
                 .padding()
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
+        
         .safeAreaInset(edge: .bottom) {
             HStack {
                 if course.price > 0 && !course.isEnrolled {
@@ -1145,7 +1146,7 @@ struct LessonRow: View {
         HStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .fill(lesson.isCompleted ? Color.green : (lesson.isLocked ? Color(.systemGray4) : Color.blue))
+                    .fill(lesson.isCompleted ? Color.green : (lesson.isLocked ? Color.gray.opacity(0.35) : Color.blue))
                     .frame(width: 36, height: 36)
                 
                 if lesson.isCompleted {
@@ -1186,7 +1187,7 @@ struct LessonRow: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
         .opacity(lesson.isLocked ? 0.6 : 1)
     }
@@ -1222,7 +1223,7 @@ struct CourseReviewsSection: View {
                 }
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.08))
             .cornerRadius(16)
             
             // Reviews
@@ -1246,7 +1247,7 @@ struct RatingBarEducation: View {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     Rectangle()
-                        .fill(Color(.systemGray4))
+                        .fill(Color.gray.opacity(0.35))
                     
                     Rectangle()
                         .fill(Color.yellow)
@@ -1264,7 +1265,7 @@ struct ReviewRowEducation: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Circle()
-                    .fill(Color(.systemGray5))
+                    .fill(Color.gray.opacity(0.12))
                     .frame(width: 36, height: 36)
                 
                 VStack(alignment: .leading) {
@@ -1292,7 +1293,7 @@ struct ReviewRowEducation: View {
                 .foregroundColor(.secondary)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
     }
 }
@@ -1387,7 +1388,7 @@ struct EducationProfileView: View {
                 Section {
                     HStack(spacing: 16) {
                         Circle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.gray.opacity(0.12))
                             .frame(width: 70, height: 70)
                             .overlay(
                                 Image(systemName: "person.fill")
@@ -1467,10 +1468,26 @@ struct EducationProfileView: View {
                 }
                 
                 Section("Settings") {
-                    NavigationLink("Learning Goals", systemImage: "target") {}
-                    NavigationLink("Notifications", systemImage: "bell") {}
-                    NavigationLink("Download Settings", systemImage: "arrow.down.circle") {}
-                    NavigationLink("Privacy", systemImage: "lock") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Learning Goals", systemImage: "target")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Notifications", systemImage: "bell")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Download Settings", systemImage: "arrow.down.circle")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Privacy", systemImage: "lock")
+                    }
                 }
                 
                 Section {

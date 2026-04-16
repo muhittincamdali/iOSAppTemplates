@@ -27,15 +27,15 @@ public struct LearningAppTemplate {
         public let level: CourseLevel
         public let instructor: String
         public let duration: TimeInterval
-        public let lessons: [Lesson]
+        public var lessons: [Lesson]
         public let quizzes: [Quiz]
         public let assignments: [Assignment]
         public let materials: [LearningMaterial]
         public let enrollmentCount: Int
         public let rating: Double?
         public let reviewCount: Int
-        public let isEnrolled: Bool
-        public let progress: Double
+        public var isEnrolled: Bool
+        public var progress: Double
         public let certificateEligible: Bool
         public let certificateIssued: Bool
         public let certificateURL: String?
@@ -101,9 +101,9 @@ public struct LearningAppTemplate {
         public let audioURL: String?
         public let duration: TimeInterval
         public let order: Int
-        public let isCompleted: Bool
-        public let completedAt: Date?
-        public let notes: [Note]
+        public var isCompleted: Bool
+        public var completedAt: Date?
+        public var notes: [Note]
         public let attachments: [LessonAttachment]
         
         public init(
@@ -768,8 +768,8 @@ public struct LearningAppTemplate {
         public let courseId: String
         public let lessonId: String
         public let startTime: Date
-        public let endTime: Date?
-        public let duration: TimeInterval
+        public var endTime: Date?
+        public var duration: TimeInterval
         
         public init(
             id: String = UUID().uuidString,
@@ -964,7 +964,7 @@ public struct LearningAppTemplate {
                 }
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(.regularMaterial)
             .cornerRadius(12)
             .shadow(radius: 2)
             .onTapGesture {
@@ -1030,7 +1030,7 @@ public struct LearningAppTemplate {
                 Spacer()
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(.regularMaterial)
             .cornerRadius(8)
             .shadow(radius: 1)
             .onTapGesture {

@@ -1,56 +1,58 @@
 # Contributing
 
-Thanks for your interest in contributing! Here's how to get started.
+Bu repo buyuk iddia tasiyan bir template koleksiyonu oldugu icin, katkilarin da truth-based olmasi gerekiyor.
 
-## Getting Started
+## Before You Open A PR
 
-1. Fork the repository
-2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/REPO_NAME.git`
-3. Create a branch: `git checkout -b feature/your-feature`
-4. Make your changes
-5. Push to your fork: `git push origin feature/your-feature`
-6. Open a Pull Request
+1. Reponun mevcut truth surface'ini oku:
+   - `README.md`
+   - `Documentation/README.md`
+   - `Documentation/Complete-App-Standard.md`
+2. Degisikligin hangi alana ait oldugunu netlestir:
+   - package target
+   - template family
+   - standalone template root
+   - docs / workflow / validation
+3. Public claim ekliyorsan onu kanitlayan path'i de ekle.
 
-## Development Setup
+## Local Setup
 
 ```bash
-# Clone the repo
-git clone https://github.com/muhittincamdali/REPO_NAME.git
-cd REPO_NAME
-
-# Open in Xcode
+git clone https://github.com/muhittincamdali/iOSAppTemplates.git
+cd iOSAppTemplates
 open Package.swift
+swift build
+swift test
 ```
 
-## Code Style
+## Contribution Rules
 
-- Follow Swift API Design Guidelines
-- Use SwiftLint (config included)
-- Write descriptive commit messages
-- Add documentation for public APIs
+- Placeholder, fake metric, fake coverage, fake App Store, fake benchmark dili ekleme.
+- Public docs ile package truth'u birbiriyle celismesin.
+- Yeni template veya example ekliyorsan:
+  - acik entry path
+  - gercek README
+  - build/test etkisi
+  - gerekiyorsa media/proof planini da ekle
+- Buyuk degisikliklerde once canonical doc/router yuzeylerini guncelle.
 
-## Commit Messages
+## Commit Style
 
-Use conventional commits:
-- `feat:` new feature
-- `fix:` bug fix
-- `docs:` documentation
-- `refactor:` code refactor
-- `test:` tests
+- `feat:`
+- `fix:`
+- `docs:`
+- `refactor:`
+- `test:`
+- `chore:`
 
-Example: `feat: add dark mode support`
+## Pull Request Checklist
 
-## Pull Request Process
+- [ ] `swift build` gecti
+- [ ] `swift test` gecti
+- [ ] yeni public claim truth-based
+- [ ] ilgili docs guncellendi
+- [ ] broken link veya placeholder birakilmadi
 
-1. Update README if needed
-2. Add tests for new features
-3. Ensure CI passes
-4. Request review from maintainers
+## Conduct
 
-## Code of Conduct
-
-Be respectful and constructive. We're all here to build great software together.
-
-## Questions?
-
-Open an issue or reach out!
+Kisa, net, teknik ve saygili iletisim beklenir.

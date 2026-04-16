@@ -1,6 +1,7 @@
 import XCTest
 @testable import EntertainmentTemplates
 
+@MainActor
 final class EntertainmentTemplatesTests: XCTestCase {
     
     func testEntertainmentTemplatesInitialization() {

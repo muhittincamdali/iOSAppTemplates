@@ -2,358 +2,42 @@ name: Performance Validation
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, master]
   pull_request:
-    branches: [ main ]
+    branches: [main, master]
   schedule:
-    # Run performance tests daily at 2 AM UTC
     - cron: '0 2 * * *'
 
-env:
-  XCODE_VERSION: '16.0'
-  IOS_SIMULATOR: 'iPhone 16 Pro'
-  WATCHOS_SIMULATOR: 'Apple Watch Series 10 (46mm)'
-  TVOS_SIMULATOR: 'Apple TV 4K (3rd generation)'
-  VISIONOS_SIMULATOR: 'Apple Vision Pro'
-
 jobs:
-  performance-benchmarks:
-    name: Performance Benchmarks
-    runs-on: macos-15
-    timeout-minutes: 60
-    
-    strategy:
-      matrix:
-        platform: [iOS, visionOS]
-        configuration: [Debug, Release]
-        
-    steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-      
-    - name: Setup Xcode
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: ${{ env.XCODE_VERSION }}
-        
-    - name: Cache Swift Package Manager
-      uses: actions/cache@v4
-      with:
-        path: |
-          .build
-          ~/Library/Caches/org.swift.swiftpm
-        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
-        restore-keys: |
-          ${{ runner.os }}-spm-
-          
-    - name: Install Dependencies
-      run: |
-        swift package resolve
-        
-    - name: Build Performance Tests
-      run: |
-        swift build --configuration ${{ matrix.configuration }} \
-          --target PerformanceBenchmarkTests
-          
-    - name: Run Launch Performance Tests
-      id: launch-tests
-      run: |
-        # Run launch performance benchmarks
-        swift test --configuration ${{ matrix.configuration }} \
-          --filter PerformanceBenchmarkTests.testColdLaunchPerformance \
-          --parallel
-          
-        swift test --configuration ${{ matrix.configuration }} \
-          --filter PerformanceBenchmarkTests.testHotLaunchPerformance \
-          --parallel
-          
-    - name: Run Animation Performance Tests  
-      id: animation-tests
-      run: |
-        # Run 120fps animation benchmarks
-        swift test --configuration ${{ matrix.configuration }} \
-          --filter PerformanceBenchmarkTests.testAnimationPerformance \
-          --parallel
-          
-        swift test --configuration ${{ matrix.configuration }} \
-          --filter PerformanceBenchmarkTests.testScrollPerformance \
-          --parallel
-          
-    - name: Run Memory Performance Tests
-      id: memory-tests
-      run: |
-        # Run memory usage benchmarks
-        swift test --configuration ${{ matrix.configuration }} \
-          --filter PerformanceBenchmarkTests.testLaunchMemoryFootprint \
-          --parallel
-          
-        swift test --configuration ${{ matrix.configuration }} \
-          --filter PerformanceBenchmarkTests.testMemoryUsageDuringOperations \
-          --parallel
-          
-        swift test --configuration ${{ matrix.configuration }} \
-          --filter PerformanceBenchmarkTests.testMemoryLeakDetection \
-          --parallel
-          
-    - name: Run CPU Performance Tests
-      id: cpu-tests
-      run: |
-        # Run CPU usage benchmarks
-        swift test --configuration ${{ matrix.configuration }} \
-          --filter PerformanceBenchmarkTests.testCPUUsageNormalOperations \
-          --parallel
-          
-    - name: Run Network Performance Tests
-      id: network-tests
-      run: |
-        # Run network latency benchmarks
-        swift test --configuration ${{ matrix.configuration }} \
-          --filter PerformanceBenchmarkTests.testNetworkLatency \
-          --parallel
-          
-    - name: Run Disk I/O Performance Tests
-      id: diskio-tests
-      run: |
-        # Run disk I/O benchmarks
-        swift test --configuration ${{ matrix.configuration }} \
-          --filter PerformanceBenchmarkTests.testDiskIOPerformance \
-          --parallel
-          
-    - name: Generate Performance Report
-      id: performance-report
-      run: |
-        # Generate comprehensive performance report
-        swift test --configuration ${{ matrix.configuration }} \
-          --filter PerformanceBenchmarkTests.testGeneratePerformanceReport
-          
-    - name: Performance Validation Gate
-      run: |
-        echo "🎯 Performance Validation"
-        echo "Platform: ${{ matrix.platform }}"
-        echo "Configuration: ${{ matrix.configuration }}"
-        echo ""
-        
-        # Validate performance thresholds
-        echo "✅ Launch Performance: Cold <1s, Hot <300ms"
-        echo "✅ Animation Performance: 120fps target"
-        echo "✅ Memory Usage: <100MB footprint"
-        echo "✅ CPU Usage: <30% average"
-        echo "✅ Network Latency: <100ms"
-        echo "✅ Disk I/O: <50ms operations"
-        echo ""
-        echo "Performance validation completed successfully! 🚀"
-        
-    - name: Upload Performance Artifacts
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: performance-results-${{ matrix.platform }}-${{ matrix.configuration }}
-        path: |
-          .build/debug/PerformanceBenchmarkTests
-          performance-report-*.json
-        retention-days: 30
-        
-    - name: Archive Performance Metrics
-      if: always()
-      run: |
-        mkdir -p performance-metrics
-        echo "{
-          \"platform\": \"${{ matrix.platform }}\",
-          \"configuration\": \"${{ matrix.configuration }}\",
-          \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
-          \"runner\": \"${{ runner.os }}\",
-          \"xcode_version\": \"${{ env.XCODE_VERSION }}\"
-        }" > performance-metrics/run-info.json
+  performance-smoke:
+    name: Performance Smoke
+    runs-on: macos-14
 
-  memory-profiling:
-    name: Memory Profiling Analysis
-    runs-on: macos-15
-    needs: performance-benchmarks
-    
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-      
-    - name: Setup Xcode
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: ${{ env.XCODE_VERSION }}
-        
-    - name: Run Memory Leak Detection
-      run: |
-        echo "🔍 Running Memory Leak Detection"
-        
-        # Run comprehensive memory leak tests
-        swift test --configuration Release \
-          --filter PerformanceBenchmarkTests.testMemoryLeakDetection \
-          --enable-code-coverage
-          
-    - name: Memory Growth Analysis
-      run: |
-        echo "📈 Analyzing Memory Growth Patterns"
-        
-        # Run stress tests to validate memory management
-        swift test --configuration Release \
-          --filter PerformanceBenchmarkTests.testMemoryUsageDuringOperations
-          
-    - name: Generate Memory Report
-      run: |
-        echo "📊 Generating Memory Analysis Report"
-        echo "✅ Memory leaks: None detected"
-        echo "✅ Memory growth: <5MB over lifecycle"
-        echo "✅ Peak usage: <100MB footprint"
+      - uses: actions/checkout@v4
 
-  battery-efficiency:
-    name: Battery Efficiency Testing
-    runs-on: macos-15
-    needs: performance-benchmarks
-    
-    steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-      
-    - name: Setup Xcode
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: ${{ env.XCODE_VERSION }}
-        
-    - name: Battery Efficiency Tests
-      run: |
-        echo "🔋 Running Battery Efficiency Tests"
-        
-        # Test background processing efficiency
-        swift test --configuration Release \
-          --filter PerformanceBenchmarkTests.testBackgroundProcessingEfficiency
-          
-    - name: Power Consumption Analysis
-      run: |
-        echo "⚡ Analyzing Power Consumption Patterns"
-        echo "✅ Background efficiency: >95%"
-        echo "✅ CPU optimization: <30% average usage"
-        echo "✅ Network efficiency: Optimized request batching"
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.2.app
 
-  performance-regression:
-    name: Performance Regression Detection
-    runs-on: macos-15
-    if: github.event_name == 'pull_request'
-    
-    steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-      
-    - name: Checkout Base Branch
-      run: |
-        git fetch origin ${{ github.base_ref }}
-        git checkout origin/${{ github.base_ref }}
-        
-    - name: Run Baseline Performance Tests
-      id: baseline
-      run: |
-        echo "📊 Running Baseline Performance Tests"
-        swift test --configuration Release \
-          --filter PerformanceBenchmarkTests.testGeneratePerformanceReport \
-          > baseline-performance.log 2>&1 || true
-        
-    - name: Checkout PR Branch
-      run: |
-        git checkout ${{ github.sha }}
-        
-    - name: Run Current Performance Tests
-      id: current
-      run: |
-        echo "📊 Running Current Performance Tests"
-        swift test --configuration Release \
-          --filter PerformanceBenchmarkTests.testGeneratePerformanceReport \
-          > current-performance.log 2>&1 || true
-          
-    - name: Compare Performance Results
-      run: |
-        echo "🔍 Comparing Performance Results"
-        echo "Baseline vs Current performance analysis:"
-        echo "- Launch time regression check: ✅"
-        echo "- Memory usage regression check: ✅"
-        echo "- Animation performance check: ✅"
-        echo "- No significant regressions detected"
+      - name: Build release package
+        run: swift build -c release
 
-  compliance-report:
-    name: Performance Compliance Report
-    runs-on: macos-15
-    needs: [performance-benchmarks, memory-profiling, battery-efficiency]
-    if: always()
-    
-    steps:
-    - name: Download Performance Artifacts
-      uses: actions/download-artifact@v4
-      with:
-        pattern: performance-results-*
-        merge-multiple: true
-        
-    - name: Generate Compliance Report
-      run: |
-        echo "# 📊 ENTERPRISE_STANDARDS Performance Compliance Report" > compliance-report.md
-        echo "" >> compliance-report.md
-        echo "**Generated**: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> compliance-report.md
-        echo "**Commit**: ${{ github.sha }}" >> compliance-report.md
-        echo "**Branch**: ${{ github.ref_name }}" >> compliance-report.md
-        echo "" >> compliance-report.md
-        
-        echo "## ✅ Performance Validation Results" >> compliance-report.md
-        echo "" >> compliance-report.md
-        echo "| Metric | Threshold | Status | Notes |" >> compliance-report.md
-        echo "|--------|-----------|---------|-------|" >> compliance-report.md
-        echo "| Cold Launch | <1s | ✅ PASS | Average: 0.8s |" >> compliance-report.md
-        echo "| Hot Launch | <300ms | ✅ PASS | Average: 250ms |" >> compliance-report.md
-        echo "| Animation FPS | 120fps | ✅ PASS | Average: 118fps |" >> compliance-report.md
-        echo "| Memory Usage | <100MB | ✅ PASS | Peak: 85MB |" >> compliance-report.md
-        echo "| CPU Usage | <30% | ✅ PASS | Average: 25% |" >> compliance-report.md
-        echo "| Network Latency | <100ms | ✅ PASS | Average: 75ms |" >> compliance-report.md
-        echo "| Disk I/O | <50ms | ✅ PASS | Average: 35ms |" >> compliance-report.md
-        echo "| Battery Efficiency | >95% | ✅ PASS | Efficiency: 97% |" >> compliance-report.md
-        echo "" >> compliance-report.md
-        
-        echo "## 🎯 Overall Compliance Score: 100%" >> compliance-report.md
-        echo "" >> compliance-report.md
-        echo "All ENTERPRISE_STANDARDS performance requirements have been met successfully." >> compliance-report.md
-        
-    - name: Upload Compliance Report
-      uses: actions/upload-artifact@v4
-      with:
-        name: enterprise-standards-compliance-report
-        path: compliance-report.md
-        retention-days: 90
-        
-    - name: Comment PR with Results
-      if: github.event_name == 'pull_request'
-      uses: actions/github-script@v7
-      with:
-        script: |
-          const fs = require('fs');
-          const report = fs.readFileSync('compliance-report.md', 'utf8');
-          
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: report
-          });
+      - name: Run active performance tests
+        run: swift test --filter PerformanceBenchmarkTests
 
-  performance-monitoring:
-    name: Continuous Performance Monitoring
-    runs-on: macos-15
-    if: github.ref == 'refs/heads/main'
-    needs: [compliance-report]
-    
-    steps:
-    - name: Setup Performance Monitoring
-      run: |
-        echo "📊 Setting up continuous performance monitoring"
-        echo "- Baseline metrics established"
-        echo "- Regression detection active"
-        echo "- Daily performance reports enabled"
-        
-    - name: Performance Trend Analysis
-      run: |
-        echo "📈 Performance trend analysis configured"
-        echo "- Historical performance data tracking"
-        echo "- Automated alerting for regressions >5%"
-        echo "- Weekly performance optimization recommendations"
+      - name: Write performance summary
+        run: |
+          mkdir -p performance-artifacts
+          {
+            echo "Performance validation completed."
+            echo "Current truth:"
+            echo "- Uses active package test target: PerformanceBenchmarkTests"
+            echo "- Does not claim device-lab metrics or release benchmark proof"
+          } > performance-artifacts/summary.txt
+
+      - name: Upload performance artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-smoke-results
+          path: performance-artifacts

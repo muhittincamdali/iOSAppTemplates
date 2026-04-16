@@ -141,15 +141,14 @@ public struct PostsFeature {
     }
     
     @Dependency(\.postsClient) var postsClient
-    @Dependency(\.mainQueue) var mainQueue
-    
     public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .loadPosts, .refreshPosts:
                 state.isLoading = true
                 state.errorMessage = nil
-                
+                let postsClient = self.postsClient
+
                 return .run { send in
                     do {
                         let posts = try await postsClient.fetchPosts()
@@ -158,7 +157,6 @@ public struct PostsFeature {
                         await send(.postLoadingFailed(error.localizedDescription))
                     }
                 }
-                .receive(on: mainQueue)
                 
             case .postsLoaded(let posts):
                 state.isLoading = false
@@ -171,11 +169,13 @@ public struct PostsFeature {
                 return .none
                 
             case .likePost(let postId):
+                let postsClient = self.postsClient
                 return .run { _ in
                     try await postsClient.likePost(postId)
                 }
                 
             case .sharePost(let postId):
+                let postsClient = self.postsClient
                 return .run { _ in
                     try await postsClient.sharePost(postId)
                 }
@@ -334,6 +334,7 @@ public struct ProfileFeature {
             switch action {
             case .loadCurrentUser:
                 state.isLoading = true
+                let userClient = self.userClient
                 return .run { send in
                     let user = try await userClient.getCurrentUser()
                     await send(.userLoaded(user))
@@ -346,6 +347,7 @@ public struct ProfileFeature {
                 
             case .loadUserPosts:
                 guard let userId = state.currentUser?.id else { return .none }
+                let postsClient = self.postsClient
                 return .run { send in
                     let posts = try await postsClient.fetchUserPosts(userId)
                     await send(.userPostsLoaded(posts))
@@ -399,9 +401,8 @@ public struct ProfileView: View {
                 }
             }
             .navigationTitle("Profile")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Menu("Options", systemImage: "ellipsis.circle") {
                         Button("Edit Profile") {
                             store.send(.editProfile)
@@ -519,6 +520,7 @@ public struct NotificationsFeature {
             switch action {
             case .loadNotifications:
                 state.isLoading = true
+                let notificationsClient = self.notificationsClient
                 return .run { send in
                     let notifications = try await notificationsClient.fetchNotifications()
                     await send(.notificationsLoaded(notifications))
@@ -535,6 +537,7 @@ public struct NotificationsFeature {
                     state.notifications[index].isRead = true
                     state.unreadCount = max(0, state.unreadCount - 1)
                 }
+                let notificationsClient = self.notificationsClient
                 return .run { _ in
                     try await notificationsClient.markAsRead(id)
                 }
@@ -546,6 +549,7 @@ public struct NotificationsFeature {
                     return updated
                 }
                 state.unreadCount = 0
+                let notificationsClient = self.notificationsClient
                 return .run { _ in
                     try await notificationsClient.markAllAsRead()
                 }
@@ -573,7 +577,7 @@ public struct NotificationsView: View {
             }
             .navigationTitle("Notifications")
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Mark All Read") {
                         store.send(.markAllAsRead)
                     }
@@ -666,7 +670,7 @@ public struct CreatePostView: View {
 
 // MARK: - Models
 
-public struct Post: Identifiable, Equatable, Codable {
+public struct Post: Identifiable, Equatable, Codable, Sendable {
     public let id: String
     public let content: String
     public let author: User
@@ -694,7 +698,7 @@ public struct Post: Identifiable, Equatable, Codable {
     }
 }
 
-public struct User: Identifiable, Equatable, Codable {
+public struct User: Identifiable, Equatable, Codable, Sendable {
     public let id: String
     public let username: String
     public let displayName: String
@@ -725,7 +729,7 @@ public struct User: Identifiable, Equatable, Codable {
     }
 }
 
-public struct AppNotification: Identifiable, Equatable, Codable {
+public struct AppNotification: Identifiable, Equatable, Codable, Sendable {
     public let id: String
     public let message: String
     public let avatarURL: URL?
@@ -780,7 +784,7 @@ private enum NotificationsClientKey: DependencyKey {
 
 // MARK: - Clients
 
-public struct PostsClient {
+public struct PostsClient: Sendable {
     public var fetchPosts: @Sendable () async throws -> [Post]
     public var fetchUserPosts: @Sendable (String) async throws -> [Post]
     public var likePost: @Sendable (String) async throws -> Void
@@ -805,7 +809,7 @@ public struct PostsClient {
     )
 }
 
-public struct UserClient {
+public struct UserClient: Sendable {
     public var getCurrentUser: @Sendable () async throws -> User
     
     public static let live = UserClient(
@@ -816,7 +820,7 @@ public struct UserClient {
     )
 }
 
-public struct NotificationsClient {
+public struct NotificationsClient: Sendable {
     public var fetchNotifications: @Sendable () async throws -> [AppNotification]
     public var markAsRead: @Sendable (String) async throws -> Void
     public var markAllAsRead: @Sendable () async throws -> Void

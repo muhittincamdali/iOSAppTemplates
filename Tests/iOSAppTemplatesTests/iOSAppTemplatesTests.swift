@@ -1,18 +1,11 @@
 import XCTest
 @testable import iOSAppTemplates
 
+@MainActor
 final class iOSAppTemplatesTests: XCTestCase {
-    
-    var templateManager: TemplateManager!
-    
-    override func setUp() {
-        super.setUp()
-        templateManager = TemplateManager.shared
-    }
-    
-    override func tearDown() {
-        templateManager = nil
-        super.tearDown()
+
+    private var templateManager: TemplateManager {
+        TemplateManager.shared
     }
     
     // MARK: - Template Manager Tests

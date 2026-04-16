@@ -344,6 +344,7 @@ public struct Reel: Identifiable, Codable {
 
 // MARK: - Sample Data
 
+@MainActor
 public enum SocialSampleData {
     public static let currentUser = User(
         username: "johndoe",
@@ -556,15 +557,14 @@ public struct FeedView: View {
                 }
             }
             .navigationTitle("Feed")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Text("Social")
                         .font(.title2)
                         .fontWeight(.bold)
                 }
                 
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .automatic) {
                     Button {
                         showingCreatePost = true
                     } label: {
@@ -597,7 +597,7 @@ public struct FeedView: View {
                 MessagesListView()
                     .environmentObject(store)
             }
-            .fullScreenCover(item: $showingStoryViewer) { story in
+            .sheet(item: $showingStoryViewer) { story in
                 StoryViewerView(story: story)
                     .environmentObject(store)
             }
@@ -617,7 +617,7 @@ struct StoriesScrollView: View {
                 VStack(spacing: 4) {
                     ZStack(alignment: .bottomTrailing) {
                         Circle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.gray.opacity(0.12))
                             .frame(width: 68, height: 68)
                             .overlay(
                                 Image(systemName: "person.fill")
@@ -660,7 +660,7 @@ struct StoriesScrollView: View {
                                 .frame(width: 72, height: 72)
                                 .overlay(
                                     Circle()
-                                        .fill(Color(.systemGray5))
+                                        .fill(Color.gray.opacity(0.12))
                                         .frame(width: 66, height: 66)
                                         .overlay(
                                             Text(story.user.displayName.prefix(1))
@@ -694,7 +694,7 @@ struct PostView: View {
             // Header
             HStack {
                 Circle()
-                    .fill(Color(.systemGray5))
+                    .fill(Color.gray.opacity(0.12))
                     .frame(width: 40, height: 40)
                     .overlay(
                         Text(post.author.displayName.prefix(1))
@@ -738,7 +738,7 @@ struct PostView: View {
             
             // Image
             Rectangle()
-                .fill(Color(.systemGray6))
+                .fill(Color.gray.opacity(0.08))
                 .aspectRatio(1, contentMode: .fit)
                 .overlay(
                     Image(systemName: "photo")
@@ -844,7 +844,7 @@ struct CommentsView: View {
                         // Original post preview
                         HStack(alignment: .top, spacing: 12) {
                             Circle()
-                                .fill(Color(.systemGray5))
+                                .fill(Color.gray.opacity(0.12))
                                 .frame(width: 36, height: 36)
                             
                             VStack(alignment: .leading, spacing: 4) {
@@ -880,7 +880,7 @@ struct CommentsView: View {
                 // Comment input
                 HStack(spacing: 12) {
                     Circle()
-                        .fill(Color(.systemGray5))
+                        .fill(Color.gray.opacity(0.12))
                         .frame(width: 36, height: 36)
                     
                     TextField("Add a comment...", text: $newComment)
@@ -896,9 +896,8 @@ struct CommentsView: View {
                 .padding()
             }
             .navigationTitle("Comments")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Done") {
                         dismiss()
                     }
@@ -917,7 +916,7 @@ struct CommentRow: View {
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             Circle()
-                .fill(Color(.systemGray5))
+                .fill(Color.gray.opacity(0.12))
                 .frame(width: 36, height: 36)
                 .overlay(
                     Text(user.displayName.prefix(1))
@@ -973,7 +972,7 @@ struct StoryViewerView: View {
                 
                 // Story content
                 Rectangle()
-                    .fill(Color(.systemGray6))
+                    .fill(Color.gray.opacity(0.08))
                     .overlay(
                         Image(systemName: "photo")
                             .font(.system(size: 80))
@@ -995,7 +994,7 @@ struct StoryViewerView: View {
                     // Header
                     HStack {
                         Circle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.gray.opacity(0.12))
                             .frame(width: 36, height: 36)
                         
                         VStack(alignment: .leading) {
@@ -1109,7 +1108,7 @@ struct ExploreView: View {
                         TextField("Search", text: $searchText)
                     }
                     .padding(12)
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(10)
                     .padding(.horizontal)
                     
@@ -1117,7 +1116,7 @@ struct ExploreView: View {
                     LazyVGrid(columns: columns, spacing: 2) {
                         ForEach(0..<30, id: \.self) { index in
                             Rectangle()
-                                .fill(Color(.systemGray5))
+                                .fill(Color.gray.opacity(0.12))
                                 .aspectRatio(1, contentMode: .fit)
                                 .overlay(
                                     Group {
@@ -1132,7 +1131,6 @@ struct ExploreView: View {
                 }
             }
             .navigationTitle("Explore")
-            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
@@ -1150,7 +1148,7 @@ struct ReelsView: View {
                         .tag(index)
                 }
             }
-            .tabViewStyle(.page(indexDisplayMode: .never))
+            .tabViewStyle(.automatic)
             .ignoresSafeArea()
         }
     }
@@ -1169,7 +1167,7 @@ struct ReelView: View {
             
             // Video placeholder
             Rectangle()
-                .fill(Color(.systemGray6))
+                .fill(Color.gray.opacity(0.08))
                 .overlay(
                     Image(systemName: "play.circle.fill")
                         .font(.system(size: 80))
@@ -1184,7 +1182,7 @@ struct ReelView: View {
                     
                     HStack {
                         Circle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.gray.opacity(0.12))
                             .frame(width: 36, height: 36)
                         
                         Text(reel.author.username)
@@ -1203,7 +1201,7 @@ struct ReelView: View {
                                 .fontWeight(.semibold)
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 6)
-                                .background(reel.author.isFollowing ? Color(.systemGray5) : Color.white)
+                                .background(reel.author.isFollowing ? Color.gray.opacity(0.12) : Color.white)
                                 .foregroundColor(reel.author.isFollowing ? .white : .black)
                                 .cornerRadius(8)
                         }
@@ -1262,7 +1260,7 @@ struct ReelView: View {
                     
                     // Audio disc
                     Circle()
-                        .fill(Color(.systemGray5))
+                        .fill(Color.gray.opacity(0.12))
                         .frame(width: 36, height: 36)
                         .overlay(
                             Circle()
@@ -1327,7 +1325,7 @@ struct NotificationRow: View {
     var body: some View {
         HStack(spacing: 12) {
             Circle()
-                .fill(Color(.systemGray5))
+                .fill(Color.gray.opacity(0.12))
                 .frame(width: 44, height: 44)
                 .overlay(
                     Text(notification.user.displayName.prefix(1))
@@ -1366,7 +1364,7 @@ struct NotificationRow: View {
                 }
             } else if notification.post != nil {
                 Rectangle()
-                    .fill(Color(.systemGray5))
+                    .fill(Color.gray.opacity(0.12))
                     .frame(width: 44, height: 44)
             }
         }
@@ -1396,15 +1394,14 @@ struct MessagesListView: View {
             .listStyle(.plain)
             .searchable(text: $searchText, prompt: "Search")
             .navigationTitle("Messages")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {
                         // New message
                     } label: {
@@ -1426,7 +1423,7 @@ struct ConversationRow: View {
     var body: some View {
         HStack(spacing: 12) {
             Circle()
-                .fill(Color(.systemGray5))
+                .fill(Color.gray.opacity(0.12))
                 .frame(width: 56, height: 56)
                 .overlay(
                     Text(otherUser?.displayName.prefix(1) ?? "?")
@@ -1503,7 +1500,7 @@ struct ChatView: View {
                 TextField("Message...", text: $messageText)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(20)
                 
                 if messageText.isEmpty {
@@ -1527,9 +1524,8 @@ struct ChatView: View {
             .padding()
         }
         .navigationTitle(otherUser?.displayName ?? "Chat")
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .automatic) {
                 HStack {
                     Button {} label: {
                         Image(systemName: "phone")
@@ -1555,7 +1551,7 @@ struct MessageBubble: View {
             Text(message.content)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 10)
-                .background(isFromCurrentUser ? Color.accentColor : Color(.systemGray5))
+                .background(isFromCurrentUser ? Color.accentColor : Color.gray.opacity(0.12))
                 .foregroundColor(isFromCurrentUser ? .white : .primary)
                 .cornerRadius(20)
             
@@ -1586,7 +1582,7 @@ public struct ProfileView: View {
                     // Profile header
                     HStack(spacing: 24) {
                         Circle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.gray.opacity(0.12))
                             .frame(width: 86, height: 86)
                             .overlay(
                                 Image(systemName: "person.fill")
@@ -1655,7 +1651,7 @@ public struct ProfileView: View {
                                 .fontWeight(.semibold)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 8)
-                                .background(Color(.systemGray6))
+                                .background(Color.gray.opacity(0.08))
                                 .cornerRadius(8)
                         }
                         
@@ -1665,7 +1661,7 @@ public struct ProfileView: View {
                                 .fontWeight(.semibold)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 8)
-                                .background(Color(.systemGray6))
+                                .background(Color.gray.opacity(0.08))
                                 .cornerRadius(8)
                         }
                     }
@@ -1678,7 +1674,7 @@ public struct ProfileView: View {
                             // Add highlight
                             VStack(spacing: 4) {
                                 Circle()
-                                    .stroke(Color(.systemGray4), lineWidth: 1)
+                                    .stroke(Color.gray.opacity(0.35), lineWidth: 1)
                                     .frame(width: 64, height: 64)
                                     .overlay(
                                         Image(systemName: "plus")
@@ -1693,7 +1689,7 @@ public struct ProfileView: View {
                             ForEach(["Travel", "Food", "Work", "Music"], id: \.self) { highlight in
                                 VStack(spacing: 4) {
                                     Circle()
-                                        .fill(Color(.systemGray5))
+                                        .fill(Color.gray.opacity(0.12))
                                         .frame(width: 64, height: 64)
                                     
                                     Text(highlight)
@@ -1725,16 +1721,15 @@ public struct ProfileView: View {
                     LazyVGrid(columns: columns, spacing: 2) {
                         ForEach(0..<15, id: \.self) { index in
                             Rectangle()
-                                .fill(Color(.systemGray5))
+                                .fill(Color.gray.opacity(0.12))
                                 .aspectRatio(1, contentMode: .fit)
                         }
                     }
                 }
             }
             .navigationTitle(store.currentUser.username)
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Menu {
                         Button("Settings", systemImage: "gearshape") {
                             showingSettings = true
@@ -1787,7 +1782,7 @@ struct EditProfileView: View {
                         Spacer()
                         VStack {
                             Circle()
-                                .fill(Color(.systemGray5))
+                                .fill(Color.gray.opacity(0.12))
                                 .frame(width: 80, height: 80)
                                 .overlay(
                                     Image(systemName: "person.fill")
@@ -1816,15 +1811,14 @@ struct EditProfileView: View {
                 }
             }
             .navigationTitle("Edit Profile")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Done") {
                         // Save changes
                         dismiss()
@@ -1870,32 +1864,100 @@ struct SettingsView: View {
                 }
                 
                 Section("How you use the app") {
-                    NavigationLink("Saved", systemImage: "bookmark") {}
-                    NavigationLink("Archive", systemImage: "archivebox") {}
-                    NavigationLink("Your Activity", systemImage: "clock") {}
-                    NavigationLink("Notifications", systemImage: "bell") {}
-                    NavigationLink("Time Management", systemImage: "hourglass") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Saved", systemImage: "bookmark")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Archive", systemImage: "archivebox")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Your Activity", systemImage: "clock")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Notifications", systemImage: "bell")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Time Management", systemImage: "hourglass")
+                    }
                 }
                 
                 Section("Who can see your content") {
-                    NavigationLink("Account Privacy", systemImage: "lock") {}
-                    NavigationLink("Close Friends", systemImage: "star") {}
-                    NavigationLink("Blocked", systemImage: "nosign") {}
-                    NavigationLink("Hide Story and Live", systemImage: "eye.slash") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Account Privacy", systemImage: "lock")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Close Friends", systemImage: "star")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Blocked", systemImage: "nosign")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Hide Story and Live", systemImage: "eye.slash")
+                    }
                 }
                 
                 Section("What you see") {
-                    NavigationLink("Favorites", systemImage: "heart") {}
-                    NavigationLink("Muted Accounts", systemImage: "speaker.slash") {}
-                    NavigationLink("Suggested Content", systemImage: "sparkles") {}
-                    NavigationLink("Like and Share Counts", systemImage: "number") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Favorites", systemImage: "heart")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Muted Accounts", systemImage: "speaker.slash")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Suggested Content", systemImage: "sparkles")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Like and Share Counts", systemImage: "number")
+                    }
                 }
                 
                 Section("Your app and media") {
-                    NavigationLink("Device Permissions", systemImage: "gear") {}
-                    NavigationLink("Archiving and Downloading", systemImage: "arrow.down.circle") {}
-                    NavigationLink("Language", systemImage: "globe") {}
-                    NavigationLink("Data Usage", systemImage: "chart.bar") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Device Permissions", systemImage: "gear")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Archiving and Downloading", systemImage: "arrow.down.circle")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Language", systemImage: "globe")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Data Usage", systemImage: "chart.bar")
+                    }
                 }
                 
                 Section {
@@ -1904,9 +1966,8 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Done") {
                         dismiss()
                     }
@@ -1928,7 +1989,7 @@ struct CreatePostView: View {
             VStack {
                 // Selected image
                 Rectangle()
-                    .fill(Color(.systemGray6))
+                    .fill(Color.gray.opacity(0.08))
                     .aspectRatio(1, contentMode: .fit)
                     .overlay(
                         Image(systemName: "photo.badge.plus")
@@ -1939,7 +2000,7 @@ struct CreatePostView: View {
                 // Caption
                 HStack(alignment: .top, spacing: 12) {
                     Circle()
-                        .fill(Color(.systemGray5))
+                        .fill(Color.gray.opacity(0.12))
                         .frame(width: 36, height: 36)
                     
                     TextField("Write a caption...", text: $caption, axis: .vertical)
@@ -1969,15 +2030,14 @@ struct CreatePostView: View {
                 .listStyle(.plain)
             }
             .navigationTitle("New Post")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Share") {
                         // Create post
                         dismiss()
@@ -2006,7 +2066,7 @@ struct UserProfileView: View {
                 // Profile header
                 HStack(spacing: 24) {
                     Circle()
-                        .fill(Color(.systemGray5))
+                        .fill(Color.gray.opacity(0.12))
                         .frame(width: 86, height: 86)
                         .overlay(
                             Text(user.displayName.prefix(1))
@@ -2075,7 +2135,7 @@ struct UserProfileView: View {
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 8)
-                            .background(user.isFollowing ? Color(.systemGray6) : Color.accentColor)
+                            .background(user.isFollowing ? Color.gray.opacity(0.08) : Color.accentColor)
                             .foregroundColor(user.isFollowing ? .primary : .white)
                             .cornerRadius(8)
                     }
@@ -2086,7 +2146,7 @@ struct UserProfileView: View {
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 8)
-                            .background(Color(.systemGray6))
+                            .background(Color.gray.opacity(0.08))
                             .cornerRadius(8)
                     }
                     .foregroundColor(.primary)
@@ -2099,14 +2159,13 @@ struct UserProfileView: View {
                 LazyVGrid(columns: columns, spacing: 2) {
                     ForEach(0..<12, id: \.self) { index in
                         Rectangle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.gray.opacity(0.12))
                             .aspectRatio(1, contentMode: .fit)
                     }
                 }
             }
         }
         .navigationTitle(user.username)
-        .navigationBarTitleDisplayMode(.inline)
     }
     
     private func formatCount(_ count: Int) -> String {

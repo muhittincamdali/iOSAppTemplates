@@ -401,7 +401,7 @@ func printHelp() {
     🎨 iOS App Template Generator
     ═══════════════════════════════
     
-    Generate production-ready iOS app templates with a single command.
+    Generate structured iOS app template scaffolds with a single command.
     
     USAGE:
         swift TemplateGenerator.swift [OPTIONS]

@@ -1,6 +1,6 @@
 import Foundation
 import SwiftUI
-import Charts
+import DGCharts
 
 // MARK: - Finance Templates
 public struct FinanceTemplates {
@@ -71,7 +71,7 @@ public struct PersonalFinanceAppTemplate {
         public let id: String
         public let name: String
         public let type: AccountType
-        public let balance: Double
+        public var balance: Double
         public let currency: String
         public let institution: String?
         public let accountNumber: String?
@@ -935,7 +935,7 @@ public struct PersonalFinanceAppTemplate {
                 }
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(Color.gray.opacity(0.04))
             .cornerRadius(12)
             .shadow(radius: 2)
             .onTapGesture {
@@ -991,7 +991,7 @@ public struct PersonalFinanceAppTemplate {
                 }
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(Color.gray.opacity(0.04))
             .cornerRadius(8)
             .shadow(radius: 1)
             .onTapGesture {
@@ -1068,7 +1068,7 @@ public struct PersonalFinanceAppTemplate {
                 }
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(Color.gray.opacity(0.04))
             .cornerRadius(12)
             .shadow(radius: 2)
             .onTapGesture {

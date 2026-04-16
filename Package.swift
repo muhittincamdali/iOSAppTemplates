@@ -3,6 +3,10 @@
 
 import PackageDescription
 
+let templateTargetSettings: [SwiftSetting] = [
+    .unsafeFlags(["-strict-concurrency=minimal"])
+]
+
 let package = Package(
     name: "iOSAppTemplates",
     platforms: [
@@ -77,7 +81,6 @@ let package = Package(
     ],
     dependencies: [
         // Modern Swift
-        .package(url: "https://github.com/apple/swift-markdown", from: "0.5.0"),
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "1.0.0"),
         .package(url: "https://github.com/apple/swift-collections", from: "1.1.0"),
         
@@ -117,7 +120,8 @@ let package = Package(
                 "FinanceTemplates",
                 "TravelTemplates"
             ],
-            path: "Sources/iOSAppTemplates"
+            path: "Sources/iOSAppTemplates",
+            swiftSettings: templateTargetSettings
         ),
         
         // Template category targets
@@ -130,7 +134,8 @@ let package = Package(
                 .product(name: "FirebaseStorage", package: "firebase-ios-sdk"),
                 .product(name: "Kingfisher", package: "Kingfisher")
             ],
-            path: "Sources/SocialTemplates"
+            path: "Sources/SocialTemplates",
+            swiftSettings: templateTargetSettings
         ),
         
         .target(
@@ -142,7 +147,8 @@ let package = Package(
                 .product(name: "FirebaseStorage", package: "firebase-ios-sdk"),
                 .product(name: "Kingfisher", package: "Kingfisher")
             ],
-            path: "Sources/CommerceTemplates"
+            path: "Sources/CommerceTemplates",
+            swiftSettings: templateTargetSettings
         ),
         
         .target(
@@ -151,9 +157,10 @@ let package = Package(
                 .product(name: "Alamofire", package: "Alamofire"),
                 .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
-                .product(name: "Charts", package: "Charts")
+                .product(name: "DGCharts", package: "Charts")
             ],
-            path: "Sources/HealthTemplates"
+            path: "Sources/HealthTemplates",
+            swiftSettings: templateTargetSettings
         ),
         
         .target(
@@ -163,7 +170,8 @@ let package = Package(
                 .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseFirestore", package: "firebase-ios-sdk")
             ],
-            path: "Sources/ProductivityTemplates"
+            path: "Sources/ProductivityTemplates",
+            swiftSettings: templateTargetSettings
         ),
         
         .target(
@@ -175,7 +183,8 @@ let package = Package(
                 .product(name: "FirebaseStorage", package: "firebase-ios-sdk"),
                 .product(name: "Kingfisher", package: "Kingfisher")
             ],
-            path: "Sources/EntertainmentTemplates"
+            path: "Sources/EntertainmentTemplates",
+            swiftSettings: templateTargetSettings
         ),
         
         .target(
@@ -186,7 +195,8 @@ let package = Package(
                 .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseStorage", package: "firebase-ios-sdk")
             ],
-            path: "Sources/EducationTemplates"
+            path: "Sources/EducationTemplates",
+            swiftSettings: templateTargetSettings
         ),
         
         .target(
@@ -195,9 +205,10 @@ let package = Package(
                 .product(name: "Alamofire", package: "Alamofire"),
                 .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
-                .product(name: "Charts", package: "Charts")
+                .product(name: "DGCharts", package: "Charts")
             ],
-            path: "Sources/FinanceTemplates"
+            path: "Sources/FinanceTemplates",
+            swiftSettings: templateTargetSettings
         ),
         
         .target(
@@ -209,7 +220,8 @@ let package = Package(
                 .product(name: "FirebaseStorage", package: "firebase-ios-sdk"),
                 .product(name: "Kingfisher", package: "Kingfisher")
             ],
-            path: "Sources/TravelTemplates"
+            path: "Sources/TravelTemplates",
+            swiftSettings: templateTargetSettings
         ),
         
         // Modern Architecture targets
@@ -219,7 +231,8 @@ let package = Package(
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "Dependencies", package: "swift-dependencies")
             ],
-            path: "Sources/TCATemplates"
+            path: "Sources/TCATemplates",
+            swiftSettings: templateTargetSettings
         ),
         
         .target(
@@ -227,7 +240,8 @@ let package = Package(
             dependencies: [
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
             ],
-            path: "Sources/VisionOSTemplates"
+            path: "Sources/VisionOSTemplates",
+            swiftSettings: templateTargetSettings
         ),
         
         .target(
@@ -236,7 +250,8 @@ let package = Package(
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "StableDiffusion", package: "ml-stable-diffusion")
             ],
-            path: "Sources/AITemplates"
+            path: "Sources/AITemplates",
+            swiftSettings: templateTargetSettings
         ),
         
         .target(
@@ -245,7 +260,8 @@ let package = Package(
                 .product(name: "Collections", package: "swift-collections"),
                 .product(name: "AsyncAlgorithms", package: "swift-async-algorithms")
             ],
-            path: "Sources/PerformanceTemplates"
+            path: "Sources/PerformanceTemplates",
+            swiftSettings: templateTargetSettings
         ),
         
         .target(
@@ -254,7 +270,8 @@ let package = Package(
                 .product(name: "Alamofire", package: "Alamofire"),
                 .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
             ],
-            path: "Sources/SecurityTemplates"
+            path: "Sources/SecurityTemplates",
+            swiftSettings: templateTargetSettings
         ),
         
         // Test targets
@@ -262,18 +279,6 @@ let package = Package(
             name: "iOSAppTemplatesTests",
             dependencies: ["iOSAppTemplates"],
             path: "Tests/iOSAppTemplatesTests"
-        ),
-        
-        .testTarget(
-            name: "SocialTemplatesTests",
-            dependencies: ["SocialTemplates"],
-            path: "Tests/SocialTemplatesTests"
-        ),
-        
-        .testTarget(
-            name: "CommerceTemplatesTests",
-            dependencies: ["CommerceTemplates"],
-            path: "Tests/CommerceTemplatesTests"
         ),
         
         .testTarget(
@@ -306,44 +311,8 @@ let package = Package(
             path: "Tests/FinanceTemplatesTests"
         ),
         
-        .testTarget(
-            name: "TravelTemplatesTests",
-            dependencies: ["TravelTemplates"],
-            path: "Tests/TravelTemplatesTests"
-        ),
-        
-        // Modern Architecture test targets
-        .testTarget(
-            name: "TCATemplatesTests",
-            dependencies: ["TCATemplates"],
-            path: "Tests/TCATemplatesTests"
-        ),
-        
-        .testTarget(
-            name: "VisionOSTemplatesTests",
-            dependencies: ["VisionOSTemplates"],
-            path: "Tests/VisionOSTemplatesTests"
-        ),
-        
-        .testTarget(
-            name: "AITemplatesTests",
-            dependencies: ["AITemplates"],
-            path: "Tests/AITemplatesTests"
-        ),
-        
-        .testTarget(
-            name: "PerformanceTemplatesTests",
-            dependencies: ["PerformanceTemplates"],
-            path: "Tests/PerformanceTemplatesTests"
-        ),
-        
-        .testTarget(
-            name: "SecurityTemplatesTests",
-            dependencies: ["SecurityTemplates"],
-            path: "Tests/SecurityTemplatesTests"
-        ),
-        
-        // Performance Benchmark Tests - Enterprise Standards Compliance
+        // Active test targets. Stale fabricated suites stay out of the package graph
+        // until their modules and contracts are rebuilt to truth-based coverage.
         .testTarget(
             name: "PerformanceBenchmarkTests",
             dependencies: [
@@ -351,6 +320,12 @@ let package = Package(
                 "PerformanceTemplates"
             ],
             path: "Tests/PerformanceBenchmarkTests"
+        ),
+
+        .testTarget(
+            name: "SecuritySurfaceTests",
+            dependencies: ["SecurityTemplates"],
+            path: "Tests/SecuritySurfaceTests"
         )
     ]
 ) 

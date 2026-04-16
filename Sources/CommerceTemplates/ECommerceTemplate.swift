@@ -268,6 +268,7 @@ public struct Review: Identifiable, Codable {
 
 // MARK: - Sample Data Provider
 
+@MainActor
 public enum ECommerceSampleData {
     public static let products: [Product] = [
         Product(
@@ -574,12 +575,12 @@ public struct ECommerceHomeView: View {
             }
             .navigationTitle("Shop")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     CartButton(itemCount: store.cartItemCount) {
                         showingCart = true
                     }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {
                         showingProfile = true
                     } label: {
@@ -624,7 +625,7 @@ struct SearchBarView: View {
             }
         }
         .padding(12)
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Search products")
@@ -746,7 +747,7 @@ struct CategoryChip: View {
             .font(.subheadline)
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
-            .background(isSelected ? Color.accentColor : Color(.systemGray6))
+            .background(isSelected ? Color.accentColor : Color.gray.opacity(0.08))
             .foregroundColor(isSelected ? .white : .primary)
             .cornerRadius(20)
         }
@@ -804,7 +805,7 @@ struct FlashSaleCard: View {
         VStack(alignment: .leading, spacing: 8) {
             ZStack(alignment: .topTrailing) {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.systemGray6))
+                    .fill(Color.gray.opacity(0.08))
                     .frame(width: 140, height: 140)
                     .overlay(
                         Image(systemName: "photo")
@@ -813,7 +814,8 @@ struct FlashSaleCard: View {
                     )
                 
                 if let originalPrice = product.originalPrice {
-                    let discount = Int(((originalPrice - product.price) / originalPrice) * 100)
+                    let discountDecimal = ((originalPrice - product.price) / originalPrice) * 100
+                    let discount = NSDecimalNumber(decimal: discountDecimal).intValue
                     Text("-\(discount)%")
                         .font(.caption)
                         .fontWeight(.bold)
@@ -915,7 +917,7 @@ struct ProductCard: View {
         VStack(alignment: .leading, spacing: 8) {
             ZStack(alignment: .topTrailing) {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.systemGray6))
+                    .fill(Color.gray.opacity(0.08))
                     .aspectRatio(1, contentMode: .fit)
                     .overlay(
                         Image(systemName: iconFor(product.category))
@@ -1007,7 +1009,7 @@ public struct ProductDetailView: View {
                 TabView(selection: $selectedImageIndex) {
                     ForEach(0..<max(1, product.images.count), id: \.self) { index in
                         RoundedRectangle(cornerRadius: 0)
-                            .fill(Color(.systemGray6))
+                            .fill(Color.gray.opacity(0.08))
                             .overlay(
                                 Image(systemName: "photo")
                                     .font(.system(size: 60))
@@ -1016,7 +1018,7 @@ public struct ProductDetailView: View {
                             .tag(index)
                     }
                 }
-                .tabViewStyle(.page)
+                .tabViewStyle(.automatic)
                 .frame(height: 350)
                 
                 VStack(alignment: .leading, spacing: 16) {
@@ -1120,7 +1122,7 @@ public struct ProductDetailView: View {
                                             .fontWeight(.medium)
                                             .frame(maxWidth: .infinity)
                                             .padding(.vertical, 12)
-                                            .background(selectedSize == size ? Color.accentColor : Color(.systemGray6))
+                                            .background(selectedSize == size ? Color.accentColor : Color.gray.opacity(0.08))
                                             .foregroundColor(selectedSize == size ? .white : .primary)
                                             .cornerRadius(8)
                                     }
@@ -1202,7 +1204,7 @@ public struct ProductDetailView: View {
                             .font(.title2)
                             .foregroundColor(store.wishlist.contains(product.id) ? .red : .primary)
                             .frame(width: 50, height: 50)
-                            .background(Color(.systemGray6))
+                            .background(Color.gray.opacity(0.08))
                             .cornerRadius(12)
                     }
                     
@@ -1229,9 +1231,8 @@ public struct ProductDetailView: View {
             }
             .background(.bar)
         }
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .automatic) {
                 Button {
                     // Share action
                 } label: {
@@ -1263,9 +1264,8 @@ public struct CartView: View {
                 }
             }
             .navigationTitle("Cart")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Close") {
                         dismiss()
                     }
@@ -1377,7 +1377,7 @@ struct CartItemRow: View {
     var body: some View {
         HStack(spacing: 16) {
             RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.systemGray6))
+                .fill(Color.gray.opacity(0.08))
                 .frame(width: 80, height: 80)
                 .overlay(
                     Image(systemName: "photo")
@@ -1445,9 +1445,8 @@ public struct CheckoutView: View {
                 .padding()
             }
             .navigationTitle("Checkout")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
@@ -1522,7 +1521,7 @@ struct AddressSectionView: View {
                         }
                     }
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(12)
                 }
             }
@@ -1568,7 +1567,7 @@ struct PaymentSectionView: View {
                     .font(.subheadline)
                     .foregroundColor(.primary)
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(12)
                 }
             }
@@ -1617,7 +1616,7 @@ struct OrderSummaryView: View {
                 }
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.08))
             .cornerRadius(12)
         }
     }
@@ -1654,7 +1653,7 @@ struct OrderConfirmationView: View {
             }
             .padding()
             .frame(maxWidth: .infinity)
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.08))
             .cornerRadius(12)
             .padding(.horizontal)
             
@@ -1713,7 +1712,7 @@ struct ReviewsView: View {
                         }
                     }
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(12)
                     
                     // Reviews List
@@ -1724,9 +1723,8 @@ struct ReviewsView: View {
                 .padding()
             }
             .navigationTitle("Reviews")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Done") {
                         dismiss()
                     }
@@ -1749,7 +1747,7 @@ struct RatingBar: View {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     Rectangle()
-                        .fill(Color(.systemGray5))
+                        .fill(Color.gray.opacity(0.12))
                     
                     Rectangle()
                         .fill(Color.yellow)
@@ -1769,7 +1767,7 @@ struct ReviewCard: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Circle()
-                    .fill(Color(.systemGray4))
+                    .fill(Color.gray.opacity(0.35))
                     .frame(width: 40, height: 40)
                     .overlay(
                         Text(review.userName.prefix(1))
@@ -1825,7 +1823,7 @@ struct ReviewCard: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
     }
 }
@@ -1844,7 +1842,7 @@ public struct ProfileView: View {
                 Section {
                     HStack(spacing: 16) {
                         Circle()
-                            .fill(Color(.systemGray4))
+                            .fill(Color.gray.opacity(0.35))
                             .frame(width: 60, height: 60)
                             .overlay(
                                 Image(systemName: "person.fill")
@@ -1941,9 +1939,8 @@ public struct ProfileView: View {
                 }
             }
             .navigationTitle("Profile")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Done") {
                         dismiss()
                     }
@@ -2054,7 +2051,7 @@ struct OrderDetailView: View {
                     }
                 }
                 .padding()
-                .background(Color(.systemGray6))
+                .background(Color.gray.opacity(0.08))
                 .cornerRadius(12)
                 
                 // Items
@@ -2065,7 +2062,7 @@ struct OrderDetailView: View {
                     ForEach(order.items) { item in
                         HStack {
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(Color(.systemGray5))
+                                .fill(Color.gray.opacity(0.12))
                                 .frame(width: 50, height: 50)
                             
                             VStack(alignment: .leading) {
@@ -2084,7 +2081,7 @@ struct OrderDetailView: View {
                     }
                 }
                 .padding()
-                .background(Color(.systemGray6))
+                .background(Color.gray.opacity(0.08))
                 .cornerRadius(12)
                 
                 // Shipping Address
@@ -2099,7 +2096,7 @@ struct OrderDetailView: View {
                 .font(.subheadline)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-                .background(Color(.systemGray6))
+                .background(Color.gray.opacity(0.08))
                 .cornerRadius(12)
                 
                 // Total
@@ -2113,7 +2110,7 @@ struct OrderDetailView: View {
                     }
                 }
                 .padding()
-                .background(Color(.systemGray6))
+                .background(Color.gray.opacity(0.08))
                 .cornerRadius(12)
             }
             .padding()
@@ -2149,7 +2146,7 @@ struct WishlistView: View {
                 List(wishlistProducts) { product in
                     HStack(spacing: 16) {
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(Color(.systemGray6))
+                            .fill(Color.gray.opacity(0.08))
                             .frame(width: 80, height: 80)
                         
                         VStack(alignment: .leading, spacing: 4) {

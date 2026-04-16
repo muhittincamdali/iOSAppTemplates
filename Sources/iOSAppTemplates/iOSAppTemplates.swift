@@ -26,6 +26,7 @@ public struct iOSAppTemplates {
 }
 
 // MARK: - Template Manager
+@MainActor
 public class TemplateManager: ObservableObject {
     
     // MARK: - Singleton
@@ -100,7 +101,12 @@ public class TemplateManager: ObservableObject {
     
     /// Search templates
     public func searchTemplates(query: String) -> [AppTemplate] {
-        let lowercasedQuery = query.lowercased()
+        let lowercasedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+
+        guard !lowercasedQuery.isEmpty else {
+            return templates
+        }
+
         return templates.filter { template in
             template.name.lowercased().contains(lowercasedQuery) ||
             template.description.lowercased().contains(lowercasedQuery) ||

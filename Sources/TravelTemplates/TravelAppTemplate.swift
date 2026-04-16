@@ -10,7 +10,7 @@ import MapKit
 
 // MARK: - Models
 
-public struct Destination: Identifiable, Codable, Hashable {
+public struct Destination: Identifiable, Codable, Hashable, Sendable {
     public let id: UUID
     public let name: String
     public let country: String
@@ -53,7 +53,7 @@ public struct Destination: Identifiable, Codable, Hashable {
     }
 }
 
-public struct Coordinates: Codable, Hashable {
+public struct Coordinates: Codable, Hashable, Sendable {
     public let latitude: Double
     public let longitude: Double
     
@@ -63,7 +63,7 @@ public struct Coordinates: Codable, Hashable {
     }
 }
 
-public struct Flight: Identifiable, Codable {
+public struct Flight: Identifiable, Codable, Sendable {
     public let id: UUID
     public let airline: String
     public let flightNumber: String
@@ -106,7 +106,7 @@ public struct Flight: Identifiable, Codable {
     }
 }
 
-public struct FlightLocation: Codable, Hashable {
+public struct FlightLocation: Codable, Hashable, Sendable {
     public let city: String
     public let airport: String
     public let code: String
@@ -118,14 +118,14 @@ public struct FlightLocation: Codable, Hashable {
     }
 }
 
-public enum FlightClass: String, Codable, CaseIterable {
+public enum FlightClass: String, Codable, CaseIterable, Sendable {
     case economy = "Economy"
     case premiumEconomy = "Premium Economy"
     case business = "Business"
     case first = "First Class"
 }
 
-public struct BaggageInfo: Codable {
+public struct BaggageInfo: Codable, Sendable {
     public let carryOn: Bool
     public let checkedBag: Int
     public let weightLimit: Int
@@ -137,7 +137,7 @@ public struct BaggageInfo: Codable {
     }
 }
 
-public struct Hotel: Identifiable, Codable {
+public struct Hotel: Identifiable, Codable, Sendable {
     public let id: UUID
     public let name: String
     public let location: String
@@ -183,7 +183,7 @@ public struct Hotel: Identifiable, Codable {
     }
 }
 
-public enum HotelAmenity: String, Codable, CaseIterable {
+public enum HotelAmenity: String, Codable, CaseIterable, Sendable {
     case wifi = "Free WiFi"
     case pool = "Swimming Pool"
     case gym = "Fitness Center"
@@ -211,7 +211,7 @@ public enum HotelAmenity: String, Codable, CaseIterable {
     }
 }
 
-public struct RoomType: Identifiable, Codable {
+public struct RoomType: Identifiable, Codable, Sendable {
     public let id: UUID
     public let name: String
     public let description: String
@@ -239,7 +239,7 @@ public struct RoomType: Identifiable, Codable {
     }
 }
 
-public struct Booking: Identifiable, Codable {
+public struct Booking: Identifiable, Codable, Sendable {
     public let id: UUID
     public let type: BookingType
     public let flight: Flight?
@@ -279,13 +279,13 @@ public struct Booking: Identifiable, Codable {
     }
 }
 
-public enum BookingType: String, Codable {
+public enum BookingType: String, Codable, Sendable {
     case flight = "Flight"
     case hotel = "Hotel"
     case package = "Package"
 }
 
-public enum BookingStatus: String, Codable {
+public enum BookingStatus: String, Codable, Sendable {
     case pending = "Pending"
     case confirmed = "Confirmed"
     case cancelled = "Cancelled"
@@ -301,7 +301,7 @@ public enum BookingStatus: String, Codable {
     }
 }
 
-public struct ItineraryItem: Identifiable, Codable {
+public struct ItineraryItem: Identifiable, Codable, Sendable {
     public let id: UUID
     public var title: String
     public var description: String
@@ -332,7 +332,7 @@ public struct ItineraryItem: Identifiable, Codable {
     }
 }
 
-public enum ItineraryCategory: String, Codable, CaseIterable {
+public enum ItineraryCategory: String, Codable, CaseIterable, Sendable {
     case flight = "Flight"
     case hotel = "Hotel"
     case activity = "Activity"
@@ -365,6 +365,7 @@ public enum ItineraryCategory: String, Codable, CaseIterable {
 
 // MARK: - Sample Data
 
+@MainActor
 public enum TravelSampleData {
     public static let destinations: [Destination] = [
         Destination(name: "Paris", country: "France", description: "The city of lights, known for the Eiffel Tower, art museums, and romantic atmosphere.", rating: 4.8, reviewCount: 125000, popularAttractions: ["Eiffel Tower", "Louvre Museum", "Notre-Dame"], averagePrice: 2000, bestTimeToVisit: "Apr-Jun, Sep-Oct", coordinates: Coordinates(latitude: 48.8566, longitude: 2.3522)),
@@ -526,7 +527,7 @@ struct ExploreView: View {
                         TextField("Search destinations...", text: $store.searchQuery)
                     }
                     .padding(12)
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(12)
                     .padding(.horizontal)
                     
@@ -683,7 +684,7 @@ struct DestinationDetailView: View {
                     // Quick Info
                     HStack(spacing: 20) {
                         InfoBox(icon: "calendar", title: "Best Time", value: destination.bestTimeToVisit)
-                        InfoBox(icon: "dollarsign.circle", title: "Avg. Cost", value: "\(destination.averagePrice, format: .currency(code: "USD"))")
+                        InfoBox(icon: "dollarsign.circle", title: "Avg. Cost", value: String(format: "$%.0f", NSDecimalNumber(decimal: destination.averagePrice).doubleValue))
                     }
                     
                     // Description
@@ -736,7 +737,7 @@ struct DestinationDetailView: View {
                             }
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color(.systemGray6))
+                            .background(Color.gray.opacity(0.08))
                             .cornerRadius(12)
                         }
                         .foregroundColor(.primary)
@@ -745,7 +746,6 @@ struct DestinationDetailView: View {
                 .padding()
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -770,7 +770,7 @@ struct InfoBox: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
     }
 }
@@ -794,7 +794,7 @@ struct FlightSearchView: View {
                                 TextField("From", text: $store.departureCity)
                             }
                             .padding()
-                            .background(Color(.systemGray6))
+                            .background(Color.gray.opacity(0.08))
                             .cornerRadius(12)
                             
                             HStack {
@@ -803,7 +803,7 @@ struct FlightSearchView: View {
                                 TextField("To", text: $store.arrivalCity)
                             }
                             .padding()
-                            .background(Color(.systemGray6))
+                            .background(Color.gray.opacity(0.08))
                             .cornerRadius(12)
                         }
                         
@@ -812,20 +812,20 @@ struct FlightSearchView: View {
                             DatePicker("Departure", selection: $store.departureDate, displayedComponents: .date)
                                 .labelsHidden()
                                 .padding()
-                                .background(Color(.systemGray6))
+                                .background(Color.gray.opacity(0.08))
                                 .cornerRadius(12)
                             
                             DatePicker("Return", selection: $store.returnDate, displayedComponents: .date)
                                 .labelsHidden()
                                 .padding()
-                                .background(Color(.systemGray6))
+                                .background(Color.gray.opacity(0.08))
                                 .cornerRadius(12)
                         }
                         
                         // Passengers
                         Stepper("Passengers: \(store.passengers)", value: $store.passengers, in: 1...9)
                             .padding()
-                            .background(Color(.systemGray6))
+                            .background(Color.gray.opacity(0.08))
                             .cornerRadius(12)
                         
                         Button {
@@ -952,7 +952,7 @@ struct FlightCard: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .padding(.horizontal)
         .sheet(isPresented: $showingBooking) {
@@ -981,9 +981,8 @@ struct FlightResultsView: View {
             }
             .listStyle(.plain)
             .navigationTitle("Flight Results")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Done") {
                         dismiss()
                     }
@@ -1060,13 +1059,13 @@ struct FlightBookingView: View {
                         }
                     }
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(16)
                     
                     // Passengers
                     Stepper("Passengers: \(store.passengers)", value: $store.passengers, in: 1...9)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(Color.gray.opacity(0.08))
                         .cornerRadius(16)
                     
                     // Total
@@ -1079,15 +1078,14 @@ struct FlightBookingView: View {
                             .fontWeight(.bold)
                     }
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(16)
                 }
                 .padding()
             }
             .navigationTitle("Book Flight")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
@@ -1137,26 +1135,26 @@ struct HotelSearchView: View {
                             TextField("Destination", text: $destination)
                         }
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(Color.gray.opacity(0.08))
                         .cornerRadius(12)
                         
                         HStack(spacing: 12) {
                             DatePicker("Check-in", selection: $store.departureDate, displayedComponents: .date)
                                 .labelsHidden()
                                 .padding()
-                                .background(Color(.systemGray6))
+                                .background(Color.gray.opacity(0.08))
                                 .cornerRadius(12)
                             
                             DatePicker("Check-out", selection: $store.returnDate, displayedComponents: .date)
                                 .labelsHidden()
                                 .padding()
-                                .background(Color(.systemGray6))
+                                .background(Color.gray.opacity(0.08))
                                 .cornerRadius(12)
                         }
                         
                         Stepper("Guests: \(store.hotelGuests)", value: $store.hotelGuests, in: 1...8)
                             .padding()
-                            .background(Color(.systemGray6))
+                            .background(Color.gray.opacity(0.08))
                             .cornerRadius(12)
                         
                         Button {} label: {
@@ -1200,7 +1198,7 @@ struct HotelCard: View {
     var body: some View {
         HStack(spacing: 12) {
             Rectangle()
-                .fill(Color(.systemGray5))
+                .fill(Color.gray.opacity(0.12))
                 .frame(width: 100, height: 100)
                 .cornerRadius(12)
                 .overlay(
@@ -1244,7 +1242,7 @@ struct HotelCard: View {
             Spacer()
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .padding(.horizontal)
     }
@@ -1262,7 +1260,7 @@ struct HotelDetailView: View {
             VStack(spacing: 20) {
                 // Images
                 Rectangle()
-                    .fill(Color(.systemGray5))
+                    .fill(Color.gray.opacity(0.12))
                     .frame(height: 250)
                     .overlay(
                         Image(systemName: "building.2")
@@ -1348,7 +1346,7 @@ struct HotelDetailView: View {
                                         .foregroundColor(selectedRoom?.id == room.id ? .blue : .secondary)
                                 }
                                 .padding()
-                                .background(Color(.systemGray6))
+                                .background(Color.gray.opacity(0.08))
                                 .cornerRadius(12)
                             }
                             .foregroundColor(.primary)
@@ -1358,7 +1356,6 @@ struct HotelDetailView: View {
                 .padding()
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom) {
             Button {
                 showingBooking = true
@@ -1413,7 +1410,7 @@ struct HotelBookingView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(16)
                     
                     // Dates
@@ -1442,7 +1439,7 @@ struct HotelBookingView: View {
                         }
                     }
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(16)
                     
                     // Total
@@ -1455,15 +1452,14 @@ struct HotelBookingView: View {
                             .fontWeight(.bold)
                     }
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(16)
                 }
                 .padding()
             }
             .navigationTitle("Book Hotel")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
@@ -1581,7 +1577,7 @@ struct TravelProfileView: View {
                 Section {
                     HStack(spacing: 16) {
                         Circle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.gray.opacity(0.12))
                             .frame(width: 60, height: 60)
                             .overlay(
                                 Image(systemName: "person.fill")
@@ -1611,16 +1607,44 @@ struct TravelProfileView: View {
                 }
                 
                 Section("Saved") {
-                    NavigationLink("Favorite Destinations", systemImage: "heart") {}
-                    NavigationLink("Saved Hotels", systemImage: "bookmark") {}
-                    NavigationLink("Recent Searches", systemImage: "clock") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Favorite Destinations", systemImage: "heart")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Saved Hotels", systemImage: "bookmark")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Recent Searches", systemImage: "clock")
+                    }
                 }
                 
                 Section("Settings") {
-                    NavigationLink("Payment Methods", systemImage: "creditcard") {}
-                    NavigationLink("Notifications", systemImage: "bell") {}
-                    NavigationLink("Travel Preferences", systemImage: "gearshape") {}
-                    NavigationLink("Help & Support", systemImage: "questionmark.circle") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Payment Methods", systemImage: "creditcard")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Notifications", systemImage: "bell")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Travel Preferences", systemImage: "gearshape")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Help & Support", systemImage: "questionmark.circle")
+                    }
                 }
                 
                 Section {

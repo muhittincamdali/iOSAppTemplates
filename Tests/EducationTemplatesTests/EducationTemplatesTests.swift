@@ -1,6 +1,7 @@
 import XCTest
 @testable import EducationTemplates
 
+@MainActor
 final class EducationTemplatesTests: XCTestCase {
     
     func testEducationTemplatesInitialization() {
@@ -185,20 +186,14 @@ final class EducationTemplatesTests: XCTestCase {
         // Given
         let note = LearningAppTemplate.Note(
             id: "note-1",
-            title: "Important Concepts",
             content: "Remember to use optionals properly",
-            date: Date(),
-            location: "Lesson 2",
-            coordinates: nil,
-            tags: ["swift", "optionals"]
+            timestamp: 120
         )
         
         // Then
         XCTAssertEqual(note.id, "note-1")
-        XCTAssertEqual(note.title, "Important Concepts")
         XCTAssertEqual(note.content, "Remember to use optionals properly")
-        XCTAssertEqual(note.location, "Lesson 2")
-        XCTAssertEqual(note.tags.count, 2)
+        XCTAssertEqual(note.timestamp, 120)
     }
     
     func testLessonAttachmentInitialization() {
@@ -207,7 +202,7 @@ final class EducationTemplatesTests: XCTestCase {
             id: "attachment-1",
             name: "code_example.swift",
             url: "https://example.com/code.swift",
-            type: .document,
+            type: .doc,
             size: 1024
         )
         
@@ -215,7 +210,7 @@ final class EducationTemplatesTests: XCTestCase {
         XCTAssertEqual(attachment.id, "attachment-1")
         XCTAssertEqual(attachment.name, "code_example.swift")
         XCTAssertEqual(attachment.url, "https://example.com/code.swift")
-        XCTAssertEqual(attachment.type, .document)
+        XCTAssertEqual(attachment.type, .doc)
         XCTAssertEqual(attachment.size, 1024)
     }
     
@@ -325,7 +320,6 @@ final class EducationTemplatesTests: XCTestCase {
         
         // Then
         XCTAssertTrue(manager.courses.isEmpty)
-        XCTAssertTrue(manager.destinations.isEmpty)
         XCTAssertTrue(manager.studySessions.isEmpty)
         XCTAssertFalse(manager.isLoading)
     }

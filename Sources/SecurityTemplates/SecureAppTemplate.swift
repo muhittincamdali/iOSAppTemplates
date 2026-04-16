@@ -69,6 +69,7 @@ public class BiometricAuthManager {
 
 // MARK: - Secure Storage Manager
 
+@MainActor
 public class SecureStorageManager {
     private let service = "com.app.secure.storage"
     
@@ -146,6 +147,7 @@ public class SecureStorageManager {
 
 // MARK: - Encryption Manager
 
+@MainActor
 public class EncryptionManager {
     public static let shared = EncryptionManager()
     
@@ -192,6 +194,7 @@ public class EncryptionManager {
 
 // MARK: - Secure Network Manager
 
+@MainActor
 public class SecureNetworkManager {
     public static let shared = SecureNetworkManager()
     
@@ -225,7 +228,7 @@ public class SecureNetworkManager {
         self.trustedHosts = ["api.example.com", "secure.example.com"]
     }
     
-    public func secureRequest<T: Decodable>(
+    public func secureRequest<T: Decodable & Sendable>(
         _ url: URLConvertible,
         method: HTTPMethod = .get,
         parameters: Parameters? = nil,
