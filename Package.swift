@@ -92,7 +92,7 @@ let package = Package(
         .package(url: "https://github.com/Alamofire/Alamofire", from: "5.9.0"),
         
         // Firebase
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "11.0.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "12.12.1"),
         
         // UI & Visualization
         .package(url: "https://github.com/danielgindi/Charts", from: "5.1.0"),
