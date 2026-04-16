@@ -1,6 +1,7 @@
 import SwiftUI
 import Collections
 import AsyncAlgorithms
+@preconcurrency import Darwin
 import Foundation
 #if canImport(UIKit)
 import UIKit

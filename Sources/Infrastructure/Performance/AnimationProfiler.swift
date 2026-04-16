@@ -5,6 +5,7 @@
 // Created on 17/08/2024.
 //
 
+@preconcurrency import Darwin
 import Foundation
 import QuartzCore
 import UIKit
