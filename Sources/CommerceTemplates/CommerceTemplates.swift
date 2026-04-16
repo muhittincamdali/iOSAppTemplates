@@ -88,8 +88,7 @@ public struct EcommerceAppTemplate {
         public let productName: String
         public let productImage: String?
         public let price: Double
-        public let quantity: Int
-        public let totalPrice: Double
+        public var quantity: Int
         
         public init(
             id: String,
@@ -105,7 +104,10 @@ public struct EcommerceAppTemplate {
             self.productImage = productImage
             self.price = price
             self.quantity = quantity
-            self.totalPrice = price * Double(quantity)
+        }
+
+        public var totalPrice: Double {
+            price * Double(quantity)
         }
     }
     
@@ -117,7 +119,7 @@ public struct EcommerceAppTemplate {
         public let tax: Double
         public let shipping: Double
         public let total: Double
-        public let status: OrderStatus
+        public var status: OrderStatus
         public let shippingAddress: Address
         public let billingAddress: Address
         public let paymentMethod: PaymentMethod
@@ -286,7 +288,7 @@ public struct EcommerceAppTemplate {
             isLoading = true
             defer { isLoading = false }
             
-            var query = db.collection("products")
+            var query: Query = db.collection("products")
             
             if let category = category {
                 query = query.whereField("category", isEqualTo: category)
@@ -617,7 +619,7 @@ public struct EcommerceAppTemplate {
                 "phone": order.billingAddress.phone ?? ""
             ]
             
-            let paymentMethodData = [
+            let paymentMethodData: [String: Any] = [
                 "id": order.paymentMethod.id,
                 "type": order.paymentMethod.type.rawValue,
                 "last4": order.paymentMethod.last4 ?? "",
@@ -736,7 +738,7 @@ public struct EcommerceAppTemplate {
                 }
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(.regularMaterial)
             .cornerRadius(12)
             .shadow(radius: 2)
         }

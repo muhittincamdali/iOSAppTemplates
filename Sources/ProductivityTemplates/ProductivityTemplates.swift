@@ -19,17 +19,17 @@ public struct ProductivityTemplates {
 public struct TaskManagementAppTemplate {
     
     // MARK: - Models
-    public struct Task: Identifiable, Codable {
+    public struct Task: Identifiable, Codable, Sendable {
         public let id: String
         public let title: String
         public let description: String?
         public let priority: TaskPriority
-        public let status: TaskStatus
+        public var status: TaskStatus
         public let category: TaskCategory
         public let dueDate: Date?
-        public let completedDate: Date?
+        public var completedDate: Date?
         public let estimatedTime: TimeInterval?
-        public let actualTime: TimeInterval?
+        public var actualTime: TimeInterval?
         public let tags: [String]
         public let subtasks: [Subtask]
         public let attachments: [TaskAttachment]
@@ -74,7 +74,7 @@ public struct TaskManagementAppTemplate {
         }
     }
     
-    public struct Subtask: Identifiable, Codable {
+    public struct Subtask: Identifiable, Codable, Sendable {
         public let id: String
         public let title: String
         public let isCompleted: Bool
@@ -93,7 +93,7 @@ public struct TaskManagementAppTemplate {
         }
     }
     
-    public struct TaskAttachment: Identifiable, Codable {
+    public struct TaskAttachment: Identifiable, Codable, Sendable {
         public let id: String
         public let name: String
         public let url: String
@@ -118,7 +118,7 @@ public struct TaskManagementAppTemplate {
         }
     }
     
-    public struct Project: Identifiable, Codable {
+    public struct Project: Identifiable, Codable, Sendable {
         public let id: String
         public let name: String
         public let description: String?
@@ -167,7 +167,7 @@ public struct TaskManagementAppTemplate {
         }
     }
     
-    public struct TeamMember: Identifiable, Codable {
+    public struct TeamMember: Identifiable, Codable, Sendable {
         public let id: String
         public let name: String
         public let email: String
@@ -192,7 +192,7 @@ public struct TaskManagementAppTemplate {
         }
     }
     
-    public struct Budget: Codable {
+    public struct Budget: Codable, Sendable {
         public let total: Double
         public let spent: Double
         public let currency: String
@@ -219,7 +219,7 @@ public struct TaskManagementAppTemplate {
         }
     }
     
-    public struct BudgetCategory: Identifiable, Codable {
+    public struct BudgetCategory: Identifiable, Codable, Sendable {
         public let id: String
         public let name: String
         public let allocated: Double
@@ -242,12 +242,12 @@ public struct TaskManagementAppTemplate {
         }
     }
     
-    public struct TimeEntry: Identifiable, Codable {
+    public struct TimeEntry: Identifiable, Codable, Sendable {
         public let id: String
         public let taskId: String
         public let startTime: Date
-        public let endTime: Date?
-        public let duration: TimeInterval
+        public var endTime: Date?
+        public var duration: TimeInterval
         public let description: String?
         public let isBillable: Bool
         public let rate: Double?
@@ -274,7 +274,7 @@ public struct TaskManagementAppTemplate {
     }
     
     // MARK: - Enums
-    public enum TaskPriority: String, CaseIterable, Codable {
+    public enum TaskPriority: String, CaseIterable, Codable, Sendable {
         case low = "low"
         case medium = "medium"
         case high = "high"
@@ -299,7 +299,7 @@ public struct TaskManagementAppTemplate {
         }
     }
     
-    public enum TaskStatus: String, CaseIterable, Codable {
+    public enum TaskStatus: String, CaseIterable, Codable, Sendable {
         case pending = "pending"
         case inProgress = "in_progress"
         case completed = "completed"
@@ -317,7 +317,7 @@ public struct TaskManagementAppTemplate {
         }
     }
     
-    public enum TaskCategory: String, CaseIterable, Codable {
+    public enum TaskCategory: String, CaseIterable, Codable, Sendable {
         case personal = "personal"
         case work = "work"
         case health = "health"
@@ -357,7 +357,7 @@ public struct TaskManagementAppTemplate {
         }
     }
     
-    public enum AttachmentType: String, CaseIterable, Codable {
+    public enum AttachmentType: String, CaseIterable, Codable, Sendable {
         case image = "image"
         case document = "document"
         case video = "video"
@@ -377,7 +377,7 @@ public struct TaskManagementAppTemplate {
         }
     }
     
-    public enum ProjectStatus: String, CaseIterable, Codable {
+    public enum ProjectStatus: String, CaseIterable, Codable, Sendable {
         case planning = "planning"
         case active = "active"
         case onHold = "on_hold"
@@ -395,7 +395,7 @@ public struct TaskManagementAppTemplate {
         }
     }
     
-    public enum ProjectPriority: String, CaseIterable, Codable {
+    public enum ProjectPriority: String, CaseIterable, Codable, Sendable {
         case low = "low"
         case medium = "medium"
         case high = "high"
@@ -409,9 +409,18 @@ public struct TaskManagementAppTemplate {
             case .critical: return "Critical"
             }
         }
+
+        public var color: String {
+            switch self {
+            case .low: return "green"
+            case .medium: return "blue"
+            case .high: return "orange"
+            case .critical: return "red"
+            }
+        }
     }
     
-    public enum TeamRole: String, CaseIterable, Codable {
+    public enum TeamRole: String, CaseIterable, Codable, Sendable {
         case owner = "owner"
         case manager = "manager"
         case member = "member"
@@ -658,7 +667,7 @@ public struct TaskManagementAppTemplate {
         
         public func cancelTaskReminder(taskId: String) async throws {
             let center = UNUserNotificationCenter.current()
-            await center.removePendingNotificationRequests(withIdentifiers: ["task_\(taskId)"])
+            center.removePendingNotificationRequests(withIdentifiers: ["task_\(taskId)"])
         }
     }
     
@@ -791,7 +800,7 @@ public struct TaskManagementAppTemplate {
                 }
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(.regularMaterial)
             .cornerRadius(12)
             .shadow(radius: 2)
             .onTapGesture {
@@ -905,7 +914,7 @@ public struct TaskManagementAppTemplate {
                 }
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(.regularMaterial)
             .cornerRadius(12)
             .shadow(radius: 2)
             .onTapGesture {

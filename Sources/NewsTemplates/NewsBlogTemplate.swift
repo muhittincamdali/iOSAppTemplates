@@ -162,6 +162,7 @@ public struct ArticleComment: Identifiable, Codable {
 
 // MARK: - Sample Data
 
+@MainActor
 public enum NewsSampleData {
     public static let authors: [Author] = [
         Author(name: "Sarah Chen", bio: "Tech journalist covering AI and startups", isVerified: true, articlesCount: 234, followersCount: 45000),
@@ -432,7 +433,7 @@ public struct NewsFeedView: View {
             }
             .navigationTitle("News")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {
                         showingSearch = true
                     } label: {
@@ -440,7 +441,7 @@ public struct NewsFeedView: View {
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {} label: {
                         Image(systemName: "bell")
                     }
@@ -467,7 +468,7 @@ struct FeaturedArticleCard: View {
             VStack(alignment: .leading, spacing: 12) {
                 ZStack(alignment: .bottomLeading) {
                     Rectangle()
-                        .fill(Color(.systemGray5))
+                        .fill(Color.gray.opacity(0.12))
                         .aspectRatio(16/9, contentMode: .fit)
                         .overlay(
                             Image(systemName: "photo")
@@ -570,7 +571,7 @@ struct CategoryChipNews: View {
             .font(.subheadline)
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
-            .background(isSelected ? color : Color(.systemGray6))
+            .background(isSelected ? color : Color.gray.opacity(0.08))
             .foregroundColor(isSelected ? .white : .primary)
             .cornerRadius(20)
         }
@@ -622,7 +623,7 @@ struct TrendingArticleCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 ZStack(alignment: .topLeading) {
                     Rectangle()
-                        .fill(Color(.systemGray5))
+                        .fill(Color.gray.opacity(0.12))
                         .frame(width: 200, height: 120)
                         .cornerRadius(12)
                     
@@ -725,12 +726,12 @@ struct ArticleRowView: View {
                 Spacer()
                 
                 Rectangle()
-                    .fill(Color(.systemGray5))
+                    .fill(Color.gray.opacity(0.12))
                     .frame(width: 80, height: 80)
                     .cornerRadius(8)
             }
             .padding()
-            .background(Color(.systemGray6).opacity(0.5))
+            .background(Color.gray.opacity(0.08).opacity(0.5))
             .cornerRadius(12)
         }
         .buttonStyle(.plain)
@@ -754,7 +755,7 @@ public struct ArticleDetailView: View {
             VStack(alignment: .leading, spacing: 20) {
                 // Cover Image
                 Rectangle()
-                    .fill(Color(.systemGray5))
+                    .fill(Color.gray.opacity(0.12))
                     .aspectRatio(16/9, contentMode: .fit)
                     .overlay(
                         Image(systemName: "photo")
@@ -804,7 +805,7 @@ public struct ArticleDetailView: View {
                     // Author
                     HStack(spacing: 12) {
                         Circle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.gray.opacity(0.12))
                             .frame(width: 44, height: 44)
                             .overlay(
                                 Text(article.author.name.prefix(1))
@@ -866,7 +867,7 @@ public struct ArticleDetailView: View {
                                     .font(.caption)
                                     .padding(.horizontal, 12)
                                     .padding(.vertical, 6)
-                                    .background(Color(.systemGray6))
+                                    .background(Color.gray.opacity(0.08))
                                     .cornerRadius(16)
                             }
                         }
@@ -875,9 +876,8 @@ public struct ArticleDetailView: View {
                 .padding()
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
+            ToolbarItemGroup(placement: .automatic) {
                 Button {
                     store.toggleBookmark(article)
                 } label: {
@@ -1015,7 +1015,7 @@ struct ArticleCommentsView: View {
                         .textFieldStyle(.plain)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 8)
-                        .background(Color(.systemGray6))
+                        .background(Color.gray.opacity(0.08))
                         .cornerRadius(20)
                     
                     Button {
@@ -1029,9 +1029,8 @@ struct ArticleCommentsView: View {
                 .padding()
             }
             .navigationTitle("Comments")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Done") {
                         dismiss()
                     }
@@ -1049,7 +1048,7 @@ struct CommentRowNews: View {
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             Circle()
-                .fill(Color(.systemGray5))
+                .fill(Color.gray.opacity(0.12))
                 .frame(width: 36, height: 36)
             
             VStack(alignment: .leading, spacing: 4) {
@@ -1101,7 +1100,7 @@ struct ExploreNewsView: View {
                         TextField("Search articles, topics, authors", text: $store.searchQuery)
                     }
                     .padding(12)
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(12)
                     .padding(.horizontal)
                     
@@ -1136,7 +1135,7 @@ struct ExploreNewsView: View {
                                             .foregroundColor(.secondary)
                                     }
                                     .padding()
-                                    .background(Color(.systemGray6))
+                                    .background(Color.gray.opacity(0.08))
                                     .cornerRadius(12)
                                 }
                                 .buttonStyle(.plain)
@@ -1174,7 +1173,7 @@ struct AuthorCard: View {
     var body: some View {
         VStack(spacing: 12) {
             Circle()
-                .fill(Color(.systemGray5))
+                .fill(Color.gray.opacity(0.12))
                 .frame(width: 60, height: 60)
             
             VStack(spacing: 4) {
@@ -1206,7 +1205,7 @@ struct AuthorCard: View {
         }
         .frame(width: 130)
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
     }
 }
@@ -1331,10 +1330,9 @@ struct SearchArticlesView: View {
                 }
             }
             .navigationTitle("Search")
-            .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $searchText, prompt: "Search articles")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Cancel") {
                         dismiss()
                     }
@@ -1355,7 +1353,7 @@ struct NewsProfileView: View {
                 Section {
                     HStack(spacing: 16) {
                         Circle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.gray.opacity(0.12))
                             .frame(width: 60, height: 60)
                             .overlay(
                                 Image(systemName: "person.fill")
@@ -1400,17 +1398,45 @@ struct NewsProfileView: View {
                 
                 // Settings
                 Section("Settings") {
-                    NavigationLink("Reading Preferences", systemImage: "textformat.size") {}
-                    NavigationLink("Notifications", systemImage: "bell") {}
-                    NavigationLink("Dark Mode", systemImage: "moon") {}
-                    NavigationLink("Downloads", systemImage: "arrow.down.circle") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Reading Preferences", systemImage: "textformat.size")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Notifications", systemImage: "bell")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Dark Mode", systemImage: "moon")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Downloads", systemImage: "arrow.down.circle")
+                    }
                 }
                 
                 // Account
                 Section("Account") {
-                    NavigationLink("Manage Subscription", systemImage: "creditcard") {}
-                    NavigationLink("Privacy", systemImage: "lock") {}
-                    NavigationLink("Help & Support", systemImage: "questionmark.circle") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Manage Subscription", systemImage: "creditcard")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Privacy", systemImage: "lock")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Help & Support", systemImage: "questionmark.circle")
+                    }
                 }
                 
                 Section {

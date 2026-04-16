@@ -1,198 +1,145 @@
-# 🏗️ Architecture API - Enterprise Standards Compliant
+# Architecture API
 
-## 📋 Overview
+Bu repo tek bir zorunlu architecture contract sunmuyor. Bunun yerine farkli template family'lerinde tekrarlanan birkac desen var:
 
-Complete architecture patterns reference following Enterprise Standards with **26,633+ lines** of production-ready code.
+- `SwiftUI-first app shells`
+- `ObservableObject` tabanli store/manager yapilari
+- domain models + sample data
+- secili alanlarda `TCA`
+- secili alanlarda `visionOS` ve `AI` reference surfaces
 
-## 🎯 Architecture Patterns
+Bu sayfa canonical architecture map'tir; premium delivery guarantee belgesi degildir.
 
-### TCA (The Composable Architecture)
+## Repo-Level Architecture Map
+
+### 1. Root Discovery Layer
+
+Kaynak:
+- `Sources/iOSAppTemplates/iOSAppTemplates.swift`
+
+Rol:
+- template metadata'yi expose eder
+- category/complexity/search uzerinden template discovery yapar
+
+Ana tipler:
+- `TemplateManager`
+- `AppTemplate`
+- `TemplateCategory`
+- `TemplateComplexity`
+
+### 2. Template Family Modules
+
+Her family kendi product lane'ini tasir:
+
+- `Sources/SocialTemplates`
+- `Sources/CommerceTemplates`
+- `Sources/HealthTemplates`
+- `Sources/ProductivityTemplates`
+- `Sources/EducationTemplates`
+- `Sources/FinanceTemplates`
+- `Sources/TravelTemplates`
+- `Sources/EntertainmentTemplates`
+- `Sources/FoodTemplates`
+
+Genel pattern:
+- domain model'ler
+- manager/store tipleri
+- sample data
+- SwiftUI views
+- bazen standalone `App` girisleri
+
+Bu family'ler ayni abstraction seviyesinde degildir. Bazi moduller daha cok reference implementation, bazilari daha fazla UI surface tasir.
+
+## Architecture Patterns Present Today
+
+### SwiftUI + ObservableObject
+
+En yaygin pattern bu:
+
 ```swift
-/// Modern TCA implementation with iOS 18 features
-@Reducer
-public struct AppFeature {
-    @ObservableState
-    public struct State: Equatable {
-        var posts: [Post] = []
-        var isLoading = false
-        var selectedPost: Post?
-    }
-    
-    public enum Action {
-        case loadPosts
-        case postsLoaded([Post])
-        case selectPost(Post)
-    }
-    
-    public var body: some Reducer<State, Action> {
-        Reduce { state, action in
-            switch action {
-            case .loadPosts:
-                state.isLoading = true
-                return .run { send in
-                    let posts = try await PostsClient().fetchPosts()
-                    await send(.postsLoaded(posts))
-                }
-            case .postsLoaded(let posts):
-                state.isLoading = false
-                state.posts = posts
-                return .none
-            case .selectPost(let post):
-                state.selectedPost = post
-                return .none
-            }
-        }
-    }
+@MainActor
+final class ExampleStore: ObservableObject {
+    @Published var items: [Item] = []
+    @Published var isLoading = false
 }
 ```
 
-### MVVM-C Pattern
+Bu desen sosyal, finance, health ve productivity surface'lerinde tekrar eder.
+
+### Domain Models + Sample Data
+
+Bir cok template family su yapida ilerler:
+
 ```swift
-/// Clean MVVM-C implementation with Coordinator pattern
-protocol Coordinator: AnyObject {
-    var childCoordinators: [Coordinator] { get set }
-    var navigationController: UINavigationController { get set }
-    func start()
-    func finish()
+public struct Product: Identifiable, Codable {
+    public let id: String
+    public let name: String
 }
 
-class AppCoordinator: Coordinator {
-    var childCoordinators = [Coordinator]()
-    var navigationController: UINavigationController
-    
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
-    }
-    
-    func start() {
-        let homeCoordinator = HomeCoordinator(navigationController: navigationController)
-        childCoordinators.append(homeCoordinator)
-        homeCoordinator.start()
-    }
-    
-    func finish() {
-        childCoordinators.removeAll()
-    }
+public enum CommerceSampleData {
+    // curated sample content
 }
 ```
 
-### Clean Architecture Layers
-```swift
-// MARK: - Domain Layer
-protocol UserRepository {
-    func getUsers() async throws -> [User]
-    func saveUser(_ user: User) async throws
-}
+Bu repo'nun bugunku en guclu tarafi burada: yeniden kullanilabilir model + sample content + SwiftUI view kombinasyonu.
 
-protocol GetUsersUseCase {
-    func execute() async throws -> [User]
-}
+### TCA Reference Surface
 
-// MARK: - Data Layer
-class NetworkUserRepository: UserRepository {
-    private let networkService: NetworkService
-    
-    init(networkService: NetworkService) {
-        self.networkService = networkService
-    }
-    
-    func getUsers() async throws -> [User] {
-        return try await networkService.fetch(endpoint: .users)
-    }
-    
-    func saveUser(_ user: User) async throws {
-        try await networkService.post(user, to: .users)
-    }
-}
+Kaynak:
+- `Sources/TCATemplates/SocialMediaTCATemplate.swift`
 
-// MARK: - Presentation Layer
-@Observable
-class UsersViewModel {
-    private let getUsersUseCase: GetUsersUseCase
-    var users: [User] = []
-    var isLoading = false
-    var error: String?
-    
-    init(getUsersUseCase: GetUsersUseCase) {
-        self.getUsersUseCase = getUsersUseCase
-    }
-    
-    func loadUsers() async {
-        isLoading = true
-        defer { isLoading = false }
-        
-        do {
-            users = try await getUsersUseCase.execute()
-        } catch {
-            self.error = error.localizedDescription
-        }
-    }
-}
-```
+Repo'da `TCA` support reference seviyesinde vardir. Bu, tum template'lerin `TCA` kullandigi anlamina gelmez.
 
-## 📊 Performance Standards
+Ornek tipler:
+- `SocialMediaApp`
+- `PostsFeature`
+- `ProfileFeature`
+- `NotificationsFeature`
 
-| **Metric** | **Enterprise Standards** | **Achievement** |
-|------------|-------------------------|-----------------|
-| Launch Time | <1s | ✅ **0.8s** |
-| Memory Usage | <75MB | ✅ **<75MB** |
-| Frame Rate | 120fps | ✅ **120fps** |
-| Code Volume | ≥15,000 lines | ✅ **26,633 lines** |
+### visionOS Reference Surface
 
-## 🔒 Security Architecture
+Kaynak:
+- `Sources/VisionOSTemplates/SpatialSocialTemplate.swift`
 
-### Enterprise-Grade Security
-```swift
-/// Bank-level security implementation
-class SecurityManager {
-    private let encryptionService: EncryptionService
-    private let biometricService: BiometricService
-    
-    init() {
-        self.encryptionService = AES256EncryptionService()
-        self.biometricService = BiometricAuthService()
-    }
-    
-    func authenticateUser() async throws -> Bool {
-        return try await biometricService.authenticate()
-    }
-    
-    func encryptData<T: Codable>(_ data: T) throws -> Data {
-        return try encryptionService.encrypt(data)
-    }
-}
-```
+Bu alan spatial UI ve immersive scene orgusu icin reference surface sunar. Bugun icin bu alan:
+- category expansion
+- spatial UI reference
+- API exploration
+amaciyla daha anlamlidir; tam product proof degildir.
 
-## 🎯 Multi-Platform Support
+### AI Reference Surface
 
-### iOS 18 + visionOS 2
-```swift
-/// Universal app structure for multiple platforms
-#if os(iOS)
-import UIKit
-#elseif os(visionOS)
-import RealityKit
-#endif
+Kaynak:
+- `Sources/AITemplates/SmartPhotoTemplate.swift`
 
-@main
-struct UniversalApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-        #if os(visionOS)
-        .windowStyle(.volumetric)
-        
-        ImmersiveSpace(id: "ImmersiveSpace") {
-            ImmersiveView()
-        }
-        #endif
-    }
-}
-```
+AI lane su an:
+- photo analysis
+- smart search
+- enhancement client abstractions
+uzerinden reference/sample surface sunar.
 
-## 📚 Additional Resources
+## What This Repo Does Not Guarantee
 
-- [TCA Official Documentation](https://github.com/pointfreeco/swift-composable-architecture)
-- [Clean Architecture Guide](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [MVVM-C Pattern](https://www.raywenderlich.com/158-coordinator-tutorial-for-ios-getting-started)
+Bu repo su anda asagidakileri canonical contract olarak garanti etmez:
+
+- tek resmi architecture pattern
+- uniform dependency injection contract
+- tum lane'lerde ayni test depth
+- tum lane'lerde ayni production hardening
+- tum lane'lerde standalone shippable app maturity
+
+Bu nedenle `architecture guide` ile `complete app claim` ayni sey degildir.
+
+## Recommended Reading Order
+
+1. [API Reference](./API-Reference.md)
+2. [Complete App Standard](./Complete-App-Standard.md)
+3. `Sources/iOSAppTemplates/iOSAppTemplates.swift`
+4. ilgilendigin lane icin ilgili `Sources/*Templates/*.swift`
+5. `Templates/` altindaki standalone roots
+
+## External References
+
+- [The Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture)
+- [Apple SwiftUI Documentation](https://developer.apple.com/documentation/swiftui)
+- [Apple visionOS Documentation](https://developer.apple.com/documentation/visionos)

@@ -1,132 +1,69 @@
-# iOS App Templates Documentation
+# Documentation Hub
 
-Welcome to the comprehensive documentation for iOS App Templates - a world-class collection of production-ready iOS application templates.
+Bu sayfa `iOSAppTemplates` icin canonical docs router'dir.
 
-## 📚 Documentation Structure
+## Current Repo Truth
 
-### 🚀 Getting Started
-- [Quick Start Guide](./Guides/QuickStart.md) - Build your first app in 5 minutes
-- [First App Tutorial](./FirstApp.md) - Complete walkthrough with code examples
+- `Sources/` canonical template-family surface
+- `Templates/` altinda `3` standalone app root var
+- `Examples/` karisik reference/example alani; henuz 20 app gallery degil
+- genis complete-app parity hedef, bugunku parity claim'i degil
 
-### 🏗️ Architecture
-- [Architecture API Reference](./ArchitectureAPI.md) - Complete architecture patterns
-- [Architecture Templates Guide](./ArchitectureTemplatesGuide.md) - Implementation guide
-- [Best Practices Guide](./BestPracticesGuide.md) - SOLID principles and patterns
+## Start By Goal
 
-### 📱 Templates
-- [Template Guide](./TemplateGuide.md) - Complete template catalog and usage
-- [UI Templates Guide](./UITemplatesGuide.md) - UI component library
-- [Vision Pro Guide](./VisionProGuide.md) - visionOS and spatial computing
-- [Security API](./SecurityAPI.md) - Enterprise security implementation
-- [Testing Templates Guide](./TestingTemplatesGuide.md) - Testing patterns and examples
+| Goal | Start here |
+| --- | --- |
+| Repo'yu hizli degerlendirmek | [Guides/QuickStart.md](./Guides/QuickStart.md) |
+| Gercek kurulum yolunu gormek | [Guides/Installation.md](./Guides/Installation.md) |
+| Complete-app standardini anlamak | [Complete-App-Standard.md](./Complete-App-Standard.md) |
+| Template ailelerini incelemek | [TemplateGuide.md](./TemplateGuide.md) |
+| Example/router yuzeyini gormek | [../Examples/README.md](../Examples/README.md) |
+| Repo gap audit'ini okumak | [World-Class-Audit-2026-04-15.md](./World-Class-Audit-2026-04-15.md) |
 
-### 🛠️ API Reference
-- [API Reference](./API-Reference.md) - Complete API documentation
-- [UI Components](./UIComponents.md) - Reusable UI component library
-- [Architecture Templates API](./ArchitectureTemplatesAPI.md) - Architecture patterns API
-- [Template Manager API](./TemplateManagerAPI.md) - Template management system
-- [Configuration API](./ConfigurationAPI.md) - Configuration and setup APIs
+## Core Surfaces
 
-### 💡 Examples
-- [First App Tutorial](./FirstApp.md) - Build a complete social media app
-- [Vision Pro Guide](./VisionProGuide.md) - Spatial computing examples
-- [Template Guide](./TemplateGuide.md) - Using templates effectively
+### Onboarding
 
-### 📖 Guides
-- [Best Practices Guide](./BestPracticesGuide.md) - iOS development best practices
-- [Performance Guide](./Guides/PerformanceGuide.md) - Optimization techniques
-- [Security Guide](./Guides/SecurityGuide.md) - Security implementation
-- [Testing Guide](./Guides/TestingGuide.md) - Complete testing strategies
-- [Architecture Guide](./Guides/ArchitectureGuide.md) - Architecture patterns
-- [Quick Start](./Guides/QuickStart.md) - Getting started quickly
+- [Guides/QuickStart.md](./Guides/QuickStart.md)
+- [Guides/Installation.md](./Guides/Installation.md)
+- [FirstApp.md](./FirstApp.md)
 
-### 🤝 Contributing
-- [Contributing Guidelines](../CONTRIBUTING.md) - How to contribute
-- [Code of Conduct](../CODE_OF_CONDUCT.md) - Community standards
-- [Installation Guide](./Guides/Installation.md) - Installation process
+### Template And Product Surfaces
 
-### 🔧 Advanced Topics
-- [Customization Guide](./CustomizationGuide.md) - Customizing templates
-- [Customization API](./CustomizationAPI.md) - Advanced customization APIs
-- [Generation API](./GenerationAPI.md) - Code generation system
+- [TemplateGuide.md](./TemplateGuide.md)
+- [VisionProGuide.md](./VisionProGuide.md)
+- [ArchitectureTemplatesGuide.md](./ArchitectureTemplatesGuide.md)
 
-## 🎯 Quick Links
+### API And Package Surfaces
 
-### For Beginners
-1. [Quick Start Guide](./Guides/QuickStart.md)
-2. [First App Tutorial](./FirstApp.md)
-3. [Template Guide](./TemplateGuide.md)
-4. [UI Components](./UIComponents.md)
+- [API-Reference.md](./API-Reference.md)
+- [API.md](./API.md)
+- [ArchitectureAPI.md](./ArchitectureAPI.md)
+- [SecurityAPI.md](./SecurityAPI.md)
 
-### For Advanced Users
-1. [Architecture API](./ArchitectureAPI.md)
-2. [Customization Guide](./CustomizationGuide.md)
-3. [Performance Guide](./Guides/PerformanceGuide.md)
-4. [Vision Pro Guide](./VisionProGuide.md)
+### Validation And Trust
 
-### For Contributors
-1. [Contributing Guidelines](../CONTRIBUTING.md)
-2. [API Reference](./API-Reference.md)
-3. [Testing Guide](./Guides/TestingGuide.md)
-4. [Architecture Guide](./Guides/ArchitectureGuide.md)
+- [Guides/TestingGuide.md](./Guides/TestingGuide.md)
+- [../SECURITY.md](../SECURITY.md)
+- [../CONTRIBUTING.md](../CONTRIBUTING.md)
+- [World-Class-Audit-2026-04-15.md](./World-Class-Audit-2026-04-15.md)
 
-## 📊 Template Categories
+## What To Ignore For Now
 
-### By Architecture
-- **Clean Architecture** - SOLID principles, layered architecture
-- **TCA** - The Composable Architecture with unidirectional data flow
-- **MVVM** - Model-View-ViewModel pattern
-- **MVP** - Model-View-Presenter pattern
-- **VIPER** - View-Interactor-Presenter-Entity-Router
+Bu repo icinde henuz complete-app gallery parity'sine ulasmamis alanlar var. Bir yuzey buyuk bir iddia tasiyorsa once su iki sayfayi kontrol et:
 
-### By Platform
-- **iOS 18+** - Latest iOS features and capabilities
-- **visionOS 2.0+** - Spatial computing and AR/VR
-- **macOS 15+** - Mac Catalyst and native macOS
-- **tvOS 18+** - Apple TV applications
-- **watchOS 11+** - Apple Watch companions
+- [Complete-App-Standard.md](./Complete-App-Standard.md)
+- [World-Class-Audit-2026-04-15.md](./World-Class-Audit-2026-04-15.md)
 
-### By Use Case
-- **Social & Networking** - Social media and communication apps
-- **Commerce & Payments** - E-commerce and payment solutions
-- **Health & Fitness** - HealthKit and fitness tracking
-- **Education & Learning** - Educational and e-learning apps
-- **Finance & Banking** - Financial services and banking
-- **Travel & Transportation** - Travel and navigation apps
-- **AI & Machine Learning** - CoreML and Vision framework
+## Version Baseline
 
-## 🔍 Search Documentation
+Top-level package baseline:
 
-Looking for something specific? Use these indexes:
+- Swift 6
+- iOS 18
+- macOS 15
+- tvOS 18
+- watchOS 11
+- visionOS 2
 
-- [API Reference](./API-Reference.md) - Complete API documentation
-- [Template Guide](./TemplateGuide.md) - All templates and features
-- [UI Components](./UIComponents.md) - Component library reference
-- [Security API](./SecurityAPI.md) - Security implementation reference
-
-## 📝 Version History
-
-- **v2.0.0** - Swift 6.0, iOS 18, visionOS 2.0 support
-- **v1.5.0** - TCA integration, performance templates
-- **v1.0.0** - Initial release with core templates
-
-## 🆘 Getting Help
-
-- **GitHub Issues**: [Report bugs or request features](https://github.com/yourusername/iOSAppTemplates/issues)
-- **Discussions**: [Community discussions](https://github.com/yourusername/iOSAppTemplates/discussions)
-- **Stack Overflow**: Tag your questions with `ios-app-templates`
-- **Twitter**: Follow [@iOSAppTemplates](https://twitter.com/iOSAppTemplates)
-
-## 📄 License
-
-This project is licensed under the MIT License. See [LICENSE](../LICENSE) for details.
-
----
-
-<div align="center">
-  <strong>Built with ❤️ by the iOS Community</strong>
-  <br>
-  <a href="https://github.com/yourusername/iOSAppTemplates">GitHub</a> •
-  <a href="https://twitter.com/iOSAppTemplates">Twitter</a> •
-  <a href="https://iosapptemplates.dev">Website</a>
-</div>
+Standalone template roots bu baseline ile hizalaniyor.

@@ -316,6 +316,7 @@ public enum InvestmentType: String, Codable, CaseIterable {
 
 // MARK: - Sample Data
 
+@MainActor
 public enum FinanceSampleData {
     public static let accounts: [BankAccount] = [
         BankAccount(name: "Main Checking", type: .checking, balance: 12456.78, accountNumber: "****4567", isPrimary: true, color: "#007AFF"),
@@ -507,7 +508,7 @@ public struct FinanceDashboardView: View {
             }
             .navigationTitle("Dashboard")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {} label: {
                         Image(systemName: "bell")
                     }
@@ -740,7 +741,7 @@ struct RecentTransactionsSection: View {
                     }
                 }
             }
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.08))
             .cornerRadius(16)
             .padding(.horizontal)
         }
@@ -813,7 +814,7 @@ struct BudgetOverviewSection: View {
                 }
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.08))
             .cornerRadius(16)
             .padding(.horizontal)
         }
@@ -844,7 +845,7 @@ struct BudgetRow: View {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     Rectangle()
-                        .fill(Color(.systemGray4))
+                        .fill(Color.gray.opacity(0.35))
                     
                     Rectangle()
                         .fill(budget.progress > 0.9 ? Color.red : budget.category.color)
@@ -875,7 +876,7 @@ public struct CardsView: View {
                                 .tag(index)
                         }
                     }
-                    .tabViewStyle(.page(indexDisplayMode: .always))
+                    .tabViewStyle(.automatic)
                     .frame(height: 240)
                     
                     // Card Actions
@@ -895,7 +896,7 @@ public struct CardsView: View {
             }
             .navigationTitle("Cards")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {} label: {
                         Image(systemName: "plus")
                     }
@@ -1025,7 +1026,7 @@ struct CardDetailsView: View {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     Rectangle()
-                        .fill(Color(.systemGray4))
+                        .fill(Color.gray.opacity(0.35))
                     
                     Rectangle()
                         .fill(Color.red)
@@ -1051,7 +1052,7 @@ struct CardDetailsView: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .padding(.horizontal)
     }
@@ -1073,7 +1074,7 @@ struct RecentCardTransactionsView: View {
                         .padding(.leading, 60)
                 }
             }
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.08))
             .cornerRadius(16)
             .padding(.horizontal)
         }
@@ -1164,7 +1165,7 @@ struct CategoryFilterChip: View {
             .font(.subheadline)
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
-            .background(isSelected ? color : Color(.systemGray6))
+            .background(isSelected ? color : Color.gray.opacity(0.08))
             .foregroundColor(isSelected ? .white : .primary)
             .cornerRadius(20)
         }
@@ -1211,7 +1212,7 @@ struct TransactionDetailView: View {
                     Divider()
                     DetailRow(title: "Type", value: transaction.type.rawValue.capitalized)
                 }
-                .background(Color(.systemGray6))
+                .background(Color.gray.opacity(0.08))
                 .cornerRadius(16)
                 .padding(.horizontal)
                 
@@ -1224,7 +1225,7 @@ struct TransactionDetailView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(Color.gray.opacity(0.08))
                         .cornerRadius(12)
                     }
                     
@@ -1235,7 +1236,7 @@ struct TransactionDetailView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(Color.gray.opacity(0.08))
                         .cornerRadius(12)
                     }
                 }
@@ -1244,7 +1245,7 @@ struct TransactionDetailView: View {
             }
         }
         .navigationTitle(transaction.title)
-        .navigationBarTitleDisplayMode(.inline)
+        
     }
 }
 
@@ -1287,7 +1288,7 @@ struct BudgetView: View {
                     
                     ZStack {
                         Circle()
-                            .stroke(Color(.systemGray4), lineWidth: 20)
+                            .stroke(Color.gray.opacity(0.35), lineWidth: 20)
                         
                         Circle()
                             .trim(from: 0, to: Double(truncating: (totalSpent / totalBudget) as NSNumber))
@@ -1308,7 +1309,7 @@ struct BudgetView: View {
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color(.systemGray6))
+                .background(Color.gray.opacity(0.08))
                 .cornerRadius(20)
                 .padding(.horizontal)
                 
@@ -1327,7 +1328,7 @@ struct BudgetView: View {
         }
         .navigationTitle("Budget")
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .automatic) {
                 Button {
                     showingAddBudget = true
                 } label: {
@@ -1378,7 +1379,7 @@ struct BudgetCategoryCard: View {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     Rectangle()
-                        .fill(Color(.systemGray4))
+                        .fill(Color.gray.opacity(0.35))
                     
                     Rectangle()
                         .fill(budget.progress > 0.9 ? Color.red : budget.category.color)
@@ -1397,7 +1398,7 @@ struct BudgetCategoryCard: View {
             .foregroundColor(.secondary)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .padding(.horizontal)
     }
@@ -1518,7 +1519,7 @@ struct HoldingRow: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
         .padding(.horizontal)
     }
@@ -1622,7 +1623,7 @@ struct AccountDetailView: View {
                                     .padding(.leading, 60)
                             }
                         }
-                        .background(Color(.systemGray6))
+                        .background(Color.gray.opacity(0.08))
                         .cornerRadius(16)
                         .padding(.horizontal)
                     }
@@ -1644,7 +1645,7 @@ struct FinanceProfileView: View {
                 Section {
                     HStack(spacing: 16) {
                         Circle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.gray.opacity(0.12))
                             .frame(width: 60, height: 60)
                             .overlay(
                                 Text("JD")
@@ -1665,21 +1666,57 @@ struct FinanceProfileView: View {
                 }
                 
                 Section("Security") {
-                    NavigationLink("Face ID & Passcode", systemImage: "faceid") {}
-                    NavigationLink("Two-Factor Authentication", systemImage: "lock.shield") {}
-                    NavigationLink("Login Notifications", systemImage: "bell.badge") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Face ID & Passcode", systemImage: "faceid")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Two-Factor Authentication", systemImage: "lock.shield")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Login Notifications", systemImage: "bell.badge")
+                    }
                 }
                 
                 Section("Preferences") {
-                    NavigationLink("Notifications", systemImage: "bell") {}
-                    NavigationLink("Default Currency", systemImage: "dollarsign.circle") {}
-                    NavigationLink("Appearance", systemImage: "paintbrush") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Notifications", systemImage: "bell")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Default Currency", systemImage: "dollarsign.circle")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Appearance", systemImage: "paintbrush")
+                    }
                 }
                 
                 Section("Support") {
-                    NavigationLink("Help Center", systemImage: "questionmark.circle") {}
-                    NavigationLink("Contact Us", systemImage: "message") {}
-                    NavigationLink("Report a Problem", systemImage: "exclamationmark.triangle") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Help Center", systemImage: "questionmark.circle")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Contact Us", systemImage: "message")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Report a Problem", systemImage: "exclamationmark.triangle")
+                    }
                 }
                 
                 Section {
@@ -1700,5 +1737,31 @@ public struct FinanceApp: App {
         WindowGroup {
             FinanceHomeView()
         }
+    }
+}
+
+extension Color {
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&int)
+        let a, r, g, b: UInt64
+        switch hex.count {
+        case 3:
+            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6:
+            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8:
+            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            (a, r, g, b) = (255, 0, 0, 0)
+        }
+        self.init(
+            .sRGB,
+            red: Double(r) / 255,
+            green: Double(g) / 255,
+            blue: Double(b) / 255,
+            opacity: Double(a) / 255
+        )
     }
 }

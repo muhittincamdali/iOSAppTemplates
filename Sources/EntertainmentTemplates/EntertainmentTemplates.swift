@@ -38,9 +38,9 @@ public struct GamingAppTemplate {
         public let userRating: Double?
         public let reviewCount: Int
         public let isInstalled: Bool
-        public let isFavorite: Bool
-        public let playTime: TimeInterval
-        public let lastPlayed: Date?
+        public var isFavorite: Bool
+        public var playTime: TimeInterval
+        public var lastPlayed: Date?
         public let achievements: [Achievement]
         public let tags: [String]
         public let createdAt: Date
@@ -173,8 +173,8 @@ public struct GamingAppTemplate {
         public let id: String
         public let gameId: String
         public let startTime: Date
-        public let endTime: Date?
-        public let duration: TimeInterval
+        public var endTime: Date?
+        public var duration: TimeInterval
         public let achievements: [Achievement]
         public let score: Int?
         public let level: Int?
@@ -768,7 +768,7 @@ public struct GamingAppTemplate {
                 }
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(.regularMaterial)
             .cornerRadius(12)
             .shadow(radius: 2)
             .onTapGesture {
@@ -845,7 +845,7 @@ public struct GamingAppTemplate {
                 Spacer()
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(.regularMaterial)
             .cornerRadius(8)
             .opacity(achievement.isUnlocked ? 1.0 : 0.6)
             .onTapGesture {

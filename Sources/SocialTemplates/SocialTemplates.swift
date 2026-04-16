@@ -4,6 +4,28 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 import Kingfisher
+#if canImport(UIKit)
+import UIKit
+public typealias PlatformImage = UIImage
+#elseif canImport(AppKit)
+import AppKit
+public typealias PlatformImage = NSImage
+#endif
+
+private func jpegData(from image: PlatformImage, compressionQuality: Double) -> Data? {
+#if canImport(UIKit)
+    image.jpegData(compressionQuality: compressionQuality)
+#elseif canImport(AppKit)
+    guard let tiffData = image.tiffRepresentation,
+          let bitmap = NSBitmapImageRep(data: tiffData) else {
+        return nil
+    }
+    return bitmap.representation(
+        using: .jpeg,
+        properties: [.compressionFactor: compressionQuality]
+    )
+#endif
+}
 
 // MARK: - Social Templates
 public struct SocialTemplates {
@@ -73,10 +95,10 @@ public struct SocialMediaAppTemplate {
         public let content: String
         public let images: [String]?
         public let videoURL: String?
-        public let likesCount: Int
+        public var likesCount: Int
         public let commentsCount: Int
         public let sharesCount: Int
-        public let isLiked: Bool
+        public var isLiked: Bool
         public let isBookmarked: Bool
         public let createdAt: Date
         public let updatedAt: Date
@@ -266,7 +288,7 @@ public struct SocialMediaAppTemplate {
         
         // MARK: - Post Methods
         
-        public func createPost(content: String, images: [UIImage]? = nil) async throws -> Post {
+        public func createPost(content: String, images: [PlatformImage]? = nil) async throws -> Post {
             guard let currentUser = SocialAuthManager().currentUser else {
                 throw SocialError.userNotAuthenticated
             }
@@ -278,7 +300,7 @@ public struct SocialMediaAppTemplate {
             
             if let images = images {
                 for (index, image) in images.enumerated() {
-                    if let imageData = image.jpegData(compressionQuality: 0.8) {
+                    if let imageData = jpegData(from: image, compressionQuality: 0.8) {
                         let fileName = "posts/\(UUID().uuidString)_\(index).jpg"
                         let imageRef = storage.reference().child(fileName)
                         let _ = try await imageRef.putDataAsync(imageData)
@@ -519,7 +541,7 @@ public struct SocialMediaAppTemplate {
                 .foregroundColor(.secondary)
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(Color.gray.opacity(0.04))
             .cornerRadius(12)
             .shadow(radius: 2)
         }

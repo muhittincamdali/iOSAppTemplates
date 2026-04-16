@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 import HealthKit
-import Charts
+import DGCharts
 
 // MARK: - Health Templates
 public struct HealthTemplates {
@@ -23,15 +23,15 @@ public struct FitnessAppTemplate {
         public let id: String
         public let name: String
         public let type: WorkoutType
-        public let duration: TimeInterval
+        public var duration: TimeInterval
         public let caloriesBurned: Double
         public let distance: Double?
         public let averageHeartRate: Double?
         public let maxHeartRate: Double?
         public let startDate: Date
-        public let endDate: Date
+        public var endDate: Date
         public let notes: String?
-        public let isCompleted: Bool
+        public var isCompleted: Bool
         
         public init(
             id: String,
@@ -469,23 +469,24 @@ public struct FitnessAppTemplate {
             guard isAuthorized else {
                 throw HealthError.notAuthorized
             }
-            
-            let workoutType = HKWorkoutActivityType.running // Default, should be mapped from WorkoutType
-            
-            let workout = HKWorkout(
-                activityType: workoutType,
-                start: workout.startDate,
-                end: workout.endDate,
-                duration: workout.duration,
-                totalEnergyBurned: HKQuantity(unit: .kilocalorie(), doubleValue: workout.caloriesBurned),
-                totalDistance: workout.distance.map { HKQuantity(unit: .meter(), doubleValue: $0) },
-                metadata: [
-                    HKMetadataKeyWorkoutBrandName: "FitnessApp",
-                    "workout_id": workout.id
-                ]
+
+            let configuration = HKWorkoutConfiguration()
+            configuration.activityType = workoutActivityType(for: workout.type)
+
+            let builder = HKWorkoutBuilder(
+                healthStore: healthStore,
+                configuration: configuration,
+                device: nil
             )
-            
-            try await healthStore.save(workout)
+
+            try await beginCollection(for: builder, at: workout.startDate)
+
+            if let activeEnergySample = activeEnergySample(for: workout) {
+                try await add(samples: [activeEnergySample], to: builder)
+            }
+
+            try await endCollection(for: builder, at: workout.endDate)
+            _ = try await finishWorkout(for: builder)
         }
         
         public func fetchWorkouts(from startDate: Date, to endDate: Date) async throws -> [HKWorkout] {
@@ -496,19 +497,13 @@ public struct FitnessAppTemplate {
             let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
             let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
             
-            let query = HKSampleQuery(
-                sampleType: .workoutType(),
-                predicate: predicate,
-                limit: HKObjectQueryNoLimit,
-                sortDescriptors: [sortDescriptor]
-            ) { _, samples, error in
-                if let error = error {
-                    print("Error fetching workouts: \(error)")
-                }
-            }
-            
             return try await withCheckedThrowingContinuation { continuation in
-                query.completionHandler = { _, samples, error in
+                let query = HKSampleQuery(
+                    sampleType: .workoutType(),
+                    predicate: predicate,
+                    limit: HKObjectQueryNoLimit,
+                    sortDescriptors: [sortDescriptor]
+                ) { _, samples, error in
                     if let error = error {
                         continuation.resume(throwing: error)
                     } else {
@@ -516,6 +511,7 @@ public struct FitnessAppTemplate {
                         continuation.resume(returning: workouts)
                     }
                 }
+
                 healthStore.execute(query)
             }
         }
@@ -531,18 +527,12 @@ public struct FitnessAppTemplate {
             
             let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictStartDate)
             
-            let query = HKStatisticsQuery(
-                quantityType: stepType,
-                quantitySamplePredicate: predicate,
-                options: .cumulativeSum
-            ) { _, statistics, error in
-                if let error = error {
-                    print("Error fetching step count: \(error)")
-                }
-            }
-            
             return try await withCheckedThrowingContinuation { continuation in
-                query.completionHandler = { _, statistics, error in
+                let query = HKStatisticsQuery(
+                    quantityType: stepType,
+                    quantitySamplePredicate: predicate,
+                    options: .cumulativeSum
+                ) { _, statistics, error in
                     if let error = error {
                         continuation.resume(throwing: error)
                     } else {
@@ -550,7 +540,115 @@ public struct FitnessAppTemplate {
                         continuation.resume(returning: Int(steps))
                     }
                 }
+
                 healthStore.execute(query)
+            }
+        }
+
+        private func workoutActivityType(for type: WorkoutType) -> HKWorkoutActivityType {
+            switch type {
+            case .running: return .running
+            case .cycling: return .cycling
+            case .swimming: return .swimming
+            case .walking: return .walking
+            case .strength: return .traditionalStrengthTraining
+            case .yoga: return .yoga
+            case .pilates: return .pilates
+            case .hiit: return .highIntensityIntervalTraining
+            case .cardio: return .mixedCardio
+            case .flexibility: return .flexibility
+            case .sports: return .discSports
+            case .other: return .other
+            }
+        }
+
+        private func activeEnergySample(for workout: Workout) -> HKQuantitySample? {
+            guard workout.caloriesBurned > 0 else {
+                return nil
+            }
+
+            let quantityType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
+            let quantity = HKQuantity(unit: .kilocalorie(), doubleValue: workout.caloriesBurned)
+
+            return HKQuantitySample(
+                type: quantityType,
+                quantity: quantity,
+                start: workout.startDate,
+                end: workout.endDate
+            )
+        }
+
+        private func beginCollection(for builder: HKWorkoutBuilder, at startDate: Date) async throws {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                builder.beginCollection(withStart: startDate) { success, error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+
+                    guard success else {
+                        continuation.resume(throwing: HealthError.invalidData)
+                        return
+                    }
+
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+
+        private func add(samples: [HKSample], to builder: HKWorkoutBuilder) async throws {
+            guard !samples.isEmpty else { return }
+
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                builder.add(samples) { success, error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+
+                    guard success else {
+                        continuation.resume(throwing: HealthError.invalidData)
+                        return
+                    }
+
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+
+        private func endCollection(for builder: HKWorkoutBuilder, at endDate: Date) async throws {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                builder.endCollection(withEnd: endDate) { success, error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+
+                    guard success else {
+                        continuation.resume(throwing: HealthError.invalidData)
+                        return
+                    }
+
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+
+        private func finishWorkout(for builder: HKWorkoutBuilder) async throws -> HKWorkout {
+            try await withCheckedThrowingContinuation { continuation in
+                builder.finishWorkout { workout, error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+
+                    guard let workout else {
+                        continuation.resume(throwing: HealthError.invalidData)
+                        return
+                    }
+
+                    continuation.resume(returning: workout)
+                }
             }
         }
     }
@@ -604,16 +702,21 @@ public struct FitnessAppTemplate {
             workouts = healthKitWorkouts.map { hkWorkout in
                 Workout(
                     id: hkWorkout.uuid.uuidString,
-                    name: hkWorkout.workoutActivityType.name,
+                    name: String(describing: hkWorkout.workoutActivityType).capitalized,
                     type: WorkoutType.running, // Map from HKWorkoutActivityType
                     duration: hkWorkout.duration,
-                    caloriesBurned: hkWorkout.totalEnergyBurned?.doubleValue(for: .kilocalorie()) ?? 0,
+                    caloriesBurned: activeEnergyBurned(from: hkWorkout),
                     distance: hkWorkout.totalDistance?.doubleValue(for: .meter()),
                     startDate: hkWorkout.startDate,
                     endDate: hkWorkout.endDate,
                     isCompleted: true
                 )
             }
+        }
+
+        private func activeEnergyBurned(from workout: HKWorkout) -> Double {
+            let energyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
+            return workout.statistics(for: energyType)?.sumQuantity()?.doubleValue(for: .kilocalorie()) ?? 0
         }
     }
     
@@ -695,7 +798,7 @@ public struct FitnessAppTemplate {
                 }
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(.regularMaterial)
             .cornerRadius(12)
             .shadow(radius: 2)
             .onTapGesture {
@@ -772,7 +875,7 @@ public struct FitnessAppTemplate {
                 }
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(.regularMaterial)
             .cornerRadius(12)
             .shadow(radius: 2)
             .onTapGesture {

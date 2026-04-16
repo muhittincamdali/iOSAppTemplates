@@ -276,6 +276,7 @@ public enum RepeatMode: String, Codable {
 
 // MARK: - Sample Data
 
+@MainActor
 public enum MusicSampleData {
     public static let artists: [Artist] = [
         Artist(name: "The Weeknd", monthlyListeners: 85000000, isVerified: true, genres: [.pop, .rnb]),
@@ -506,7 +507,7 @@ struct RecentlyPlayedSection: View {
                     } label: {
                         HStack(spacing: 8) {
                             Rectangle()
-                                .fill(Color(.systemGray5))
+                                .fill(Color.gray.opacity(0.12))
                                 .frame(width: 50, height: 50)
                                 .cornerRadius(4)
                             
@@ -518,7 +519,7 @@ struct RecentlyPlayedSection: View {
                             Spacer()
                         }
                         .frame(maxWidth: .infinity)
-                        .background(Color(.systemGray6))
+                        .background(Color.gray.opacity(0.08))
                         .cornerRadius(4)
                     }
                     .buttonStyle(.plain)
@@ -629,7 +630,7 @@ struct TrendingSongRow: View {
                     .frame(width: 20)
                 
                 Rectangle()
-                    .fill(Color(.systemGray5))
+                    .fill(Color.gray.opacity(0.12))
                     .frame(width: 50, height: 50)
                     .cornerRadius(4)
                 
@@ -679,7 +680,7 @@ struct NewReleasesSection: View {
                         } label: {
                             VStack(alignment: .leading, spacing: 8) {
                                 Rectangle()
-                                    .fill(Color(.systemGray5))
+                                    .fill(Color.gray.opacity(0.12))
                                     .frame(width: 150, height: 150)
                                     .cornerRadius(4)
                                     .overlay(
@@ -720,7 +721,7 @@ struct MiniPlayerView: View {
             } label: {
                 HStack(spacing: 12) {
                     Rectangle()
-                        .fill(Color(.systemGray5))
+                        .fill(Color.gray.opacity(0.12))
                         .frame(width: 44, height: 44)
                         .cornerRadius(4)
                     
@@ -755,7 +756,7 @@ struct MiniPlayerView: View {
                 .background(.ultraThinMaterial)
             }
             .buttonStyle(.plain)
-            .fullScreenCover(isPresented: $showingFullPlayer) {
+            .sheet(isPresented: $showingFullPlayer) {
                 FullPlayerView()
                     .environmentObject(store)
             }
@@ -920,7 +921,7 @@ struct FullPlayerView: View {
                 .padding(.horizontal)
                 .padding(.bottom)
             }
-            .background(Color(.systemBackground))
+            .background(Color.gray.opacity(0.04))
         }
     }
     
@@ -1003,7 +1004,6 @@ struct PlaylistDetailView: View {
             }
             .padding(.bottom, store.currentSong != nil ? 70 : 0)
         }
-        .navigationBarTitleDisplayMode(.inline)
     }
     
     private func formatDuration(_ duration: TimeInterval) -> String {
@@ -1023,7 +1023,7 @@ struct SongRow: View {
         } label: {
             HStack(spacing: 12) {
                 Rectangle()
-                    .fill(Color(.systemGray5))
+                    .fill(Color.gray.opacity(0.12))
                     .frame(width: 50, height: 50)
                     .cornerRadius(4)
                 
@@ -1079,7 +1079,7 @@ struct AlbumDetailView: View {
                 // Header
                 VStack(spacing: 16) {
                     Rectangle()
-                        .fill(Color(.systemGray5))
+                        .fill(Color.gray.opacity(0.12))
                         .frame(width: 200, height: 200)
                         .cornerRadius(4)
                         .shadow(radius: 10)
@@ -1126,7 +1126,6 @@ struct AlbumDetailView: View {
             }
             .padding(.bottom, store.currentSong != nil ? 70 : 0)
         }
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -1259,7 +1258,7 @@ struct ArtistRow: View {
     var body: some View {
         HStack(spacing: 12) {
             Circle()
-                .fill(Color(.systemGray5))
+                .fill(Color.gray.opacity(0.12))
                 .frame(width: 50, height: 50)
             
             VStack(alignment: .leading, spacing: 4) {
@@ -1324,7 +1323,7 @@ struct MusicLibraryView: View {
                         } label: {
                             HStack(spacing: 12) {
                                 Rectangle()
-                                    .fill(Color(.systemGray5))
+                                    .fill(Color.gray.opacity(0.12))
                                     .frame(width: 50, height: 50)
                                     .cornerRadius(4)
                                 
@@ -1344,7 +1343,7 @@ struct MusicLibraryView: View {
                     ForEach(store.artists) { artist in
                         HStack(spacing: 12) {
                             Circle()
-                                .fill(Color(.systemGray5))
+                                .fill(Color.gray.opacity(0.12))
                                 .frame(width: 50, height: 50)
                             
                             Text(artist.name)
@@ -1356,7 +1355,7 @@ struct MusicLibraryView: View {
             .listStyle(.plain)
             .navigationTitle("Your Library")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {
                         showingCreatePlaylist = true
                     } label: {
@@ -1401,15 +1400,14 @@ struct CreatePlaylistView: View {
                 TextField("Playlist name", text: $playlistName)
             }
             .navigationTitle("New Playlist")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Create") {
                         store.createPlaylist(name: playlistName)
                         dismiss()
@@ -1445,7 +1443,7 @@ struct PodcastsView: View {
                                         } label: {
                                             VStack {
                                                 Rectangle()
-                                                    .fill(Color(.systemGray5))
+                                                    .fill(Color.gray.opacity(0.12))
                                                     .frame(width: 120, height: 120)
                                                     .cornerRadius(8)
                                                 
@@ -1517,7 +1515,7 @@ struct PodcastCategoryCard: View {
             Spacer()
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(8)
     }
 }
@@ -1528,7 +1526,7 @@ struct PodcastRow: View {
     var body: some View {
         HStack(spacing: 12) {
             Rectangle()
-                .fill(Color(.systemGray5))
+                .fill(Color.gray.opacity(0.12))
                 .frame(width: 80, height: 80)
                 .cornerRadius(8)
             
@@ -1566,7 +1564,7 @@ struct PodcastDetailView: View {
                 // Header
                 VStack(spacing: 16) {
                     Rectangle()
-                        .fill(Color(.systemGray5))
+                        .fill(Color.gray.opacity(0.12))
                         .frame(width: 180, height: 180)
                         .cornerRadius(8)
                         .shadow(radius: 10)
@@ -1591,7 +1589,7 @@ struct PodcastDetailView: View {
                             .fontWeight(.semibold)
                             .padding(.horizontal, 30)
                             .padding(.vertical, 12)
-                            .background(podcast.isSubscribed ? Color(.systemGray5) : Color.green)
+                            .background(podcast.isSubscribed ? Color.gray.opacity(0.12) : Color.green)
                             .foregroundColor(podcast.isSubscribed ? .primary : .white)
                             .cornerRadius(25)
                     }
@@ -1611,7 +1609,6 @@ struct PodcastDetailView: View {
             }
             .padding(.bottom, store.currentSong != nil ? 70 : 0)
         }
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -1656,7 +1653,7 @@ struct EpisodeRow: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
         .padding(.horizontal)
     }

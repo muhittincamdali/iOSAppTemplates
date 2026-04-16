@@ -4,7 +4,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 import HealthKit
-import Charts
+import DGCharts
 
 // MARK: - Fitness App
 @main

@@ -9,7 +9,7 @@ import Combine
 
 // MARK: - Models
 
-public struct TaskItem: Identifiable, Codable {
+public struct TaskItem: Identifiable, Codable, Hashable, Sendable {
     public let id: UUID
     public var title: String
     public var description: String
@@ -61,7 +61,7 @@ public struct TaskItem: Identifiable, Codable {
     }
 }
 
-public struct Subtask: Identifiable, Codable {
+public struct Subtask: Identifiable, Codable, Hashable, Sendable {
     public let id: UUID
     public var title: String
     public var isCompleted: Bool
@@ -73,7 +73,7 @@ public struct Subtask: Identifiable, Codable {
     }
 }
 
-public enum Priority: String, Codable, CaseIterable {
+public enum Priority: String, Codable, CaseIterable, Sendable {
     case none = "None"
     case low = "Low"
     case medium = "Medium"
@@ -101,7 +101,7 @@ public enum Priority: String, Codable, CaseIterable {
     }
 }
 
-public struct TaskTag: Identifiable, Codable, Hashable {
+public struct TaskTag: Identifiable, Codable, Hashable, Sendable {
     public let id: UUID
     public var name: String
     public var color: String
@@ -113,14 +113,14 @@ public struct TaskTag: Identifiable, Codable, Hashable {
     }
 }
 
-public enum RecurringRule: String, Codable, CaseIterable {
+public enum RecurringRule: String, Codable, CaseIterable, Sendable {
     case daily = "Daily"
     case weekly = "Weekly"
     case monthly = "Monthly"
     case yearly = "Yearly"
 }
 
-public struct Project: Identifiable, Codable {
+public struct Project: Identifiable, Codable, Hashable, Sendable {
     public let id: UUID
     public var name: String
     public var description: String
@@ -151,7 +151,7 @@ public struct Project: Identifiable, Codable {
     }
 }
 
-public struct Note: Identifiable, Codable {
+public struct Note: Identifiable, Codable, Sendable {
     public let id: UUID
     public var title: String
     public var content: String
@@ -182,7 +182,7 @@ public struct Note: Identifiable, Codable {
     }
 }
 
-public struct NoteFolder: Identifiable, Codable {
+public struct NoteFolder: Identifiable, Codable, Sendable {
     public let id: UUID
     public var name: String
     public var icon: String
@@ -194,7 +194,7 @@ public struct NoteFolder: Identifiable, Codable {
     }
 }
 
-public struct FocusSession: Identifiable, Codable {
+public struct FocusSession: Identifiable, Codable, Sendable {
     public let id: UUID
     public let taskId: UUID?
     public let duration: TimeInterval
@@ -222,7 +222,7 @@ public struct FocusSession: Identifiable, Codable {
     }
 }
 
-public struct Habit: Identifiable, Codable {
+public struct Habit: Identifiable, Codable, Sendable {
     public let id: UUID
     public var name: String
     public var icon: String
@@ -253,7 +253,7 @@ public struct Habit: Identifiable, Codable {
     }
 }
 
-public enum HabitFrequency: String, Codable, CaseIterable {
+public enum HabitFrequency: String, Codable, CaseIterable, Sendable {
     case daily = "Daily"
     case weekly = "Weekly"
     case monthly = "Monthly"
@@ -261,6 +261,7 @@ public enum HabitFrequency: String, Codable, CaseIterable {
 
 // MARK: - Sample Data
 
+@MainActor
 public enum ProductivitySampleData {
     public static let tags: [TaskTag] = [
         TaskTag(name: "Work", color: "#007AFF"),
@@ -483,7 +484,7 @@ public struct TasksView: View {
                                     .fontWeight(store.selectedFilter == filter ? .semibold : .regular)
                                     .padding(.horizontal, 16)
                                     .padding(.vertical, 8)
-                                    .background(store.selectedFilter == filter ? Color.blue : Color(.systemGray6))
+                                    .background(store.selectedFilter == filter ? Color.blue : Color.gray.opacity(0.08))
                                     .foregroundColor(store.selectedFilter == filter ? .white : .primary)
                                     .cornerRadius(20)
                             }
@@ -537,7 +538,7 @@ public struct TasksView: View {
             }
             .navigationTitle("Tasks")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {
                         showingAddTask = true
                     } label: {
@@ -698,15 +699,14 @@ struct AddTaskView: View {
                 }
             }
             .navigationTitle("New Task")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Add") {
                         let task = TaskItem(
                             title: title,
@@ -805,9 +805,8 @@ struct TaskDetailView: View {
                 }
             }
             .navigationTitle("Task Details")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Done") {
                         dismiss()
                     }
@@ -854,7 +853,7 @@ struct ProjectsListView: View {
             }
             .navigationTitle("Projects")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {
                         showingAddProject = true
                     } label: {
@@ -939,15 +938,14 @@ struct AddProjectView: View {
                 }
             }
             .navigationTitle("New Project")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Create") {
                         let project = Project(name: name, description: description, color: selectedColor)
                         store.projects.append(project)
@@ -992,7 +990,7 @@ struct NotesListView: View {
             .navigationTitle("Notes")
             .searchable(text: $searchText, prompt: "Search notes")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {
                         showingAddNote = true
                     } label: {
@@ -1083,15 +1081,14 @@ struct NoteEditorView: View {
                     .padding(.horizontal)
             }
             .navigationTitle(note == nil ? "New Note" : "Edit Note")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Save") {
                         if let existingNote = note {
                             if let index = store.notes.firstIndex(where: { $0.id == existingNote.id }) {
@@ -1131,7 +1128,7 @@ struct FocusModeView: View {
                         
                         ZStack {
                             Circle()
-                                .stroke(Color(.systemGray4), lineWidth: 12)
+                                .stroke(Color.gray.opacity(0.35), lineWidth: 12)
                             
                             Circle()
                                 .trim(from: 0, to: store.focusTimeRemaining / selectedDuration)
@@ -1193,7 +1190,7 @@ struct FocusModeView: View {
                                             .fontWeight(.medium)
                                             .padding(.horizontal, 16)
                                             .padding(.vertical, 12)
-                                            .background(selectedDuration == duration ? Color.blue : Color(.systemGray6))
+                                            .background(selectedDuration == duration ? Color.blue : Color.gray.opacity(0.08))
                                             .foregroundColor(selectedDuration == duration ? .white : .primary)
                                             .cornerRadius(12)
                                     }
@@ -1273,7 +1270,7 @@ struct HabitsView: View {
                             .tint(.green)
                     }
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(16)
                     
                     // Habits List
@@ -1285,7 +1282,7 @@ struct HabitsView: View {
             }
             .navigationTitle("Habits")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {
                         showingAddHabit = true
                     } label: {
@@ -1330,7 +1327,7 @@ struct HabitRow: View {
                     .font(.title2)
                     .foregroundColor(.white)
                     .frame(width: 50, height: 50)
-                    .background(isCompletedToday ? Color(hex: habit.color) : Color(.systemGray4))
+                    .background(isCompletedToday ? Color(hex: habit.color) : Color.gray.opacity(0.35))
                     .cornerRadius(12)
             }
             
@@ -1356,7 +1353,7 @@ struct HabitRow: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
     }
 }
@@ -1384,7 +1381,7 @@ struct AddHabitView: View {
                             Image(systemName: icon)
                                 .font(.title2)
                                 .frame(width: 50, height: 50)
-                                .background(selectedIcon == icon ? Color.blue.opacity(0.2) : Color(.systemGray6))
+                                .background(selectedIcon == icon ? Color.blue.opacity(0.2) : Color.gray.opacity(0.08))
                                 .cornerRadius(12)
                                 .onTapGesture {
                                     selectedIcon = icon
@@ -1417,15 +1414,14 @@ struct AddHabitView: View {
                 }
             }
             .navigationTitle("New Habit")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button("Create") {
                         let habit = Habit(name: name, icon: selectedIcon, color: selectedColor, frequency: frequency)
                         store.habits.append(habit)
@@ -1447,5 +1443,31 @@ public struct ProductivityApp: App {
         WindowGroup {
             ProductivityHomeView()
         }
+    }
+}
+
+extension Color {
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&int)
+        let a, r, g, b: UInt64
+        switch hex.count {
+        case 3:
+            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6:
+            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8:
+            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            (a, r, g, b) = (255, 0, 0, 0)
+        }
+        self.init(
+            .sRGB,
+            red: Double(r) / 255,
+            green: Double(g) / 255,
+            blue: Double(b) / 255,
+            opacity: Double(a) / 255
+        )
     }
 }

@@ -310,6 +310,7 @@ public struct Achievement: Identifiable, Codable {
 
 // MARK: - Sample Data
 
+@MainActor
 public enum FitnessSampleData {
     public static let exercises: [Exercise] = [
         Exercise(name: "Push-ups", description: "Classic upper body exercise", sets: 3, reps: 15, muscleGroups: [.chest, .triceps, .shoulders]),
@@ -522,7 +523,7 @@ public struct DashboardView: View {
             }
             .navigationTitle("Dashboard")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {} label: {
                         Image(systemName: "bell")
                     }
@@ -560,7 +561,7 @@ struct ActivityRingsCard: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .padding(.horizontal)
     }
@@ -708,7 +709,7 @@ struct QuickStatCard: View {
             .cornerRadius(2)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
     }
 }
@@ -785,7 +786,7 @@ struct WorkoutCard: View {
                         .font(.caption)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(Color(.systemGray5))
+                        .background(Color.gray.opacity(0.12))
                         .cornerRadius(8)
                 }
             }
@@ -796,7 +797,7 @@ struct WorkoutCard: View {
                 .foregroundColor(.secondary)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .padding(.horizontal)
     }
@@ -849,7 +850,7 @@ struct WaterTrackerCard: View {
             .disabled(store.todayActivity.waterIntake >= store.goals.dailyWaterIntake)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .padding(.horizontal)
     }
@@ -943,7 +944,7 @@ struct WorkoutTypeChip: View {
             .font(.subheadline)
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
-            .background(isSelected ? (type?.color ?? .blue) : Color(.systemGray6))
+            .background(isSelected ? (type?.color ?? .blue) : Color.gray.opacity(0.08))
             .foregroundColor(isSelected ? .white : .primary)
             .cornerRadius(20)
         }
@@ -1029,7 +1030,7 @@ public struct WorkoutDetailView: View {
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color(.systemGray6))
+                .background(Color.gray.opacity(0.08))
                 .cornerRadius(16)
                 .padding(.horizontal)
                 
@@ -1070,7 +1071,7 @@ public struct WorkoutDetailView: View {
                 }
                 .font(.subheadline)
                 .padding()
-                .background(Color(.systemGray6))
+                .background(Color.gray.opacity(0.08))
                 .cornerRadius(16)
                 .padding(.horizontal)
                 
@@ -1088,7 +1089,6 @@ public struct WorkoutDetailView: View {
                 }
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom) {
             Button {
                 showingWorkoutPlayer = true
@@ -1104,7 +1104,7 @@ public struct WorkoutDetailView: View {
             .padding()
             .background(.bar)
         }
-        .fullScreenCover(isPresented: $showingWorkoutPlayer) {
+        .sheet(isPresented: $showingWorkoutPlayer) {
             WorkoutPlayerView(workout: workout) {
                 store.completeWorkout(workout)
                 showingWorkoutPlayer = false
@@ -1148,7 +1148,7 @@ struct ExerciseRow: View {
                 .foregroundColor(.accentColor)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
         .padding(.horizontal)
     }
@@ -1206,7 +1206,7 @@ struct WorkoutPlayerView: View {
                 // Timer Circle
                 ZStack {
                     Circle()
-                        .stroke(Color(.systemGray4), lineWidth: 12)
+                        .stroke(Color.gray.opacity(0.35), lineWidth: 12)
                     
                     Circle()
                         .trim(from: 0, to: Double(timeRemaining) / 45.0)
@@ -1296,7 +1296,7 @@ public struct NutritionView: View {
             }
             .navigationTitle("Nutrition")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {
                         showingAddFood = true
                     } label: {
@@ -1346,7 +1346,7 @@ struct NutritionSummaryCard: View {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     Rectangle()
-                        .fill(Color(.systemGray4))
+                        .fill(Color.gray.opacity(0.35))
                     
                     Rectangle()
                         .fill(Color.green)
@@ -1357,7 +1357,7 @@ struct NutritionSummaryCard: View {
             .cornerRadius(4)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .padding(.horizontal)
     }
@@ -1381,7 +1381,7 @@ struct MacrosCard: View {
             MacroItem(name: "Fat", value: totalFat, goal: 65, color: .yellow)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .padding(.horizontal)
     }
@@ -1456,7 +1456,7 @@ struct MealSection: View {
                     .font(.subheadline)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(12)
                 }
                 .padding(.horizontal)
@@ -1479,7 +1479,7 @@ struct MealSection: View {
                                 .foregroundColor(.secondary)
                         }
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(Color.gray.opacity(0.08))
                         .cornerRadius(12)
                     }
                 }
@@ -1511,7 +1511,6 @@ struct AddFoodView: View {
                     Section("Recent Foods") {
                         ForEach(FitnessSampleData.nutritionEntries) { entry in
                             Button {
-                                var newEntry = entry
                                 store.addNutritionEntry(NutritionEntry(
                                     name: entry.name,
                                     calories: entry.calories,
@@ -1541,10 +1540,9 @@ struct AddFoodView: View {
                 }
             }
             .navigationTitle("Add Food")
-            .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $searchText, prompt: "Search foods")
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
@@ -1615,7 +1613,7 @@ struct WeeklyActivityChart: View {
             .frame(height: 120)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
         .padding(.horizontal)
     }
@@ -1684,7 +1682,7 @@ struct AchievementsListView: View {
                     .font(.title2)
                     .foregroundColor(achievement.isUnlocked ? .yellow : .secondary)
                     .frame(width: 50, height: 50)
-                    .background(achievement.isUnlocked ? Color.yellow.opacity(0.2) : Color(.systemGray5))
+                    .background(achievement.isUnlocked ? Color.yellow.opacity(0.2) : Color.gray.opacity(0.12))
                     .clipShape(Circle())
                 
                 VStack(alignment: .leading, spacing: 4) {
@@ -1768,7 +1766,7 @@ struct StatBox: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
     }
 }
@@ -1783,7 +1781,7 @@ struct FitnessProfileView: View {
                 Section {
                     HStack(spacing: 16) {
                         Circle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.gray.opacity(0.12))
                             .frame(width: 70, height: 70)
                             .overlay(
                                 Image(systemName: "person.fill")
@@ -1840,16 +1838,44 @@ struct FitnessProfileView: View {
                 }
                 
                 Section("Settings") {
-                    NavigationLink("Notifications", systemImage: "bell") {}
-                    NavigationLink("Apple Health", systemImage: "heart") {}
-                    NavigationLink("Units", systemImage: "ruler") {}
-                    NavigationLink("Privacy", systemImage: "lock") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Notifications", systemImage: "bell")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Apple Health", systemImage: "heart")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Units", systemImage: "ruler")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Privacy", systemImage: "lock")
+                    }
                 }
                 
                 Section("Account") {
-                    NavigationLink("Subscription", systemImage: "creditcard") {}
-                    NavigationLink("Help & Support", systemImage: "questionmark.circle") {}
-                    NavigationLink("About", systemImage: "info.circle") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Subscription", systemImage: "creditcard")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Help & Support", systemImage: "questionmark.circle")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("About", systemImage: "info.circle")
+                    }
                 }
                 
                 Section {

@@ -28,9 +28,9 @@ public struct TravelAppTemplate {
         public let endDate: Date
         public let status: TripStatus
         public let budget: Budget?
-        public let itinerary: [ItineraryItem]
-        public let bookings: [Booking]
-        public let expenses: [Expense]
+        public var itinerary: [ItineraryItem]
+        public var bookings: [Booking]
+        public var expenses: [Expense]
         public let photos: [Photo]
         public let notes: [Note]
         public let travelers: [Traveler]
@@ -1222,7 +1222,7 @@ public struct TravelAppTemplate {
                 }
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(Color.gray.opacity(0.04))
             .cornerRadius(12)
             .shadow(radius: 2)
             .onTapGesture {
@@ -1302,7 +1302,7 @@ public struct TravelAppTemplate {
                 }
             }
             .padding()
-            .background(Color(.systemBackground))
+            .background(Color.gray.opacity(0.04))
             .cornerRadius(12)
             .shadow(radius: 2)
             .onTapGesture {

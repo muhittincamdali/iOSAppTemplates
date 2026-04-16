@@ -1,6 +1,7 @@
 import XCTest
 @testable import HealthTemplates
 
+@MainActor
 final class HealthTemplatesTests: XCTestCase {
     
     func testHealthTemplatesInitialization() {

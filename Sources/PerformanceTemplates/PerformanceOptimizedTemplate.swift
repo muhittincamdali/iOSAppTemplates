@@ -2,6 +2,9 @@ import SwiftUI
 import Collections
 import AsyncAlgorithms
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#endif
 
 // MARK: - Performance Optimized Template
 
@@ -14,6 +17,7 @@ public struct PerformanceOptimizedTemplate {
 // MARK: - Performance Monitoring
 
 @Observable
+@MainActor
 public class PerformanceMonitor {
     public var metrics: PerformanceMetrics = PerformanceMetrics()
     public var isMonitoring = false
@@ -43,7 +47,7 @@ public class PerformanceMonitor {
     @MainActor
     private func monitorMemoryUsage() async {
         while isMonitoring {
-            let memoryInfo = mach_task_basic_info()
+            var memoryInfo = mach_task_basic_info()
             var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
             
             let result = withUnsafeMutablePointer(to: &memoryInfo) {
@@ -158,6 +162,7 @@ public struct HighPerformanceListView<Item: Identifiable & Hashable, Content: Vi
 
 @Observable
 public class OptimizedImageLoader {
+#if canImport(UIKit)
     public var image: UIImage?
     public var isLoading = false
     public var error: Error?
@@ -205,10 +210,12 @@ public class OptimizedImageLoader {
         
         isLoading = false
     }
+#endif
 }
 
 // MARK: - Optimized Image View
 
+#if canImport(UIKit)
 public struct OptimizedAsyncImage: View {
     let url: URL?
     let placeholder: () -> AnyView
@@ -244,11 +251,35 @@ public struct OptimizedAsyncImage: View {
         }
     }
 }
+#else
+public struct OptimizedAsyncImage: View {
+    let url: URL?
+    let placeholder: () -> AnyView
+    
+    public init(
+        url: URL?,
+        @ViewBuilder placeholder: @escaping () -> some View = { ProgressView() }
+    ) {
+        self.url = url
+        self.placeholder = { AnyView(placeholder()) }
+    }
+    
+    public var body: some View {
+        if let url = url {
+            AsyncImage(url: url) { _ in
+                placeholder()
+            }
+        } else {
+            placeholder()
+        }
+    }
+}
+#endif
 
 // MARK: - Memory Efficient Data Store
 
 public actor MemoryEfficientDataStore<T: Codable> {
-    private var cache: DequeModule.Deque<CacheItem<T>> = []
+    private var cache: Deque<CacheItem<T>> = []
     private let maxCacheSize: Int
     private let fileManager = FileManager.default
     private let cacheDirectory: URL
@@ -314,27 +345,27 @@ private struct CacheItem<T> {
 // MARK: - Async Data Pipeline
 
 public struct AsyncDataPipeline {
-    public static func processItems<T>(_ items: [T]) -> AsyncChannel<T> {
-        let (stream, continuation) = AsyncChannel<T>.makeStream()
+    public static func processItems<T: Sendable>(_ items: [T]) -> AsyncChannel<T> {
+        let stream = AsyncChannel<T>()
         
         Task {
             for item in items {
                 // Simulate processing delay
                 try? await Task.sleep(for: .milliseconds(10))
-                continuation.yield(item)
+                await stream.send(item)
             }
-            continuation.finish()
+            stream.finish()
         }
         
         return stream
     }
     
-    public static func batchProcess<T, U>(
+    public static func batchProcess<T: Sendable, U: Sendable>(
         _ items: [T],
         batchSize: Int = 10,
-        transform: @escaping (T) async -> U
+        transform: @escaping @Sendable (T) async -> U
     ) -> AsyncChannel<[U]> {
-        let (stream, continuation) = AsyncChannel<[U]>.makeStream()
+        let stream = AsyncChannel<[U]>()
         
         Task {
             for batch in items.chunked(into: batchSize) {
@@ -352,9 +383,9 @@ public struct AsyncDataPipeline {
                     return results
                 }
                 
-                continuation.yield(results)
+                await stream.send(results)
             }
-            continuation.finish()
+            stream.finish()
         }
         
         return stream
@@ -383,7 +414,7 @@ public struct PerformanceDemoView: View {
             }
             .navigationTitle("Performance Demo")
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button(isLoading ? "Loading..." : "Load Data") {
                         loadData()
                     }

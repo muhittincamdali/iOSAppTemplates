@@ -1,500 +1,89 @@
 # Quick Start Guide
 
-Build your first iOS app using iOS App Templates in just 5 minutes! This guide will walk you through creating a fully functional app from scratch.
+Bu repo ile en hizli ilk basari yolu `generator-style` API degil, mevcut package ve standalone template roots'lari acmaktir.
 
-## 🎯 What You'll Build
+## Fastest Paths
 
-In this tutorial, you'll create:
-- A modern social media app with authentication
-- Real-time chat functionality
-- User profiles and feed
-- Dark mode support
-- Accessibility features
-
-## 🚀 5-Minute Setup
-
-### Step 1: Create New Project (1 minute)
-
-Open Terminal and run:
+### 1. Root package'i incele
 
 ```bash
-# Create new directory
-mkdir MyAwesomeApp && cd MyAwesomeApp
-
-# Initialize Swift package
-swift package init --type executable --name MyAwesomeApp
-
-# Open in Xcode
+git clone https://github.com/muhittincamdali/iOSAppTemplates.git
+cd iOSAppTemplates
 open Package.swift
+swift build
+swift test
 ```
 
-### Step 2: Add iOS App Templates (1 minute)
-
-Update your `Package.swift`:
-
-```swift
-// swift-tools-version: 6.0
-import PackageDescription
-
-let package = Package(
-    name: "MyAwesomeApp",
-    platforms: [
-        .iOS(.v18)
-    ],
-    dependencies: [
-        .package(url: "https://github.com/yourusername/iOSAppTemplates.git", from: "2.0.0")
-    ],
-    targets: [
-        .executableTarget(
-            name: "MyAwesomeApp",
-            dependencies: [
-                .product(name: "iOSAppTemplates", package: "iOSAppTemplates"),
-                .product(name: "TCATemplates", package: "iOSAppTemplates")
-            ]
-        )
-    ]
-)
-```
-
-### Step 3: Create Your App (2 minutes)
-
-Replace the contents of `Sources/MyAwesomeApp/MyAwesomeApp.swift`:
-
-```swift
-import SwiftUI
-import iOSAppTemplates
-
-@main
-struct MyAwesomeApp: App {
-    @StateObject private var appState = AppState()
-    
-    var body: some Scene {
-        WindowGroup {
-            TemplateBuilder()
-                .useTemplate(.social)
-                .configure { config in
-                    config.appName = "MyAwesome"
-                    config.primaryColor = .blue
-                    config.features = [
-                        .authentication,
-                        .userProfiles,
-                        .feed,
-                        .chat,
-                        .notifications,
-                        .settings
-                    ]
-                }
-                .build()
-                .environmentObject(appState)
-        }
-    }
-}
-
-// App State Management
-class AppState: ObservableObject {
-    @Published var user: User?
-    @Published var isAuthenticated = false
-    
-    init() {
-        checkAuthenticationStatus()
-    }
-    
-    private func checkAuthenticationStatus() {
-        // Check if user is logged in
-        if let savedUser = UserDefaults.standard.data(forKey: "currentUser"),
-           let user = try? JSONDecoder().decode(User.self, from: savedUser) {
-            self.user = user
-            self.isAuthenticated = true
-        }
-    }
-}
-```
-
-### Step 4: Customize Your Template (1 minute)
-
-Create `Sources/MyAwesomeApp/Configuration.swift`:
+Sonra su surface ile basla:
 
 ```swift
 import iOSAppTemplates
-import SwiftUI
 
-extension TemplateConfiguration {
-    static var myAwesomeConfig: TemplateConfiguration {
-        TemplateConfiguration(
-            // App Identity
-            appName: "MyAwesome",
-            bundleId: "com.example.myawesome",
-            version: "1.0.0",
-            
-            // Visual Design
-            theme: Theme(
-                primaryColor: Color.blue,
-                secondaryColor: Color.purple,
-                backgroundColor: Color(.systemBackground),
-                font: .system
-            ),
-            
-            // Features
-            features: [
-                .authentication(.emailPassword, .biometric, .social),
-                .userProfiles(editable: true, public: true),
-                .feed(.timeline, .stories, .reels),
-                .chat(.oneToOne, .groups, .voice),
-                .notifications(.push, .inApp),
-                .settings(.profile, .privacy, .appearance)
-            ],
-            
-            // API Configuration
-            apiConfig: APIConfiguration(
-                baseURL: "https://api.myawesome.com",
-                timeout: 30,
-                headers: ["X-App-Version": "1.0.0"]
-            ),
-            
-            // Analytics
-            analytics: AnalyticsConfiguration(
-                providers: [.firebase, .mixpanel],
-                trackingEnabled: true
-            )
-        )
-    }
-}
+let manager = TemplateManager.shared
+let allTemplates = manager.searchTemplates(query: "")
+let commerce = manager.getTemplates(category: .commerce)
+let social = manager.searchTemplates(query: "social")
 ```
 
-## 📱 Template Options
+Bu yol:
+- root metadata surface'ini
+- category/complexity map'ini
+- arama davranisini
+dogrular.
 
-### Social Media App
+### 2. Standalone template root ac
 
-```swift
-TemplateBuilder()
-    .useTemplate(.social)
-    .configure { config in
-        config.features = [
-            .authentication,
-            .feed,
-            .stories,
-            .messaging,
-            .notifications
-        ]
-    }
-    .build()
+Bugun repo icindeki en net standalone roots:
+
+```bash
+open Templates/SocialMediaApp/Package.swift
+open Templates/EcommerceApp/Package.swift
+open Templates/FitnessApp/Package.swift
 ```
 
-### E-Commerce App
+Bu yol:
+- app shell
+- package-level entry
+- lane-specific source surface
+gosterir.
 
-```swift
-TemplateBuilder()
-    .useTemplate(.commerce)
-    .configure { config in
-        config.features = [
-            .productCatalog,
-            .shoppingCart,
-            .payments,
-            .orderTracking,
-            .reviews
-        ]
-    }
-    .build()
-```
+## Which Path Should You Pick?
 
-### Health & Fitness App
+### Repo'yu hizli degerlendirmek istiyorsan
+- `Package.swift`
+- `Sources/iOSAppTemplates/iOSAppTemplates.swift`
+- `Documentation/Complete-App-Standard.md`
 
-```swift
-TemplateBuilder()
-    .useTemplate(.health)
-    .configure { config in
-        config.features = [
-            .healthKit,
-            .workoutTracking,
-            .nutrition,
-            .goals,
-            .progress
-        ]
-    }
-    .build()
-```
+### UI-first bir lane ile baslamak istiyorsan
+- `Templates/SocialMediaApp`
+- `Templates/EcommerceApp`
+- `Templates/FitnessApp`
 
-### Education App
+### Daha genis source surface istiyorsan
+- `Sources/SocialTemplates`
+- `Sources/CommerceTemplates`
+- `Sources/HealthTemplates`
+- `Sources/ProductivityTemplates`
+- `Sources/FinanceTemplates`
 
-```swift
-TemplateBuilder()
-    .useTemplate(.education)
-    .configure { config in
-        config.features = [
-            .courses,
-            .videoLessons,
-            .quizzes,
-            .progress,
-            .certificates
-        ]
-    }
-    .build()
-```
+## Current Truth
 
-## 🎨 Customization Examples
+Bu repo bugun:
+- root package discovery surface sunuyor
+- birden fazla template family modulu sunuyor
+- `3` net standalone template root tasiyor
 
-### Custom Theme
+Bu repo bugun otomatik olarak sunmuyor:
+- tek adimda generated shippable app
+- store submission proof
+- `20 complete apps` galerisi
 
-```swift
-let customTheme = Theme(
-    primaryColor: Color(hex: "#FF6B6B"),
-    secondaryColor: Color(hex: "#4ECDC4"),
-    backgroundColor: Color(hex: "#1A1A2E"),
-    textColor: Color(hex: "#EAEAEA"),
-    font: Font.custom("Avenir", size: 16)
-)
+O iddia icin canonical standard:
+- [Complete App Standard](../Complete-App-Standard.md)
 
-TemplateBuilder()
-    .useTemplate(.social)
-    .setTheme(customTheme)
-    .build()
-```
+## Recommended Reading Order
 
-### Add Custom Views
-
-```swift
-struct CustomFeedView: View {
-    @StateObject var viewModel = FeedViewModel()
-    
-    var body: some View {
-        ScrollView {
-            LazyVStack {
-                ForEach(viewModel.posts) { post in
-                    PostCard(post: post)
-                        .padding(.horizontal)
-                }
-            }
-        }
-        .task {
-            await viewModel.loadPosts()
-        }
-    }
-}
-
-// Integrate with template
-TemplateBuilder()
-    .useTemplate(.social)
-    .replaceView(.feed, with: CustomFeedView())
-    .build()
-```
-
-### Add Custom Features
-
-```swift
-extension Feature {
-    static let aiAssistant = Feature(
-        id: "ai_assistant",
-        name: "AI Assistant",
-        view: AIAssistantView(),
-        icon: "brain",
-        requiresAuth: true
-    )
-}
-
-TemplateBuilder()
-    .useTemplate(.education)
-    .addFeature(.aiAssistant)
-    .build()
-```
-
-## 🏗️ Architecture Patterns
-
-### Using TCA (The Composable Architecture)
-
-```swift
-import ComposableArchitecture
-import TCATemplates
-
-struct AppFeature: Reducer {
-    struct State: Equatable {
-        var user: User?
-        var isLoading = false
-        var feed = FeedFeature.State()
-        var profile = ProfileFeature.State()
-    }
-    
-    enum Action: Equatable {
-        case onAppear
-        case feed(FeedFeature.Action)
-        case profile(ProfileFeature.Action)
-    }
-    
-    var body: some ReducerOf<Self> {
-        Scope(state: \.feed, action: /Action.feed) {
-            FeedFeature()
-        }
-        Scope(state: \.profile, action: /Action.profile) {
-            ProfileFeature()
-        }
-        Reduce { state, action in
-            switch action {
-            case .onAppear:
-                state.isLoading = true
-                return .run { send in
-                    // Load initial data
-                }
-            case .feed, .profile:
-                return .none
-            }
-        }
-    }
-}
-```
-
-### Using MVVM
-
-```swift
-import Combine
-
-class MainViewModel: ObservableObject {
-    @Published var user: User?
-    @Published var posts: [Post] = []
-    @Published var isLoading = false
-    
-    private var cancellables = Set<AnyCancellable>()
-    private let apiService: APIService
-    
-    init(apiService: APIService = .shared) {
-        self.apiService = apiService
-        loadData()
-    }
-    
-    func loadData() {
-        isLoading = true
-        
-        apiService.fetchPosts()
-            .receive(on: DispatchQueue.main)
-            .sink(
-                receiveCompletion: { _ in
-                    self.isLoading = false
-                },
-                receiveValue: { posts in
-                    self.posts = posts
-                }
-            )
-            .store(in: &cancellables)
-    }
-}
-```
-
-## 🚢 Running Your App
-
-### On Simulator
-
-1. Select target device in Xcode
-2. Press ⌘R or click the Run button
-3. App launches in simulator
-
-### On Device
-
-1. Connect your iPhone/iPad
-2. Select your device in Xcode
-3. Trust developer certificate on device:
-   - Settings → General → VPN & Device Management
-4. Press ⌘R to run
-
-### Testing Different Configurations
-
-```swift
-// Debug configuration
-#if DEBUG
-TemplateBuilder()
-    .useTemplate(.social)
-    .enableMockData()
-    .enableDebugMenu()
-    .build()
-#else
-// Production configuration
-TemplateBuilder()
-    .useTemplate(.social)
-    .configure(with: .production)
-    .build()
-#endif
-```
-
-## 📊 Sample Data
-
-### Using Mock Data
-
-```swift
-TemplateBuilder()
-    .useTemplate(.social)
-    .useMockDataProvider { provider in
-        provider.users = User.mockUsers
-        provider.posts = Post.mockPosts
-        provider.messages = Message.mockMessages
-    }
-    .build()
-```
-
-### Creating Mock Models
-
-```swift
-extension User {
-    static var mockUsers: [User] {
-        [
-            User(id: "1", name: "John Doe", avatar: "person.circle"),
-            User(id: "2", name: "Jane Smith", avatar: "person.circle.fill"),
-            User(id: "3", name: "Bob Johnson", avatar: "person.crop.circle")
-        ]
-    }
-}
-
-extension Post {
-    static var mockPosts: [Post] {
-        [
-            Post(
-                id: "1",
-                author: User.mockUsers[0],
-                content: "Hello, World! 🎉",
-                timestamp: Date(),
-                likes: 42
-            ),
-            Post(
-                id: "2",
-                author: User.mockUsers[1],
-                content: "Check out iOS App Templates!",
-                timestamp: Date().addingTimeInterval(-3600),
-                likes: 128
-            )
-        ]
-    }
-}
-```
-
-## 🎯 Next Steps
-
-### Essential Guides
-1. [Architecture Guide](../ArchitectureTemplatesGuide.md) - Understand app structure
-2. [Template Guide](../TemplateGuide.md) - Explore all templates
-3. [Customization Guide](../CustomizationGuide.md) - Deep customization
-4. [API Reference](../API-Reference.md) - Connect to backend
-
-### Advanced Topics
-1. [Performance Guide](./PerformanceGuide.md)
-2. [Security Guide](./SecurityGuide.md)
-3. [Architecture Guide](./ArchitectureGuide.md)
-4. [Testing Guide](./TestingGuide.md)
-
-## 💡 Pro Tips
-
-1. **Use Environment Variables** for API keys
-2. **Enable SwiftLint** for code quality
-3. **Add Unit Tests** early in development
-4. **Use Git** from the start
-5. **Follow Apple's Human Interface Guidelines**
-
-## 🆘 Need Help?
-
-- 📖 [Documentation](../README.md)
-- 💬 [Discord Community](https://discord.gg/iosapptemplates)
-- 🐛 [Report Issues](https://github.com/yourusername/iOSAppTemplates/issues)
-- ✉️ [Email Support](mailto:support@iosapptemplates.dev)
-
----
-
-<div align="center">
-  <h3>🎉 Congratulations!</h3>
-  <p>You've built your first app with iOS App Templates!</p>
-  <p>Share your creation: <strong>#iOSAppTemplates</strong></p>
-</div>
+1. [Installation](./Installation.md)
+2. [First App Tutorial](../FirstApp.md)
+3. [Template Guide](../TemplateGuide.md)
+4. [API Reference](../API-Reference.md)

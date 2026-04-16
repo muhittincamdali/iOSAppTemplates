@@ -1,20 +1,18 @@
 Pod::Spec.new do |s|
   s.name             = 'iOSAppTemplates'
   s.version          = '2.0.0'
-  s.summary          = 'Production-ready iOS app templates with Clean Architecture, MVVM-C, and TCA patterns.'
+  s.summary          = 'Swift package template families and starter surfaces for Apple platform app ideas.'
   s.description      = <<-DESC
-    iOSAppTemplates provides production-ready iOS app templates with Clean Architecture,
-    MVVM-C, and TCA patterns. Ship faster with 8 app categories: Social, E-Commerce,
-    Finance, Health, Education, Travel, AI, and Productivity. All templates are fully
-    tested, well documented, and ready for the App Store.
+    iOSAppTemplates ships modular Swift package targets, template families, and starter
+    app surfaces for common Apple-platform product lanes. The repository currently mixes
+    shared package modules, standalone template roots, examples, and documentation. Use
+    it as a starter system and code reference, not as blanket distribution proof.
   DESC
 
   s.homepage         = 'https://github.com/muhittincamdali/iOSAppTemplates'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Muhittin Camdali' => 'contact@muhittincamdali.com' }
   s.source           = { :git => 'https://github.com/muhittincamdali/iOSAppTemplates.git', :tag => s.version.to_s }
-  s.social_media_url = 'https://twitter.com/muhittincamdali'
-
   s.ios.deployment_target = '15.0'
   s.osx.deployment_target = '12.0'
   s.tvos.deployment_target = '15.0'
@@ -26,7 +24,6 @@ Pod::Spec.new do |s|
 
   s.frameworks = 'Foundation', 'SwiftUI', 'Combine'
 
-  # Subspecs for modular installation
   s.default_subspecs = 'Core'
 
   s.subspec 'Core' do |core|

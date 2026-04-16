@@ -73,6 +73,7 @@ public struct SmartPhotoApp {
             switch action {
             case .loadPhotos:
                 state.isProcessing = true
+                let photoAnalysisClient = self.photoAnalysisClient
                 return .run { send in
                     let photos = try await photoAnalysisClient.loadPhotos()
                     await send(.photosLoaded(photos))
@@ -94,6 +95,7 @@ public struct SmartPhotoApp {
                 
             case .analyzePhoto(let photo):
                 state.isProcessing = true
+                let photoAnalysisClient = self.photoAnalysisClient
                 return .run { send in
                     let analysis = try await photoAnalysisClient.analyzePhoto(photo)
                     await send(.analysisCompleted(analysis))
@@ -106,6 +108,7 @@ public struct SmartPhotoApp {
                 
             case .enhancePhoto(let photo, let enhancement):
                 state.isProcessing = true
+                let photoEnhancementClient = self.photoEnhancementClient
                 return .run { send in
                     let enhancedPhoto = try await photoEnhancementClient.enhancePhoto(photo, enhancement)
                     await send(.enhancementCompleted(enhancedPhoto))
@@ -124,6 +127,7 @@ public struct SmartPhotoApp {
                     state.filteredPhotos = state.photos
                     return .none
                 } else {
+                    let photoSearchClient = self.photoSearchClient
                     return .run { send in
                         let results = try await photoSearchClient.searchPhotos(query)
                         await send(.searchCompleted(results))
@@ -135,6 +139,7 @@ public struct SmartPhotoApp {
                 return .none
                 
             case .generateCaption(let photo):
+                let aiCaptionClient = self.aiCaptionClient
                 return .run { send in
                     let caption = try await aiCaptionClient.generateCaption(photo)
                     await send(.captionGenerated(photo, caption))
@@ -147,6 +152,7 @@ public struct SmartPhotoApp {
                 return .none
                 
             case .classifyImage(let photo):
+                let imageClassificationClient = self.imageClassificationClient
                 return .run { send in
                     let classifications = try await imageClassificationClient.classifyImage(photo)
                     await send(.classificationCompleted(photo, classifications))
@@ -711,7 +717,7 @@ public struct SearchBar: View {
 
 // MARK: - Models
 
-public struct SmartPhoto: Identifiable, Equatable, Codable {
+public struct SmartPhoto: Identifiable, Equatable, Codable, Sendable {
     public let id: String
     public let imageURL: URL
     public let createdAt: Date
@@ -742,7 +748,7 @@ public struct SmartPhoto: Identifiable, Equatable, Codable {
     }
 }
 
-public struct ImageClassification: Equatable, Codable {
+public struct ImageClassification: Equatable, Codable, Sendable {
     public let label: String
     public let confidence: Float
     
@@ -752,7 +758,7 @@ public struct ImageClassification: Equatable, Codable {
     }
 }
 
-public struct PhotoAnalysis: Identifiable, Equatable, Codable {
+public struct PhotoAnalysis: Identifiable, Equatable, Codable, Sendable {
     public let id: String
     public let photoId: String
     public let detectedObjects: [DetectedObject]
@@ -780,7 +786,7 @@ public struct PhotoAnalysis: Identifiable, Equatable, Codable {
     }
 }
 
-public struct DetectedObject: Identifiable, Equatable, Codable {
+public struct DetectedObject: Identifiable, Equatable, Codable, Sendable {
     public let id: String
     public let label: String
     public let confidence: Float
@@ -799,7 +805,7 @@ public struct DetectedObject: Identifiable, Equatable, Codable {
     }
 }
 
-public struct BoundingBox: Equatable, Codable {
+public struct BoundingBox: Equatable, Codable, Sendable {
     public let x: Float
     public let y: Float
     public let width: Float
@@ -813,7 +819,7 @@ public struct BoundingBox: Equatable, Codable {
     }
 }
 
-public struct PhotoColor: Equatable, Codable, Hashable {
+public struct PhotoColor: Equatable, Codable, Hashable, Sendable {
     public let red: Float
     public let green: Float
     public let blue: Float
@@ -838,7 +844,7 @@ extension Color {
     }
 }
 
-public struct PhotoMetadata: Equatable, Codable {
+public struct PhotoMetadata: Equatable, Codable, Sendable {
     public let camera: String?
     public let location: String?
     public let dimensions: PhotoDimensions
@@ -857,7 +863,7 @@ public struct PhotoMetadata: Equatable, Codable {
     }
 }
 
-public struct PhotoDimensions: Equatable, Codable {
+public struct PhotoDimensions: Equatable, Codable, Sendable {
     public let width: Int
     public let height: Int
     
@@ -867,7 +873,7 @@ public struct PhotoDimensions: Equatable, Codable {
     }
 }
 
-public enum AIEnhancement: String, CaseIterable, Codable {
+public enum AIEnhancement: String, CaseIterable, Codable, Sendable {
     case autoEnhance = "autoEnhance"
     case denoise = "denoise"
     case sharpen = "sharpen"
@@ -955,7 +961,7 @@ private enum ImageClassificationClientKey: DependencyKey {
 
 // MARK: - Clients
 
-public struct PhotoAnalysisClient {
+public struct PhotoAnalysisClient: Sendable {
     public var loadPhotos: @Sendable () async throws -> [SmartPhoto]
     public var analyzePhoto: @Sendable (SmartPhoto) async throws -> PhotoAnalysis
     
@@ -984,7 +990,7 @@ public struct PhotoAnalysisClient {
     )
 }
 
-public struct PhotoEnhancementClient {
+public struct PhotoEnhancementClient: Sendable {
     public var enhancePhoto: @Sendable (SmartPhoto, AIEnhancement) async throws -> SmartPhoto
     
     public static let live = PhotoEnhancementClient(
@@ -997,7 +1003,7 @@ public struct PhotoEnhancementClient {
     )
 }
 
-public struct PhotoSearchClient {
+public struct PhotoSearchClient: Sendable {
     public var searchPhotos: @Sendable (String) async throws -> [SmartPhoto]
     
     public static let live = PhotoSearchClient(
@@ -1011,7 +1017,7 @@ public struct PhotoSearchClient {
     )
 }
 
-public struct AICaptionClient {
+public struct AICaptionClient: Sendable {
     public var generateCaption: @Sendable (SmartPhoto) async throws -> String
     
     public static let live = AICaptionClient(
@@ -1029,7 +1035,7 @@ public struct AICaptionClient {
     )
 }
 
-public struct ImageClassificationClient {
+public struct ImageClassificationClient: Sendable {
     public var classifyImage: @Sendable (SmartPhoto) async throws -> [ImageClassification]
     
     public static let live = ImageClassificationClient(

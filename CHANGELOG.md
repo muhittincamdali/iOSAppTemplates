@@ -8,38 +8,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Initial release of iOS App Templates Collection
-- Social Media App Template with Firebase integration
-- E-commerce App Template with Stripe integration
-- Fitness App Template with HealthKit integration
-- Complete documentation and examples
-- SwiftUI-based modern UI components
-- Clean Architecture implementation
-- MVVM pattern implementation
-- Comprehensive test coverage
+- Package stabilization and truth-reset work
+- Current repo audit and complete-app standard docs
+- Root package search fix for empty queries
+- Truthful smoke coverage for the active package test graph
 
 ### Changed
-- Updated to Swift 5.9
-- Updated to iOS 15.0+ deployment target
-- Improved documentation structure
-- Enhanced template customization options
+- Package graph and tests aligned with the current public surface
+- Public docs tightened to match current repo maturity
+- Template package baselines aligned with the current Swift/Xcode floor
 
 ### Fixed
-- Template structure and organization
-- Documentation links and references
-- Code examples and usage guides
+- Swift 6 build issues across active template families
+- Stale examples, broken public links, and fabricated doc claims
 
 ## [1.0.0] - 2024-08-02
 
 ### Added
 - Initial release
-- Three production-ready app templates
-- Complete documentation suite
-- Example implementations
-- Test coverage for all templates
+- Three public template roots
+- Documentation surface
+- Example and reference material
 - Swift Package Manager support
-- CocoaPods support
-- Carthage support
 
 ### Features
 - **Social Media App Template**
@@ -76,8 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Contributing guidelines
 
 ### Testing
-- Unit tests for all templates
-- UI tests for user flows
+- Initial unit-level package coverage
 - Integration tests for APIs
 - Performance tests
 - Accessibility tests
@@ -186,15 +175,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Release Notes
 
 ### Version 1.0.0
-This is the first stable release of iOS App Templates Collection. It includes three production-ready templates with complete documentation, examples, and test coverage.
+This is the first stable public release of iOS App Templates Collection. It introduced the initial template roots, documentation surface, and starter package coverage.
 
 ### Key Features
-- **Production Ready**: All templates are ready for App Store deployment
-- **Modern Architecture**: Clean Architecture with MVVM pattern
+- **Starter Templates**: Initial public app roots and source-based template families
+- **Architecture Coverage**: SwiftUI-first examples with multiple implementation styles
 - **SwiftUI**: Modern UI framework with declarative syntax
-- **Comprehensive Testing**: Unit, UI, and integration tests
-- **Complete Documentation**: API reference, guides, and examples
-- **Multiple Platforms**: iOS, iPadOS, and macOS support
+- **Initial Testing**: Early package-level coverage
+- **Documentation**: API reference, guides, and examples
+- **Apple Platform Focus**: iOS-first package surface with Apple-platform expansion paths
 
 ### Migration Guide
 This is the initial release, so no migration is required. All templates are designed to be used as starting points for new projects.
@@ -209,14 +198,12 @@ None in this release.
 - None reported
 
 ### Security
-- All dependencies are up to date
-- No known security vulnerabilities
-- Secure coding practices implemented
+- Security posture should be re-evaluated against the current dependency graph and workflow state
+- Treat this release as a starter baseline, not as an immutable security proof
 
 ### Performance
-- Optimized for performance
-- Memory efficient implementations
-- Battery usage optimized
+- Performance expectations should be validated in the consuming app shell
+- This changelog entry is not a benchmark proof artifact
 
 ### Accessibility
 - Full accessibility support

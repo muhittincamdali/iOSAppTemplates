@@ -1,137 +1,51 @@
-# 📱 iOS App Templates - Example Projects
+# Examples Hub
 
-## Overview
+Bu klasor henuz full complete-app gallery degil. Bugunku rol:
 
-This directory contains production-ready example projects demonstrating the full capabilities of the iOS App Templates framework. Each example is a complete, runnable application with comprehensive documentation.
+- source-level reference
+- lightweight onboarding example
+- richer social example surface
 
-## 🚀 Quick Start Examples
+## Canonical Example Router
 
-### 1. Social Media App
-A complete social media application with real-time messaging, user profiles, and content sharing.
+| Surface | Type | Use it for |
+| --- | --- | --- |
+| [BasicExample.swift](./BasicExample.swift) | single-file reference | package API'yi hizli gormek |
+| [BasicExample/BasicExample.swift](./BasicExample/BasicExample.swift) | small example shell | minimal structure incelemek |
+| [QuickStartExample/QuickStartApp.swift](./QuickStartExample/QuickStartApp.swift) | onboarding entry | en hizli source-level baslangic |
+| [SocialMediaExample](./SocialMediaExample/) | richer category example | social lane icin daha urun benzeri akis gormek |
 
-**Features:**
-- User authentication with Face ID/Touch ID
-- Real-time feed with 120fps scrolling
-- Post creation with media support
-- Secure messaging with AES-256 encryption
-- Push notifications
-- Dark mode support
+## Important Truth
 
-[📂 View Source](./SocialMediaExample/)
+- Bu klasor altindaki her sey ayrik runnable Xcode project degil.
+- En guvenilir runnable path bugun `Templates/` altindaki standalone roots.
+- En guvenilir repo validation path bugun root `swift build` ve `swift test`.
 
-### 2. E-Commerce App
-Full-featured shopping application with product catalog, cart, and payment processing.
+## If You Want To Run Something
 
-**Features:**
-- Product browsing with advanced filters
-- Shopping cart with persistence
-- Apple Pay integration
-- Order tracking
-- Wishlist functionality
-- Product reviews and ratings
+### Package truth
 
-[📂 View Source](./ECommerceExample/)
-
-### 3. Vision Pro Spatial App
-Revolutionary spatial computing application for Apple Vision Pro.
-
-**Features:**
-- 3D content display
-- Hand tracking interactions
-- Eye tracking navigation
-- Immersive environments
-- Multi-user sessions
-- Spatial audio
-
-[📂 View Source](./VisionProExample/)
-
-## 🏗️ Architecture Examples
-
-### TCA (The Composable Architecture)
-Modern unidirectional data flow architecture with comprehensive state management.
-
-[📂 View Example](./TCAExample/)
-
-### MVVM + Clean Architecture
-Enterprise-grade architecture with clear separation of concerns.
-
-[📂 View Example](./MVVMCleanExample/)
-
-## 🎯 Running the Examples
-
-### Prerequisites
-- Xcode 16.0+
-- iOS 18.0+ Simulator or Device
-- Swift 6.0+
-- (Optional) Apple Vision Pro for spatial examples
-
-### Installation Steps
-
-1. **Clone the repository:**
 ```bash
-git clone https://github.com/muhittincamdali/iOSAppTemplates.git
-cd iOSAppTemplates/Examples
+swift build
+swift test
 ```
 
-2. **Open the example project:**
+### Standalone roots
+
 ```bash
-cd SocialMediaExample
-open SocialMediaExample.xcodeproj
+open ../Templates/SocialMediaApp/Package.swift
+open ../Templates/EcommerceApp/Package.swift
+open ../Templates/FitnessApp/Package.swift
 ```
 
-3. **Build and run:**
-- Select your target device/simulator
-- Press ⌘R to build and run
+### Generator path
 
-## 📊 Example Categories
+```bash
+swift ../Scripts/TemplateGenerator.swift --interactive
+```
 
-| Category | Examples | Features |
-|----------|----------|----------|
-| **Social & Networking** | Social Media, Messaging | Real-time updates, multimedia sharing |
-| **Commerce** | E-Commerce, Marketplace | Payments, inventory, orders |
-| **Productivity** | Task Manager, Notes | Sync, collaboration, widgets |
-| **Entertainment** | Video Streaming, Music | Media playback, offline support |
-| **Finance** | Banking, Crypto | Security, transactions, charts |
-| **Health & Fitness** | Workout Tracker | HealthKit, activity tracking |
-| **Education** | Learning Platform | Progress tracking, quizzes |
-| **Enterprise** | CRM, Analytics | Data visualization, reports |
+## Related Docs
 
-## 🔧 Customization
-
-Each example can be customized for your specific needs:
-
-1. **Branding**: Update colors, fonts, and assets in `Resources/`
-2. **Features**: Enable/disable features in `Configuration.swift`
-3. **Backend**: Configure your API endpoints in `NetworkConfig.swift`
-4. **Analytics**: Add your tracking codes in `Analytics.swift`
-
-## 📚 Learning Resources
-
-- [First App Tutorial](../Documentation/FirstApp.md) - Step-by-step guide
-- [Architecture Guide](../Documentation/Guides/ArchitectureGuide.md) - Design patterns
-- [Best Practices](../Documentation/BestPracticesGuide.md) - iOS development standards
-- [API Reference](../Documentation/API-Reference.md) - Complete framework documentation
-
-## 🤝 Contributing
-
-We welcome contributions! To add a new example:
-
-1. Create a new directory under `Examples/`
-2. Include a complete Xcode project
-3. Add comprehensive README documentation
-4. Ensure >95% test coverage
-5. Submit a pull request
-
-## 📄 License
-
-All examples are provided under the MIT License. See [LICENSE](../LICENSE) for details.
-
-## 🆘 Support
-
-- **GitHub Issues**: [Report bugs](https://github.com/muhittincamdali/iOSAppTemplates/issues)
-- **Discussions**: [Community forum](https://github.com/muhittincamdali/iOSAppTemplates/discussions)
-- **Documentation**: [Full docs](../Documentation/)
-
----
-
-**Built with ❤️ by the iOS Community**
+- [../Documentation/Guides/QuickStart.md](../Documentation/Guides/QuickStart.md)
+- [../Documentation/TemplateGuide.md](../Documentation/TemplateGuide.md)
+- [../Documentation/Complete-App-Standard.md](../Documentation/Complete-App-Standard.md)

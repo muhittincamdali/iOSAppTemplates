@@ -1,6 +1,7 @@
 import XCTest
 @testable import ProductivityTemplates
 
+@MainActor
 final class ProductivityTemplatesTests: XCTestCase {
     
     func testProductivityTemplatesInitialization() {
@@ -20,8 +21,7 @@ final class ProductivityTemplatesTests: XCTestCase {
             priority: .high,
             status: .pending,
             category: .work,
-            dueDate: Date().addingTimeInterval(86400),
-            accountId: "account-1"
+            dueDate: Date().addingTimeInterval(86400)
         )
         
         // Then
@@ -31,7 +31,6 @@ final class ProductivityTemplatesTests: XCTestCase {
         XCTAssertEqual(task.priority, .high)
         XCTAssertEqual(task.status, .pending)
         XCTAssertEqual(task.category, .work)
-        XCTAssertEqual(task.accountId, "account-1")
     }
     
     func testSubtaskInitialization() {
@@ -132,8 +131,7 @@ final class ProductivityTemplatesTests: XCTestCase {
             id: "category-1",
             name: "Development",
             allocated: 5000.0,
-            spent: 2500.0,
-            category: .work
+            spent: 2500.0
         )
         
         // Then
@@ -142,7 +140,6 @@ final class ProductivityTemplatesTests: XCTestCase {
         XCTAssertEqual(category.allocated, 5000.0)
         XCTAssertEqual(category.spent, 2500.0)
         XCTAssertEqual(category.remaining, 2500.0)
-        XCTAssertEqual(category.percentageSpent, 50.0)
     }
     
     func testTimeEntryInitialization() {
@@ -167,19 +164,19 @@ final class ProductivityTemplatesTests: XCTestCase {
         XCTAssertEqual(timeEntry.rate, 50.0)
     }
     
-    func testTransactionTypeProperties() {
+    func testTaskPriorityProperties() {
         // Given
-        let income = TaskManagementAppTemplate.TransactionType.income
-        let expense = TaskManagementAppTemplate.TransactionType.expense
-        let transfer = TaskManagementAppTemplate.TransactionType.transfer
+        let low = TaskManagementAppTemplate.TaskPriority.low
+        let high = TaskManagementAppTemplate.TaskPriority.high
+        let urgent = TaskManagementAppTemplate.TaskPriority.urgent
         
         // Then
-        XCTAssertEqual(income.displayName, "Income")
-        XCTAssertEqual(income.color, "green")
-        XCTAssertEqual(expense.displayName, "Expense")
-        XCTAssertEqual(expense.color, "red")
-        XCTAssertEqual(transfer.displayName, "Transfer")
-        XCTAssertEqual(transfer.color, "blue")
+        XCTAssertEqual(low.displayName, "Low")
+        XCTAssertEqual(low.color, "green")
+        XCTAssertEqual(high.displayName, "High")
+        XCTAssertEqual(high.color, "orange")
+        XCTAssertEqual(urgent.displayName, "Urgent")
+        XCTAssertEqual(urgent.color, "red")
     }
     
     func testTaskStatusProperties() {
@@ -291,8 +288,7 @@ final class ProductivityTemplatesTests: XCTestCase {
             title: "Test Task",
             priority: .medium,
             status: .pending,
-            category: .work,
-            accountId: "account-1"
+            category: .work
         )
         
         let card = TaskManagementAppTemplate.TaskCard(

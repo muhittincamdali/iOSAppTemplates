@@ -10,36 +10,24 @@ If you discover a security vulnerability, please report it responsibly.
 ## Supported Versions
 Security fixes are applied to the latest mainline branch.
 
-## Overview
-This document belongs to the iOSAppTemplates repository. It explains goals, scope, and usage.
-
-## Architecture
-Clean Architecture and SOLID are followed to ensure maintainability and scalability.
-
 ## Installation (SPM)
 ```swift
-.package(url: "https://github.com/owner/iOSAppTemplates.git", from: "1.0.0")
+.package(url: "https://github.com/muhittincamdali/iOSAppTemplates.git", from: "2.0.0")
 ```
 
-## Quick Start
-```swift
-// Add a concise example usage here
-```
+## Scope
 
-## API Reference
-Describe key types and methods exposed by this module.
+This repository includes:
 
-## Usage Examples
-Provide several concrete end-to-end examples.
+- Swift package targets
+- template families
+- standalone template app roots
+- example apps
+- generator scripts
 
-## Performance
-List relevant performance considerations.
+When reporting a vulnerability, include:
 
-## Security
-Document security-sensitive areas and mitigations.
-
-## Troubleshooting
-Known issues and solutions.
-
-## FAQ
-Answer common questions with clear, actionable guidance.
+- affected path or target
+- reproduction steps
+- expected impact
+- whether the issue affects shipped templates, examples, or shared package targets

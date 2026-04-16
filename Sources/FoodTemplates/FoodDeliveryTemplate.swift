@@ -389,6 +389,7 @@ public struct RestaurantReview: Identifiable, Codable {
 
 // MARK: - Sample Data
 
+@MainActor
 public enum FoodSampleData {
     public static let restaurants: [Restaurant] = [
         Restaurant(
@@ -679,9 +680,8 @@ public struct FoodHomeView: View {
                 .padding(.vertical)
             }
             .navigationTitle("Food Delivery")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button {
                         showingCart = true
                     } label: {
@@ -735,7 +735,7 @@ struct DeliveryAddressHeader: View {
             Spacer()
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
         .padding(.horizontal)
     }
@@ -753,7 +753,7 @@ struct SearchBarFood: View {
             TextField("Search restaurants, cuisines...", text: $store.searchQuery)
         }
         .padding(12)
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
         .padding(.horizontal)
     }
@@ -778,7 +778,7 @@ struct CuisineScrollView: View {
                             Text(cuisine.icon)
                                 .font(.title)
                                 .frame(width: 50, height: 50)
-                                .background(store.selectedCuisine == cuisine ? Color.orange.opacity(0.2) : Color(.systemGray6))
+                                .background(store.selectedCuisine == cuisine ? Color.orange.opacity(0.2) : Color.gray.opacity(0.08))
                                 .clipShape(Circle())
                             
                             Text(cuisine.rawValue)
@@ -826,7 +826,7 @@ struct ActiveOrderBanner: View {
                     .foregroundColor(.orange)
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.08))
             .cornerRadius(16)
             .padding(.horizontal)
         }
@@ -927,7 +927,7 @@ struct FeaturedRestaurantCard: View {
         VStack(alignment: .leading, spacing: 8) {
             ZStack(alignment: .topTrailing) {
                 Rectangle()
-                    .fill(Color(.systemGray5))
+                    .fill(Color.gray.opacity(0.12))
                     .frame(width: 200, height: 120)
                     .cornerRadius(12)
                     .overlay(
@@ -1013,7 +1013,7 @@ struct RestaurantRowCard: View {
     var body: some View {
         HStack(spacing: 12) {
             Rectangle()
-                .fill(Color(.systemGray5))
+                .fill(Color.gray.opacity(0.12))
                 .frame(width: 100, height: 100)
                 .cornerRadius(12)
                 .overlay(
@@ -1066,7 +1066,7 @@ struct RestaurantRowCard: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
     }
 }
@@ -1089,7 +1089,7 @@ public struct RestaurantDetailView: View {
                 // Header Image
                 ZStack(alignment: .bottomLeading) {
                     Rectangle()
-                        .fill(Color(.systemGray5))
+                        .fill(Color.gray.opacity(0.12))
                         .frame(height: 200)
                         .overlay(
                             Text(restaurant.cuisine.first?.icon ?? "🍽️")
@@ -1118,7 +1118,7 @@ public struct RestaurantDetailView: View {
                         InfoBadge(icon: "bicycle", value: restaurant.deliveryFee == 0 ? "Free" : "\(restaurant.deliveryFee, format: .currency(code: "USD"))", label: "Delivery", color: .green)
                     }
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(16)
                     
                     // Category Tabs
@@ -1133,7 +1133,7 @@ public struct RestaurantDetailView: View {
                                         .fontWeight(selectedCategory == category ? .semibold : .regular)
                                         .padding(.horizontal, 16)
                                         .padding(.vertical, 8)
-                                        .background(selectedCategory == category ? Color.orange : Color(.systemGray6))
+                                        .background(selectedCategory == category ? Color.orange : Color.gray.opacity(0.08))
                                         .foregroundColor(selectedCategory == category ? .white : .primary)
                                         .cornerRadius(20)
                                 }
@@ -1151,7 +1151,6 @@ public struct RestaurantDetailView: View {
                 .padding()
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom) {
             if store.cartItemCount > 0 && store.currentRestaurant?.id == restaurant.id {
                 Button {
@@ -1250,7 +1249,7 @@ struct MenuItemRow: View {
             
             ZStack(alignment: .bottomTrailing) {
                 Rectangle()
-                    .fill(Color(.systemGray5))
+                    .fill(Color.gray.opacity(0.12))
                     .frame(width: 80, height: 80)
                     .cornerRadius(8)
                 
@@ -1269,7 +1268,7 @@ struct MenuItemRow: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
     }
 }
@@ -1316,7 +1315,7 @@ public struct CartViewFood: View {
                                     .foregroundColor(.red)
                                 }
                                 .padding()
-                                .background(Color(.systemGray6))
+                                .background(Color.gray.opacity(0.08))
                                 .cornerRadius(12)
                             }
                             
@@ -1335,7 +1334,7 @@ public struct CartViewFood: View {
                                 }
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color(.systemGray6))
+                                .background(Color.gray.opacity(0.08))
                                 .cornerRadius(12)
                             }
                             .foregroundColor(.primary)
@@ -1345,9 +1344,8 @@ public struct CartViewFood: View {
                 }
             }
             .navigationTitle("Cart")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Close") {
                         dismiss()
                     }
@@ -1422,7 +1420,7 @@ struct CartItemRowFood: View {
     var body: some View {
         HStack(spacing: 12) {
             Rectangle()
-                .fill(Color(.systemGray5))
+                .fill(Color.gray.opacity(0.12))
                 .frame(width: 60, height: 60)
                 .cornerRadius(8)
             
@@ -1457,7 +1455,7 @@ struct CartItemRowFood: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.08))
         .cornerRadius(12)
     }
 }
@@ -1504,7 +1502,7 @@ struct CheckoutViewFood: View {
                                     .font(.caption)
                             }
                             .padding()
-                            .background(Color(.systemGray6))
+                            .background(Color.gray.opacity(0.08))
                             .cornerRadius(12)
                         }
                     }
@@ -1523,7 +1521,7 @@ struct CheckoutViewFood: View {
                                         .fontWeight(.medium)
                                         .frame(maxWidth: .infinity)
                                         .padding()
-                                        .background(selectedTip == tip ? Color.orange : Color(.systemGray6))
+                                        .background(selectedTip == tip ? Color.orange : Color.gray.opacity(0.08))
                                         .foregroundColor(selectedTip == tip ? .white : .primary)
                                         .cornerRadius(12)
                                 }
@@ -1544,7 +1542,7 @@ struct CheckoutViewFood: View {
                                 .font(.caption)
                         }
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(Color.gray.opacity(0.08))
                         .cornerRadius(12)
                     }
                     
@@ -1591,7 +1589,7 @@ struct CheckoutViewFood: View {
                                 }
                             }
                             .padding()
-                            .background(Color(.systemGray6))
+                            .background(Color.gray.opacity(0.08))
                             .cornerRadius(12)
                         }
                     }
@@ -1599,9 +1597,8 @@ struct CheckoutViewFood: View {
                 .padding()
             }
             .navigationTitle("Checkout")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
@@ -1623,7 +1620,7 @@ struct CheckoutViewFood: View {
                 .padding()
                 .background(.bar)
             }
-            .fullScreenCover(isPresented: $showingOrderConfirmation) {
+            .sheet(isPresented: $showingOrderConfirmation) {
                 if let order = placedOrder {
                     OrderConfirmationViewFood(order: order)
                 }
@@ -1669,7 +1666,7 @@ struct OrderConfirmationViewFood: View {
                 }
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.08))
             .cornerRadius(12)
             .padding(.horizontal)
             
@@ -1695,7 +1692,7 @@ struct OrderConfirmationViewFood: View {
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(Color.gray.opacity(0.08))
                         .cornerRadius(12)
                 }
             }
@@ -1713,7 +1710,7 @@ struct OrderTrackingView: View {
             VStack(spacing: 24) {
                 // Map Placeholder
                 Rectangle()
-                    .fill(Color(.systemGray5))
+                    .fill(Color.gray.opacity(0.12))
                     .frame(height: 200)
                     .cornerRadius(16)
                     .overlay(
@@ -1736,7 +1733,7 @@ struct OrderTrackingView: View {
                     }
                 }
                 .padding()
-                .background(Color(.systemGray6))
+                .background(Color.gray.opacity(0.08))
                 .cornerRadius(16)
                 
                 // Order Details
@@ -1766,14 +1763,14 @@ struct OrderTrackingView: View {
                     }
                 }
                 .padding()
-                .background(Color(.systemGray6))
+                .background(Color.gray.opacity(0.08))
                 .cornerRadius(16)
                 
                 // Driver Info
                 if let driverName = order.driverName {
                     HStack {
                         Circle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.gray.opacity(0.12))
                             .frame(width: 50, height: 50)
                         
                         VStack(alignment: .leading) {
@@ -1807,7 +1804,7 @@ struct OrderTrackingView: View {
                         }
                     }
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.08))
                     .cornerRadius(16)
                 }
             }
@@ -1827,7 +1824,7 @@ struct StatusTimelineRow: View {
         HStack(alignment: .top, spacing: 16) {
             VStack(spacing: 0) {
                 Circle()
-                    .fill(isCompleted ? status.color : Color(.systemGray4))
+                    .fill(isCompleted ? status.color : Color.gray.opacity(0.35))
                     .frame(width: 24, height: 24)
                     .overlay(
                         Image(systemName: isCompleted ? "checkmark" : "")
@@ -1838,7 +1835,7 @@ struct StatusTimelineRow: View {
                 
                 if !isLast {
                     Rectangle()
-                        .fill(isCompleted ? status.color : Color(.systemGray4))
+                        .fill(isCompleted ? status.color : Color.gray.opacity(0.35))
                         .frame(width: 2, height: 40)
                 }
             }
@@ -1902,7 +1899,7 @@ struct OrderHistoryRow: View {
     var body: some View {
         HStack(spacing: 12) {
             Rectangle()
-                .fill(Color(.systemGray5))
+                .fill(Color.gray.opacity(0.12))
                 .frame(width: 60, height: 60)
                 .cornerRadius(8)
                 .overlay(
@@ -2001,7 +1998,7 @@ struct FoodProfileView: View {
                 Section {
                     HStack(spacing: 16) {
                         Circle()
-                            .fill(Color(.systemGray5))
+                            .fill(Color.gray.opacity(0.12))
                             .frame(width: 60, height: 60)
                             .overlay(
                                 Image(systemName: "person.fill")
@@ -2048,8 +2045,16 @@ struct FoodProfileView: View {
                 }
                 
                 Section("Payment") {
-                    NavigationLink("Payment Methods", systemImage: "creditcard") {}
-                    NavigationLink("Promotions", systemImage: "tag") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Payment Methods", systemImage: "creditcard")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Promotions", systemImage: "tag")
+                    }
                 }
                 
                 Section("Favorites") {
@@ -2067,9 +2072,21 @@ struct FoodProfileView: View {
                 }
                 
                 Section("Settings") {
-                    NavigationLink("Notifications", systemImage: "bell") {}
-                    NavigationLink("Preferences", systemImage: "gearshape") {}
-                    NavigationLink("Help & Support", systemImage: "questionmark.circle") {}
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Notifications", systemImage: "bell")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Preferences", systemImage: "gearshape")
+                    }
+                    NavigationLink {
+                        EmptyView()
+                    } label: {
+                        Label("Help & Support", systemImage: "questionmark.circle")
+                    }
                 }
                 
                 Section {
