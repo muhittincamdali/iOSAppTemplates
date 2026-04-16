@@ -30,14 +30,21 @@ jobs:
             --transform-for-static-hosting \
             --output-path ./docs 2>/dev/null || echo "DocC build skipped"
 
+      - name: Skip when Pages is disabled
+        if: ${{ !github.event.repository.has_pages }}
+        run: echo "GitHub Pages is not enabled for this repository. Skipping Pages deployment."
+
       - name: Setup Pages
+        if: ${{ github.event.repository.has_pages }}
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
+        if: ${{ github.event.repository.has_pages }}
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./docs
 
       - name: Deploy to GitHub Pages
+        if: ${{ github.event.repository.has_pages }}
         id: deployment
         uses: actions/deploy-pages@v4
