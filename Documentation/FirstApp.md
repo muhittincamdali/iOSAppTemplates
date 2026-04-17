@@ -9,7 +9,7 @@ Bu sayfa bugunku repo gercegine gore en kisa ilk yol'u anlatir. Uydurma generato
 
 ## Hangi Ilk Yol Daha Dogru?
 
-### Hemen calisan bir app shell gormek istiyorsan
+### Hemen standalone bir app shell incelemek istiyorsan
 
 Su klasorlerden biriyle basla:
 
@@ -17,7 +17,7 @@ Su klasorlerden biriyle basla:
 - `Templates/EcommerceApp`
 - `Templates/FitnessApp`
 
-Bu yuzeyler repo icindeki bugunku en net standalone roots'lardir.
+Bu yuzeyler repo icindeki bugunku en net standalone roots'lardir. Manifest smoke gecerler; app-specific build proof ise ayri backlog katmanidir.
 
 ### Once package surface'ini anlamak istiyorsan
 
@@ -70,7 +70,7 @@ Bu yol:
 - search davranisini
 dogrular.
 
-## Option B: Standalone Template Root Ac
+## Option B: Standalone Template Root Ac ve Incele
 
 En hizli UI-first yol:
 
@@ -89,7 +89,11 @@ Bu roots:
 - standalone app shell
 - package-level app entry
 - kendi dependency ve platform baseline'i
-tasir.
+tasir
+
+ama bugun henuz otomatik olarak su seyi kanitlamaz:
+- standalone iOS build proof
+- per-app media proof
 
 ## Sonra Nereye Bakmali?
 

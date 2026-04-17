@@ -12,7 +12,7 @@ Amaç:
 
 ## Status Labels
 
-- `Standalone Root`: `Templates/` altinda acilabilir app shell var
+- `Standalone Root`: `Templates/` altinda manifest-valid app package entry ve source shell var
 - `Template Family`: `Sources/` altinda category-level source surface var
 - `Example Surface`: `Examples/` altinda ek inspection path var
 - `Complete App Target`: complete-app standardina gore hedef urun
@@ -72,7 +72,7 @@ Amaç:
 
 ## How To Read This Repo Today
 
-### If you want a runnable shell now
+### If you want a standalone package root now
 
 - `Templates/EcommerceApp`
 - `Templates/SocialMediaApp`

@@ -6,7 +6,7 @@ Bu sayfa `iOSAppTemplates` icin tracked gallery surface'tir.
 
 Buradaki kural:
 
-- bugun acilabilen sey `runnable now`
+- bugun manifest smoke gecen sey `standalone package root`
 - sadece source seviyesinde olan sey `template family`
 - eksik proof tasiyan sey `complete app` diye sayilmaz
 
@@ -17,8 +17,8 @@ Buradaki kural:
 - Type: `Standalone Root`
 - Entry: `Templates/EcommerceApp/Package.swift`
 - Product shape: store, cart, checkout, auth shell
-- Proof today: package root mevcut, source shell mevcut
-- Gap: screenshot, per-app README, explicit smoke proof
+- Proof today: package root mevcut, manifest smoke gecerli, source shell mevcut
+- Gap: iOS-targeted standalone build proof, screenshot, per-app README
 
 ### Social: SocialMediaApp
 
@@ -26,16 +26,16 @@ Buradaki kural:
 - Entry: `Templates/SocialMediaApp/Package.swift`
 - Extra route: `Examples/SocialMediaExample`
 - Product shape: auth, feed/community shell, richer UI fragments
-- Proof today: package root mevcut, ek example surface mevcut
-- Gap: screenshot, per-app README, explicit standalone smoke proof
+- Proof today: package root mevcut, manifest smoke gecerli, ek example surface mevcut
+- Gap: iOS-targeted standalone build proof, screenshot, per-app README
 
 ### Health / Fitness: FitnessApp
 
 - Type: `Standalone Root`
 - Entry: `Templates/FitnessApp/Package.swift`
 - Product shape: auth, workout/progress shell, HealthKit-adjacent flow
-- Proof today: package root mevcut, source shell mevcut
-- Gap: screenshot, per-app README, explicit smoke proof
+- Proof today: package root mevcut, manifest smoke gecerli, source shell mevcut
+- Gap: iOS-targeted standalone build proof, screenshot, per-app README
 
 ## Template Family Coverage
 
@@ -92,3 +92,4 @@ Bu sayfa ancak su iki katman geldikce gercek world-class gallery'ye donusur:
 
 1. per-app README
 2. screenshot / demo proof
+3. explicit standalone build proof

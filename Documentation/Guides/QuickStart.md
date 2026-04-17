@@ -1,6 +1,6 @@
 # Quick Start Guide
 
-Bu repo ile en hizli ilk basari yolu `generator-style` API degil, mevcut package ve standalone template roots'lari acmaktir.
+Bu repo ile en hizli ilk basari yolu `generator-style` API degil, mevcut package ve standalone template roots'larini incelemektir.
 
 ## Fastest Paths
 
@@ -31,7 +31,7 @@ Bu yol:
 - arama davranisini
 dogrular.
 
-### 2. Standalone template root ac
+### 2. Standalone template root incele
 
 Bugun repo icindeki en net standalone roots:
 
@@ -42,9 +42,9 @@ open Templates/FitnessApp/Package.swift
 ```
 
 Bu yol:
-- app shell
-- package-level entry
-- lane-specific source surface
+- manifest-valid package entry
+- app shell source surface
+- lane-specific packaging
 gosterir.
 
 ## Which Path Should You Pick?
@@ -78,6 +78,7 @@ Bu repo bugun otomatik olarak sunmuyor:
 - tek adimda generated shippable app
 - store submission proof
 - `20 complete apps` galerisi
+- hosted standalone build proof
 
 O iddia icin canonical standard:
 - [Complete App Standard](../Complete-App-Standard.md)

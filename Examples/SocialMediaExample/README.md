@@ -6,7 +6,7 @@ Bu klasor su an tek basina ship edilen bir Xcode app projesi degil. Repo icindek
 
 - Ayrik `.xcodeproj` veya `.xcworkspace` burada ship edilmiyor.
 - Screenshot, UI test ve performance proof bu klasore bagli degil.
-- Canonical runnable roots su an `Templates/` altindaki bagimsiz app paketleridir.
+- Canonical standalone package-entry roots su an `Templates/` altindaki bagimsiz app paketleridir.
 - Canonical package validation ise root seviyedeki `swift build` ve `swift test` komutlaridir.
 
 ## What This Example Is Good For
