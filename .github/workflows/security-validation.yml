@@ -34,7 +34,7 @@ jobs:
         run: |
           test -f Sources/SecurityTemplates/SecureAppTemplate.swift
           test -f Documentation/SecurityAPI.md
-          rg -n "import LocalAuthentication|import CryptoKit|public class EncryptionManager|public class SecureStorageManager|public struct DataValidator" Sources/SecurityTemplates/SecureAppTemplate.swift
+          grep -En "import LocalAuthentication|import CryptoKit|public class EncryptionManager|public class SecureStorageManager|public struct DataValidator" Sources/SecurityTemplates/SecureAppTemplate.swift
 
       - name: Write security summary
         run: |
