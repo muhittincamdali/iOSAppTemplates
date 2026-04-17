@@ -4,6 +4,9 @@ on:
   push:
     branches: [main, master]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 permissions:
   pages: write
   id-token: write
@@ -18,9 +21,9 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Build Documentation
         run: |
@@ -36,11 +39,11 @@ jobs:
 
       - name: Setup Pages
         if: ${{ github.event.repository.has_pages }}
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         if: ${{ github.event.repository.has_pages }}
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./docs
 
