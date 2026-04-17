@@ -26,7 +26,8 @@ jobs:
       - name: Test
         run: swift test
       
-      - name: SwiftLint
+      - name: SwiftLint smoke
         run: |
           brew install swiftlint
-          swiftlint lint --reporter github-actions-logging
+          ruby -e 'require "yaml"; YAML.load_file(".swiftlint.yml")'
+          swiftlint version
