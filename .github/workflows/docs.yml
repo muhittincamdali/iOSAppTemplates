@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - name: Validate portfolio surface
+        run: bash Scripts/validate-portfolio-surface.sh
       - name: Check links
         uses: lycheeverse/lychee-action@v1
         with:

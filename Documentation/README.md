@@ -17,6 +17,8 @@ Bu sayfa `iOSAppTemplates` icin canonical docs router'dir.
 | Gercek kurulum yolunu gormek | [Guides/Installation.md](./Guides/Installation.md) |
 | Complete-app standardini anlamak | [Complete-App-Standard.md](./Complete-App-Standard.md) |
 | Current portfolio map'i gormek | [Portfolio-Matrix.md](./Portfolio-Matrix.md) |
+| Tracked gallery'yi gormek | [Template-Showcase.md](./Template-Showcase.md) |
+| Lane proof seviyesini gormek | [Proof-Matrix.md](./Proof-Matrix.md) |
 | Template ailelerini incelemek | [TemplateGuide.md](./TemplateGuide.md) |
 | Example/router yuzeyini gormek | [../Examples/README.md](../Examples/README.md) |
 | Repo gap audit'ini okumak | [World-Class-Audit-2026-04-15.md](./World-Class-Audit-2026-04-15.md) |
@@ -32,6 +34,8 @@ Bu sayfa `iOSAppTemplates` icin canonical docs router'dir.
 ### Template And Product Surfaces
 
 - [Portfolio-Matrix.md](./Portfolio-Matrix.md)
+- [Template-Showcase.md](./Template-Showcase.md)
+- [Proof-Matrix.md](./Proof-Matrix.md)
 - [TemplateGuide.md](./TemplateGuide.md)
 - [VisionProGuide.md](./VisionProGuide.md)
 - [ArchitectureTemplatesGuide.md](./ArchitectureTemplatesGuide.md)
