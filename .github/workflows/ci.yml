@@ -28,6 +28,9 @@ jobs:
 
       - name: Template generator smoke
         run: bash Scripts/validate-template-generator-smoke.sh
+
+      - name: Standalone root manifest smoke
+        run: bash Scripts/validate-standalone-template-roots.sh
       
       - name: SwiftLint smoke
         run: |

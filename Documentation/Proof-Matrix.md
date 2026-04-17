@@ -6,22 +6,22 @@ Bu sayfa current public claim ile current proof arasindaki farki lane bazinda go
 
 Status anlamlari:
 
-- `Strong`: route + build path + packaging sinyali var
-- `Medium`: route var, ama packaging veya proof eksik
+- `Strong`: route + build path + packaging + app-specific proof var
+- `Medium`: route + packaging var, ama app-specific build veya media proof eksik
 - `Low`: source-level gorunurluk var, product proof zayif
 
 | Lane | Current Packaging | Current Proof | Strength | Next Missing Piece |
 | --- | --- | --- | --- | --- |
-| Commerce | standalone root + template family | root package green, standalone shell mevcut | Strong | per-app README + media |
-| Social | standalone root + template family + example | root package green, richer source/example surface mevcut | Strong | per-app README + media |
-| Health / Fitness | standalone root + template family | root package green, standalone shell mevcut | Strong | per-app README + media |
-| Finance | template family + generator lane | root package green, generator smoke green | Medium | standalone root veya per-app proof |
-| Education | template family + generator lane | root package green, generator lane listede | Medium | standalone root veya per-app proof |
-| Food Delivery | template family + generator lane | root package green, generator lane listede | Medium | standalone root veya per-app proof |
-| Travel | template family + generator lane | root package green, generator lane listede | Medium | standalone root veya per-app proof |
-| Productivity | template family + generator lane | root package green, generator lane listede | Medium | standalone root veya per-app proof |
-| News | template family + generator lane | root package green, generator lane listede | Medium | standalone root veya per-app proof |
-| Music / Podcast | template family + generator lane | root package green, generator lane listede | Medium | standalone root veya per-app proof |
+| Commerce | standalone root + template family | root package green, standalone manifest smoke green, source shell mevcut | Medium | iOS-targeted standalone build + per-app README + media |
+| Social | standalone root + template family + example | root package green, standalone manifest smoke green, richer source/example surface mevcut | Medium | iOS-targeted standalone build + per-app README + media |
+| Health / Fitness | standalone root + template family | root package green, standalone manifest smoke green, source shell mevcut | Medium | iOS-targeted standalone build + per-app README + media |
+| Finance | template family + generator lane | root package green, generator smoke green | Low | standalone root veya per-app proof |
+| Education | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
+| Food Delivery | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
+| Travel | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
+| Productivity | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
+| News | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
+| Music / Podcast | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
 
 ## Current Global Proof
 
@@ -29,6 +29,7 @@ Status anlamlari:
 - root `swift test` gecerli
 - generator `--list` gecerli
 - generator sample app `build + test` gecerli
+- standalone roots icin manifest smoke gecerli
 - GitHub workflows su an truth-based ve yesil
 
 ## What Is Still Missing
@@ -37,7 +38,7 @@ Status anlamlari:
 
 1. lane-specific per-app README
 2. real screenshot gallery
-3. explicit per-app smoke/build proof
+3. explicit iOS-targeted per-app smoke/build proof
 4. current 3 root disindaki lane'ler icin standalone packaging
 
 ## Rule

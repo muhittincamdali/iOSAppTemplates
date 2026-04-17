@@ -77,13 +77,24 @@ swift build
 swift test
 ```
 
-### 2. Open a standalone app root
+### 2. Inspect a standalone app root
 
 ```bash
 open Templates/SocialMediaApp/Package.swift
 open Templates/EcommerceApp/Package.swift
 open Templates/FitnessApp/Package.swift
 ```
+
+Bu yol bugun:
+- manifest-valid package entry
+- lane-specific source shell
+- standalone root packaging
+gosterir.
+
+Bu yol bugun henuz otomatik olarak su seyi kanitlamaz:
+- hosted standalone build proof
+- iOS simulator smoke
+- per-app media proof
 
 ### 3. Use the generator
 

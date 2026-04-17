@@ -48,7 +48,7 @@ Bugun public repo icinde net standalone roots:
 - `Templates/EcommerceApp`
 - `Templates/FitnessApp`
 
-Bu roots bugunku en yakin "open package and inspect app shell" yuzeyidir.
+Bu roots bugunku en yakin "open package and inspect app shell" yuzeyidir. Manifest smoke gecerler; app-specific build proof ise henuz ayri bir katmandir.
 
 ## How To Choose A Starting Point
 
@@ -100,6 +100,14 @@ open Templates/EcommerceApp/Package.swift
 open Templates/FitnessApp/Package.swift
 ```
 
+Bugun bu akisin garanti ettigi sey:
+- package manifest gecerliligi
+- lane-specific source shell
+
+Bugun bu akisin garanti etmedigi sey:
+- standalone iOS build proof
+- per-app media proof
+
 ## Deployment And App Store Notes
 
 Bu repo bugun:
@@ -112,6 +120,7 @@ Bu repo bugun su seyi otomatik garanti etmez:
 - App Store submission readiness
 - TestFlight-ready binary
 - uniform CI proof for every template lane
+- standalone iOS build proof for every root
 
 Bir template'i ship etmek istiyorsan en dogru akış:
 

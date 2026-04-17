@@ -18,7 +18,7 @@ Bu klasor henuz full complete-app gallery degil. Bugunku rol:
 ## Important Truth
 
 - Bu klasor altindaki her sey ayrik runnable Xcode project degil.
-- En guvenilir runnable path bugun `Templates/` altindaki standalone roots.
+- En guvenilir standalone package-entry path bugun `Templates/` altindaki standalone roots.
 - En guvenilir repo validation path bugun root `swift build` ve `swift test`.
 
 ## If You Want To Run Something
@@ -30,7 +30,7 @@ swift build
 swift test
 ```
 
-### Standalone roots
+### Standalone roots inceleme
 
 ```bash
 open ../Templates/SocialMediaApp/Package.swift
