@@ -47,5 +47,6 @@ swift ../Scripts/TemplateGenerator.swift --interactive
 ## Related Docs
 
 - [../Documentation/Guides/QuickStart.md](../Documentation/Guides/QuickStart.md)
+- [../Documentation/Portfolio-Matrix.md](../Documentation/Portfolio-Matrix.md)
 - [../Documentation/TemplateGuide.md](../Documentation/TemplateGuide.md)
 - [../Documentation/Complete-App-Standard.md](../Documentation/Complete-App-Standard.md)

@@ -25,6 +25,7 @@ Bu repo bugun sana uygun degil:
 | --- | --- |
 | Repo'yu 5 dakikada degerlendirmek | [Documentation/Guides/QuickStart.md](Documentation/Guides/QuickStart.md) |
 | Gercek complete-app standardini gormek | [Documentation/Complete-App-Standard.md](Documentation/Complete-App-Standard.md) |
+| Current portfolio gercegini gormek | [Documentation/Portfolio-Matrix.md](Documentation/Portfolio-Matrix.md) |
 | Template ailelerini incelemek | [Documentation/TemplateGuide.md](Documentation/TemplateGuide.md) |
 | Ornek/router yuzeyini gormek | [Examples/README.md](Examples/README.md) |
 | Mevcut gap audit'i okumak | [Documentation/World-Class-Audit-2026-04-15.md](Documentation/World-Class-Audit-2026-04-15.md) |
@@ -56,6 +57,10 @@ Bu repo bugun sana uygun degil:
 | Productivity | template family |
 
 Bu tablo `complete app` parity degil, bugun repo icinde bulunan packaging gercegidir.
+
+Daha net current-vs-target map icin:
+
+- [Documentation/Portfolio-Matrix.md](Documentation/Portfolio-Matrix.md)
 
 ## Fastest Working Paths
 
