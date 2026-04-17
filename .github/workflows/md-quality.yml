@@ -2,13 +2,15 @@ name: Markdown Quality
 on:
   pull_request:
     paths: ['**/*.md']
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '20'
       - run: npm i -g textlint @textlint/markdown textlint-rule-terminology textlint-rule-no-dead-link
