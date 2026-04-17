@@ -138,12 +138,17 @@ class TemplateGenerator {
     let projectName: String
     let outputPath: String
     let bundleIdentifier: String
+    let generatedHomeViewName: String
     
     init(template: TemplateType, projectName: String, outputPath: String, bundleIdentifier: String?) {
         self.template = template
         self.projectName = projectName
         self.outputPath = outputPath
         self.bundleIdentifier = bundleIdentifier ?? "com.example.\(projectName.lowercased().replacingOccurrences(of: " ", with: ""))"
+        self.generatedHomeViewName = template.displayName
+            .replacingOccurrences(of: " ", with: "")
+            .replacingOccurrences(of: "/", with: "")
+            .replacingOccurrences(of: "&", with: "")
     }
     
     func generate() throws {
@@ -204,21 +209,24 @@ class TemplateGenerator {
     
     private func generatePackageSwift(at path: String) throws {
         let content = """
-        // swift-tools-version: 5.9
+        // swift-tools-version: 6.0
         import PackageDescription
         
         let package = Package(
             name: "\(projectName)",
             platforms: [
-                .iOS(.v15),
-                .macOS(.v12)
+                .iOS(.v18),
+                .macOS(.v15),
+                .tvOS(.v18),
+                .watchOS(.v11),
+                .visionOS(.v2)
             ],
             products: [
-                .library(name: "\(projectName)", targets: ["\(projectName)"])
+                .executable(name: "\(projectName)", targets: ["\(projectName)"])
             ],
             dependencies: [],
             targets: [
-                .target(
+                .executableTarget(
                     name: "\(projectName)",
                     dependencies: [],
                     path: "Sources/\(projectName)"
@@ -256,7 +264,7 @@ class TemplateGenerator {
         
         struct ContentView: View {
             var body: some View {
-                \(template.displayName.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "/", with: "").replacingOccurrences(of: "&", with: ""))HomeView()
+                \(generatedHomeViewName)HomeView()
             }
         }
         
@@ -266,10 +274,25 @@ class TemplateGenerator {
         """
         
         try contentViewContent.write(toFile: "\(path)/Sources/\(projectName)/Views/ContentView.swift", atomically: true, encoding: .utf8)
+
+        let testContent = """
+        import Testing
+        @testable import \(projectName)
+
+        @Test
+        func generatedStarterCompiles() {
+            _ = ContentView()
+        }
+        """
+
+        try testContent.write(toFile: "\(path)/Tests/\(projectName)Tests/\(projectName)Tests.swift", atomically: true, encoding: .utf8)
     }
     
     private func generateTemplateSource(at path: String) throws {
-        // Generate a placeholder that references the template
+        let featuresLiteral = template.features
+            .map { "\"\($0)\"" }
+            .joined(separator: ", ")
+        
         let content = """
         // MARK: - \(template.displayName) Template
         // This template includes \(template.screens)+ screens with the following features:
@@ -281,8 +304,8 @@ class TemplateGenerator {
         import SwiftUI
         import Foundation
         
-        // Placeholder - replace with actual template implementation
-        public struct \(template.displayName.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "/", with: "").replacingOccurrences(of: "&", with: ""))HomeView: View {
+        // Generated starter shell - replace or extend with the lane-specific implementation.
+        public struct \(generatedHomeViewName)HomeView: View {
             public init() {}
             
             public var body: some View {
@@ -312,7 +335,7 @@ class TemplateGenerator {
                             }
                         }
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(Color.secondary.opacity(0.12))
                         .cornerRadius(12)
                     }
                     .padding()
@@ -321,12 +344,12 @@ class TemplateGenerator {
             }
             
             private var features: [String] {
-                \(template.features.map { "\\"\\($0)\\"" }.description)
+                [\(featuresLiteral)]
             }
         }
         """
         
-        try content.write(toFile: "\(path)/Sources/\(projectName)/Views/\(template.displayName.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "/", with: "").replacingOccurrences(of: "&", with: ""))HomeView.swift", atomically: true, encoding: .utf8)
+        try content.write(toFile: "\(path)/Sources/\(projectName)/Views/\(generatedHomeViewName)HomeView.swift", atomically: true, encoding: .utf8)
     }
     
     private func templateSourcePath() -> String {
@@ -348,7 +371,7 @@ class TemplateGenerator {
         let content = """
         # \(projectName)
         
-        A \(template.displayName) iOS app generated with iOSAppTemplates.
+        A \(template.displayName) starter generated with iOSAppTemplates.
         
         ## Features
         
@@ -356,15 +379,16 @@ class TemplateGenerator {
         
         ## Requirements
         
-        - iOS 15.0+
-        - Xcode 15.0+
-        - Swift 5.9+
+        - iOS 18.0+
+        - macOS 15.0+ for package inspection
+        - Xcode 16.0+
+        - Swift 6.0+
         
         ## Getting Started
         
         1. Open `Package.swift` in Xcode
         2. Build and run the project
-        3. Customize the template to your needs
+        3. Replace the generated shell with the lane-specific source as needed
         
         ## Project Structure
         
@@ -387,6 +411,10 @@ class TemplateGenerator {
         ---
         
         Generated with [iOSAppTemplates](https://github.com/muhittincamdali/iOSAppTemplates)
+        
+        See also:
+        - `iOSAppTemplates/Documentation/Complete-App-Standard.md`
+        - `iOSAppTemplates/Documentation/TemplateGuide.md`
         """
         
         try content.write(toFile: "\(path)/README.md", atomically: true, encoding: .utf8)

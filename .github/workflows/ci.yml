@@ -25,6 +25,9 @@ jobs:
       
       - name: Test
         run: swift test
+
+      - name: Template generator smoke
+        run: bash Scripts/validate-template-generator-smoke.sh
       
       - name: SwiftLint smoke
         run: |
