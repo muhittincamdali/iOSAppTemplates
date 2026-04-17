@@ -22,7 +22,7 @@ excluded:
   - Pods
   - .build
   - Package.swift
-  - */Generated/*
+  - "*/Generated/*"
   - DerivedData
 
 identifier_name:
