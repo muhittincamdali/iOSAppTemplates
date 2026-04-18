@@ -12,9 +12,9 @@ Status anlamlari:
 
 | Lane | Current Packaging | Current Proof | Strength | Next Missing Piece |
 | --- | --- | --- | --- | --- |
-| Commerce | standalone root + template family | root package green, standalone manifest smoke green, source shell mevcut, per-app proof surface mevcut, template-root README mevcut | Medium | iOS-targeted standalone build + media |
-| Social | standalone root + template family + example | root package green, standalone manifest smoke green, richer source/example surface mevcut, per-app proof surface mevcut, template-root README mevcut | Medium | iOS-targeted standalone build + media |
-| Health / Fitness | standalone root + template family | root package green, standalone manifest smoke green, source shell mevcut, per-app proof surface mevcut, template-root README mevcut | Medium | iOS-targeted standalone build + media |
+| Commerce | standalone root + template family | root package green, standalone manifest smoke green, source shell mevcut, per-app proof surface mevcut, template-root README mevcut | Medium | dependency lockfile + iOS-targeted standalone build + media |
+| Social | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/SocialMediaApp/Package.resolved` mevcut, richer source/example surface mevcut, per-app proof surface mevcut, template-root README mevcut | Medium | iOS-targeted standalone build + media |
+| Health / Fitness | standalone root + template family | root package green, standalone manifest smoke green, `Templates/FitnessApp/Package.resolved` mevcut, source shell mevcut, per-app proof surface mevcut, template-root README mevcut | Medium | iOS-targeted standalone build + media |
 | Finance | template family + generator lane | root package green, generator smoke green | Low | standalone root veya per-app proof |
 | Education | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
 | Food Delivery | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
@@ -30,6 +30,7 @@ Status anlamlari:
 - generator `--list` gecerli
 - generator sample app `build + test` gecerli
 - standalone roots icin manifest smoke gecerli
+- Social ve Fitness standalone roots icin deterministic `Package.resolved` mevcut
 - standalone roots icin canonical per-app proof sayfalari mevcut
 - GitHub workflows su an truth-based ve yesil
 
