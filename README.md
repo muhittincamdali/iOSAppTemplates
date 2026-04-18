@@ -31,6 +31,7 @@ This repository is not yet a full fit if you expect:
 | See canonical app proof pages | [Documentation/App-Proofs/README.md](Documentation/App-Proofs/README.md) |
 | See canonical app media pages | [Documentation/App-Media/README.md](Documentation/App-Media/README.md) |
 | Read the 20-app market strategy | [Documentation/World-Class-20-App-Strategy-2026-04-19.md](Documentation/World-Class-20-App-Strategy-2026-04-19.md) |
+| See the Wave 1 execution plan | [Documentation/Wave-1-Implementation-Plan.md](Documentation/Wave-1-Implementation-Plan.md) |
 | Inspect template families | [Documentation/TemplateGuide.md](Documentation/TemplateGuide.md) |
 | Inspect the example router | [Examples/README.md](Examples/README.md) |
 | Read the hard gap audit | [Documentation/World-Class-Audit-2026-04-15.md](Documentation/World-Class-Audit-2026-04-15.md) |
@@ -69,6 +70,7 @@ For the stronger current-vs-target view, use:
 - [Documentation/Template-Showcase.md](Documentation/Template-Showcase.md)
 - [Documentation/Proof-Matrix.md](Documentation/Proof-Matrix.md)
 - [Documentation/App-Proofs/README.md](Documentation/App-Proofs/README.md)
+- [Documentation/Wave-1-Implementation-Plan.md](Documentation/Wave-1-Implementation-Plan.md)
 - [Documentation/World-Class-20-App-Strategy-2026-04-19.md](Documentation/World-Class-20-App-Strategy-2026-04-19.md)
 
 ## Fastest Working Paths
