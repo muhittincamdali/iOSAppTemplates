@@ -12,9 +12,9 @@ Status anlamlari:
 
 | Lane | Current Packaging | Current Proof | Strength | Next Missing Piece |
 | --- | --- | --- | --- | --- |
-| Commerce | standalone root + template family | root package green, standalone manifest smoke green, source shell mevcut, per-app proof surface mevcut | Medium | iOS-targeted standalone build + media + template-root README |
-| Social | standalone root + template family + example | root package green, standalone manifest smoke green, richer source/example surface mevcut, per-app proof surface mevcut | Medium | iOS-targeted standalone build + media + template-root README |
-| Health / Fitness | standalone root + template family | root package green, standalone manifest smoke green, source shell mevcut, per-app proof surface mevcut | Medium | iOS-targeted standalone build + media + template-root README |
+| Commerce | standalone root + template family | root package green, standalone manifest smoke green, source shell mevcut, per-app proof surface mevcut, template-root README mevcut | Medium | iOS-targeted standalone build + media |
+| Social | standalone root + template family + example | root package green, standalone manifest smoke green, richer source/example surface mevcut, per-app proof surface mevcut, template-root README mevcut | Medium | iOS-targeted standalone build + media |
+| Health / Fitness | standalone root + template family | root package green, standalone manifest smoke green, source shell mevcut, per-app proof surface mevcut, template-root README mevcut | Medium | iOS-targeted standalone build + media |
 | Finance | template family + generator lane | root package green, generator smoke green | Low | standalone root veya per-app proof |
 | Education | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
 | Food Delivery | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |

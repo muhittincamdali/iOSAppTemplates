@@ -23,7 +23,7 @@ Canonical app-proof router:
 - Product shape: store, cart, checkout, auth shell
 - Proof today: package root mevcut, manifest smoke gecerli, source shell mevcut
 - Proof surface: [App-Proofs/EcommerceApp.md](./App-Proofs/EcommerceApp.md)
-- Gap: iOS-targeted standalone build proof, screenshot, per-app README
+- Gap: iOS-targeted standalone build proof, screenshot
 
 ### Social: SocialMediaApp
 
@@ -33,7 +33,7 @@ Canonical app-proof router:
 - Product shape: auth, feed/community shell, richer UI fragments
 - Proof today: package root mevcut, manifest smoke gecerli, ek example surface mevcut
 - Proof surface: [App-Proofs/SocialMediaApp.md](./App-Proofs/SocialMediaApp.md)
-- Gap: iOS-targeted standalone build proof, screenshot, per-app README
+- Gap: iOS-targeted standalone build proof, screenshot
 
 ### Health / Fitness: FitnessApp
 
@@ -42,7 +42,7 @@ Canonical app-proof router:
 - Product shape: auth, workout/progress shell, HealthKit-adjacent flow
 - Proof today: package root mevcut, manifest smoke gecerli, source shell mevcut
 - Proof surface: [App-Proofs/FitnessApp.md](./App-Proofs/FitnessApp.md)
-- Gap: iOS-targeted standalone build proof, screenshot, per-app README
+- Gap: iOS-targeted standalone build proof, screenshot
 
 ## Template Family Coverage
 
@@ -98,6 +98,5 @@ ama su an tek basina `complete app` kaniti degil.
 
 Bu sayfa ancak su iki katman geldikce gercek world-class gallery'ye donusur:
 
-1. per-app README
-2. screenshot / demo proof
-3. explicit standalone build proof
+1. screenshot / demo proof
+2. explicit standalone build proof

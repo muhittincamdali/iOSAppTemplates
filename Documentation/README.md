@@ -41,6 +41,9 @@ Bu sayfa `iOSAppTemplates` icin canonical docs router'dir.
 - [TemplateGuide.md](./TemplateGuide.md)
 - [VisionProGuide.md](./VisionProGuide.md)
 - [ArchitectureTemplatesGuide.md](./ArchitectureTemplatesGuide.md)
+- `Templates/EcommerceApp/README.md`
+- `Templates/SocialMediaApp/README.md`
+- `Templates/FitnessApp/README.md`
 
 ### API And Package Surfaces
 

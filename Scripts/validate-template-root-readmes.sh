@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo_root"
+
+roots=(
+  "Templates/EcommerceApp"
+  "Templates/SocialMediaApp"
+  "Templates/FitnessApp"
+)
+
+for root in "${roots[@]}"; do
+  readme="$root/README.md"
+  package="$root/Package.swift"
+
+  [[ -f "$readme" ]] || { echo "Missing template root README: $readme" >&2; exit 1; }
+  [[ -f "$package" ]] || { echo "Missing template root package: $package" >&2; exit 1; }
+
+  grep -Fq "open Package.swift" "$readme" || { echo "$readme missing package start path" >&2; exit 1; }
+  grep -Fq "../../Documentation/App-Proofs/" "$readme" || { echo "$readme missing canonical app proof link" >&2; exit 1; }
+  grep -Fq "swift build" "$readme" || { echo "$readme missing repo build proof path" >&2; exit 1; }
+  grep -Fq "swift test" "$readme" || { echo "$readme missing repo test proof path" >&2; exit 1; }
+done
+
+grep -Fq "Templates/EcommerceApp/README.md" Documentation/App-Proofs/EcommerceApp.md || { echo "Ecommerce proof page missing template README link" >&2; exit 1; }
+grep -Fq "Templates/SocialMediaApp/README.md" Documentation/App-Proofs/SocialMediaApp.md || { echo "Social proof page missing template README link" >&2; exit 1; }
+grep -Fq "Templates/FitnessApp/README.md" Documentation/App-Proofs/FitnessApp.md || { echo "Fitness proof page missing template README link" >&2; exit 1; }
+
+echo "Template root README validation passed."

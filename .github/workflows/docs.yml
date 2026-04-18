@@ -18,6 +18,8 @@ jobs:
         run: bash Scripts/validate-portfolio-surface.sh
       - name: Validate app proof surfaces
         run: bash Scripts/validate-app-proof-surfaces.sh
+      - name: Validate template root readmes
+        run: bash Scripts/validate-template-root-readmes.sh
       - name: Check links
         uses: lycheeverse/lychee-action@v1
         with:
