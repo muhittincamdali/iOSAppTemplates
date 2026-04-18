@@ -32,6 +32,7 @@ Status anlamlari:
 - standalone roots icin manifest smoke gecerli
 - 3 standalone root icin deterministic `Package.resolved` mevcut
 - standalone roots icin canonical per-app proof sayfalari mevcut
+- 3 standalone root icin canonical media router mevcut, ama status bugun `not-published`
 - GitHub workflows su an truth-based ve yesil
 
 ## App Proof Router

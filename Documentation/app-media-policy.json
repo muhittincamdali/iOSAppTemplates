@@ -1,0 +1,22 @@
+{
+  "apps": [
+    {
+      "id": "EcommerceApp",
+      "lane": "Commerce",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/EcommerceApp.md"
+    },
+    {
+      "id": "SocialMediaApp",
+      "lane": "Social",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/SocialMediaApp.md"
+    },
+    {
+      "id": "FitnessApp",
+      "lane": "Health / Fitness",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/FitnessApp.md"
+    }
+  ]
+}

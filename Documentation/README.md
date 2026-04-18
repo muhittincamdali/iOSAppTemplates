@@ -20,6 +20,7 @@ Bu sayfa `iOSAppTemplates` icin canonical docs router'dir.
 | Tracked gallery'yi gormek | [Template-Showcase.md](./Template-Showcase.md) |
 | Lane proof seviyesini gormek | [Proof-Matrix.md](./Proof-Matrix.md) |
 | Standalone root proof sayfalarini gormek | [App-Proofs/README.md](./App-Proofs/README.md) |
+| Media truth seviyesini gormek | [App-Media/README.md](./App-Media/README.md) |
 | Template ailelerini incelemek | [TemplateGuide.md](./TemplateGuide.md) |
 | Example/router yuzeyini gormek | [../Examples/README.md](../Examples/README.md) |
 | Repo gap audit'ini okumak | [World-Class-Audit-2026-04-15.md](./World-Class-Audit-2026-04-15.md) |
@@ -38,6 +39,7 @@ Bu sayfa `iOSAppTemplates` icin canonical docs router'dir.
 - [Template-Showcase.md](./Template-Showcase.md)
 - [Proof-Matrix.md](./Proof-Matrix.md)
 - [App-Proofs/README.md](./App-Proofs/README.md)
+- [App-Media/README.md](./App-Media/README.md)
 - [TemplateGuide.md](./TemplateGuide.md)
 - [VisionProGuide.md](./VisionProGuide.md)
 - [ArchitectureTemplatesGuide.md](./ArchitectureTemplatesGuide.md)

@@ -22,6 +22,8 @@ jobs:
         run: bash Scripts/validate-template-root-readmes.sh
       - name: Validate standalone root lockfiles
         run: bash Scripts/validate-standalone-root-lockfiles.sh
+      - name: Validate app media surfaces
+        run: bash Scripts/validate-app-media-surfaces.sh
       - name: Check links
         uses: lycheeverse/lychee-action@v1
         with:
