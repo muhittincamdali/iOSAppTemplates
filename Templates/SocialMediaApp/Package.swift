@@ -6,8 +6,7 @@ import PackageDescription
 let package = Package(
     name: "SocialMediaApp",
     platforms: [
-        .iOS(.v18),
-        .macOS(.v15)
+        .iOS(.v18)
     ],
     products: [
         .library(
@@ -38,6 +37,9 @@ let package = Package(
                 .product(name: "FirebaseStorage", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk"),
                 "Kingfisher"
+            ],
+            exclude: [
+                "SignUpView.swift"
             ]),
         .target(
             name: "SocialMediaAppUI",

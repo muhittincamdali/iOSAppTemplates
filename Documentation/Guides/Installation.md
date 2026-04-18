@@ -106,7 +106,7 @@ open Templates/EcommerceApp/Package.swift
 open Templates/FitnessApp/Package.swift
 ```
 
-Bu roots, root package'tan farkli olarak daha dogrudan app-shell inspection yuzeyi sunar.
+Bu roots, root package'tan farkli olarak daha dogrudan iOS app-shell inspection yuzeyi sunar.
 
 ## What This Page Does Not Assume
 

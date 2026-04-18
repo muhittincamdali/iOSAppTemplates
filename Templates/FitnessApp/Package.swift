@@ -6,8 +6,7 @@ import PackageDescription
 let package = Package(
     name: "FitnessApp",
     platforms: [
-        .iOS(.v18),
-        .macOS(.v15)
+        .iOS(.v18)
     ],
     products: [
         .library(

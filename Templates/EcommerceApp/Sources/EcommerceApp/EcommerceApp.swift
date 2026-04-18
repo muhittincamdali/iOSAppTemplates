@@ -693,6 +693,7 @@ struct Product: Identifiable, Codable {
 }
 
 // MARK: - View Models
+@MainActor
 class ProductManager: ObservableObject {
     @Published var products: [Product] = []
     @Published var featuredProducts: [Product] = []
@@ -935,6 +936,7 @@ struct SearchBar: View {
 }
 
 // MARK: - Managers
+@MainActor
 class AuthManager: ObservableObject {
     static let shared = AuthManager()
     
@@ -976,6 +978,7 @@ class AuthManager: ObservableObject {
     }
 }
 
+@MainActor
 class CartManager: ObservableObject {
     static let shared = CartManager()
     
@@ -1017,6 +1020,7 @@ class CartManager: ObservableObject {
     }
 }
 
+@MainActor
 class OrderManager: ObservableObject {
     static let shared = OrderManager()
     
