@@ -72,4 +72,4 @@ Top-level package baseline:
 - watchOS 11
 - visionOS 2
 
-Standalone template roots bu baseline ile hizalaniyor.
+Standalone template roots bu noktada iOS-only app-shell surface olarak ele alinmalidir; top-level package baseline ile birebir ayni contract sayilmaz.

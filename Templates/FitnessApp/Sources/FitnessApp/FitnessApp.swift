@@ -778,6 +778,7 @@ struct Goal: Identifiable, Codable {
 }
 
 // MARK: - View Models
+@MainActor
 class WorkoutManager: ObservableObject {
     @Published var workouts: [Workout] = []
     @Published var recentWorkouts: [Workout] = []
@@ -847,6 +848,7 @@ class WorkoutManager: ObservableObject {
     }
 }
 
+@MainActor
 class ProgressManager: ObservableObject {
     @Published var progress: [ProgressData] = []
     @Published var isLoading = false
@@ -987,6 +989,7 @@ struct PrimaryButton: View {
 }
 
 // MARK: - Managers
+@MainActor
 class AuthManager: ObservableObject {
     static let shared = AuthManager()
     
@@ -1028,6 +1031,7 @@ class AuthManager: ObservableObject {
     }
 }
 
+@MainActor
 class HealthKitManager: ObservableObject {
     static let shared = HealthKitManager()
     

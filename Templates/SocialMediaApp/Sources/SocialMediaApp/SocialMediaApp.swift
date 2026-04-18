@@ -837,6 +837,7 @@ struct PrimaryButton: View {
 }
 
 // MARK: - Managers
+@MainActor
 class AuthManager: ObservableObject {
     static let shared = AuthManager()
     
@@ -878,6 +879,7 @@ class AuthManager: ObservableObject {
     }
 }
 
+@MainActor
 class DataManager: ObservableObject {
     static let shared = DataManager()
     
@@ -888,6 +890,7 @@ class DataManager: ObservableObject {
     }
 }
 
+@MainActor
 class NotificationManager: ObservableObject {
     static let shared = NotificationManager()
     
