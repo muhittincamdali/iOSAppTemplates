@@ -12,9 +12,9 @@ Status anlamlari:
 
 | Lane | Current Packaging | Current Proof | Strength | Next Missing Piece |
 | --- | --- | --- | --- | --- |
-| Commerce | standalone root + template family | root package green, standalone manifest smoke green, source shell mevcut | Medium | iOS-targeted standalone build + per-app README + media |
-| Social | standalone root + template family + example | root package green, standalone manifest smoke green, richer source/example surface mevcut | Medium | iOS-targeted standalone build + per-app README + media |
-| Health / Fitness | standalone root + template family | root package green, standalone manifest smoke green, source shell mevcut | Medium | iOS-targeted standalone build + per-app README + media |
+| Commerce | standalone root + template family | root package green, standalone manifest smoke green, source shell mevcut, per-app proof surface mevcut | Medium | iOS-targeted standalone build + media + template-root README |
+| Social | standalone root + template family + example | root package green, standalone manifest smoke green, richer source/example surface mevcut, per-app proof surface mevcut | Medium | iOS-targeted standalone build + media + template-root README |
+| Health / Fitness | standalone root + template family | root package green, standalone manifest smoke green, source shell mevcut, per-app proof surface mevcut | Medium | iOS-targeted standalone build + media + template-root README |
 | Finance | template family + generator lane | root package green, generator smoke green | Low | standalone root veya per-app proof |
 | Education | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
 | Food Delivery | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
@@ -30,7 +30,15 @@ Status anlamlari:
 - generator `--list` gecerli
 - generator sample app `build + test` gecerli
 - standalone roots icin manifest smoke gecerli
+- standalone roots icin canonical per-app proof sayfalari mevcut
 - GitHub workflows su an truth-based ve yesil
+
+## App Proof Router
+
+- [App-Proofs/README.md](./App-Proofs/README.md)
+- [App-Proofs/EcommerceApp.md](./App-Proofs/EcommerceApp.md)
+- [App-Proofs/SocialMediaApp.md](./App-Proofs/SocialMediaApp.md)
+- [App-Proofs/FitnessApp.md](./App-Proofs/FitnessApp.md)
 
 ## What Is Still Missing
 
