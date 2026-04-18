@@ -2,10 +2,15 @@
 
 set -euo pipefail
 
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo_root"
+
 ROOTS=(
   "Templates/EcommerceApp:EcommerceApp"
   "Templates/SocialMediaApp:SocialMediaApp"
   "Templates/FitnessApp:FitnessApp"
+  "Templates/ProductivityApp:ProductivityApp"
+  "Templates/FinanceApp:FinanceApp"
 )
 
 assert_exists() {

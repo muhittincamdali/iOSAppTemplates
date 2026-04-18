@@ -15,11 +15,11 @@ Status anlamlari:
 | Commerce | standalone root + template family | root package green, standalone manifest smoke green, `Templates/EcommerceApp/Package.resolved` mevcut, source shell mevcut, per-app proof surface mevcut, template-root README mevcut | Medium | iOS-targeted standalone build + media |
 | Social | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/SocialMediaApp/Package.resolved` mevcut, richer source/example surface mevcut, per-app proof surface mevcut, template-root README mevcut | Medium | iOS-targeted standalone build + media |
 | Health / Fitness | standalone root + template family | root package green, standalone manifest smoke green, `Templates/FitnessApp/Package.resolved` mevcut, source shell mevcut, per-app proof surface mevcut, template-root README mevcut | Medium | iOS-targeted standalone build + media |
-| Finance | template family + generator lane | root package green, generator smoke green | Low | standalone root veya per-app proof |
+| Finance | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/FinanceApp/Package.resolved` mevcut, local standalone `swift test` gecerli, richer source/example surface mevcut, per-app proof surface mevcut, template-root README mevcut | Medium | iOS-targeted standalone build + media |
 | Education | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
 | Food Delivery | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
 | Travel | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
-| Productivity | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
+| Productivity | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/ProductivityApp/Package.resolved` mevcut, local standalone `swift test` gecerli, richer source/example surface mevcut, per-app proof surface mevcut, template-root README mevcut | Medium | iOS-targeted standalone build + media |
 | News | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
 | Music / Podcast | template family + generator lane | root package green, generator lane listede | Low | standalone root veya per-app proof |
 
@@ -30,9 +30,10 @@ Status anlamlari:
 - generator `--list` gecerli
 - generator sample app `build + test` gecerli
 - standalone roots icin manifest smoke gecerli
-- 3 standalone root icin deterministic `Package.resolved` mevcut
+- 5 standalone root icin deterministic `Package.resolved` mevcut
 - standalone roots icin canonical per-app proof sayfalari mevcut
-- 3 standalone root icin canonical media router mevcut, ama status bugun `not-published`
+- 5 standalone root icin canonical media router mevcut, ama status bugun `not-published`
+- `ProductivityApp` ve `FinanceApp` icin local standalone `swift test` gecerli
 - GitHub workflows su an truth-based ve yesil
 
 ## App Proof Router
@@ -41,6 +42,8 @@ Status anlamlari:
 - [App-Proofs/EcommerceApp.md](./App-Proofs/EcommerceApp.md)
 - [App-Proofs/SocialMediaApp.md](./App-Proofs/SocialMediaApp.md)
 - [App-Proofs/FitnessApp.md](./App-Proofs/FitnessApp.md)
+- [App-Proofs/ProductivityApp.md](./App-Proofs/ProductivityApp.md)
+- [App-Proofs/FinanceApp.md](./App-Proofs/FinanceApp.md)
 
 ## What Is Still Missing
 
@@ -49,7 +52,7 @@ Status anlamlari:
 1. lane-specific per-app README
 2. real screenshot gallery
 3. explicit iOS-targeted per-app smoke/build proof
-4. current 3 root disindaki lane'ler icin standalone packaging
+4. current 5 root disindaki lane'ler icin standalone packaging
 
 Wave 1 icin zorunlu app-pack kontrati:
 

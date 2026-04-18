@@ -10,41 +10,26 @@ required_files=(
   "Documentation/App-Proofs/EcommerceApp.md"
   "Documentation/App-Proofs/SocialMediaApp.md"
   "Documentation/App-Proofs/FitnessApp.md"
+  "Documentation/App-Proofs/ProductivityApp.md"
+  "Documentation/App-Proofs/FinanceApp.md"
 )
 
 for file in "${required_files[@]}"; do
   [[ -f "$file" ]] || { echo "Missing app proof file: $file" >&2; exit 1; }
 done
 
-required_patterns=(
-  "Templates/EcommerceApp/Package.swift"
-  "Templates/SocialMediaApp/Package.swift"
-  "Templates/FitnessApp/Package.swift"
+generic_patterns=(
   "swift package dump-package"
   "swift build -c release"
 )
 
 for file in "${required_files[@]:1}"; do
-  for pattern in "${required_patterns[@]}"; do
-    if [[ "$file" == *"EcommerceApp.md" && "$pattern" == "Templates/SocialMediaApp/Package.swift" ]]; then
-      continue
-    fi
-    if [[ "$file" == *"EcommerceApp.md" && "$pattern" == "Templates/FitnessApp/Package.swift" ]]; then
-      continue
-    fi
-    if [[ "$file" == *"SocialMediaApp.md" && "$pattern" == "Templates/EcommerceApp/Package.swift" ]]; then
-      continue
-    fi
-    if [[ "$file" == *"SocialMediaApp.md" && "$pattern" == "Templates/FitnessApp/Package.swift" ]]; then
-      continue
-    fi
-    if [[ "$file" == *"FitnessApp.md" && "$pattern" == "Templates/EcommerceApp/Package.swift" ]]; then
-      continue
-    fi
-    if [[ "$file" == *"FitnessApp.md" && "$pattern" == "Templates/SocialMediaApp/Package.swift" ]]; then
-      continue
-    fi
+  app_name="$(basename "$file" .md)"
+  app_package="Templates/${app_name}/Package.swift"
 
+  grep -Fq "$app_package" "$file" || { echo "$file missing pattern: $app_package" >&2; exit 1; }
+
+  for pattern in "${generic_patterns[@]}"; do
     grep -Fq "$pattern" "$file" || { echo "$file missing pattern: $pattern" >&2; exit 1; }
   done
 done

@@ -9,6 +9,8 @@ Bugunku kapsam:
 - `Templates/EcommerceApp`
 - `Templates/SocialMediaApp`
 - `Templates/FitnessApp`
+- `Templates/ProductivityApp`
+- `Templates/FinanceApp`
 
 Bu sayfalarin rolu:
 
@@ -24,6 +26,8 @@ Bu sayfalarin rolu:
 | EcommerceApp | Commerce | standalone root + source shell | [EcommerceApp.md](./EcommerceApp.md) |
 | SocialMediaApp | Social | standalone root + source shell + richer example | [SocialMediaApp.md](./SocialMediaApp.md) |
 | FitnessApp | Health / Fitness | standalone root + source shell | [FitnessApp.md](./FitnessApp.md) |
+| ProductivityApp | Productivity | standalone root + source shell + richer example | [ProductivityApp.md](./ProductivityApp.md) |
+| FinanceApp | Finance | standalone root + source shell + richer example | [FinanceApp.md](./FinanceApp.md) |
 
 ## Rule
 
@@ -32,7 +36,7 @@ Bu klasorde proof surface'i olan bir app otomatik olarak `Complete App` sayilmaz
 `Complete App` etiketi icin canonical standard:
 - [../Complete-App-Standard.md](../Complete-App-Standard.md)
 
-Bugun bu uc app icin dogru etiket:
+Bugun bu bes app icin dogru etiket:
 
 - `Standalone Root`
 - `App-shell proof surface`
