@@ -24,6 +24,11 @@ jobs:
         with:
           xcode-version: latest-stable
 
+      - name: Reset SwiftPM artifact caches
+        run: |
+          rm -rf ~/Library/Caches/org.swift.swiftpm/artifacts
+          rm -rf .build/artifacts
+
       - name: Build release package
         run: swift build -c release
 
