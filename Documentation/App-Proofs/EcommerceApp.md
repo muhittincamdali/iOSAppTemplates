@@ -35,6 +35,7 @@ Last updated: 2026-04-18
 
 - standalone root package mevcut
 - template-root README mevcut
+- `Templates/EcommerceApp/Package.resolved` lockfile mevcut
 - `swift package dump-package` gecerli
 - root repo `swift build -c release` gecerli
 - root repo `swift test` gecerli
@@ -50,6 +51,7 @@ Last updated: 2026-04-18
 
 ```bash
 open Templates/EcommerceApp/Package.swift
+open Templates/EcommerceApp/Package.resolved
 ```
 
 Ardindan:

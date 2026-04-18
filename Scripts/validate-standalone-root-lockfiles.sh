@@ -16,13 +16,16 @@ require_pattern() {
 }
 
 required_roots=(
+  "Templates/EcommerceApp"
   "Templates/SocialMediaApp"
   "Templates/FitnessApp"
 )
 
 required_doc_paths=(
+  "Documentation/App-Proofs/EcommerceApp.md"
   "Documentation/App-Proofs/SocialMediaApp.md"
   "Documentation/App-Proofs/FitnessApp.md"
+  "Templates/EcommerceApp/README.md"
   "Templates/SocialMediaApp/README.md"
   "Templates/FitnessApp/README.md"
   "Documentation/Proof-Matrix.md"
@@ -67,10 +70,13 @@ for relative_path in "${required_doc_paths[@]}"; do
   fi
 done
 
+require_pattern 'Templates/EcommerceApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention EcommerceApp lockfile coverage."
 require_pattern 'Templates/SocialMediaApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention SocialMediaApp lockfile coverage."
 require_pattern 'Templates/FitnessApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention FitnessApp lockfile coverage."
+require_pattern 'Templates/EcommerceApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/EcommerceApp.md" "EcommerceApp proof surface must mention the lockfile."
 require_pattern 'Templates/SocialMediaApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/SocialMediaApp.md" "SocialMediaApp proof surface must mention the lockfile."
 require_pattern 'Templates/FitnessApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/FitnessApp.md" "FitnessApp proof surface must mention the lockfile."
+require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/EcommerceApp/README.md" "EcommerceApp template README must mention the lockfile."
 require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/SocialMediaApp/README.md" "SocialMediaApp template README must mention the lockfile."
 require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/FitnessApp/README.md" "FitnessApp template README must mention the lockfile."
 

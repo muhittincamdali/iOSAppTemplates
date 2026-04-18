@@ -21,7 +21,7 @@ Canonical app-proof router:
 - Type: `Standalone Root`
 - Entry: `Templates/EcommerceApp/Package.swift`
 - Product shape: store, cart, checkout, auth shell
-- Proof today: package root mevcut, manifest smoke gecerli, source shell mevcut
+- Proof today: package root mevcut, manifest smoke gecerli, `Templates/EcommerceApp/Package.resolved` mevcut, source shell mevcut
 - Proof surface: [App-Proofs/EcommerceApp.md](./App-Proofs/EcommerceApp.md)
 - Gap: iOS-targeted standalone build proof, screenshot
 
