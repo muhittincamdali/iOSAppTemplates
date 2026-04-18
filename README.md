@@ -28,6 +28,7 @@ Bu repo bugun sana uygun degil:
 | Current portfolio gercegini gormek | [Documentation/Portfolio-Matrix.md](Documentation/Portfolio-Matrix.md) |
 | Tracked gallery yuzeyini gormek | [Documentation/Template-Showcase.md](Documentation/Template-Showcase.md) |
 | Lane bazli proof seviyesini gormek | [Documentation/Proof-Matrix.md](Documentation/Proof-Matrix.md) |
+| Standalone root proof sayfalarini gormek | [Documentation/App-Proofs/README.md](Documentation/App-Proofs/README.md) |
 | Template ailelerini incelemek | [Documentation/TemplateGuide.md](Documentation/TemplateGuide.md) |
 | Ornek/router yuzeyini gormek | [Examples/README.md](Examples/README.md) |
 | Mevcut gap audit'i okumak | [Documentation/World-Class-Audit-2026-04-15.md](Documentation/World-Class-Audit-2026-04-15.md) |
@@ -65,6 +66,7 @@ Daha net current-vs-target map icin:
 - [Documentation/Portfolio-Matrix.md](Documentation/Portfolio-Matrix.md)
 - [Documentation/Template-Showcase.md](Documentation/Template-Showcase.md)
 - [Documentation/Proof-Matrix.md](Documentation/Proof-Matrix.md)
+- [Documentation/App-Proofs/README.md](Documentation/App-Proofs/README.md)
 
 ## Fastest Working Paths
 

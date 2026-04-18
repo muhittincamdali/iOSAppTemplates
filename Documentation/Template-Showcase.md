@@ -12,12 +12,17 @@ Buradaki kural:
 
 ## Runnable Now
 
+Canonical app-proof router:
+
+- [App-Proofs/README.md](./App-Proofs/README.md)
+
 ### Commerce: EcommerceApp
 
 - Type: `Standalone Root`
 - Entry: `Templates/EcommerceApp/Package.swift`
 - Product shape: store, cart, checkout, auth shell
 - Proof today: package root mevcut, manifest smoke gecerli, source shell mevcut
+- Proof surface: [App-Proofs/EcommerceApp.md](./App-Proofs/EcommerceApp.md)
 - Gap: iOS-targeted standalone build proof, screenshot, per-app README
 
 ### Social: SocialMediaApp
@@ -27,6 +32,7 @@ Buradaki kural:
 - Extra route: `Examples/SocialMediaExample`
 - Product shape: auth, feed/community shell, richer UI fragments
 - Proof today: package root mevcut, manifest smoke gecerli, ek example surface mevcut
+- Proof surface: [App-Proofs/SocialMediaApp.md](./App-Proofs/SocialMediaApp.md)
 - Gap: iOS-targeted standalone build proof, screenshot, per-app README
 
 ### Health / Fitness: FitnessApp
@@ -35,6 +41,7 @@ Buradaki kural:
 - Entry: `Templates/FitnessApp/Package.swift`
 - Product shape: auth, workout/progress shell, HealthKit-adjacent flow
 - Proof today: package root mevcut, manifest smoke gecerli, source shell mevcut
+- Proof surface: [App-Proofs/FitnessApp.md](./App-Proofs/FitnessApp.md)
 - Gap: iOS-targeted standalone build proof, screenshot, per-app README
 
 ## Template Family Coverage
@@ -84,7 +91,8 @@ ama su an tek basina `complete app` kaniti degil.
 ### Proof seviyesini gormek istiyorsan
 
 1. [Proof-Matrix.md](./Proof-Matrix.md)
-2. [Complete-App-Standard.md](./Complete-App-Standard.md)
+2. [App-Proofs/README.md](./App-Proofs/README.md)
+3. [Complete-App-Standard.md](./Complete-App-Standard.md)
 
 ## Next Upgrade Path
 

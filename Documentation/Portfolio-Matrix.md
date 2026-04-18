@@ -21,10 +21,10 @@ Amaç:
 
 | Lane | Today | Best Current Route | Next Complete App Target |
 | --- | --- | --- | --- |
-| Commerce | Standalone Root + Template Family | `Templates/EcommerceApp` | E-Commerce Store |
-| Social | Standalone Root + Template Family + Example Surface | `Templates/SocialMediaApp` veya `Examples/SocialMediaExample` | Social Media |
+| Commerce | Standalone Root + Template Family + App Proof Surface | `Templates/EcommerceApp` veya `Documentation/App-Proofs/EcommerceApp.md` | E-Commerce Store |
+| Social | Standalone Root + Template Family + Example Surface + App Proof Surface | `Templates/SocialMediaApp` veya `Documentation/App-Proofs/SocialMediaApp.md` | Social Media |
 | News | Template Family | `Sources/NewsTemplates/NewsBlogTemplate.swift` | News / Editorial |
-| Health / Fitness | Standalone Root + Template Family | `Templates/FitnessApp` | Health / Fitness |
+| Health / Fitness | Standalone Root + Template Family + App Proof Surface | `Templates/FitnessApp` veya `Documentation/App-Proofs/FitnessApp.md` | Health / Fitness |
 | Finance | Template Family | `Sources/FinanceTemplates/FinanceAppTemplate.swift` | Finance / Budgeting |
 | Education | Template Family | `Sources/EducationTemplates/EducationAppTemplate.swift` | Education / Learning |
 | Food Delivery | Template Family | `Sources/FoodTemplates/FoodDeliveryTemplate.swift` | Food Delivery |
@@ -77,6 +77,12 @@ Amaç:
 - `Templates/EcommerceApp`
 - `Templates/SocialMediaApp`
 - `Templates/FitnessApp`
+
+### If you want the cleanest standalone proof page now
+
+- [App-Proofs/EcommerceApp.md](./App-Proofs/EcommerceApp.md)
+- [App-Proofs/SocialMediaApp.md](./App-Proofs/SocialMediaApp.md)
+- [App-Proofs/FitnessApp.md](./App-Proofs/FitnessApp.md)
 
 ### If you want broad category coverage now
 

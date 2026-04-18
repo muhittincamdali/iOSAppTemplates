@@ -51,4 +51,5 @@ swift ../Scripts/TemplateGenerator.swift --interactive
 - [../Documentation/Template-Showcase.md](../Documentation/Template-Showcase.md)
 - [../Documentation/TemplateGuide.md](../Documentation/TemplateGuide.md)
 - [../Documentation/Proof-Matrix.md](../Documentation/Proof-Matrix.md)
+- [../Documentation/App-Proofs/README.md](../Documentation/App-Proofs/README.md)
 - [../Documentation/Complete-App-Standard.md](../Documentation/Complete-App-Standard.md)

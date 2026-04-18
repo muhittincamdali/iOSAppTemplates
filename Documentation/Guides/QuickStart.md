@@ -54,6 +54,7 @@ gosterir.
 - `Sources/iOSAppTemplates/iOSAppTemplates.swift`
 - `Documentation/Complete-App-Standard.md`
 - `Documentation/Template-Showcase.md`
+- `Documentation/App-Proofs/README.md`
 
 ### UI-first bir lane ile baslamak istiyorsan
 - `Templates/SocialMediaApp`
@@ -89,4 +90,5 @@ O iddia icin canonical standard:
 2. [First App Tutorial](../FirstApp.md)
 3. [Template Guide](../TemplateGuide.md)
 4. [Template Showcase](../Template-Showcase.md)
-5. [API Reference](../API-Reference.md)
+5. [App Proof Surfaces](../App-Proofs/README.md)
+6. [API Reference](../API-Reference.md)

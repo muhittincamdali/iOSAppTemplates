@@ -144,5 +144,6 @@ olarak dusunulmelidir.
 1. [First App Tutorial](./FirstApp.md)
 2. [Template Showcase](./Template-Showcase.md)
 3. [Proof Matrix](./Proof-Matrix.md)
-4. [API Reference](./API-Reference.md)
-5. [World-Class Audit](./World-Class-Audit-2026-04-15.md)
+4. [App Proof Surfaces](./App-Proofs/README.md)
+5. [API Reference](./API-Reference.md)
+6. [World-Class Audit](./World-Class-Audit-2026-04-15.md)
