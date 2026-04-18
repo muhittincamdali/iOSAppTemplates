@@ -1,76 +1,79 @@
 # iOSAppTemplates
 
-SwiftUI-first app starter system for Apple platforms.
+Production-grade SwiftUI app starter system for Apple platforms.
 
-`iOSAppTemplates` bugun category-level template families, generator tooling, shared package targets ve `Templates/` altinda `3` standalone app root ship ediyor. Repo hedefi genis complete-app parity; bugunku claim ise bunun tamami degil, bugun gercekten neyin var oldugunu net gostermek.
+`iOSAppTemplates` currently ships category-level template families, generator tooling, shared package targets, and `3` standalone app roots under `Templates/`. The product goal is broader: become the canonical SwiftUI starter portfolio with `20 provable complete apps`. The repository should only claim what can be routed, built, shown, and validated today.
 
 ## First Decision
 
-Bu repo sana uygun:
+This repository is a strong fit if you want to:
 
-- category-level app starter ariyorsan
-- shared Swift package surface ustunden template ailesi incelemek istiyorsan
-- generator ile hizli app shell cikarmak istiyorsan
-- `Clean Architecture`, `MVVM-C`, `TCA` gibi pattern'leri ayni portfoyde gormek istiyorsan
+- evaluate a broad SwiftUI starter portfolio from one codebase
+- inspect reusable template families before building your own app
+- generate a starter shell quickly from the CLI
+- compare multiple architecture approaches in one repository
 
-Bu repo bugun sana uygun degil:
+This repository is not yet a full fit if you expect:
 
-- tam complete-app parity bekliyorsan
-- tek komutla tam release-grade portfolio istiyorsan
-- her kategori icin ayni seviyede media, UI automation ve release proof ariyorsan
+- `20 complete apps` already shipping at equal maturity
+- the same proof depth for every lane today
+- published media and simulator proof for every standalone app
 
 ## Start Here
 
-| Ihtiyacin | Ilk durak |
+| Need | Start here |
 | --- | --- |
-| Repo'yu 5 dakikada degerlendirmek | [Documentation/Guides/QuickStart.md](Documentation/Guides/QuickStart.md) |
-| Gercek complete-app standardini gormek | [Documentation/Complete-App-Standard.md](Documentation/Complete-App-Standard.md) |
-| Current portfolio gercegini gormek | [Documentation/Portfolio-Matrix.md](Documentation/Portfolio-Matrix.md) |
-| Tracked gallery yuzeyini gormek | [Documentation/Template-Showcase.md](Documentation/Template-Showcase.md) |
-| Lane bazli proof seviyesini gormek | [Documentation/Proof-Matrix.md](Documentation/Proof-Matrix.md) |
-| Standalone root proof sayfalarini gormek | [Documentation/App-Proofs/README.md](Documentation/App-Proofs/README.md) |
-| Template ailelerini incelemek | [Documentation/TemplateGuide.md](Documentation/TemplateGuide.md) |
-| Ornek/router yuzeyini gormek | [Examples/README.md](Examples/README.md) |
-| Mevcut gap audit'i okumak | [Documentation/World-Class-Audit-2026-04-15.md](Documentation/World-Class-Audit-2026-04-15.md) |
+| Evaluate the repo in 5 minutes | [Documentation/Guides/QuickStart.md](Documentation/Guides/QuickStart.md) |
+| See the complete-app contract | [Documentation/Complete-App-Standard.md](Documentation/Complete-App-Standard.md) |
+| See the current-vs-target portfolio map | [Documentation/Portfolio-Matrix.md](Documentation/Portfolio-Matrix.md) |
+| See the tracked gallery surface | [Documentation/Template-Showcase.md](Documentation/Template-Showcase.md) |
+| See lane-by-lane proof status | [Documentation/Proof-Matrix.md](Documentation/Proof-Matrix.md) |
+| See canonical app proof pages | [Documentation/App-Proofs/README.md](Documentation/App-Proofs/README.md) |
+| See canonical app media pages | [Documentation/App-Media/README.md](Documentation/App-Media/README.md) |
+| Read the 20-app market strategy | [Documentation/World-Class-20-App-Strategy-2026-04-19.md](Documentation/World-Class-20-App-Strategy-2026-04-19.md) |
+| Inspect template families | [Documentation/TemplateGuide.md](Documentation/TemplateGuide.md) |
+| Inspect the example router | [Examples/README.md](Examples/README.md) |
+| Read the hard gap audit | [Documentation/World-Class-Audit-2026-04-15.md](Documentation/World-Class-Audit-2026-04-15.md) |
 
 ## What Ships Today
 
-- `Sources/` altinda category-level template families
-- `Scripts/TemplateGenerator.swift` ile generator entry point
-- `Templates/` altinda `3` standalone app root:
+- category-level template families under `Sources/`
+- `Scripts/TemplateGenerator.swift` as the generator entry point
+- `3` standalone app roots under `Templates/`:
   - `Templates/EcommerceApp`
-  - `Templates/FitnessApp`
   - `Templates/SocialMediaApp`
-- `Examples/` altinda karisik reference/example surfaces
-- root package graph icin aktif build/test/security/performance dogrulamasi
+  - `Templates/FitnessApp`
+- a lightweight example/router layer under `Examples/`
+- active root-package validation for build, test, security, and performance
 
-## Product Lanes
+## Current Product Lanes
 
-| Lane | Current Surface |
-| --- | --- |
-| Commerce | template family + standalone root |
-| Social | template family + standalone root + richer example |
-| News | template family |
-| Health / Fitness | template family + standalone root |
-| Finance | template family |
-| Education | template family |
-| Food Delivery | template family |
-| Travel | template family |
-| Music / Podcast | template family |
-| Productivity | template family |
+| Lane | Current surface | Target complete app |
+| --- | --- | --- |
+| Commerce | template family + standalone root | E-Commerce Store |
+| Social | template family + standalone root + richer example | Social Media |
+| News | template family | News / Editorial |
+| Health / Fitness | template family + standalone root | Health / Fitness |
+| Finance | template family | Finance / Budgeting |
+| Education | template family | Education / Learning |
+| Food Delivery | template family | Food Delivery |
+| Travel | template family | Travel Planner |
+| Music / Podcast | template family | Music / Podcast |
+| Productivity | template family | Productivity / Tasks |
 
-Bu tablo `complete app` parity degil, bugun repo icinde bulunan packaging gercegidir.
+This table is not a `complete app` claim. It is the current packaging truth of the repository.
 
-Daha net current-vs-target map icin:
+For the stronger current-vs-target view, use:
 
 - [Documentation/Portfolio-Matrix.md](Documentation/Portfolio-Matrix.md)
 - [Documentation/Template-Showcase.md](Documentation/Template-Showcase.md)
 - [Documentation/Proof-Matrix.md](Documentation/Proof-Matrix.md)
 - [Documentation/App-Proofs/README.md](Documentation/App-Proofs/README.md)
+- [Documentation/World-Class-20-App-Strategy-2026-04-19.md](Documentation/World-Class-20-App-Strategy-2026-04-19.md)
 
 ## Fastest Working Paths
 
-### 1. Validate the package surface
+### 1. Validate the root package graph
 
 ```bash
 git clone https://github.com/muhittincamdali/iOSAppTemplates.git
@@ -87,17 +90,18 @@ open Templates/EcommerceApp/Package.swift
 open Templates/FitnessApp/Package.swift
 ```
 
-Bu yol bugun:
+This proves today:
+
 - manifest-valid package entry
 - lane-specific source shell
 - standalone root packaging
-- Commerce, Social ve Fitness roots icin deterministic `Package.resolved`
-gosterir.
+- deterministic `Package.resolved` coverage for the three standalone roots
 
-Bu yol bugun henuz otomatik olarak su seyi kanitlamaz:
-- hosted standalone build proof
-- iOS simulator smoke
-- per-app media proof
+This does not yet prove today:
+
+- published app media
+- hosted standalone iOS simulator proof
+- full complete-app parity for all lanes
 
 ### 3. Use the generator
 
@@ -106,24 +110,25 @@ swift Scripts/TemplateGenerator.swift --interactive
 swift Scripts/TemplateGenerator.swift --list
 ```
 
-## Current Quality Bar
+## Quality Bar
 
-- Active package graph build ediyor
-- Active package graph test ediliyor
-- Security smoke surface var
-- Performance smoke surface var
-- Public docs truth-based olacak sekilde yeniden sikilastiriliyor
+- active root package graph builds
+- active root package graph tests
+- security smoke surface exists
+- performance smoke surface exists
+- public docs are being tightened around truth-first product claims
+- the repo now has explicit app proof, media, lockfile, and portfolio routers
 
 ## Canonical Docs
 
 - [Documentation/README.md](Documentation/README.md)
 - [Documentation/Guides/Installation.md](Documentation/Guides/Installation.md)
 - [Documentation/API-Reference.md](Documentation/API-Reference.md)
-- [Documentation/VisionProGuide.md](Documentation/VisionProGuide.md)
+- [Documentation/World-Class-20-App-Strategy-2026-04-19.md](Documentation/World-Class-20-App-Strategy-2026-04-19.md)
 
 ## Contributing
 
-Yeni claim ekliyorsan proof path de ekle. Ayrinti:
+If you add a product claim, add the proof path too.
 
 - [CONTRIBUTING.md](CONTRIBUTING.md)
 - [SECURITY.md](SECURITY.md)

@@ -1,25 +1,29 @@
 # Complete App Standard
 
-Last updated: 2026-04-15
+Last updated: 2026-04-19
 
 ## Purpose
 
 This document defines when a template in `iOSAppTemplates` is allowed to be called a `complete app`.
 
-This standard exists to prevent marketing drift, proof drift, and category confusion.
+It exists to stop three failures:
+
+- marketing drift
+- proof drift
+- category confusion
 
 ## Canonical Product Goal
 
-`iOSAppTemplates` should become the canonical SwiftUI app starter system with 20 provable complete product templates.
+`iOSAppTemplates` should become the canonical SwiftUI app starter system with `20 provable complete product apps`.
 
 That means:
 
 - breadth matters
-- but proof matters more
+- proof matters more
 
-## Product Lane Model
+## Product Model
 
-The repository should expand to 20 complete apps using 5 product lanes.
+The target portfolio uses `5` lanes and `20` complete apps.
 
 ### Lane 1: Commerce
 
@@ -56,31 +60,36 @@ The repository should expand to 20 complete apps using 5 product lanes.
 19. Subscription Lifestyle / Habit Tracker
 20. Privacy / Secure Vault
 
+The market rationale for this list lives in [World-Class-20-App-Strategy-2026-04-19.md](./World-Class-20-App-Strategy-2026-04-19.md).
+
 ## Complete App Definition
 
-A template may only be labeled `complete` if all required conditions below are true.
+A template may only be labeled `complete` if every required condition below is true.
 
 ### Required Product Conditions
 
 - it has a clear product name
-- it has a defined category and lane
+- it has a defined lane and category
 - it has a documented target user
-- it has a `best for / not for` decision surface
+- it has a documented `best for / not for` decision surface
 
 ### Required Repository Conditions
 
-- it has a real template root or explicit generator output path
+- it has a real standalone root or an explicit generator output path
 - it has a per-app README
+- it has a richer example surface
 - it has a documented feature list
 - it has a documented screen list
 - it has a documented platform baseline
 
 ### Required Proof Conditions
 
-- it builds successfully in CI or local release validation
+- it has a documented start/run path
+- it has a per-app proof page
+- it has a per-app media page
 - it has at least one real screenshot
 - it is included in the gallery surface
-- it has a documented start/run path
+- it builds successfully in CI or release validation
 
 ### Strongly Recommended Conditions
 
@@ -88,22 +97,31 @@ A template may only be labeled `complete` if all required conditions below are t
 - smoke test
 - generator coverage
 - visual asset in README/showcase/gallery
+- explicit iOS-targeted standalone build proof
 
 ## Labeling Rules
 
-Use these labels consistently:
+Use these labels consistently.
 
 ### `Complete App`
 
 Use only when every required condition is satisfied.
 
+### `Standalone Root`
+
+Use when `Templates/` contains a manifest-valid app package entry and source shell, but complete-app proof is still incomplete.
+
 ### `Template Family`
 
-Use when the category and architecture exist, but proof or per-app product packaging is incomplete.
+Use when the category and architecture exist, but standalone packaging or product proof is incomplete.
+
+### `Example Surface`
+
+Use when `Examples/` contains a meaningful inspection or learning path, but not a complete app package.
 
 ### `Preview`
 
-Use when the concept is visible but not yet fully navigable or fully packaged.
+Use when the concept is visible but not fully navigable or fully packaged.
 
 ### `Module`
 
@@ -111,13 +129,13 @@ Use when a reusable source package exists without full app packaging.
 
 ## Current Reality Gap
 
-The repository currently contains strong template-family material, but not all public `complete app` claims are fully backed by complete-app proof.
+The repository contains meaningful template-family material and three standalone roots, but it does not yet have `20 complete apps`.
 
-That gap must be closed before expanding public claims.
+That gap must be closed before public claims expand.
 
-## 2026 Expansion Strategy
+## Expansion Rules
 
-Do not expand to 20 apps with disconnected demos.
+Do not expand to `20` by cloning the same shell with new labels.
 
 Expand with:
 
@@ -126,51 +144,37 @@ Expand with:
 - one shared generator contract
 - one shared proof model
 - one gallery and documentation system
+- distinct domain and interaction models per app
 
-## Sprint Sequence
+## Execution Sequence
 
-### Sprint 0: Truth Reset
+### Sprint 1: Canonical English Surface
 
-- remove placeholder and fake ownership values
-- fix broken example links
-- unify version and platform baselines
-- align README claims to current proof
+- root README stays English and product-grade
+- docs hub and portfolio router stay English and canonical
+- examples hub remains a router, not a claim dump
 
-### Sprint 1: Canonical Onboarding
+### Sprint 2: First 8 Complete Apps
 
-- one root README path
-- one `GettingStarted` path
-- one gallery-first chooser
-- one examples router
-
-### Sprint 2: Proof Reset
-
-- remove fake benchmark comparisons
-- make CI and release fail-fast
-- either fix or remove broken scheduled workflows
-- establish real proof surfaces
-
-### Sprint 3: First 8 Complete Apps
-
-- E-Commerce
-- Social Media
-- Productivity
-- Finance
-- Education
-- Food Delivery
-- Travel
-- AI Assistant
+1. E-Commerce Store
+2. Social Media
+3. Productivity / Tasks
+4. Finance / Budgeting
+5. Education / Learning
+6. Food Delivery
+7. Travel Planner
+8. AI Assistant
 
 Each of these must satisfy the complete-app definition before the next wave expands.
 
-### Sprint 4: Visual Showcase System
+### Sprint 3: Showcase And Media System
 
 - real screenshot cards
 - per-app gallery entries
-- product-lane chooser
-- social preview system
+- per-app media truth
+- README and docs surfaces that route to those assets
 
-### Sprint 5: Expand to 20
+### Sprint 4: Expansion To 20
 
 Only after the first wave is provable and stable.
 
@@ -178,14 +182,14 @@ Only after the first wave is provable and stable.
 
 The repository may publicly say `20 complete apps` only when:
 
-- 20 gallery cards exist
-- 20 real app entries exist
-- 20 per-app proof surfaces exist
-- the generator and docs system can route users to those 20 apps
+- `20` standalone roots exist
+- `20` richer examples exist
+- `20` gallery cards exist
+- `20` per-app proof surfaces exist
+- `20` per-app media surfaces exist
+- the generator and docs system can route users to all `20`
 - CI/release truth remains green
 
 ## Final Rule
 
-Count only what can be proven.
-
-If an app cannot be routed, built, shown, and understood, it does not count.
+Count only what can be routed, built, shown, and defended.

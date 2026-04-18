@@ -1,30 +1,32 @@
 # Current Portfolio Matrix
 
-Last updated: 2026-04-18
+Last updated: 2026-04-19
 
-Bu sayfa `iOSAppTemplates` icin current-vs-target product map'tir.
+This page is the canonical current-vs-target product map for `iOSAppTemplates`.
 
-Amaç:
+It exists to:
 
-- bugun repo icinde neyin gercekten var oldugunu gostermek
-- `20 provable complete apps` hedefine giderken lane bazli gap'i acik tutmak
-- README, docs ve examples icin tek canonical portfolio router olmak
+- show what the repository really ships today
+- keep the gap visible on the way to `20 provable complete apps`
+- give README, docs, and examples one canonical product router
 
 ## Status Labels
 
-- `Standalone Root`: `Templates/` altinda manifest-valid app package entry ve source shell var
-- `Template Family`: `Sources/` altinda category-level source surface var
-- `Example Surface`: `Examples/` altinda ek inspection path var
-- `Complete App Target`: complete-app standardina gore hedef urun
+- `Standalone Root`: `Templates/` contains a manifest-valid app package entry and source shell
+- `Template Family`: `Sources/` contains a lane-level source surface
+- `Example Surface`: `Examples/` contains an inspection or richer learning path
+- `App Proof Surface`: a canonical per-app proof page exists
+- `App Media Surface`: a canonical per-app media page exists
+- `Complete App Target`: the intended world-class app for that lane
 
 ## Current 10-Lane Surface
 
-| Lane | Today | Best Current Route | Next Complete App Target |
+| Lane | Today | Best current route | Target complete app |
 | --- | --- | --- | --- |
-| Commerce | Standalone Root + Template Family + App Proof Surface | `Templates/EcommerceApp` veya `Documentation/App-Proofs/EcommerceApp.md` | E-Commerce Store |
-| Social | Standalone Root + Template Family + Example Surface + App Proof Surface | `Templates/SocialMediaApp` veya `Documentation/App-Proofs/SocialMediaApp.md` | Social Media |
+| Commerce | Standalone Root + Template Family + App Proof Surface + App Media Surface | `Templates/EcommerceApp` or `Documentation/App-Proofs/EcommerceApp.md` | E-Commerce Store |
+| Social | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/SocialMediaApp` or `Documentation/App-Proofs/SocialMediaApp.md` | Social Media |
 | News | Template Family | `Sources/NewsTemplates/NewsBlogTemplate.swift` | News / Editorial |
-| Health / Fitness | Standalone Root + Template Family + App Proof Surface | `Templates/FitnessApp` veya `Documentation/App-Proofs/FitnessApp.md` | Health / Fitness |
+| Health / Fitness | Standalone Root + Template Family + App Proof Surface + App Media Surface | `Templates/FitnessApp` or `Documentation/App-Proofs/FitnessApp.md` | Health / Fitness |
 | Finance | Template Family | `Sources/FinanceTemplates/FinanceAppTemplate.swift` | Finance / Budgeting |
 | Education | Template Family | `Sources/EducationTemplates/EducationAppTemplate.swift` | Education / Learning |
 | Food Delivery | Template Family | `Sources/FoodTemplates/FoodDeliveryTemplate.swift` | Food Delivery |
@@ -34,10 +36,10 @@ Amaç:
 
 ## Current Truth
 
-- Bugun net standalone app root sayisi `3`
-- Generator bugun `10` lane icin starter shell uretiyor
-- Bu `10 lane`, `10 complete app` demek degil
-- `Complete App` etiketi sadece [Complete-App-Standard.md](./Complete-App-Standard.md) ile verilecek
+- the repository currently has `3` standalone app roots
+- the generator currently covers the broad starter map via `swift Scripts/TemplateGenerator.swift --list`
+- this `10 lane` surface does not equal `10 complete apps`
+- the `Complete App` label is governed only by [Complete-App-Standard.md](./Complete-App-Standard.md)
 
 ## 20 Complete App Expansion Map
 
@@ -70,7 +72,9 @@ Amaç:
 19. Subscription Lifestyle / Habit Tracker
 20. Privacy / Secure Vault
 
-## How To Read This Repo Today
+The market reasoning for this order lives in [World-Class-20-App-Strategy-2026-04-19.md](./World-Class-20-App-Strategy-2026-04-19.md).
+
+## How To Read The Repo Today
 
 ### If you want a standalone package root now
 
@@ -78,23 +82,28 @@ Amaç:
 - `Templates/SocialMediaApp`
 - `Templates/FitnessApp`
 
-### If you want the cleanest standalone proof page now
+### If you want the cleanest proof pages now
 
 - [App-Proofs/EcommerceApp.md](./App-Proofs/EcommerceApp.md)
 - [App-Proofs/SocialMediaApp.md](./App-Proofs/SocialMediaApp.md)
 - [App-Proofs/FitnessApp.md](./App-Proofs/FitnessApp.md)
 
+### If you want the canonical media router now
+
+- [App-Media/README.md](./App-Media/README.md)
+
 ### If you want broad category coverage now
 
 - `swift Scripts/TemplateGenerator.swift --list`
 - `swift Scripts/TemplateGenerator.swift --interactive`
-- `Sources/` altindaki lane-specific template dosyalari
+- lane-specific files under `Sources/`
 
-### If you want proof discipline
+### If you want the product gap without marketing noise
 
 - [Complete-App-Standard.md](./Complete-App-Standard.md)
+- [World-Class-20-App-Strategy-2026-04-19.md](./World-Class-20-App-Strategy-2026-04-19.md)
 - [World-Class-Audit-2026-04-15.md](./World-Class-Audit-2026-04-15.md)
 
 ## Hard Rule
 
-Count only what can be routed, opened, built, and shown.
+Count only what can be routed, built, shown, and defended.

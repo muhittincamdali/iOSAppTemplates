@@ -1,29 +1,30 @@
 # Documentation Hub
 
-Bu sayfa `iOSAppTemplates` icin canonical docs router'dir.
+This page is the canonical documentation router for `iOSAppTemplates`.
 
 ## Current Repo Truth
 
-- `Sources/` canonical template-family surface
-- `Templates/` altinda `3` standalone app root var
-- `Examples/` karisik reference/example alani; henuz 20 app gallery degil
-- genis complete-app parity hedef, bugunku parity claim'i degil
+- `Sources/` is the canonical template-family surface
+- `Templates/` currently ships `3` standalone app roots
+- `Examples/` is still a mixed reference/example area, not a 20-app gallery
+- the product goal is broad complete-app parity, not a claim that parity exists today
 
 ## Start By Goal
 
 | Goal | Start here |
 | --- | --- |
-| Repo'yu hizli degerlendirmek | [Guides/QuickStart.md](./Guides/QuickStart.md) |
-| Gercek kurulum yolunu gormek | [Guides/Installation.md](./Guides/Installation.md) |
-| Complete-app standardini anlamak | [Complete-App-Standard.md](./Complete-App-Standard.md) |
-| Current portfolio map'i gormek | [Portfolio-Matrix.md](./Portfolio-Matrix.md) |
-| Tracked gallery'yi gormek | [Template-Showcase.md](./Template-Showcase.md) |
-| Lane proof seviyesini gormek | [Proof-Matrix.md](./Proof-Matrix.md) |
-| Standalone root proof sayfalarini gormek | [App-Proofs/README.md](./App-Proofs/README.md) |
-| Media truth seviyesini gormek | [App-Media/README.md](./App-Media/README.md) |
-| Template ailelerini incelemek | [TemplateGuide.md](./TemplateGuide.md) |
-| Example/router yuzeyini gormek | [../Examples/README.md](../Examples/README.md) |
-| Repo gap audit'ini okumak | [World-Class-Audit-2026-04-15.md](./World-Class-Audit-2026-04-15.md) |
+| Evaluate the repo quickly | [Guides/QuickStart.md](./Guides/QuickStart.md) |
+| See the installation reality | [Guides/Installation.md](./Guides/Installation.md) |
+| Understand the complete-app contract | [Complete-App-Standard.md](./Complete-App-Standard.md) |
+| See the current portfolio map | [Portfolio-Matrix.md](./Portfolio-Matrix.md) |
+| See the tracked gallery | [Template-Showcase.md](./Template-Showcase.md) |
+| See lane-by-lane proof status | [Proof-Matrix.md](./Proof-Matrix.md) |
+| See canonical app proof pages | [App-Proofs/README.md](./App-Proofs/README.md) |
+| See canonical app media pages | [App-Media/README.md](./App-Media/README.md) |
+| Read the market-backed 20-app strategy | [World-Class-20-App-Strategy-2026-04-19.md](./World-Class-20-App-Strategy-2026-04-19.md) |
+| Inspect template families | [TemplateGuide.md](./TemplateGuide.md) |
+| Inspect the examples router | [../Examples/README.md](../Examples/README.md) |
+| Read the hard gap audit | [World-Class-Audit-2026-04-15.md](./World-Class-Audit-2026-04-15.md) |
 
 ## Core Surfaces
 
@@ -33,13 +34,14 @@ Bu sayfa `iOSAppTemplates` icin canonical docs router'dir.
 - [Guides/Installation.md](./Guides/Installation.md)
 - [FirstApp.md](./FirstApp.md)
 
-### Template And Product Surfaces
+### Product And Portfolio
 
 - [Portfolio-Matrix.md](./Portfolio-Matrix.md)
 - [Template-Showcase.md](./Template-Showcase.md)
 - [Proof-Matrix.md](./Proof-Matrix.md)
 - [App-Proofs/README.md](./App-Proofs/README.md)
 - [App-Media/README.md](./App-Media/README.md)
+- [World-Class-20-App-Strategy-2026-04-19.md](./World-Class-20-App-Strategy-2026-04-19.md)
 - [TemplateGuide.md](./TemplateGuide.md)
 - [VisionProGuide.md](./VisionProGuide.md)
 - [ArchitectureTemplatesGuide.md](./ArchitectureTemplatesGuide.md)
@@ -61,12 +63,15 @@ Bu sayfa `iOSAppTemplates` icin canonical docs router'dir.
 - [../CONTRIBUTING.md](../CONTRIBUTING.md)
 - [World-Class-Audit-2026-04-15.md](./World-Class-Audit-2026-04-15.md)
 
-## What To Ignore For Now
+## What To Treat Carefully
 
-Bu repo icinde henuz complete-app gallery parity'sine ulasmamis alanlar var. Bir yuzey buyuk bir iddia tasiyorsa once su iki sayfayi kontrol et:
+Some repository surfaces still point to future complete-app parity.
+
+If a page carries a big claim, verify it against:
 
 - [Complete-App-Standard.md](./Complete-App-Standard.md)
-- [World-Class-Audit-2026-04-15.md](./World-Class-Audit-2026-04-15.md)
+- [Portfolio-Matrix.md](./Portfolio-Matrix.md)
+- [Proof-Matrix.md](./Proof-Matrix.md)
 
 ## Version Baseline
 
@@ -79,4 +84,4 @@ Top-level package baseline:
 - watchOS 11
 - visionOS 2
 
-Standalone template roots bu noktada iOS-only app-shell surface olarak ele alinmalidir; top-level package baseline ile birebir ayni contract sayilmaz.
+Standalone template roots should currently be treated as iOS-only app-shell surfaces, not as full parity with the top-level package contract.
