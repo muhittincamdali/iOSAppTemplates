@@ -35,6 +35,7 @@ Last updated: 2026-04-18
 
 ## Current Proof
 
+- `Package.resolved` lockfile mevcut
 - `swift package dump-package` gecerli
 - root repo `swift build -c release` gecerli
 - root repo `swift test` gecerli
@@ -50,6 +51,7 @@ Last updated: 2026-04-18
 
 ```bash
 open Package.swift
+open Package.resolved
 ```
 
 Repo-level proof:

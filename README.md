@@ -91,7 +91,7 @@ Bu yol bugun:
 - manifest-valid package entry
 - lane-specific source shell
 - standalone root packaging
-- Social ve Fitness roots icin deterministic `Package.resolved`
+- Commerce, Social ve Fitness roots icin deterministic `Package.resolved`
 gosterir.
 
 Bu yol bugun henuz otomatik olarak su seyi kanitlamaz:
