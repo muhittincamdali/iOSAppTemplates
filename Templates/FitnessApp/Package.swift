@@ -23,8 +23,7 @@ let package = Package(
         .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.8.1"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.18.0"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.9.1"),
-        .package(url: "https://github.com/danielgindi/Charts.git", from: "5.0.0"),
-        .package(url: "https://github.com/realm/SwiftLint.git", from: "0.54.0")
+        .package(url: "https://github.com/danielgindi/Charts.git", from: "5.0.0")
     ],
     targets: [
         .target(
