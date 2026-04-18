@@ -35,6 +35,7 @@ Last updated: 2026-04-18
 ## Current Proof
 
 - standalone root package mevcut
+- template-root README mevcut
 - `swift package dump-package` gecerli
 - root repo `swift build -c release` gecerli
 - root repo `swift test` gecerli
@@ -42,7 +43,6 @@ Last updated: 2026-04-18
 
 ## Missing Proof
 
-- app-specific README `Templates/SocialMediaApp` altinda yok
 - canonical screenshot yok
 - demo clip yok
 - explicit standalone iOS-targeted CI proof yok
@@ -63,6 +63,7 @@ swift test
 
 ## Canonical References
 
+- [Template Root README](../../Templates/SocialMediaApp/README.md)
 - [../Template-Showcase.md](../Template-Showcase.md)
 - [../Proof-Matrix.md](../Proof-Matrix.md)
 - [../Portfolio-Matrix.md](../Portfolio-Matrix.md)
