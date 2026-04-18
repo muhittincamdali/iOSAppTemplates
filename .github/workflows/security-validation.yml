@@ -29,9 +29,6 @@ jobs:
           rm -rf ~/Library/Caches/org.swift.swiftpm/artifacts
           rm -rf .build/artifacts
 
-      - name: Build release package
-        run: swift build -c release
-
       - name: Run active security smoke tests
         run: swift test --filter SecuritySurfaceTests
 
