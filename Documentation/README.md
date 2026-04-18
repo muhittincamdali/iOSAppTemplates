@@ -22,6 +22,7 @@ This page is the canonical documentation router for `iOSAppTemplates`.
 | See canonical app proof pages | [App-Proofs/README.md](./App-Proofs/README.md) |
 | See canonical app media pages | [App-Media/README.md](./App-Media/README.md) |
 | Read the market-backed 20-app strategy | [World-Class-20-App-Strategy-2026-04-19.md](./World-Class-20-App-Strategy-2026-04-19.md) |
+| See the Wave 1 execution plan | [Wave-1-Implementation-Plan.md](./Wave-1-Implementation-Plan.md) |
 | Inspect template families | [TemplateGuide.md](./TemplateGuide.md) |
 | Inspect the examples router | [../Examples/README.md](../Examples/README.md) |
 | Read the hard gap audit | [World-Class-Audit-2026-04-15.md](./World-Class-Audit-2026-04-15.md) |
@@ -42,6 +43,8 @@ This page is the canonical documentation router for `iOSAppTemplates`.
 - [App-Proofs/README.md](./App-Proofs/README.md)
 - [App-Media/README.md](./App-Media/README.md)
 - [World-Class-20-App-Strategy-2026-04-19.md](./World-Class-20-App-Strategy-2026-04-19.md)
+- [Wave-1-Implementation-Plan.md](./Wave-1-Implementation-Plan.md)
+- [Wave-1-App-Pack-Spec.md](./Wave-1-App-Pack-Spec.md)
 - [TemplateGuide.md](./TemplateGuide.md)
 - [VisionProGuide.md](./VisionProGuide.md)
 - [ArchitectureTemplatesGuide.md](./ArchitectureTemplatesGuide.md)

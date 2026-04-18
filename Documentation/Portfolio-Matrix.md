@@ -74,6 +74,8 @@ It exists to:
 
 The market reasoning for this order lives in [World-Class-20-App-Strategy-2026-04-19.md](./World-Class-20-App-Strategy-2026-04-19.md).
 
+The repository-level implementation contract for these eight apps lives in [Wave-1-Implementation-Plan.md](./Wave-1-Implementation-Plan.md).
+
 ## How To Read The Repo Today
 
 ### If you want a standalone package root now

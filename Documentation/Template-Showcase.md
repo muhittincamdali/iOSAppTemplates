@@ -85,8 +85,9 @@ ama su an tek basina `complete app` kaniti degil.
 ### Category breadth gormek istiyorsan
 
 1. [Portfolio-Matrix.md](./Portfolio-Matrix.md)
-2. `swift Scripts/TemplateGenerator.swift --list`
-3. [TemplateGuide.md](./TemplateGuide.md)
+2. [Wave-1-Implementation-Plan.md](./Wave-1-Implementation-Plan.md)
+3. `swift Scripts/TemplateGenerator.swift --list`
+4. [TemplateGuide.md](./TemplateGuide.md)
 
 ### Proof seviyesini gormek istiyorsan
 

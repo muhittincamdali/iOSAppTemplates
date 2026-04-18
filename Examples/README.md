@@ -53,3 +53,4 @@ swift ../Scripts/TemplateGenerator.swift --interactive
 - [../Documentation/Proof-Matrix.md](../Documentation/Proof-Matrix.md)
 - [../Documentation/App-Proofs/README.md](../Documentation/App-Proofs/README.md)
 - [../Documentation/Complete-App-Standard.md](../Documentation/Complete-App-Standard.md)
+- [../Documentation/Wave-1-Implementation-Plan.md](../Documentation/Wave-1-Implementation-Plan.md)

@@ -51,6 +51,11 @@ Status anlamlari:
 3. explicit iOS-targeted per-app smoke/build proof
 4. current 3 root disindaki lane'ler icin standalone packaging
 
+Wave 1 icin zorunlu app-pack kontrati:
+
+- [Wave-1-Implementation-Plan.md](./Wave-1-Implementation-Plan.md)
+- [Wave-1-App-Pack-Spec.md](./Wave-1-App-Pack-Spec.md)
+
 ## Rule
 
 Bir lane source olarak var diye `complete app` sayilmaz.
