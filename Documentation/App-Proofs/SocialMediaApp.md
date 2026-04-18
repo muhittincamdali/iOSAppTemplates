@@ -36,6 +36,7 @@ Last updated: 2026-04-18
 
 - standalone root package mevcut
 - template-root README mevcut
+- `Templates/SocialMediaApp/Package.resolved` lockfile mevcut
 - `swift package dump-package` gecerli
 - root repo `swift build -c release` gecerli
 - root repo `swift test` gecerli
@@ -51,6 +52,7 @@ Last updated: 2026-04-18
 
 ```bash
 open Templates/SocialMediaApp/Package.swift
+open Templates/SocialMediaApp/Package.resolved
 open Examples/SocialMediaExample/README.md
 ```
 

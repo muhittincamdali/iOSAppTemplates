@@ -31,7 +31,7 @@ Canonical app-proof router:
 - Entry: `Templates/SocialMediaApp/Package.swift`
 - Extra route: `Examples/SocialMediaExample`
 - Product shape: auth, feed/community shell, richer UI fragments
-- Proof today: package root mevcut, manifest smoke gecerli, ek example surface mevcut
+- Proof today: package root mevcut, manifest smoke gecerli, `Templates/SocialMediaApp/Package.resolved` mevcut, ek example surface mevcut
 - Proof surface: [App-Proofs/SocialMediaApp.md](./App-Proofs/SocialMediaApp.md)
 - Gap: iOS-targeted standalone build proof, screenshot
 
@@ -40,7 +40,7 @@ Canonical app-proof router:
 - Type: `Standalone Root`
 - Entry: `Templates/FitnessApp/Package.swift`
 - Product shape: auth, workout/progress shell, HealthKit-adjacent flow
-- Proof today: package root mevcut, manifest smoke gecerli, source shell mevcut
+- Proof today: package root mevcut, manifest smoke gecerli, `Templates/FitnessApp/Package.resolved` mevcut, source shell mevcut
 - Proof surface: [App-Proofs/FitnessApp.md](./App-Proofs/FitnessApp.md)
 - Gap: iOS-targeted standalone build proof, screenshot
 
