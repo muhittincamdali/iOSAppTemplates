@@ -1,27 +1,29 @@
 # Examples Hub
 
-Bu klasor henuz full complete-app gallery degil. Bugunku rol:
+This folder is not a full complete-app gallery yet. Its current role is:
 
 - source-level reference
 - lightweight onboarding example
-- richer social example surface
+- richer lane examples for tracked app packs
 
 ## Canonical Example Router
 
 | Surface | Type | Use it for |
 | --- | --- | --- |
-| [BasicExample.swift](./BasicExample.swift) | single-file reference | package API'yi hizli gormek |
-| [BasicExample/BasicExample.swift](./BasicExample/BasicExample.swift) | small example shell | minimal structure incelemek |
-| [QuickStartExample/QuickStartApp.swift](./QuickStartExample/QuickStartApp.swift) | onboarding entry | en hizli source-level baslangic |
-| [SocialMediaExample](./SocialMediaExample/) | richer category example | social lane icin daha urun benzeri akis gormek |
-| [ProductivityExample](./ProductivityExample/) | richer category example | productivity lane icin daha urun benzeri akis gormek |
-| [FinanceExample](./FinanceExample/) | richer category example | finance lane icin daha urun benzeri akis gormek |
+| [BasicExample.swift](./BasicExample.swift) | single-file reference | inspect the package API quickly |
+| [BasicExample/BasicExample.swift](./BasicExample/BasicExample.swift) | small example shell | inspect minimal structure |
+| [QuickStartExample/QuickStartApp.swift](./QuickStartExample/QuickStartApp.swift) | onboarding entry | reach the fastest source-level start |
+| [SocialMediaExample](./SocialMediaExample/) | richer category example | inspect a more product-like social flow |
+| [ProductivityExample](./ProductivityExample/) | richer category example | inspect a more product-like productivity flow |
+| [FinanceExample](./FinanceExample/) | richer category example | inspect a more product-like finance flow |
+| [EducationExample](./EducationExample/) | richer category example | inspect a more product-like education flow |
+| [FoodDeliveryExample](./FoodDeliveryExample/) | richer category example | inspect a more product-like food delivery flow |
 
 ## Important Truth
 
-- Bu klasor altindaki her sey ayrik runnable Xcode project degil.
-- En guvenilir standalone package-entry path bugun `Templates/` altindaki standalone roots.
-- En guvenilir repo validation path bugun root `swift build` ve `swift test`.
+- Not everything in this folder is a separate runnable Xcode project.
+- The most reliable standalone package-entry path today is under `Templates/`.
+- The most reliable repo validation path today is root `swift build` and `swift test`.
 
 ## If You Want To Run Something
 
@@ -32,12 +34,16 @@ swift build
 swift test
 ```
 
-### Standalone roots inceleme
+### Inspect standalone roots
 
 ```bash
 open ../Templates/SocialMediaApp/Package.swift
 open ../Templates/EcommerceApp/Package.swift
 open ../Templates/FitnessApp/Package.swift
+open ../Templates/ProductivityApp/Package.swift
+open ../Templates/FinanceApp/Package.swift
+open ../Templates/EducationApp/Package.swift
+open ../Templates/FoodDeliveryApp/Package.swift
 ```
 
 ### Generator path

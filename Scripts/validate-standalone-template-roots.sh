@@ -11,6 +11,8 @@ ROOTS=(
   "Templates/FitnessApp:FitnessApp"
   "Templates/ProductivityApp:ProductivityApp"
   "Templates/FinanceApp:FinanceApp"
+  "Templates/EducationApp:EducationApp"
+  "Templates/FoodDeliveryApp:FoodDeliveryApp"
 )
 
 assert_exists() {

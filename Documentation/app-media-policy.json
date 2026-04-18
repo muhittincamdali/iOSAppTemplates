@@ -29,6 +29,18 @@
       "lane": "Finance",
       "status": "not-published",
       "required_readme": "Documentation/App-Media/FinanceApp.md"
+    },
+    {
+      "id": "EducationApp",
+      "lane": "Education",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/EducationApp.md"
+    },
+    {
+      "id": "FoodDeliveryApp",
+      "lane": "Food Delivery",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/FoodDeliveryApp.md"
     }
   ]
 }

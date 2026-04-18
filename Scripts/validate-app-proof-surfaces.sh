@@ -12,6 +12,8 @@ required_files=(
   "Documentation/App-Proofs/FitnessApp.md"
   "Documentation/App-Proofs/ProductivityApp.md"
   "Documentation/App-Proofs/FinanceApp.md"
+  "Documentation/App-Proofs/EducationApp.md"
+  "Documentation/App-Proofs/FoodDeliveryApp.md"
 )
 
 for file in "${required_files[@]}"; do
