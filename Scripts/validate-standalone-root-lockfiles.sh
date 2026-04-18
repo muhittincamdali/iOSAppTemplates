@@ -4,6 +4,17 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+require_pattern() {
+  local pattern="$1"
+  local file_path="$2"
+  local error_message="$3"
+
+  if ! grep -Eq "${pattern}" "${file_path}"; then
+    echo "${error_message}" >&2
+    exit 1
+  fi
+}
+
 required_roots=(
   "Templates/SocialMediaApp"
   "Templates/FitnessApp"
@@ -56,34 +67,11 @@ for relative_path in "${required_doc_paths[@]}"; do
   fi
 done
 
-if ! rg -q 'Templates/SocialMediaApp/Package.resolved' "${repo_root}/Documentation/Proof-Matrix.md"; then
-  echo "Proof matrix must mention SocialMediaApp lockfile coverage." >&2
-  exit 1
-fi
-
-if ! rg -q 'Templates/FitnessApp/Package.resolved' "${repo_root}/Documentation/Proof-Matrix.md"; then
-  echo "Proof matrix must mention FitnessApp lockfile coverage." >&2
-  exit 1
-fi
-
-if ! rg -q 'Templates/SocialMediaApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/SocialMediaApp.md"; then
-  echo "SocialMediaApp proof surface must mention the lockfile." >&2
-  exit 1
-fi
-
-if ! rg -q 'Templates/FitnessApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/FitnessApp.md"; then
-  echo "FitnessApp proof surface must mention the lockfile." >&2
-  exit 1
-fi
-
-if ! rg -q 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/SocialMediaApp/README.md"; then
-  echo "SocialMediaApp template README must mention the lockfile." >&2
-  exit 1
-fi
-
-if ! rg -q 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/FitnessApp/README.md"; then
-  echo "FitnessApp template README must mention the lockfile." >&2
-  exit 1
-fi
+require_pattern 'Templates/SocialMediaApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention SocialMediaApp lockfile coverage."
+require_pattern 'Templates/FitnessApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention FitnessApp lockfile coverage."
+require_pattern 'Templates/SocialMediaApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/SocialMediaApp.md" "SocialMediaApp proof surface must mention the lockfile."
+require_pattern 'Templates/FitnessApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/FitnessApp.md" "FitnessApp proof surface must mention the lockfile."
+require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/SocialMediaApp/README.md" "SocialMediaApp template README must mention the lockfile."
+require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/FitnessApp/README.md" "FitnessApp template README must mention the lockfile."
 
 echo "Standalone root lockfile surfaces look good."
