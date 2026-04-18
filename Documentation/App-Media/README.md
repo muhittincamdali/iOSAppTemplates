@@ -9,6 +9,8 @@ Bugunku truth:
 - `EcommerceApp` media `not-published`
 - `SocialMediaApp` media `not-published`
 - `FitnessApp` media `not-published`
+- `ProductivityApp` media `not-published`
+- `FinanceApp` media `not-published`
 
 Bu yuzeyin rolu:
 
@@ -23,6 +25,8 @@ Bu yuzeyin rolu:
 | EcommerceApp | Commerce | `not-published` | [EcommerceApp.md](./EcommerceApp.md) |
 | SocialMediaApp | Social | `not-published` | [SocialMediaApp.md](./SocialMediaApp.md) |
 | FitnessApp | Health / Fitness | `not-published` | [FitnessApp.md](./FitnessApp.md) |
+| ProductivityApp | Productivity | `not-published` | [ProductivityApp.md](./ProductivityApp.md) |
+| FinanceApp | Finance | `not-published` | [FinanceApp.md](./FinanceApp.md) |
 
 ## Rule
 

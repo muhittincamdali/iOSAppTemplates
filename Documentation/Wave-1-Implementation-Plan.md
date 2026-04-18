@@ -81,29 +81,29 @@ See the exact contract in [Wave-1-App-Pack-Spec.md](./Wave-1-App-Pack-Spec.md).
 
 - Current lane: Productivity
 - Current assets:
-  - template family
-  - generator lane
-- Current maturity: not yet productized
-- Main blockers:
   - standalone root
+  - template family
   - richer example
-  - README
-  - proof page
-  - media page
+  - app proof surface
+  - app media surface
+- Current maturity: active Wave 1 build candidate
+- Main blockers:
+  - screenshot/video proof
+  - explicit iOS-targeted standalone build proof
 
 ### 4. Finance / Budgeting
 
 - Current lane: Finance
 - Current assets:
-  - template family
-  - generator lane
-- Current maturity: not yet productized
-- Main blockers:
   - standalone root
+  - template family
   - richer example
-  - README
-  - proof page
-  - media page
+  - app proof surface
+  - app media surface
+- Current maturity: active Wave 1 build candidate
+- Main blockers:
+  - screenshot/video proof
+  - explicit iOS-targeted standalone build proof
 
 ### 5. Education / Learning
 

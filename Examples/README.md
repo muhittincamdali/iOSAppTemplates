@@ -14,6 +14,8 @@ Bu klasor henuz full complete-app gallery degil. Bugunku rol:
 | [BasicExample/BasicExample.swift](./BasicExample/BasicExample.swift) | small example shell | minimal structure incelemek |
 | [QuickStartExample/QuickStartApp.swift](./QuickStartExample/QuickStartApp.swift) | onboarding entry | en hizli source-level baslangic |
 | [SocialMediaExample](./SocialMediaExample/) | richer category example | social lane icin daha urun benzeri akis gormek |
+| [ProductivityExample](./ProductivityExample/) | richer category example | productivity lane icin daha urun benzeri akis gormek |
+| [FinanceExample](./FinanceExample/) | richer category example | finance lane icin daha urun benzeri akis gormek |
 
 ## Important Truth
 

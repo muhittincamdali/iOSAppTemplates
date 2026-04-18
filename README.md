@@ -41,9 +41,12 @@ This repository is not yet a full fit if you expect:
 - category-level template families under `Sources/`
 - `Scripts/TemplateGenerator.swift` as the generator entry point
 - `3` standalone app roots under `Templates/`:
+- `5` standalone app roots under `Templates/`:
   - `Templates/EcommerceApp`
   - `Templates/SocialMediaApp`
   - `Templates/FitnessApp`
+  - `Templates/ProductivityApp`
+  - `Templates/FinanceApp`
 - a lightweight example/router layer under `Examples/`
 - active root-package validation for build, test, security, and performance
 
@@ -55,12 +58,12 @@ This repository is not yet a full fit if you expect:
 | Social | template family + standalone root + richer example | Social Media |
 | News | template family | News / Editorial |
 | Health / Fitness | template family + standalone root | Health / Fitness |
-| Finance | template family | Finance / Budgeting |
+| Finance | template family + standalone root + richer example | Finance / Budgeting |
 | Education | template family | Education / Learning |
 | Food Delivery | template family | Food Delivery |
 | Travel | template family | Travel Planner |
 | Music / Podcast | template family | Music / Podcast |
-| Productivity | template family | Productivity / Tasks |
+| Productivity | template family + standalone root + richer example | Productivity / Tasks |
 
 This table is not a `complete app` claim. It is the current packaging truth of the repository.
 
@@ -90,6 +93,8 @@ swift test
 open Templates/SocialMediaApp/Package.swift
 open Templates/EcommerceApp/Package.swift
 open Templates/FitnessApp/Package.swift
+open Templates/ProductivityApp/Package.swift
+open Templates/FinanceApp/Package.swift
 ```
 
 This proves today:
@@ -98,6 +103,7 @@ This proves today:
 - lane-specific source shell
 - standalone root packaging
 - deterministic `Package.resolved` coverage for the three standalone roots
+- deterministic `Package.resolved` coverage for the five standalone roots
 
 This does not yet prove today:
 

@@ -44,6 +44,26 @@ Canonical app-proof router:
 - Proof surface: [App-Proofs/FitnessApp.md](./App-Proofs/FitnessApp.md)
 - Gap: iOS-targeted standalone build proof, screenshot
 
+### Productivity: ProductivityApp
+
+- Type: `Standalone Root + richer source shell`
+- Entry: `Templates/ProductivityApp/Package.swift`
+- Extra route: `Examples/ProductivityExample`
+- Product shape: task dashboard, project summary, focus workflow
+- Proof today: package root mevcut, manifest smoke gecerli, `Templates/ProductivityApp/Package.resolved` mevcut, ek example surface mevcut
+- Proof surface: [App-Proofs/ProductivityApp.md](./App-Proofs/ProductivityApp.md)
+- Gap: iOS-targeted standalone build proof, screenshot
+
+### Finance: FinanceApp
+
+- Type: `Standalone Root + richer source shell`
+- Entry: `Templates/FinanceApp/Package.swift`
+- Extra route: `Examples/FinanceExample`
+- Product shape: finance dashboard, accounts, budget review, cash-flow workflow
+- Proof today: package root mevcut, manifest smoke gecerli, `Templates/FinanceApp/Package.resolved` mevcut, ek example surface mevcut
+- Proof surface: [App-Proofs/FinanceApp.md](./App-Proofs/FinanceApp.md)
+- Gap: iOS-targeted standalone build proof, screenshot
+
 ## Template Family Coverage
 
 Bunlar bugun lane-level source surface olarak var ama standalone complete-app proof tasimiyor:

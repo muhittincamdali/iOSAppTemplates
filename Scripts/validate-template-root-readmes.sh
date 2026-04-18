@@ -9,6 +9,8 @@ roots=(
   "Templates/EcommerceApp"
   "Templates/SocialMediaApp"
   "Templates/FitnessApp"
+  "Templates/ProductivityApp"
+  "Templates/FinanceApp"
 )
 
 for root in "${roots[@]}"; do
@@ -27,5 +29,7 @@ done
 grep -Fq "Templates/EcommerceApp/README.md" Documentation/App-Proofs/EcommerceApp.md || { echo "Ecommerce proof page missing template README link" >&2; exit 1; }
 grep -Fq "Templates/SocialMediaApp/README.md" Documentation/App-Proofs/SocialMediaApp.md || { echo "Social proof page missing template README link" >&2; exit 1; }
 grep -Fq "Templates/FitnessApp/README.md" Documentation/App-Proofs/FitnessApp.md || { echo "Fitness proof page missing template README link" >&2; exit 1; }
+grep -Fq "Templates/ProductivityApp/README.md" Documentation/App-Proofs/ProductivityApp.md || { echo "Productivity proof page missing template README link" >&2; exit 1; }
+grep -Fq "Templates/FinanceApp/README.md" Documentation/App-Proofs/FinanceApp.md || { echo "Finance proof page missing template README link" >&2; exit 1; }
 
 echo "Template root README validation passed."

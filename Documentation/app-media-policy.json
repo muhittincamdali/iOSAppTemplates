@@ -17,6 +17,18 @@
       "lane": "Health / Fitness",
       "status": "not-published",
       "required_readme": "Documentation/App-Media/FitnessApp.md"
+    },
+    {
+      "id": "ProductivityApp",
+      "lane": "Productivity",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/ProductivityApp.md"
+    },
+    {
+      "id": "FinanceApp",
+      "lane": "Finance",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/FinanceApp.md"
     }
   ]
 }

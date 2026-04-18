@@ -27,16 +27,16 @@ It exists to:
 | Social | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/SocialMediaApp` or `Documentation/App-Proofs/SocialMediaApp.md` | Social Media |
 | News | Template Family | `Sources/NewsTemplates/NewsBlogTemplate.swift` | News / Editorial |
 | Health / Fitness | Standalone Root + Template Family + App Proof Surface + App Media Surface | `Templates/FitnessApp` or `Documentation/App-Proofs/FitnessApp.md` | Health / Fitness |
-| Finance | Template Family | `Sources/FinanceTemplates/FinanceAppTemplate.swift` | Finance / Budgeting |
+| Finance | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/FinanceApp` or `Documentation/App-Proofs/FinanceApp.md` | Finance / Budgeting |
 | Education | Template Family | `Sources/EducationTemplates/EducationAppTemplate.swift` | Education / Learning |
 | Food Delivery | Template Family | `Sources/FoodTemplates/FoodDeliveryTemplate.swift` | Food Delivery |
 | Travel | Template Family | `Sources/TravelTemplates/TravelAppTemplate.swift` | Travel Planner |
 | Music / Podcast | Template Family | `Sources/MusicTemplates/MusicPodcastTemplate.swift` | Music / Podcast |
-| Productivity | Template Family | `Sources/ProductivityTemplates/ProductivityAppTemplate.swift` | Productivity / Tasks |
+| Productivity | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/ProductivityApp` or `Documentation/App-Proofs/ProductivityApp.md` | Productivity / Tasks |
 
 ## Current Truth
 
-- the repository currently has `3` standalone app roots
+- the repository currently has `5` standalone app roots
 - the generator currently covers the broad starter map via `swift Scripts/TemplateGenerator.swift --list`
 - this `10 lane` surface does not equal `10 complete apps`
 - the `Complete App` label is governed only by [Complete-App-Standard.md](./Complete-App-Standard.md)
@@ -83,12 +83,16 @@ The repository-level implementation contract for these eight apps lives in [Wave
 - `Templates/EcommerceApp`
 - `Templates/SocialMediaApp`
 - `Templates/FitnessApp`
+- `Templates/ProductivityApp`
+- `Templates/FinanceApp`
 
 ### If you want the cleanest proof pages now
 
 - [App-Proofs/EcommerceApp.md](./App-Proofs/EcommerceApp.md)
 - [App-Proofs/SocialMediaApp.md](./App-Proofs/SocialMediaApp.md)
 - [App-Proofs/FitnessApp.md](./App-Proofs/FitnessApp.md)
+- [App-Proofs/ProductivityApp.md](./App-Proofs/ProductivityApp.md)
+- [App-Proofs/FinanceApp.md](./App-Proofs/FinanceApp.md)
 
 ### If you want the canonical media router now
 

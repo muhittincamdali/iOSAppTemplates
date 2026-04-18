@@ -19,6 +19,8 @@ required_patterns=(
   "Templates/EcommerceApp"
   "Templates/SocialMediaApp"
   "Templates/FitnessApp"
+  "Templates/ProductivityApp"
+  "Templates/FinanceApp"
   "swift Scripts/TemplateGenerator.swift --list"
 )
 

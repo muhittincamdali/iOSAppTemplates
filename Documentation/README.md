@@ -5,7 +5,7 @@ This page is the canonical documentation router for `iOSAppTemplates`.
 ## Current Repo Truth
 
 - `Sources/` is the canonical template-family surface
-- `Templates/` currently ships `3` standalone app roots
+- `Templates/` currently ships `5` standalone app roots
 - `Examples/` is still a mixed reference/example area, not a 20-app gallery
 - the product goal is broad complete-app parity, not a claim that parity exists today
 
@@ -51,6 +51,8 @@ This page is the canonical documentation router for `iOSAppTemplates`.
 - `Templates/EcommerceApp/README.md`
 - `Templates/SocialMediaApp/README.md`
 - `Templates/FitnessApp/README.md`
+- `Templates/ProductivityApp/README.md`
+- `Templates/FinanceApp/README.md`
 
 ### API And Package Surfaces
 
