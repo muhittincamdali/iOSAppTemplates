@@ -43,18 +43,10 @@ jobs:
 
       - name: Write security summary
         run: |
-          mkdir -p security-artifacts
           {
             echo "Security validation completed."
             echo "Current truth:"
             echo "- Validates active SecurityTemplates source surface"
             echo "- Runs SecuritySurfaceTests smoke suite"
             echo "- Does not claim compliance certification or penetration-testing proof"
-          } > security-artifacts/summary.txt
-
-      - name: Upload security artifacts
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: security-surface-results
-          path: security-artifacts
+          } > security-summary.txt

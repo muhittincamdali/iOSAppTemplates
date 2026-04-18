@@ -37,17 +37,9 @@ jobs:
 
       - name: Write performance summary
         run: |
-          mkdir -p performance-artifacts
           {
             echo "Performance validation completed."
             echo "Current truth:"
             echo "- Uses active package test target: PerformanceBenchmarkTests"
             echo "- Does not claim device-lab metrics or release benchmark proof"
-          } > performance-artifacts/summary.txt
-
-      - name: Upload performance artifacts
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: performance-smoke-results
-          path: performance-artifacts
+          } > performance-summary.txt
