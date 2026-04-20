@@ -28,10 +28,16 @@ tracked_apps=(
   "PrivacyVaultApp"
 )
 
+apps_to_validate=("$@")
+
+if [[ ${#apps_to_validate[@]} -eq 0 ]]; then
+  apps_to_validate=("${tracked_apps[@]}")
+fi
+
 log_dir="$(mktemp -d)"
 trap 'rm -rf "$log_dir"' EXIT
 
-for app in "${tracked_apps[@]}"; do
+for app in "${apps_to_validate[@]}"; do
   log_file="$log_dir/${app}.log"
   echo "Validating generic iOS build for $app..."
   (
@@ -45,6 +51,6 @@ for app in "${tracked_apps[@]}"; do
 done
 
 echo "Tracked generic iOS build proof passed for:"
-for app in "${tracked_apps[@]}"; do
+for app in "${apps_to_validate[@]}"; do
   echo "- $app"
 done

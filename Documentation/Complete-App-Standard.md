@@ -130,7 +130,7 @@ Use when a reusable source package exists without full app packaging.
 
 ## Current Reality Gap
 
-The repository contains meaningful template-family material and nine standalone roots, but it does not yet have `20 complete apps` or equal standalone iOS proof depth across that surface.
+The repository now contains meaningful template-family material and `20` standalone roots, but it does not yet have `20 complete apps` or equal runtime media depth across that surface.
 
 That gap must be closed before public claims expand.
 

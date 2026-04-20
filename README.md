@@ -11,10 +11,10 @@ Production-grade SwiftUI app starter system for Apple platforms.
 | Signal | Current truth |
 | --- | --- |
 | Root coverage | `20` standalone app roots under `Templates/` |
-| Build proof | local generic iOS `xcodebuild` tracked for `20` roots |
+| Build proof | local generic iOS `xcodebuild` tracked for `20` roots; hosted standalone iOS workflow is versioned |
 | Public proof | per-app proof and media pages exist for `20` roots |
 | Visual layer | shareable gallery cards published for `20` roots |
-| Remaining gap | screenshots, demo clips, hosted standalone iOS CI proof |
+| Remaining gap | screenshots, demo clips, stable green hosted standalone iOS baseline |
 
 ## First Decision
 
@@ -45,6 +45,7 @@ This repository is not yet a full fit if you expect:
 | See canonical app proof pages | [Documentation/App-Proofs/README.md](Documentation/App-Proofs/README.md) |
 | See canonical app media pages | [Documentation/App-Media/README.md](Documentation/App-Media/README.md) |
 | See published gallery cards and preview boards | [Documentation/App-Gallery.md](Documentation/App-Gallery.md) |
+| See hosted standalone iOS proof workflow | [.github/workflows/standalone-ios-proof.yml](.github/workflows/standalone-ios-proof.yml) |
 | See the current repo status | [PROJECT_STATUS.md](PROJECT_STATUS.md) |
 | See GitHub distribution rules | [Documentation/GitHub-Distribution.md](Documentation/GitHub-Distribution.md) |
 | See release rules | [Documentation/Release-Process.md](Documentation/Release-Process.md) |
@@ -185,7 +186,7 @@ This proves today:
 This does not yet prove today:
 
 - published app media
-- hosted standalone iOS CI proof for the tracked roots
+- stable green hosted standalone iOS proof baseline for the tracked roots
 - full complete-app parity for all lanes
 
 ### 3. Use the generator
@@ -202,6 +203,7 @@ swift Scripts/TemplateGenerator.swift --list
 - security smoke surface exists
 - performance smoke surface exists
 - tracked local generic iOS build proof exists for `20` standalone roots
+- hosted standalone iOS proof workflow is now versioned for the same `20` roots
 - public docs are being tightened around truth-first product claims
 - the repo now has explicit app proof, media, lockfile, and portfolio routers
 - the repo now has published gallery cards and preview boards for `20` standalone roots

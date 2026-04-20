@@ -1,10 +1,10 @@
 # App Proof Surfaces
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
-Bu klasor `iOSAppTemplates` icindeki standalone app root'lar icin canonical proof router'dir.
+This directory is the canonical proof router for the standalone app roots inside `iOSAppTemplates`.
 
-Bugunku kapsam:
+Current scope:
 
 - `Templates/EcommerceApp`
 - `Templates/SocialMediaApp`
@@ -27,16 +27,17 @@ Bugunku kapsam:
 - `Templates/SubscriptionLifestyleApp`
 - `Templates/PrivacyVaultApp`
 
-Bugun ek proof gercegi:
+Current proof envelope:
 
-- `20` standalone root icin local generic iOS build proof var
+- local generic iOS build proof exists for `20` standalone roots
+- the hosted standalone iOS proof workflow is now active for the same `20` roots
 
-Bu sayfalarin rolu:
+These pages exist to:
 
-- `best for / not for` karari vermek
-- product shape'i netlestirmek
-- bugun kanitlanan proof'u acik soylemek
-- eksik proof katmanlarini acik tutmak
+- help users make a `best for / not for` decision
+- clarify product shape
+- state today’s proof plainly
+- keep missing proof layers visible
 
 ## Current App Proof Router
 
@@ -70,7 +71,7 @@ Bu klasorde proof surface'i olan bir app otomatik olarak `Complete App` sayilmaz
 `Complete App` etiketi icin canonical standard:
 - [../Complete-App-Standard.md](../Complete-App-Standard.md)
 
-Bugun bu app'ler icin dogru etiket:
+Correct label for these apps today:
 
 - `Standalone Root`
 - `App-shell proof surface`

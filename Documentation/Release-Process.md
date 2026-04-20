@@ -26,6 +26,12 @@ bash Scripts/validate-template-root-readmes.sh
 bash Scripts/validate-standalone-ios-builds.sh
 ```
 
+Also verify the hosted standalone iOS route exists and stays versioned:
+
+```bash
+bash Scripts/validate-standalone-ios-proof-surface.sh
+```
+
 ## What A Release Must Not Claim
 
 Do not publish a release title or release body that claims:
@@ -48,6 +54,7 @@ Use these documents as the canonical truth surface until the next numbered relea
 - [Portfolio-Matrix.md](Portfolio-Matrix.md)
 - [Proof-Matrix.md](Proof-Matrix.md)
 - [App-Gallery.md](App-Gallery.md)
+- [../.github/workflows/standalone-ios-proof.yml](../.github/workflows/standalone-ios-proof.yml)
 
 ## Tagging
 

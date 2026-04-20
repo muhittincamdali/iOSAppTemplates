@@ -1,22 +1,22 @@
 # App Media Surfaces
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
-Bu klasor `iOSAppTemplates` icindeki standalone app root'lar icin canonical media router'dir.
+This directory is the canonical media router for the standalone app roots inside `iOSAppTemplates`.
 
-Bugunku truth:
+Current truth:
 
-- `20` standalone root icin shareable gallery card image var
-- `20` standalone root icin preview board image var
-- canonical screenshots hala yok
-- demo clips hala yok
-- bu yuzey screenshot/demo eksigini gizlemeden visual proof katmanlarini ayri ayri gosterir
+- `20` standalone roots have published shareable gallery cards
+- `20` standalone roots have published preview boards
+- canonical runtime screenshots are still missing
+- demo clips are still missing
+- this surface separates visual layers instead of hiding the screenshot and demo gap
 
-Bu yuzeyin rolu:
+This surface exists to:
 
-- screenshot/demo durumunu yalansiz gostermek
-- gelecekteki capture batch'i icin tek canonical route vermek
-- proof pages ile media pages'i ayri tutmak
+- show screenshot and demo status truthfully
+- provide a single canonical route for future capture batches
+- keep proof pages and media pages separate
 
 ## Current Router
 
@@ -45,14 +45,14 @@ Bu yuzeyin rolu:
 
 ## Rule
 
-Bir app icin media surface var diye o app `complete` sayilmaz.
+A media surface alone does not make an app `complete`.
 
-Bir app icin media surface `preview-published` ise:
+If an app is marked `preview-published`, it means:
 
-- shareable gallery card image var
-- preview board image var
-- screenshot hala yok olabilir
-- demo clip hala yok olabilir
+- a shareable gallery card exists
+- a preview board exists
+- a real screenshot may still be missing
+- a demo clip may still be missing
 
 ## Related Surfaces
 
