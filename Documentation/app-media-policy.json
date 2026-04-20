@@ -65,6 +65,18 @@
       "lane": "Music / Podcast",
       "status": "not-published",
       "required_readme": "Documentation/App-Media/MusicPodcastApp.md"
+    },
+    {
+      "id": "MarketplaceApp",
+      "lane": "Marketplace",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/MarketplaceApp.md"
+    },
+    {
+      "id": "MessagingApp",
+      "lane": "Messaging / Community",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/MessagingApp.md"
     }
   ]
 }

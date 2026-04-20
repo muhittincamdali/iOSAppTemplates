@@ -1,6 +1,6 @@
 # Template Showcase
 
-Last updated: 2026-04-19
+Last updated: 2026-04-20
 
 This page is the tracked gallery surface for `iOSAppTemplates`.
 
@@ -34,6 +34,26 @@ Canonical app-proof router:
 - Product shape: auth, feed/community shell, richer UI fragments
 - Proof today: package root exists, manifest smoke passes, `Templates/SocialMediaApp/Package.resolved` exists, richer example surface exists, local generic iOS `xcodebuild` passes
 - Proof surface: [App-Proofs/SocialMediaApp.md](./App-Proofs/SocialMediaApp.md)
+- Gap: screenshot, demo, hosted standalone iOS CI proof
+
+### Marketplace: MarketplaceApp
+
+- Type: `Standalone Root + richer source shell`
+- Entry: `Templates/MarketplaceApp/Package.swift`
+- Extra route: `Examples/MarketplaceExample`
+- Product shape: buyer/seller dashboard, merchandising lanes, payout and trust workflow
+- Proof today: package root exists, manifest smoke passes, dependency-free package graph needs no external lockfile, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
+- Proof surface: [App-Proofs/MarketplaceApp.md](./App-Proofs/MarketplaceApp.md)
+- Gap: screenshot, demo, hosted standalone iOS CI proof
+
+### Messaging / Community: MessagingApp
+
+- Type: `Standalone Root + richer source shell`
+- Entry: `Templates/MessagingApp/Package.swift`
+- Extra route: `Examples/MessagingExample`
+- Product shape: inbox dashboard, room routing, moderation and community workflow
+- Proof today: package root exists, manifest smoke passes, dependency-free package graph needs no external lockfile, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
+- Proof surface: [App-Proofs/MessagingApp.md](./App-Proofs/MessagingApp.md)
 - Gap: screenshot, demo, hosted standalone iOS CI proof
 
 ### Health / Fitness: FitnessApp
@@ -165,8 +185,10 @@ It is not, by itself, complete-app proof.
 
 1. [Portfolio-Matrix.md](./Portfolio-Matrix.md)
 2. [Wave-1-Implementation-Plan.md](./Wave-1-Implementation-Plan.md)
-3. `swift Scripts/TemplateGenerator.swift --list`
-4. [TemplateGuide.md](./TemplateGuide.md)
+3. [App-Proofs/MarketplaceApp.md](./App-Proofs/MarketplaceApp.md)
+4. [App-Proofs/MessagingApp.md](./App-Proofs/MessagingApp.md)
+5. `swift Scripts/TemplateGenerator.swift --list`
+6. [TemplateGuide.md](./TemplateGuide.md)
 
 ### If you want to inspect proof depth
 

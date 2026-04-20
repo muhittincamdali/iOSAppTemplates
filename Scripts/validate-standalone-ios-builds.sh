@@ -17,6 +17,8 @@ tracked_apps=(
   "AIAssistantApp"
   "NewsBlogApp"
   "MusicPodcastApp"
+  "MarketplaceApp"
+  "MessagingApp"
 )
 
 log_dir="$(mktemp -d)"

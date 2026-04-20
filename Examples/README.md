@@ -23,6 +23,8 @@ This folder is not a full complete-app gallery yet. Its current role is:
 | [AIAssistantExample](./AIAssistantExample/) | richer category example | inspect a more product-like AI assistant flow |
 | [NewsBlogExample](./NewsBlogExample/) | richer category example | inspect a more product-like editorial/news flow |
 | [MusicPodcastExample](./MusicPodcastExample/) | richer category example | inspect a more product-like music and podcast flow |
+| [MarketplaceExample](./MarketplaceExample/) | richer category example | inspect a more product-like marketplace flow |
+| [MessagingExample](./MessagingExample/) | richer category example | inspect a more product-like messaging and community flow |
 
 ## Important Truth
 
@@ -53,6 +55,8 @@ open ../Templates/TravelPlannerApp/Package.swift
 open ../Templates/AIAssistantApp/Package.swift
 open ../Templates/NewsBlogApp/Package.swift
 open ../Templates/MusicPodcastApp/Package.swift
+open ../Templates/MarketplaceApp/Package.swift
+open ../Templates/MessagingApp/Package.swift
 ```
 
 ### Generator path

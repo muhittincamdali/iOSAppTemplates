@@ -1,6 +1,6 @@
 # App Media Surfaces
 
-Last updated: 2026-04-19
+Last updated: 2026-04-20
 
 Bu klasor `iOSAppTemplates` icindeki standalone app root'lar icin canonical media router'dir.
 
@@ -17,6 +17,8 @@ Bugunku truth:
 - `AIAssistantApp` media `not-published`
 - `NewsBlogApp` media `not-published`
 - `MusicPodcastApp` media `not-published`
+- `MarketplaceApp` media `not-published`
+- `MessagingApp` media `not-published`
 
 Bu yuzeyin rolu:
 
@@ -39,6 +41,8 @@ Bu yuzeyin rolu:
 | AIAssistantApp | AI | `not-published` | [AIAssistantApp.md](./AIAssistantApp.md) |
 | NewsBlogApp | News | `not-published` | [NewsBlogApp.md](./NewsBlogApp.md) |
 | MusicPodcastApp | Music / Podcast | `not-published` | [MusicPodcastApp.md](./MusicPodcastApp.md) |
+| MarketplaceApp | Marketplace | `not-published` | [MarketplaceApp.md](./MarketplaceApp.md) |
+| MessagingApp | Messaging / Community | `not-published` | [MessagingApp.md](./MessagingApp.md) |
 
 ## Rule
 

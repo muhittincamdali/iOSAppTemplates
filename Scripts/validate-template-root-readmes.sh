@@ -17,6 +17,8 @@ roots=(
   "Templates/AIAssistantApp"
   "Templates/NewsBlogApp"
   "Templates/MusicPodcastApp"
+  "Templates/MarketplaceApp"
+  "Templates/MessagingApp"
 )
 
 tracked_ios_build_apps=(
@@ -31,6 +33,8 @@ tracked_ios_build_apps=(
   "AIAssistantApp"
   "NewsBlogApp"
   "MusicPodcastApp"
+  "MarketplaceApp"
+  "MessagingApp"
 )
 
 for root in "${roots[@]}"; do
@@ -63,5 +67,7 @@ grep -Fq "Templates/TravelPlannerApp/README.md" Documentation/App-Proofs/TravelP
 grep -Fq "Templates/AIAssistantApp/README.md" Documentation/App-Proofs/AIAssistantApp.md || { echo "AIAssistant proof page missing template README link" >&2; exit 1; }
 grep -Fq "Templates/NewsBlogApp/README.md" Documentation/App-Proofs/NewsBlogApp.md || { echo "NewsBlog proof page missing template README link" >&2; exit 1; }
 grep -Fq "Templates/MusicPodcastApp/README.md" Documentation/App-Proofs/MusicPodcastApp.md || { echo "MusicPodcast proof page missing template README link" >&2; exit 1; }
+grep -Fq "Templates/MarketplaceApp/README.md" Documentation/App-Proofs/MarketplaceApp.md || { echo "Marketplace proof page missing template README link" >&2; exit 1; }
+grep -Fq "Templates/MessagingApp/README.md" Documentation/App-Proofs/MessagingApp.md || { echo "Messaging proof page missing template README link" >&2; exit 1; }
 
 echo "Template root README validation passed."
