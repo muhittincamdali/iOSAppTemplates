@@ -1,60 +1,61 @@
 # BookingReservationsApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`BookingReservationsApp`, `iOSAppTemplates` icindeki Booking / Reservations lane standalone root surface'idir.
+`BookingReservationsApp` is the standalone-root surface for the `Booking / Reservations` lane inside `iOSAppTemplates`.
 
 ## Today
 
-- Label: `Standalone Root`
+- Label: `Standalone Root + richer example surface`
 - Lane: `Booking / Reservations`
 - Entry: `Package.swift`
-- Extra route: `../../Examples/BookingReservationsExample`
 - Product target: `Booking & Reservations`
+- Richer example: `Examples/BookingReservationsExample`
 
 ## Best For / Not For
 
 ### Best for
 
-- reservation dashboard, property routing ve guest operations flow incelemek isteyen ekipler
-- booking lane icin package-entry seviyesinde app surface gormek isteyenler
-- Wave 2 expansion icin gercek root/package kaniti isteyenler
+- teams evaluating booking, calendar, and reservation starter flows
+- readers comparing travel-adjacent booking surfaces
+- maintainers reviewing appointment or reservation starter patterns
 
 ### Not for
 
-- bugun tam hospitality suite parity bekleyenler
-- screenshot veya demo proof arayanlar
-- hosted standalone iOS CI proof'un verildigini varsayanlar
+- teams expecting production reservation backends today
+- readers who assume runtime screenshots and clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- reservation operations dashboard
-- property and stay routing
-- guest support and payment shell
-- occupancy quick actions
+- availability shell
+- reservation detail surface
+- calendar or timeslot routing
+- confirmation starter flow
+- reservation domain model
 
 ## Current Proof
 
 - No external dependency lockfile is required today
-- `swift package dump-package` gecerli
-- `cd Templates/BookingReservationsApp && swift test` gecerli
-- `xcodebuild -scheme BookingReservationsApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
-- richer example route mevcut
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme BookingReservationsApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
+- richer example route exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
 ```bash
 open Package.swift
-xcodebuild -scheme BookingReservationsApp -destination 'generic/platform=iOS' build
 open ../../Examples/BookingReservationsExample/README.md
 ```
 
@@ -66,9 +67,16 @@ swift build
 swift test
 ```
 
+Standalone generic iOS proof:
+
+```bash
+xcodebuild -scheme BookingReservationsApp -destination 'generic/platform=iOS' build
+```
+
 ## Canonical References
 
 - [Proof Surface](../../Documentation/App-Proofs/BookingReservationsApp.md)
 - [Media Surface](../../Documentation/App-Media/BookingReservationsApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/BookingReservationsExample/README.md)

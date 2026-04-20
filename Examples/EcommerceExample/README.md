@@ -1,19 +1,33 @@
-# Ecommerce Example
+# EcommerceExample
 
-Bu klasor tek basina ship edilen bir Xcode app projesi degil. `EcommerceApp` hedef UX'inin daha zengin bir inspection surface'idir.
+Generated from `Documentation/app-surface-catalog.json`.
+
+`EcommerceExample` is the richer example surface for the `Commerce` lane.
+
+## Product Shape
+
+- auth shell
+- catalog and featured-product surface
+- cart flow
+- checkout shell
+
+## Best For / Not For
+
+### Best for
+
+- teams that want a second inspection route beyond `EcommerceApp`
+- readers who want to inspect the `E-Commerce Store` flow in a more product-like format
+
+### Not for
+
+- teams expecting a separate runnable Xcode project
+- readers who expect published runtime screenshots or simulator media proof today
 
 ## Current Truth
 
-- Ayrik `.xcodeproj` veya `.xcworkspace` burada ship edilmiyor.
-- Screenshot, UI test ve payment-provider proof bu klasore bagli degil.
-- Canonical standalone package-entry root su an `Templates/EcommerceApp`.
-- Canonical package validation root seviyedeki `swift build` ve `swift test`.
-
-## What This Example Is Good For
-
-- commerce lane icin catalog, cart ve checkout akisini daha zengin okumak
-- Wave 1 app-pack icin richer example surface'i takip etmek
-- product-card, merch, promo ve basket UX direction incelemek
+- this example is an inspection surface, not a separate shipped app project
+- the canonical standalone package-entry path lives under `Templates/`
+- canonical package validation remains the root-level `swift build` and `swift test` flow
 
 ## Start Here
 
@@ -28,8 +42,8 @@ swift build
 swift test
 ```
 
-## Related Docs
+## Canonical References
 
+- [EcommerceApp Proof](../../Documentation/App-Proofs/EcommerceApp.md)
+- [EcommerceApp Media](../../Documentation/App-Media/EcommerceApp.md)
 - [Wave 1 Plan](../../Documentation/Wave-1-Implementation-Plan.md)
-- [Ecommerce Proof](../../Documentation/App-Proofs/EcommerceApp.md)
-- [Ecommerce Media](../../Documentation/App-Media/EcommerceApp.md)

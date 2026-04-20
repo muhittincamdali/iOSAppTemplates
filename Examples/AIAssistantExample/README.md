@@ -1,33 +1,46 @@
 # AIAssistantExample
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`AIAssistantExample`, AI lane icin richer example surface'tir.
+`AIAssistantExample` is the richer example surface for the `AI` lane.
 
 ## Product Shape
 
-- assistant workspace
-- prompt-to-action flow
-- summary and reply draft path
-- trust surface
+- conversation shell
+- prompt and response surface
+- assistant suggestion cards
+- starter tool action surface
 
 ## Best For / Not For
 
 ### Best for
 
-- AI lane icin standalone root disinda ikinci bir inspection route isteyenler
-- assistant workflow'unu daha urun benzeri yuzeyde okumak isteyenler
+- teams that want a second inspection route beyond `AIAssistantApp`
+- readers who want to inspect the `AI Assistant` flow in a more product-like format
 
 ### Not for
 
-- ayrik runnable Xcode project bekleyenler
-- bugun screenshot veya simulator proof arayanlar
+- teams expecting a separate runnable Xcode project
+- readers who expect published runtime screenshots or simulator media proof today
+
+## Current Truth
+
+- this example is an inspection surface, not a separate shipped app project
+- the canonical standalone package-entry path lives under `Templates/`
+- canonical package validation remains the root-level `swift build` and `swift test` flow
 
 ## Start Here
 
 ```bash
 open AIAssistantWorkflowExample.swift
 open ../../Templates/AIAssistantApp/Package.swift
+```
+
+Repo proof:
+
+```bash
+swift build
+swift test
 ```
 
 ## Canonical References

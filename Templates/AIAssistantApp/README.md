@@ -1,8 +1,8 @@
 # AIAssistantApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`AIAssistantApp`, `iOSAppTemplates` icindeki AI lane standalone root surface'idir.
+`AIAssistantApp` is the standalone-root surface for the `AI` lane inside `iOSAppTemplates`.
 
 ## Today
 
@@ -10,49 +10,54 @@ Last updated: 2026-04-20
 - Lane: `AI`
 - Entry: `Package.swift`
 - Product target: `AI Assistant`
+- Richer example: `Examples/AIAssistantExample`
 
 ## Best For / Not For
 
 ### Best for
 
-- on-device assistant workspace shell incelemek isteyen ekipler
-- AI lane icin package-entry seviyesinde app surface gormek isteyenler
-- Wave 1 icin gercek AI packaging kaniti isteyenler
+- teams reviewing an assistant-style conversation shell
+- readers comparing AI lane packaging with a richer example route
+- maintainers validating a privacy-aware assistant starter surface
 
 ### Not for
 
-- bugun tam release-grade AI suite parity bekleyenler
-- screenshot veya demo proof arayanlar
-- explicit standalone iOS CI proof'un verildigini varsayanlar
+- teams expecting a production AI stack today
+- readers who assume runtime screenshots and demo clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- assistant workspace dashboard
-- suggestion queue
-- trust and guardrail signal surface
-- note-to-action workflow shell
+- conversation shell
+- prompt and response surface
+- assistant suggestion cards
+- starter tool action surface
+- AI lane example route
 
 ## Current Proof
 
-- `Package.resolved` lockfile mevcut
-- `swift package dump-package` gecerli
-- local `swift test` gecerli
-- `xcodebuild -scheme AIAssistantApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
+- `Package.resolved` exists as the tracked dependency lockfile
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme AIAssistantApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
+- richer example route exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
 ```bash
 open Package.swift
 open Package.resolved
+open ../../Examples/AIAssistantExample/README.md
 ```
 
 Repo-level proof:
@@ -75,3 +80,4 @@ xcodebuild -scheme AIAssistantApp -destination 'generic/platform=iOS' build
 - [Media Surface](../../Documentation/App-Media/AIAssistantApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/AIAssistantExample/README.md)

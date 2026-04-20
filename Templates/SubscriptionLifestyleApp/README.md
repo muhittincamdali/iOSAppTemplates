@@ -1,60 +1,61 @@
 # SubscriptionLifestyleApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`SubscriptionLifestyleApp`, `iOSAppTemplates` icindeki Subscription Lifestyle lane standalone root surface'idir.
+`SubscriptionLifestyleApp` is the standalone-root surface for the `Subscription Lifestyle` lane inside `iOSAppTemplates`.
 
 ## Today
 
-- Label: `Standalone Root`
+- Label: `Standalone Root + richer example surface`
 - Lane: `Subscription Lifestyle`
 - Entry: `Package.swift`
-- Extra route: `../../Examples/SubscriptionLifestyleExample`
 - Product target: `Subscription Lifestyle / Habit Tracker`
+- Richer example: `Examples/SubscriptionLifestyleExample`
 
 ## Best For / Not For
 
 ### Best for
 
-- subscription-first lifestyle shell'i incelemek isteyen ekipler
-- churn watch, paywall ve retention workflow icin package-entry seviyesinde app surface gormek isteyenler
-- Wave 3 premium differentiation lane'i icin gercek root/package kaniti isteyenler
+- teams evaluating premium lifestyle and habit starter flows
+- readers comparing subscription-oriented packaging surfaces
+- maintainers reviewing routine and premium UI patterns
 
 ### Not for
 
-- bugun tam billing backend parity veya StoreKit production proof bekleyenler
-- screenshot veya demo proof arayanlar
-- hosted standalone iOS CI proof'un verildigini varsayanlar
+- teams expecting production billing and entitlement flows today
+- readers who assume runtime screenshots and demo clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- subscription dashboard shell
-- membership and streak program lanes
-- churn watch workflow
-- retention quick actions
+- habit dashboard shell
+- streak and progress surface
+- premium plan starter cards
+- routine detail routing
+- lifestyle starter domain model
 
 ## Current Proof
 
 - No external dependency lockfile is required today
-- `swift package dump-package` gecerli
-- `cd Templates/SubscriptionLifestyleApp && swift test` gecerli
-- `xcodebuild -scheme SubscriptionLifestyleApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
-- richer example route mevcut
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme SubscriptionLifestyleApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
+- richer example route exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
 ```bash
 open Package.swift
-xcodebuild -scheme SubscriptionLifestyleApp -destination 'generic/platform=iOS' build
 open ../../Examples/SubscriptionLifestyleExample/README.md
 ```
 
@@ -66,9 +67,16 @@ swift build
 swift test
 ```
 
+Standalone generic iOS proof:
+
+```bash
+xcodebuild -scheme SubscriptionLifestyleApp -destination 'generic/platform=iOS' build
+```
+
 ## Canonical References
 
 - [Proof Surface](../../Documentation/App-Proofs/SubscriptionLifestyleApp.md)
 - [Media Surface](../../Documentation/App-Media/SubscriptionLifestyleApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/SubscriptionLifestyleExample/README.md)

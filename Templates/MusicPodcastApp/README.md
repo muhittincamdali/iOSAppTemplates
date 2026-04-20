@@ -1,60 +1,61 @@
 # MusicPodcastApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`MusicPodcastApp`, `iOSAppTemplates` icindeki Music / Podcast lane standalone root surface'idir.
+`MusicPodcastApp` is the standalone-root surface for the `Music / Podcast` lane inside `iOSAppTemplates`.
 
 ## Today
 
-- Label: `Standalone Root`
+- Label: `Standalone Root + richer example surface`
 - Lane: `Music / Podcast`
 - Entry: `Package.swift`
-- Extra route: `../../Examples/MusicPodcastExample`
 - Product target: `Music / Podcast`
+- Richer example: `Examples/MusicPodcastExample`
 
 ## Best For / Not For
 
 ### Best for
 
-- playback dashboard, queue ve library shell incelemek isteyen ekipler
-- music/podcast lane icin package-entry seviyesinde app surface gormek isteyenler
-- Wave 2 expansion icin gercek root/package kaniti isteyenler
+- teams evaluating media-library and player starter shells
+- readers comparing entertainment packaging and richer example routing
+- maintainers reviewing audio-first UI patterns
 
 ### Not for
 
-- bugun tam release-grade streaming suite parity bekleyenler
-- screenshot veya demo proof arayanlar
-- hosted standalone iOS CI proof'un verildigini varsayanlar
+- teams expecting production streaming infrastructure today
+- readers who assume runtime screenshots and demo clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- playback center shell
-- collection/library routing
-- podcast queue entry
-- offline and subscription quick actions
+- library shell
+- player surface
+- episode or track cards
+- queue starter flow
+- media content model
 
 ## Current Proof
 
 - No external dependency lockfile is required today
-- `swift package dump-package` gecerli
-- `cd Templates/MusicPodcastApp && swift test` gecerli
-- `xcodebuild -scheme MusicPodcastApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
-- richer example route mevcut
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme MusicPodcastApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
+- richer example route exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
 ```bash
 open Package.swift
-xcodebuild -scheme MusicPodcastApp -destination 'generic/platform=iOS' build
 open ../../Examples/MusicPodcastExample/README.md
 ```
 
@@ -66,9 +67,16 @@ swift build
 swift test
 ```
 
+Standalone generic iOS proof:
+
+```bash
+xcodebuild -scheme MusicPodcastApp -destination 'generic/platform=iOS' build
+```
+
 ## Canonical References
 
 - [Proof Surface](../../Documentation/App-Proofs/MusicPodcastApp.md)
 - [Media Surface](../../Documentation/App-Media/MusicPodcastApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/MusicPodcastExample/README.md)

@@ -1,19 +1,33 @@
-# Booking Reservations Example
+# BookingReservationsExample
 
-Bu klasor tek basina ship edilen bir Xcode app projesi degil. `BookingReservationsApp` hedef UX'inin daha zengin bir inspection surface'idir.
+Generated from `Documentation/app-surface-catalog.json`.
+
+`BookingReservationsExample` is the richer example surface for the `Booking / Reservations` lane.
+
+## Product Shape
+
+- availability shell
+- reservation detail surface
+- calendar or timeslot routing
+- confirmation starter flow
+
+## Best For / Not For
+
+### Best for
+
+- teams that want a second inspection route beyond `BookingReservationsApp`
+- readers who want to inspect the `Booking & Reservations` flow in a more product-like format
+
+### Not for
+
+- teams expecting a separate runnable Xcode project
+- readers who expect published runtime screenshots or simulator media proof today
 
 ## Current Truth
 
-- Ayrik `.xcodeproj` veya `.xcworkspace` burada ship edilmiyor.
-- Screenshot, UI test ve reservation workflow proof bu klasore bagli degil.
-- Canonical standalone package-entry root su an `Templates/BookingReservationsApp`.
-- Canonical package validation root seviyedeki `swift build` ve `swift test`.
-
-## What This Example Is Good For
-
-- booking lane icin property, guest operations ve occupancy workflow yonunu gormek
-- Wave 2 app-pack icin richer example surface'i takip etmek
-- reservation decision surface ve operations naming incelemek
+- this example is an inspection surface, not a separate shipped app project
+- the canonical standalone package-entry path lives under `Templates/`
+- canonical package validation remains the root-level `swift build` and `swift test` flow
 
 ## Start Here
 
@@ -28,8 +42,8 @@ swift build
 swift test
 ```
 
-## Related Docs
+## Canonical References
 
-- [Portfolio Matrix](../../Documentation/Portfolio-Matrix.md)
-- [BookingReservations Proof](../../Documentation/App-Proofs/BookingReservationsApp.md)
-- [BookingReservations Media](../../Documentation/App-Media/BookingReservationsApp.md)
+- [BookingReservationsApp Proof](../../Documentation/App-Proofs/BookingReservationsApp.md)
+- [BookingReservationsApp Media](../../Documentation/App-Media/BookingReservationsApp.md)
+- [Wave 1 Plan](../../Documentation/Wave-1-Implementation-Plan.md)

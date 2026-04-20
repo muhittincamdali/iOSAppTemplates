@@ -1,58 +1,63 @@
 # ProductivityApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`ProductivityApp`, `iOSAppTemplates` icindeki Productivity lane standalone root surface'idir.
+`ProductivityApp` is the standalone-root surface for the `Productivity` lane inside `iOSAppTemplates`.
 
 ## Today
 
-- Label: `Standalone Root`
+- Label: `Standalone Root + richer example surface`
 - Lane: `Productivity`
 - Entry: `Package.swift`
 - Product target: `Productivity / Tasks`
+- Richer example: `Examples/ProductivityExample`
 
 ## Best For / Not For
 
 ### Best for
 
-- task, project, focus-session shell incelemek isteyen ekipler
-- productivity lane icin package-entry seviyesinde app surface gormek isteyenler
-- Wave 1 backlog icin gercek root/package kaniti isteyenler
+- teams evaluating a dashboard-first productivity starter
+- readers comparing root package and standalone shell packaging
+- maintainers reviewing a reusable task and focus workspace surface
 
 ### Not for
 
-- bugun tam release-grade productivity suite parity bekleyenler
-- screenshot veya demo proof arayanlar
-- explicit standalone iOS CI proof'un verildigini varsayanlar
+- teams expecting a fully integrated collaboration suite today
+- readers who assume runtime screenshots and clips already exist
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- task dashboard shell
-- project summary surface
-- focus session entry
-- quick action workflow
+- workspace dashboard
+- task summary surface
+- project counters
+- focus-session actions
+- starter quick-action model
 
 ## Current Proof
 
-- `Package.resolved` lockfile mevcut
-- `swift package dump-package` gecerli
-- local `swift test` gecerli
-- `xcodebuild -scheme ProductivityApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
+- `Package.resolved` exists as the tracked dependency lockfile
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme ProductivityApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
+- richer example route exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
 ```bash
 open Package.swift
 open Package.resolved
+open ../../Examples/ProductivityExample/README.md
 ```
 
 Repo-level proof:
@@ -75,3 +80,4 @@ xcodebuild -scheme ProductivityApp -destination 'generic/platform=iOS' build
 - [Media Surface](../../Documentation/App-Media/ProductivityApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/ProductivityExample/README.md)

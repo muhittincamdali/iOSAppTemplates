@@ -1,19 +1,33 @@
-# Messaging Example
+# MessagingExample
 
-Bu klasor tek basina ship edilen bir Xcode app projesi degil. `MessagingApp` hedef UX'inin daha zengin bir inspection surface'idir.
+Generated from `Documentation/app-surface-catalog.json`.
+
+`MessagingExample` is the richer example surface for the `Messaging / Community` lane.
+
+## Product Shape
+
+- conversation list shell
+- chat thread surface
+- contact or member routing
+- composer starter flow
+
+## Best For / Not For
+
+### Best for
+
+- teams that want a second inspection route beyond `MessagingApp`
+- readers who want to inspect the `Messaging / Community` flow in a more product-like format
+
+### Not for
+
+- teams expecting a separate runnable Xcode project
+- readers who expect published runtime screenshots or simulator media proof today
 
 ## Current Truth
 
-- Ayrik `.xcodeproj` veya `.xcworkspace` burada ship edilmiyor.
-- Screenshot, UI test ve messaging/community workflow proof bu klasore bagli degil.
-- Canonical standalone package-entry root su an `Templates/MessagingApp`.
-- Canonical package validation root seviyedeki `swift build` ve `swift test`.
-
-## What This Example Is Good For
-
-- messaging lane icin inbox, room routing ve moderation yonunu gormek
-- Wave 2 app-pack icin richer example surface'i takip etmek
-- community communication ve safety workflow naming incelemek
+- this example is an inspection surface, not a separate shipped app project
+- the canonical standalone package-entry path lives under `Templates/`
+- canonical package validation remains the root-level `swift build` and `swift test` flow
 
 ## Start Here
 
@@ -28,8 +42,8 @@ swift build
 swift test
 ```
 
-## Related Docs
+## Canonical References
 
-- [Portfolio Matrix](../../Documentation/Portfolio-Matrix.md)
-- [Messaging Proof](../../Documentation/App-Proofs/MessagingApp.md)
-- [Messaging Media](../../Documentation/App-Media/MessagingApp.md)
+- [MessagingApp Proof](../../Documentation/App-Proofs/MessagingApp.md)
+- [MessagingApp Media](../../Documentation/App-Media/MessagingApp.md)
+- [Wave 1 Plan](../../Documentation/Wave-1-Implementation-Plan.md)

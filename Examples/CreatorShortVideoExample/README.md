@@ -1,19 +1,33 @@
-# Creator Short Video Example
+# CreatorShortVideoExample
 
-Bu klasor tek basina ship edilen bir Xcode app projesi degil. `CreatorShortVideoApp` hedef UX'inin daha zengin bir inspection surface'idir.
+Generated from `Documentation/app-surface-catalog.json`.
+
+`CreatorShortVideoExample` is the richer example surface for the `Creator / Short Video` lane.
+
+## Product Shape
+
+- creator feed shell
+- clip card surface
+- engagement starter routing
+- publish or upload shell
+
+## Best For / Not For
+
+### Best for
+
+- teams that want a second inspection route beyond `CreatorShortVideoApp`
+- readers who want to inspect the `Creator / Short Video` flow in a more product-like format
+
+### Not for
+
+- teams expecting a separate runnable Xcode project
+- readers who expect published runtime screenshots or simulator media proof today
 
 ## Current Truth
 
-- Ayrik `.xcodeproj` veya `.xcworkspace` burada ship edilmiyor.
-- Screenshot, UI test ve creator workflow proof bu klasore bagli degil.
-- Canonical standalone package-entry root su an `Templates/CreatorShortVideoApp`.
-- Canonical package validation root seviyedeki `swift build` ve `swift test`.
-
-## What This Example Is Good For
-
-- creator lane icin clip routing, publishing ve moderation workflow yonunu gormek
-- Wave 2 app-pack icin richer example surface'i takip etmek
-- short-video product naming ve creator decision surface incelemek
+- this example is an inspection surface, not a separate shipped app project
+- the canonical standalone package-entry path lives under `Templates/`
+- canonical package validation remains the root-level `swift build` and `swift test` flow
 
 ## Start Here
 
@@ -28,8 +42,8 @@ swift build
 swift test
 ```
 
-## Related Docs
+## Canonical References
 
-- [Portfolio Matrix](../../Documentation/Portfolio-Matrix.md)
-- [CreatorShortVideo Proof](../../Documentation/App-Proofs/CreatorShortVideoApp.md)
-- [CreatorShortVideo Media](../../Documentation/App-Media/CreatorShortVideoApp.md)
+- [CreatorShortVideoApp Proof](../../Documentation/App-Proofs/CreatorShortVideoApp.md)
+- [CreatorShortVideoApp Media](../../Documentation/App-Media/CreatorShortVideoApp.md)
+- [Wave 1 Plan](../../Documentation/Wave-1-Implementation-Plan.md)

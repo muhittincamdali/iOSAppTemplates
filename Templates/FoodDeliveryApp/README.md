@@ -1,58 +1,63 @@
 # FoodDeliveryApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`FoodDeliveryApp`, `iOSAppTemplates` icindeki Food Delivery lane standalone root surface'idir.
+`FoodDeliveryApp` is the standalone-root surface for the `Food Delivery` lane inside `iOSAppTemplates`.
 
 ## Today
 
-- Label: `Standalone Root`
+- Label: `Standalone Root + richer example surface`
 - Lane: `Food Delivery`
 - Entry: `Package.swift`
 - Product target: `Food Delivery`
+- Richer example: `Examples/FoodDeliveryExample`
 
 ## Best For / Not For
 
 ### Best for
 
-- restaurant, cart ve delivery shell incelemek isteyen ekipler
-- food delivery lane icin package-entry seviyesinde app surface gormek isteyenler
-- Wave 1 backlog icin gercek root/package kaniti isteyenler
+- teams inspecting restaurant and order-flow starter surfaces
+- readers who want a delivery lane with a richer example route
+- maintainers reviewing map, cart, and order-status starter patterns
 
 ### Not for
 
-- bugun tam release-grade food delivery parity bekleyenler
-- screenshot veya demo proof arayanlar
-- explicit standalone iOS CI proof'un verildigini varsayanlar
+- teams expecting production delivery logistics today
+- readers who assume published runtime screenshots and clips already exist
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
 - restaurant discovery shell
-- cart entry
-- order status workflow
-- delivery summary surface
+- menu and item cards
+- cart flow
+- order tracking shell
+- starter delivery domain model
 
 ## Current Proof
 
-- `Package.resolved` lockfile mevcut
-- `swift package dump-package` gecerli
-- local `swift test` gecerli
-- `xcodebuild -scheme FoodDeliveryApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
+- `Package.resolved` exists as the tracked dependency lockfile
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme FoodDeliveryApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
+- richer example route exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
 ```bash
 open Package.swift
 open Package.resolved
+open ../../Examples/FoodDeliveryExample/README.md
 ```
 
 Repo-level proof:
@@ -75,3 +80,4 @@ xcodebuild -scheme FoodDeliveryApp -destination 'generic/platform=iOS' build
 - [Media Surface](../../Documentation/App-Media/FoodDeliveryApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/FoodDeliveryExample/README.md)

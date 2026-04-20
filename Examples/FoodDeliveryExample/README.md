@@ -1,23 +1,38 @@
-# Food Delivery Example
+# FoodDeliveryExample
 
-Bu klasor tek basina ship edilen bir Xcode app projesi degil. `FoodDeliveryApp` hedef UX'inin daha zengin bir inspection surface'idir.
+Generated from `Documentation/app-surface-catalog.json`.
+
+`FoodDeliveryExample` is the richer example surface for the `Food Delivery` lane.
+
+## Product Shape
+
+- restaurant discovery shell
+- menu and item cards
+- cart flow
+- order tracking shell
+
+## Best For / Not For
+
+### Best for
+
+- teams that want a second inspection route beyond `FoodDeliveryApp`
+- readers who want to inspect the `Food Delivery` flow in a more product-like format
+
+### Not for
+
+- teams expecting a separate runnable Xcode project
+- readers who expect published runtime screenshots or simulator media proof today
 
 ## Current Truth
 
-- Ayrik `.xcodeproj` veya `.xcworkspace` burada ship edilmiyor.
-- Screenshot, UI test ve performance proof bu klasore bagli degil.
-- Canonical standalone package-entry root su an `Templates/FoodDeliveryApp`.
-- Canonical package validation root seviyedeki `swift build` ve `swift test`.
-
-## What This Example Is Good For
-
-- food delivery lane icin discovery, cart ve order-tracking flow yonunu gormek
-- Wave 1 app-pack icin richer example surface'i takip etmek
-- naming, restaurant hierarchy ve delivery UX direction incelemek
+- this example is an inspection surface, not a separate shipped app project
+- the canonical standalone package-entry path lives under `Templates/`
+- canonical package validation remains the root-level `swift build` and `swift test` flow
 
 ## Start Here
 
 ```bash
+open FoodDeliveryFlowExample.swift
 open ../../Templates/FoodDeliveryApp/Package.swift
 ```
 
@@ -28,8 +43,8 @@ swift build
 swift test
 ```
 
-## Related Docs
+## Canonical References
 
+- [FoodDeliveryApp Proof](../../Documentation/App-Proofs/FoodDeliveryApp.md)
+- [FoodDeliveryApp Media](../../Documentation/App-Media/FoodDeliveryApp.md)
 - [Wave 1 Plan](../../Documentation/Wave-1-Implementation-Plan.md)
-- [Food Delivery Proof](../../Documentation/App-Proofs/FoodDeliveryApp.md)
-- [Food Delivery Media](../../Documentation/App-Media/FoodDeliveryApp.md)

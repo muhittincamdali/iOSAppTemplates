@@ -1,19 +1,33 @@
-# Privacy Vault Example
+# PrivacyVaultExample
 
-Bu klasor tek basina ship edilen bir Xcode app projesi degil. `PrivacyVaultApp` hedef UX'inin daha zengin bir inspection surface'idir.
+Generated from `Documentation/app-surface-catalog.json`.
+
+`PrivacyVaultExample` is the richer example surface for the `Privacy / Secure Vault` lane.
+
+## Product Shape
+
+- vault overview shell
+- secure item list surface
+- detail and reveal starter flow
+- privacy settings shell
+
+## Best For / Not For
+
+### Best for
+
+- teams that want a second inspection route beyond `PrivacyVaultApp`
+- readers who want to inspect the `Privacy / Secure Vault` flow in a more product-like format
+
+### Not for
+
+- teams expecting a separate runnable Xcode project
+- readers who expect published runtime screenshots or simulator media proof today
 
 ## Current Truth
 
-- Ayrik `.xcodeproj` veya `.xcworkspace` burada ship edilmiyor.
-- Screenshot, UI test ve privacy workflow proof bu klasore bagli degil.
-- Canonical standalone package-entry root su an `Templates/PrivacyVaultApp`.
-- Canonical package validation root seviyedeki `swift build` ve `swift test`.
-
-## What This Example Is Good For
-
-- privacy vault lane icin secure collection, recovery ve access review workflow yonunu gormek
-- Wave 3 app-pack icin richer example surface'i takip etmek
-- privacy-first routing ve security naming incelemek
+- this example is an inspection surface, not a separate shipped app project
+- the canonical standalone package-entry path lives under `Templates/`
+- canonical package validation remains the root-level `swift build` and `swift test` flow
 
 ## Start Here
 
@@ -28,8 +42,8 @@ swift build
 swift test
 ```
 
-## Related Docs
+## Canonical References
 
-- [Portfolio Matrix](../../Documentation/Portfolio-Matrix.md)
 - [PrivacyVaultApp Proof](../../Documentation/App-Proofs/PrivacyVaultApp.md)
 - [PrivacyVaultApp Media](../../Documentation/App-Media/PrivacyVaultApp.md)
+- [Wave 1 Plan](../../Documentation/Wave-1-Implementation-Plan.md)
