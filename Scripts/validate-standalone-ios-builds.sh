@@ -23,6 +23,9 @@ tracked_apps=(
   "NotesKnowledgeApp"
   "CreatorShortVideoApp"
   "TeamCollaborationApp"
+  "CRMAdminApp"
+  "SubscriptionLifestyleApp"
+  "PrivacyVaultApp"
 )
 
 log_dir="$(mktemp -d)"

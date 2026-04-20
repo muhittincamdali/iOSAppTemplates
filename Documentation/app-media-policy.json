@@ -101,6 +101,24 @@
       "lane": "Team Collaboration",
       "status": "not-published",
       "required_readme": "Documentation/App-Media/TeamCollaborationApp.md"
+    },
+    {
+      "id": "CRMAdminApp",
+      "lane": "CRM / Admin",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/CRMAdminApp.md"
+    },
+    {
+      "id": "SubscriptionLifestyleApp",
+      "lane": "Subscription Lifestyle",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/SubscriptionLifestyleApp.md"
+    },
+    {
+      "id": "PrivacyVaultApp",
+      "lane": "Privacy / Secure Vault",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/PrivacyVaultApp.md"
     }
   ]
 }

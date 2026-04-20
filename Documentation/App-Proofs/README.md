@@ -23,10 +23,13 @@ Bugunku kapsam:
 - `Templates/NotesKnowledgeApp`
 - `Templates/CreatorShortVideoApp`
 - `Templates/TeamCollaborationApp`
+- `Templates/CRMAdminApp`
+- `Templates/SubscriptionLifestyleApp`
+- `Templates/PrivacyVaultApp`
 
 Bugun ek proof gercegi:
 
-- `17` standalone root icin local generic iOS build proof var
+- `20` standalone root icin local generic iOS build proof var
 
 Bu sayfalarin rolu:
 
@@ -56,6 +59,9 @@ Bu sayfalarin rolu:
 | NotesKnowledgeApp | Notes / Knowledge | standalone root + source shell + richer example | [NotesKnowledgeApp.md](./NotesKnowledgeApp.md) |
 | CreatorShortVideoApp | Creator / Short Video | standalone root + source shell + richer example | [CreatorShortVideoApp.md](./CreatorShortVideoApp.md) |
 | TeamCollaborationApp | Team Collaboration | standalone root + source shell + richer example | [TeamCollaborationApp.md](./TeamCollaborationApp.md) |
+| CRMAdminApp | CRM / Admin | standalone root + source shell + richer example | [CRMAdminApp.md](./CRMAdminApp.md) |
+| SubscriptionLifestyleApp | Subscription Lifestyle | standalone root + source shell + richer example | [SubscriptionLifestyleApp.md](./SubscriptionLifestyleApp.md) |
+| PrivacyVaultApp | Privacy / Secure Vault | standalone root + source shell + richer example | [PrivacyVaultApp.md](./PrivacyVaultApp.md) |
 
 ## Rule
 

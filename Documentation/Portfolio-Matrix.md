@@ -19,7 +19,7 @@ It exists to:
 - `App Media Surface`: a canonical per-app media page exists
 - `Complete App Target`: the intended world-class app for that lane
 
-## Current 17-Lane Surface
+## Current 20-Lane Surface
 
 | Lane | Today | Best current route | Target complete app |
 | --- | --- | --- | --- |
@@ -32,6 +32,9 @@ It exists to:
 | Notes / Knowledge | Standalone Root + Example Surface + App Proof Surface + App Media Surface | `Templates/NotesKnowledgeApp` or `Documentation/App-Proofs/NotesKnowledgeApp.md` | Notes / Knowledge Base |
 | Creator / Short Video | Standalone Root + Example Surface + App Proof Surface + App Media Surface | `Templates/CreatorShortVideoApp` or `Documentation/App-Proofs/CreatorShortVideoApp.md` | Creator / Short Video |
 | Team Collaboration | Standalone Root + Example Surface + App Proof Surface + App Media Surface | `Templates/TeamCollaborationApp` or `Documentation/App-Proofs/TeamCollaborationApp.md` | Team Collaboration |
+| CRM / Admin | Standalone Root + Example Surface + App Proof Surface + App Media Surface | `Templates/CRMAdminApp` or `Documentation/App-Proofs/CRMAdminApp.md` | CRM / Admin Companion |
+| Subscription Lifestyle | Standalone Root + Example Surface + App Proof Surface + App Media Surface | `Templates/SubscriptionLifestyleApp` or `Documentation/App-Proofs/SubscriptionLifestyleApp.md` | Subscription Lifestyle / Habit Tracker |
+| Privacy / Secure Vault | Standalone Root + Example Surface + App Proof Surface + App Media Surface | `Templates/PrivacyVaultApp` or `Documentation/App-Proofs/PrivacyVaultApp.md` | Privacy / Secure Vault |
 | Health / Fitness | Standalone Root + Template Family + App Proof Surface + App Media Surface | `Templates/FitnessApp` or `Documentation/App-Proofs/FitnessApp.md` | Health / Fitness |
 | Finance | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/FinanceApp` or `Documentation/App-Proofs/FinanceApp.md` | Finance / Budgeting |
 | Education | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/EducationApp` or `Documentation/App-Proofs/EducationApp.md` | Education / Learning |
@@ -43,9 +46,9 @@ It exists to:
 
 ## Current Truth
 
-- the repository currently has `17` standalone app roots
+- the repository currently has `20` standalone app roots
 - the generator currently covers the broad starter map via `swift Scripts/TemplateGenerator.swift --list`
-- this `17 lane` surface does not equal `17 complete apps`
+- this `20 lane` surface does not equal `20 complete apps`
 - the `Complete App` label is governed only by [Complete-App-Standard.md](./Complete-App-Standard.md)
 
 ## 20 Complete App Expansion Map
@@ -104,6 +107,9 @@ The repository-level implementation contract for these eight apps lives in [Wave
 - `Templates/NotesKnowledgeApp`
 - `Templates/CreatorShortVideoApp`
 - `Templates/TeamCollaborationApp`
+- `Templates/CRMAdminApp`
+- `Templates/SubscriptionLifestyleApp`
+- `Templates/PrivacyVaultApp`
 
 ### If you want the cleanest proof pages now
 
@@ -124,6 +130,9 @@ The repository-level implementation contract for these eight apps lives in [Wave
 - [App-Proofs/NotesKnowledgeApp.md](./App-Proofs/NotesKnowledgeApp.md)
 - [App-Proofs/CreatorShortVideoApp.md](./App-Proofs/CreatorShortVideoApp.md)
 - [App-Proofs/TeamCollaborationApp.md](./App-Proofs/TeamCollaborationApp.md)
+- [App-Proofs/CRMAdminApp.md](./App-Proofs/CRMAdminApp.md)
+- [App-Proofs/SubscriptionLifestyleApp.md](./App-Proofs/SubscriptionLifestyleApp.md)
+- [App-Proofs/PrivacyVaultApp.md](./App-Proofs/PrivacyVaultApp.md)
 
 ### If you want the canonical media router now
 

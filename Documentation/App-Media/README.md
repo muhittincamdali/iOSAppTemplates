@@ -23,6 +23,9 @@ Bugunku truth:
 - `NotesKnowledgeApp` media `not-published`
 - `CreatorShortVideoApp` media `not-published`
 - `TeamCollaborationApp` media `not-published`
+- `CRMAdminApp` media `not-published`
+- `SubscriptionLifestyleApp` media `not-published`
+- `PrivacyVaultApp` media `not-published`
 
 Bu yuzeyin rolu:
 
@@ -51,6 +54,9 @@ Bu yuzeyin rolu:
 | NotesKnowledgeApp | Notes / Knowledge | `not-published` | [NotesKnowledgeApp.md](./NotesKnowledgeApp.md) |
 | CreatorShortVideoApp | Creator / Short Video | `not-published` | [CreatorShortVideoApp.md](./CreatorShortVideoApp.md) |
 | TeamCollaborationApp | Team Collaboration | `not-published` | [TeamCollaborationApp.md](./TeamCollaborationApp.md) |
+| CRMAdminApp | CRM / Admin | `not-published` | [CRMAdminApp.md](./CRMAdminApp.md) |
+| SubscriptionLifestyleApp | Subscription Lifestyle | `not-published` | [SubscriptionLifestyleApp.md](./SubscriptionLifestyleApp.md) |
+| PrivacyVaultApp | Privacy / Secure Vault | `not-published` | [PrivacyVaultApp.md](./PrivacyVaultApp.md) |
 
 ## Rule
 

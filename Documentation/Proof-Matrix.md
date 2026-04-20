@@ -20,6 +20,9 @@ Status meanings:
 | Notes / Knowledge | standalone root + example | root package green, standalone manifest smoke green, `Templates/NotesKnowledgeApp/Package.swift` is dependency-free so no external dependency lockfile is required, local standalone `swift test` passes, richer example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
 | Creator / Short Video | standalone root + example | root package green, standalone manifest smoke green, `Templates/CreatorShortVideoApp/Package.swift` is dependency-free so no external dependency lockfile is required, local standalone `swift test` passes, richer example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
 | Team Collaboration | standalone root + example | root package green, standalone manifest smoke green, `Templates/TeamCollaborationApp/Package.swift` is dependency-free so no external dependency lockfile is required, local standalone `swift test` passes, richer example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
+| CRM / Admin | standalone root + example | root package green, standalone manifest smoke green, `Templates/CRMAdminApp/Package.swift` is dependency-free so no external dependency lockfile is required, local standalone `swift test` passes, richer example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
+| Subscription Lifestyle | standalone root + example | root package green, standalone manifest smoke green, `Templates/SubscriptionLifestyleApp/Package.swift` is dependency-free so no external dependency lockfile is required, local standalone `swift test` passes, richer example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
+| Privacy / Secure Vault | standalone root + example | root package green, standalone manifest smoke green, `Templates/PrivacyVaultApp/Package.swift` is dependency-free so no external dependency lockfile is required, local standalone `swift test` passes, richer example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
 | Health / Fitness | standalone root + template family | root package green, standalone manifest smoke green, `Templates/FitnessApp/Package.resolved` exists, source shell exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
 | Finance | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/FinanceApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
 | Education | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/EducationApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
@@ -39,9 +42,9 @@ Status meanings:
 - standalone root manifest smoke passes
 - deterministic `Package.resolved` coverage exists for 8 standalone roots with external packages
 - canonical per-app proof pages exist for standalone roots
-- canonical per-app media pages exist for 17 standalone roots, but media status is still `not-published`
-- local generic iOS `xcodebuild` passes for `EcommerceApp`, `SocialMediaApp`, `FitnessApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, and `TeamCollaborationApp`
-- local standalone `swift test` passes for `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, and `TeamCollaborationApp`
+- canonical per-app media pages exist for 20 standalone roots, but media status is still `not-published`
+- local generic iOS `xcodebuild` passes for `EcommerceApp`, `SocialMediaApp`, `FitnessApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, `SubscriptionLifestyleApp`, and `PrivacyVaultApp`
+- local standalone `swift test` passes for `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, `SubscriptionLifestyleApp`, and `PrivacyVaultApp`
 - GitHub workflows are truth-based and currently green
 
 ## App Proof Router
@@ -64,6 +67,9 @@ Status meanings:
 - [App-Proofs/NotesKnowledgeApp.md](./App-Proofs/NotesKnowledgeApp.md)
 - [App-Proofs/CreatorShortVideoApp.md](./App-Proofs/CreatorShortVideoApp.md)
 - [App-Proofs/TeamCollaborationApp.md](./App-Proofs/TeamCollaborationApp.md)
+- [App-Proofs/CRMAdminApp.md](./App-Proofs/CRMAdminApp.md)
+- [App-Proofs/SubscriptionLifestyleApp.md](./App-Proofs/SubscriptionLifestyleApp.md)
+- [App-Proofs/PrivacyVaultApp.md](./App-Proofs/PrivacyVaultApp.md)
 
 ## What Is Still Missing
 
@@ -72,7 +78,7 @@ Main missing layers before a `20 complete apps` claim:
 1. lane-specific per-app README
 2. real screenshot gallery
 3. hosted standalone iOS CI proof for the tracked roots
-4. standalone packaging for lanes beyond the current 17 roots
+4. screenshot and demo production for the current 20 roots
 
 Required Wave 1 app-pack contract:
 

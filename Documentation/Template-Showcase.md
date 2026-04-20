@@ -96,6 +96,36 @@ Canonical app-proof router:
 - Proof surface: [App-Proofs/TeamCollaborationApp.md](./App-Proofs/TeamCollaborationApp.md)
 - Gap: screenshot, demo, hosted standalone iOS CI proof
 
+### CRM / Admin: CRMAdminApp
+
+- Type: `Standalone Root + richer source shell`
+- Entry: `Templates/CRMAdminApp/Package.swift`
+- Extra route: `Examples/CRMAdminExample`
+- Product shape: CRM dashboard, renewal board, SLA routing and admin workflow
+- Proof today: package root exists, manifest smoke passes, dependency-free package graph needs no external lockfile, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
+- Proof surface: [App-Proofs/CRMAdminApp.md](./App-Proofs/CRMAdminApp.md)
+- Gap: screenshot, demo, hosted standalone iOS CI proof
+
+### Subscription Lifestyle: SubscriptionLifestyleApp
+
+- Type: `Standalone Root + richer source shell`
+- Entry: `Templates/SubscriptionLifestyleApp/Package.swift`
+- Extra route: `Examples/SubscriptionLifestyleExample`
+- Product shape: subscription dashboard, retention programs, paywall workflow and member operations
+- Proof today: package root exists, manifest smoke passes, dependency-free package graph needs no external lockfile, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
+- Proof surface: [App-Proofs/SubscriptionLifestyleApp.md](./App-Proofs/SubscriptionLifestyleApp.md)
+- Gap: screenshot, demo, hosted standalone iOS CI proof
+
+### Privacy / Secure Vault: PrivacyVaultApp
+
+- Type: `Standalone Root + richer source shell`
+- Entry: `Templates/PrivacyVaultApp/Package.swift`
+- Extra route: `Examples/PrivacyVaultExample`
+- Product shape: secure vault dashboard, collection routing, access review and recovery workflow
+- Proof today: package root exists, manifest smoke passes, dependency-free package graph needs no external lockfile, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
+- Proof surface: [App-Proofs/PrivacyVaultApp.md](./App-Proofs/PrivacyVaultApp.md)
+- Gap: screenshot, demo, hosted standalone iOS CI proof
+
 ### Health / Fitness: FitnessApp
 
 - Type: `Standalone Root`
