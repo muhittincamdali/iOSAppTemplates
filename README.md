@@ -110,8 +110,9 @@ This proves today:
 - manifest-valid package entry
 - lane-specific source shell
 - standalone root packaging
-- deterministic `Package.resolved` coverage for the nine standalone roots
-- local generic iOS `xcodebuild` proof for `8` standalone roots:
+- deterministic `Package.resolved` coverage for `8` standalone roots with external packages
+- local generic iOS `xcodebuild` proof for `9` standalone roots:
+  - `EcommerceApp`
   - `SocialMediaApp`
   - `FitnessApp`
   - `ProductivityApp`
@@ -124,7 +125,6 @@ This proves today:
 This does not yet prove today:
 
 - published app media
-- equal local generic iOS build proof for every standalone root
 - hosted standalone iOS CI proof for the tracked roots
 - full complete-app parity for all lanes
 
@@ -141,7 +141,7 @@ swift Scripts/TemplateGenerator.swift --list
 - active root package graph tests
 - security smoke surface exists
 - performance smoke surface exists
-- tracked local generic iOS build proof exists for `8` standalone roots
+- tracked local generic iOS build proof exists for `9` standalone roots
 - public docs are being tightened around truth-first product claims
 - the repo now has explicit app proof, media, lockfile, and portfolio routers
 

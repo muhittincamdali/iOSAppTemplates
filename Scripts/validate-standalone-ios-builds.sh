@@ -6,6 +6,7 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
 tracked_apps=(
+  "EcommerceApp"
   "SocialMediaApp"
   "FitnessApp"
   "ProductivityApp"
@@ -14,10 +15,6 @@ tracked_apps=(
   "FoodDeliveryApp"
   "TravelPlannerApp"
   "AIAssistantApp"
-)
-
-pending_apps=(
-  "EcommerceApp"
 )
 
 log_dir="$(mktemp -d)"
@@ -38,10 +35,5 @@ done
 
 echo "Tracked generic iOS build proof passed for:"
 for app in "${tracked_apps[@]}"; do
-  echo "- $app"
-done
-
-echo "Not yet tracked in this validator:"
-for app in "${pending_apps[@]}"; do
   echo "- $app"
 done

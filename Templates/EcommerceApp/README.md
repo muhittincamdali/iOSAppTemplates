@@ -36,8 +36,9 @@ Last updated: 2026-04-18
 
 ## Current Proof
 
-- `Package.resolved` lockfile mevcut
+- No external dependency lockfile is required today
 - `swift package dump-package` gecerli
+- `xcodebuild -scheme EcommerceApp -destination 'generic/platform=iOS' build` gecerli
 - root repo `swift build -c release` gecerli
 - root repo `swift test` gecerli
 - canonical app proof page mevcut
@@ -47,14 +48,13 @@ Last updated: 2026-04-18
 
 - screenshot
 - demo clip
-- explicit generic iOS build proof henuz tracked degil
 - hosted standalone iOS CI proof
 
 ## Start Here
 
 ```bash
 open Package.swift
-open Package.resolved
+xcodebuild -scheme EcommerceApp -destination 'generic/platform=iOS' build
 open ../../Examples/EcommerceExample/README.md
 ```
 

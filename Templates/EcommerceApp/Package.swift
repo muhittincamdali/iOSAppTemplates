@@ -19,23 +19,13 @@ let package = Package(
             name: "EcommerceAppCore",
             targets: ["EcommerceAppCore"])
     ],
-    dependencies: [
-        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.8.1"),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.18.0"),
-        .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.9.1")
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "EcommerceApp",
             dependencies: [
                 "EcommerceAppUI",
-                "EcommerceAppCore",
-                "Alamofire",
-                .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
-                .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
-                .product(name: "FirebaseStorage", package: "firebase-ios-sdk"),
-                .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk"),
-                "Kingfisher"
+                "EcommerceAppCore"
             ]),
         .target(
             name: "EcommerceAppUI",
@@ -44,9 +34,7 @@ let package = Package(
             ]),
         .target(
             name: "EcommerceAppCore",
-            dependencies: [
-                "Alamofire"
-            ]),
+            dependencies: []),
         .testTarget(
             name: "EcommerceAppTests",
             dependencies: ["EcommerceApp"])
