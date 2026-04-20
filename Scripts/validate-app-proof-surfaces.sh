@@ -20,6 +20,8 @@ required_files=(
   "Documentation/App-Proofs/MusicPodcastApp.md"
   "Documentation/App-Proofs/MarketplaceApp.md"
   "Documentation/App-Proofs/MessagingApp.md"
+  "Documentation/App-Proofs/BookingReservationsApp.md"
+  "Documentation/App-Proofs/NotesKnowledgeApp.md"
 )
 
 tracked_ios_build_apps=(
@@ -36,6 +38,8 @@ tracked_ios_build_apps=(
   "MusicPodcastApp"
   "MarketplaceApp"
   "MessagingApp"
+  "BookingReservationsApp"
+  "NotesKnowledgeApp"
 )
 
 for file in "${required_files[@]}"; do

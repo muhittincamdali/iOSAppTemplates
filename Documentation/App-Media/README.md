@@ -19,6 +19,8 @@ Bugunku truth:
 - `MusicPodcastApp` media `not-published`
 - `MarketplaceApp` media `not-published`
 - `MessagingApp` media `not-published`
+- `BookingReservationsApp` media `not-published`
+- `NotesKnowledgeApp` media `not-published`
 
 Bu yuzeyin rolu:
 
@@ -43,6 +45,8 @@ Bu yuzeyin rolu:
 | MusicPodcastApp | Music / Podcast | `not-published` | [MusicPodcastApp.md](./MusicPodcastApp.md) |
 | MarketplaceApp | Marketplace | `not-published` | [MarketplaceApp.md](./MarketplaceApp.md) |
 | MessagingApp | Messaging / Community | `not-published` | [MessagingApp.md](./MessagingApp.md) |
+| BookingReservationsApp | Booking / Reservations | `not-published` | [BookingReservationsApp.md](./BookingReservationsApp.md) |
+| NotesKnowledgeApp | Notes / Knowledge | `not-published` | [NotesKnowledgeApp.md](./NotesKnowledgeApp.md) |
 
 ## Rule
 

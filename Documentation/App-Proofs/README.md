@@ -19,10 +19,12 @@ Bugunku kapsam:
 - `Templates/MusicPodcastApp`
 - `Templates/MarketplaceApp`
 - `Templates/MessagingApp`
+- `Templates/BookingReservationsApp`
+- `Templates/NotesKnowledgeApp`
 
 Bugun ek proof gercegi:
 
-- `13` standalone root icin local generic iOS build proof var
+- `15` standalone root icin local generic iOS build proof var
 
 Bu sayfalarin rolu:
 
@@ -48,6 +50,8 @@ Bu sayfalarin rolu:
 | MusicPodcastApp | Music / Podcast | standalone root + source shell + richer example | [MusicPodcastApp.md](./MusicPodcastApp.md) |
 | MarketplaceApp | Marketplace | standalone root + source shell + richer example | [MarketplaceApp.md](./MarketplaceApp.md) |
 | MessagingApp | Messaging / Community | standalone root + source shell + richer example | [MessagingApp.md](./MessagingApp.md) |
+| BookingReservationsApp | Booking / Reservations | standalone root + source shell + richer example | [BookingReservationsApp.md](./BookingReservationsApp.md) |
+| NotesKnowledgeApp | Notes / Knowledge | standalone root + source shell + richer example | [NotesKnowledgeApp.md](./NotesKnowledgeApp.md) |
 
 ## Rule
 
