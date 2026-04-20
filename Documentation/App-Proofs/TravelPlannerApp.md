@@ -1,6 +1,6 @@
 # TravelPlannerApp Proof Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 ## Product Summary
 
@@ -14,41 +14,41 @@ Last updated: 2026-04-20
 
 ### Best for
 
-- destination, booking ve itinerary shell incelemek isteyen ekipler
-- standalone root ile richer example surface'i birlikte gormek isteyenler
-- Wave 1 icin gercek travel packaging kaniti isteyenler
+- teams evaluating trip and itinerary planning shells
+- readers comparing travel lane packaging and richer example routing
+- maintainers reviewing booking-adjacent trip surfaces
 
 ### Not for
 
-- bugun complete travel parity bekleyenler
-- screenshot/demo proof'un zaten mevcut oldugunu varsayanlar
-- teams that assume hosted standalone iOS proof is already green for this app pack
+- teams expecting full booking network integrations today
+- readers who assume published runtime screenshots and clips already exist
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- trip dashboard shell
-- itinerary timeline
-- booking health summary
-- flight and hotel quick actions
-- richer travel example route
+- trip overview shell
+- itinerary cards
+- destination highlights
+- booking-adjacent planning surface
+- starter travel domain model
 
 ## Current Proof
 
-- standalone root package mevcut
-- template-root README mevcut
-- `Templates/TravelPlannerApp/Package.resolved` lockfile mevcut
-- `swift package dump-package` gecerli
-- `cd Templates/TravelPlannerApp && swift test` gecerli
-- `xcodebuild -scheme TravelPlannerApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- `Examples/TravelPlannerExample` inspection route mevcut
+- standalone root package exists
+- template-root README exists
+- `Templates/TravelPlannerApp/Package.swift` exists
+- `Templates/TravelPlannerApp/Package.resolved` exists
+- local generic iOS build proof is tracked via `xcodebuild -scheme TravelPlannerApp -destination 'generic/platform=iOS' build`
+- the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- `Examples/TravelPlannerExample` inspection route exists
 
 ## Missing Proof
 
-- canonical screenshot yok
-- demo clip yok
-- hosted standalone iOS proof workflow is active; check live GitHub status on master
+- runtime screenshot not yet published
+- demo clip not yet published
+- stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path
 
@@ -56,25 +56,21 @@ Last updated: 2026-04-20
 open Templates/TravelPlannerApp/Package.swift
 open Templates/TravelPlannerApp/Package.resolved
 open Examples/TravelPlannerExample/README.md
-```
-
-Root repo proof icin:
-
-```bash
-swift build
-swift test
-```
-
-Standalone generic iOS proof icin:
-
-```bash
-cd Templates/TravelPlannerApp
 xcodebuild -scheme TravelPlannerApp -destination 'generic/platform=iOS' build
+```
+
+Then validate the root package:
+
+```bash
+swift build -c release
+swift test
 ```
 
 ## Canonical References
 
 - [Template Root README](../../Templates/TravelPlannerApp/README.md)
-- [../Template-Showcase.md](../Template-Showcase.md)
-- [../Proof-Matrix.md](../Proof-Matrix.md)
-- [../Portfolio-Matrix.md](../Portfolio-Matrix.md)
+- [Richer Example](../../Examples/TravelPlannerExample/README.md)
+- [App Media Surface](../App-Media/TravelPlannerApp.md)
+- [Template Showcase](../Template-Showcase.md)
+- [Proof Matrix](../Proof-Matrix.md)
+- [Portfolio Matrix](../Portfolio-Matrix.md)

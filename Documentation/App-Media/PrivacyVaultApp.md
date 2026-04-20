@@ -1,6 +1,6 @@
 # PrivacyVaultApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `PrivacyVaultApp`
 - Lane: `Privacy / Secure Vault`
@@ -8,20 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/PrivacyVaultApp.svg](../Assets/AppCards/PrivacyVaultApp.svg)
-- preview board image var: [../Assets/AppPreviews/PrivacyVaultApp.svg](../Assets/AppPreviews/PrivacyVaultApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/PrivacyVaultApp.svg](../Assets/AppCards/PrivacyVaultApp.svg)
+- preview board is published: [../Assets/AppPreviews/PrivacyVaultApp.svg](../Assets/AppPreviews/PrivacyVaultApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/PrivacyVaultApp.md](../App-Proofs/PrivacyVaultApp.md)
-- [../../Templates/PrivacyVaultApp/README.md](../../Templates/PrivacyVaultApp/README.md)
-- [../../Templates/PrivacyVaultApp/Package.swift](../../Templates/PrivacyVaultApp/Package.swift)
-- [../../Examples/PrivacyVaultExample/README.md](../../Examples/PrivacyVaultExample/README.md)
+- [App Proof Surface](../App-Proofs/PrivacyVaultApp.md)
+- [Template Root README](../../Templates/PrivacyVaultApp/README.md)
+- [Standalone Root Package](../../Templates/PrivacyVaultApp/Package.swift)
+- [Richer Example](../../Examples/PrivacyVaultExample/README.md)
 
 ## Next Required Capture
 
-1. secure vault dashboard screenshot
-2. access review and recovery workflow screenshot
-3. short privacy journey demo clip
+1. vault overview screenshot
+2. secure item detail screenshot
+3. short unlock-to-review demo clip

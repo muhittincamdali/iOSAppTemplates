@@ -1,6 +1,6 @@
 # CreatorShortVideoApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `CreatorShortVideoApp`
 - Lane: `Creator / Short Video`
@@ -8,20 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/CreatorShortVideoApp.svg](../Assets/AppCards/CreatorShortVideoApp.svg)
-- preview board image var: [../Assets/AppPreviews/CreatorShortVideoApp.svg](../Assets/AppPreviews/CreatorShortVideoApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/CreatorShortVideoApp.svg](../Assets/AppCards/CreatorShortVideoApp.svg)
+- preview board is published: [../Assets/AppPreviews/CreatorShortVideoApp.svg](../Assets/AppPreviews/CreatorShortVideoApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/CreatorShortVideoApp.md](../App-Proofs/CreatorShortVideoApp.md)
-- [../../Templates/CreatorShortVideoApp/README.md](../../Templates/CreatorShortVideoApp/README.md)
-- [../../Templates/CreatorShortVideoApp/Package.swift](../../Templates/CreatorShortVideoApp/Package.swift)
-- [../../Examples/CreatorShortVideoExample/README.md](../../Examples/CreatorShortVideoExample/README.md)
+- [App Proof Surface](../App-Proofs/CreatorShortVideoApp.md)
+- [Template Root README](../../Templates/CreatorShortVideoApp/README.md)
+- [Standalone Root Package](../../Templates/CreatorShortVideoApp/Package.swift)
+- [Richer Example](../../Examples/CreatorShortVideoExample/README.md)
 
 ## Next Required Capture
 
-1. creator studio dashboard screenshot
-2. clip routing and moderation workflow screenshot
-3. short publishing demo clip
+1. creator feed screenshot
+2. clip detail or upload screenshot
+3. short browse-to-publish demo clip

@@ -1,6 +1,6 @@
 # BookingReservationsApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `BookingReservationsApp`
 - Lane: `Booking / Reservations`
@@ -8,20 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/BookingReservationsApp.svg](../Assets/AppCards/BookingReservationsApp.svg)
-- preview board image var: [../Assets/AppPreviews/BookingReservationsApp.svg](../Assets/AppPreviews/BookingReservationsApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/BookingReservationsApp.svg](../Assets/AppCards/BookingReservationsApp.svg)
+- preview board is published: [../Assets/AppPreviews/BookingReservationsApp.svg](../Assets/AppPreviews/BookingReservationsApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/BookingReservationsApp.md](../App-Proofs/BookingReservationsApp.md)
-- [../../Templates/BookingReservationsApp/README.md](../../Templates/BookingReservationsApp/README.md)
-- [../../Templates/BookingReservationsApp/Package.swift](../../Templates/BookingReservationsApp/Package.swift)
-- [../../Examples/BookingReservationsExample/README.md](../../Examples/BookingReservationsExample/README.md)
+- [App Proof Surface](../App-Proofs/BookingReservationsApp.md)
+- [Template Root README](../../Templates/BookingReservationsApp/README.md)
+- [Standalone Root Package](../../Templates/BookingReservationsApp/Package.swift)
+- [Richer Example](../../Examples/BookingReservationsExample/README.md)
 
 ## Next Required Capture
 
-1. reservation operations dashboard screenshot
-2. property and guest workflow screenshot
-3. short booking management demo clip
+1. availability or schedule screenshot
+2. booking detail screenshot
+3. short selection-to-confirmation demo clip

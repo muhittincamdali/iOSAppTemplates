@@ -1,6 +1,6 @@
 # FinanceApp Proof Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 ## Product Summary
 
@@ -14,41 +14,41 @@ Last updated: 2026-04-20
 
 ### Best for
 
-- dashboard, account ve budget shell incelemek isteyen ekipler
-- standalone root ile richer example surface'i birlikte gormek isteyenler
-- Wave 1 icin gercek finance packaging kaniti isteyenler
+- teams inspecting budgeting and account-summary starter flows
+- readers who want a finance lane with root packaging and richer example coverage
+- maintainers reviewing starter financial UI patterns without backend claims
 
 ### Not for
 
-- bugun complete finance suite parity bekleyenler
-- screenshot/demo proof'un zaten mevcut oldugunu varsayanlar
-- teams that assume hosted standalone iOS proof is already green for this app pack
+- teams expecting bank-grade integrations today
+- readers who assume published runtime screenshots and clips already exist
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- finance dashboard shell
-- account snapshot surface
-- budget review entry
-- cash-flow quick actions
-- richer finance example route
+- account summary shell
+- transaction overview
+- budget category surface
+- spending insight cards
+- starter finance domain model
 
 ## Current Proof
 
-- standalone root package mevcut
-- template-root README mevcut
-- `Templates/FinanceApp/Package.resolved` lockfile mevcut
-- `swift package dump-package` gecerli
-- `cd Templates/FinanceApp && swift test` gecerli
-- `xcodebuild -scheme FinanceApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- `Examples/FinanceExample` inspection route mevcut
+- standalone root package exists
+- template-root README exists
+- `Templates/FinanceApp/Package.swift` exists
+- `Templates/FinanceApp/Package.resolved` exists
+- local generic iOS build proof is tracked via `xcodebuild -scheme FinanceApp -destination 'generic/platform=iOS' build`
+- the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- `Examples/FinanceExample` inspection route exists
 
 ## Missing Proof
 
-- canonical screenshot yok
-- demo clip yok
-- hosted standalone iOS proof workflow is active; check live GitHub status on master
+- runtime screenshot not yet published
+- demo clip not yet published
+- stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path
 
@@ -56,25 +56,21 @@ Last updated: 2026-04-20
 open Templates/FinanceApp/Package.swift
 open Templates/FinanceApp/Package.resolved
 open Examples/FinanceExample/README.md
-```
-
-Root repo proof icin:
-
-```bash
-swift build
-swift test
-```
-
-Standalone generic iOS proof icin:
-
-```bash
-cd Templates/FinanceApp
 xcodebuild -scheme FinanceApp -destination 'generic/platform=iOS' build
+```
+
+Then validate the root package:
+
+```bash
+swift build -c release
+swift test
 ```
 
 ## Canonical References
 
 - [Template Root README](../../Templates/FinanceApp/README.md)
-- [../Template-Showcase.md](../Template-Showcase.md)
-- [../Proof-Matrix.md](../Proof-Matrix.md)
-- [../Portfolio-Matrix.md](../Portfolio-Matrix.md)
+- [Richer Example](../../Examples/FinanceExample/README.md)
+- [App Media Surface](../App-Media/FinanceApp.md)
+- [Template Showcase](../Template-Showcase.md)
+- [Proof Matrix](../Proof-Matrix.md)
+- [Portfolio Matrix](../Portfolio-Matrix.md)

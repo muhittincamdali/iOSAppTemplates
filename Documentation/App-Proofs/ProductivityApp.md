@@ -1,6 +1,6 @@
 # ProductivityApp Proof Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 ## Product Summary
 
@@ -14,41 +14,41 @@ Last updated: 2026-04-20
 
 ### Best for
 
-- task, project ve focus-shell incelemek isteyen ekipler
-- standalone root ile richer example surface'i birlikte gormek isteyenler
-- Wave 1 icin gercek productivity packaging kaniti isteyenler
+- teams evaluating a dashboard-first productivity starter
+- readers comparing root package and standalone shell packaging
+- maintainers reviewing a reusable task and focus workspace surface
 
 ### Not for
 
-- bugun complete productivity suite parity bekleyenler
-- screenshot/demo proof'un zaten mevcut oldugunu varsayanlar
-- teams that assume hosted standalone iOS proof is already green for this app pack
+- teams expecting a fully integrated collaboration suite today
+- readers who assume runtime screenshots and clips already exist
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- task dashboard shell
-- project summary surface
-- focus-session entry
-- quick action workflow
-- richer productivity example route
+- workspace dashboard
+- task summary surface
+- project counters
+- focus-session actions
+- starter quick-action model
 
 ## Current Proof
 
-- standalone root package mevcut
-- template-root README mevcut
-- `Templates/ProductivityApp/Package.resolved` lockfile mevcut
-- `swift package dump-package` gecerli
-- `cd Templates/ProductivityApp && swift test` gecerli
-- `xcodebuild -scheme ProductivityApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- `Examples/ProductivityExample` inspection route mevcut
+- standalone root package exists
+- template-root README exists
+- `Templates/ProductivityApp/Package.swift` exists
+- `Templates/ProductivityApp/Package.resolved` exists
+- local generic iOS build proof is tracked via `xcodebuild -scheme ProductivityApp -destination 'generic/platform=iOS' build`
+- the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- `Examples/ProductivityExample` inspection route exists
 
 ## Missing Proof
 
-- canonical screenshot yok
-- demo clip yok
-- hosted standalone iOS proof workflow is active; check live GitHub status on master
+- runtime screenshot not yet published
+- demo clip not yet published
+- stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path
 
@@ -56,25 +56,21 @@ Last updated: 2026-04-20
 open Templates/ProductivityApp/Package.swift
 open Templates/ProductivityApp/Package.resolved
 open Examples/ProductivityExample/README.md
-```
-
-Root repo proof icin:
-
-```bash
-swift build
-swift test
-```
-
-Standalone generic iOS proof icin:
-
-```bash
-cd Templates/ProductivityApp
 xcodebuild -scheme ProductivityApp -destination 'generic/platform=iOS' build
+```
+
+Then validate the root package:
+
+```bash
+swift build -c release
+swift test
 ```
 
 ## Canonical References
 
 - [Template Root README](../../Templates/ProductivityApp/README.md)
-- [../Template-Showcase.md](../Template-Showcase.md)
-- [../Proof-Matrix.md](../Proof-Matrix.md)
-- [../Portfolio-Matrix.md](../Portfolio-Matrix.md)
+- [Richer Example](../../Examples/ProductivityExample/README.md)
+- [App Media Surface](../App-Media/ProductivityApp.md)
+- [Template Showcase](../Template-Showcase.md)
+- [Proof Matrix](../Proof-Matrix.md)
+- [Portfolio Matrix](../Portfolio-Matrix.md)

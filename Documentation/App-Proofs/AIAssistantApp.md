@@ -1,6 +1,6 @@
 # AIAssistantApp Proof Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 ## Product Summary
 
@@ -14,41 +14,41 @@ Last updated: 2026-04-20
 
 ### Best for
 
-- on-device assistant workspace shell incelemek isteyen ekipler
-- standalone root ile richer example surface'i birlikte gormek isteyenler
-- Wave 1 icin gercek AI packaging kaniti isteyenler
+- teams reviewing an assistant-style conversation shell
+- readers comparing AI lane packaging with a richer example route
+- maintainers validating a privacy-aware assistant starter surface
 
 ### Not for
 
-- bugun complete AI parity bekleyenler
-- screenshot/demo proof'un zaten mevcut oldugunu varsayanlar
-- teams that assume hosted standalone iOS proof is already green for this app pack
+- teams expecting a production AI stack today
+- readers who assume runtime screenshots and demo clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- assistant workspace dashboard
-- suggestion queue
-- trust and guardrail signals
-- note-to-action workflow shell
-- richer AI example route
+- conversation shell
+- prompt and response surface
+- assistant suggestion cards
+- starter tool action surface
+- AI lane example route
 
 ## Current Proof
 
-- standalone root package mevcut
-- template-root README mevcut
-- `Templates/AIAssistantApp/Package.resolved` lockfile mevcut
-- `swift package dump-package` gecerli
-- `cd Templates/AIAssistantApp && swift test` gecerli
-- `xcodebuild -scheme AIAssistantApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- `Examples/AIAssistantExample` inspection route mevcut
+- standalone root package exists
+- template-root README exists
+- `Templates/AIAssistantApp/Package.swift` exists
+- `Templates/AIAssistantApp/Package.resolved` exists
+- local generic iOS build proof is tracked via `xcodebuild -scheme AIAssistantApp -destination 'generic/platform=iOS' build`
+- the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- `Examples/AIAssistantExample` inspection route exists
 
 ## Missing Proof
 
-- canonical screenshot yok
-- demo clip yok
-- hosted standalone iOS proof workflow is active; check live GitHub status on master
+- runtime screenshot not yet published
+- demo clip not yet published
+- stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path
 
@@ -56,25 +56,21 @@ Last updated: 2026-04-20
 open Templates/AIAssistantApp/Package.swift
 open Templates/AIAssistantApp/Package.resolved
 open Examples/AIAssistantExample/README.md
-```
-
-Root repo proof icin:
-
-```bash
-swift build
-swift test
-```
-
-Standalone generic iOS proof icin:
-
-```bash
-cd Templates/AIAssistantApp
 xcodebuild -scheme AIAssistantApp -destination 'generic/platform=iOS' build
+```
+
+Then validate the root package:
+
+```bash
+swift build -c release
+swift test
 ```
 
 ## Canonical References
 
 - [Template Root README](../../Templates/AIAssistantApp/README.md)
-- [../Template-Showcase.md](../Template-Showcase.md)
-- [../Proof-Matrix.md](../Proof-Matrix.md)
-- [../Portfolio-Matrix.md](../Portfolio-Matrix.md)
+- [Richer Example](../../Examples/AIAssistantExample/README.md)
+- [App Media Surface](../App-Media/AIAssistantApp.md)
+- [Template Showcase](../Template-Showcase.md)
+- [Proof Matrix](../Proof-Matrix.md)
+- [Portfolio Matrix](../Portfolio-Matrix.md)

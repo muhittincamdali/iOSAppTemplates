@@ -5,6 +5,8 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
+bash Scripts/validate-generated-app-surfaces.sh >/dev/null
+
 required_files=(
   "Documentation/App-Proofs/README.md"
   "Documentation/App-Proofs/EcommerceApp.md"
@@ -56,20 +58,15 @@ for file in "${required_files[@]}"; do
   [[ -f "$file" ]] || { echo "Missing app proof file: $file" >&2; exit 1; }
 done
 
-generic_patterns=(
-  "swift package dump-package"
-  "swift build -c release"
-)
-
 for file in "${required_files[@]:1}"; do
   app_name="$(basename "$file" .md)"
   app_package="Templates/${app_name}/Package.swift"
 
   grep -Fq "$app_package" "$file" || { echo "$file missing pattern: $app_package" >&2; exit 1; }
-
-  for pattern in "${generic_patterns[@]}"; do
-    grep -Fq "$pattern" "$file" || { echo "$file missing pattern: $pattern" >&2; exit 1; }
-  done
+  grep -Fq "swift build -c release" "$file" || { echo "$file missing root release build proof" >&2; exit 1; }
+  grep -Fq "swift test" "$file" || { echo "$file missing root test proof" >&2; exit 1; }
+  grep -Fq "App Media Surface" "$file" || { echo "$file missing app media link" >&2; exit 1; }
+  grep -Fq "hosted standalone iOS proof workflow is active" "$file" || { echo "$file missing hosted proof workflow note" >&2; exit 1; }
 done
 
 for app_name in "${tracked_ios_build_apps[@]}"; do

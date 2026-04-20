@@ -1,6 +1,6 @@
 # NotesKnowledgeApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `NotesKnowledgeApp`
 - Lane: `Notes / Knowledge`
@@ -8,20 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/NotesKnowledgeApp.svg](../Assets/AppCards/NotesKnowledgeApp.svg)
-- preview board image var: [../Assets/AppPreviews/NotesKnowledgeApp.svg](../Assets/AppPreviews/NotesKnowledgeApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/NotesKnowledgeApp.svg](../Assets/AppCards/NotesKnowledgeApp.svg)
+- preview board is published: [../Assets/AppPreviews/NotesKnowledgeApp.svg](../Assets/AppPreviews/NotesKnowledgeApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/NotesKnowledgeApp.md](../App-Proofs/NotesKnowledgeApp.md)
-- [../../Templates/NotesKnowledgeApp/README.md](../../Templates/NotesKnowledgeApp/README.md)
-- [../../Templates/NotesKnowledgeApp/Package.swift](../../Templates/NotesKnowledgeApp/Package.swift)
-- [../../Examples/NotesKnowledgeExample/README.md](../../Examples/NotesKnowledgeExample/README.md)
+- [App Proof Surface](../App-Proofs/NotesKnowledgeApp.md)
+- [Template Root README](../../Templates/NotesKnowledgeApp/README.md)
+- [Standalone Root Package](../../Templates/NotesKnowledgeApp/Package.swift)
+- [Richer Example](../../Examples/NotesKnowledgeExample/README.md)
 
 ## Next Required Capture
 
-1. knowledge dashboard screenshot
-2. note collection and link workflow screenshot
-3. short note capture demo clip
+1. notes list screenshot
+2. note detail screenshot
+3. short capture-to-review demo clip

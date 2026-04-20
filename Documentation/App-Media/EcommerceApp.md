@@ -1,6 +1,6 @@
 # EcommerceApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `EcommerceApp`
 - Lane: `Commerce`
@@ -8,19 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/EcommerceApp.svg](../Assets/AppCards/EcommerceApp.svg)
-- preview board image var: [../Assets/AppPreviews/EcommerceApp.svg](../Assets/AppPreviews/EcommerceApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/EcommerceApp.svg](../Assets/AppCards/EcommerceApp.svg)
+- preview board is published: [../Assets/AppPreviews/EcommerceApp.svg](../Assets/AppPreviews/EcommerceApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/EcommerceApp.md](../App-Proofs/EcommerceApp.md)
-- [../../Templates/EcommerceApp/README.md](../../Templates/EcommerceApp/README.md)
-- [../../Templates/EcommerceApp/Package.swift](../../Templates/EcommerceApp/Package.swift)
+- [App Proof Surface](../App-Proofs/EcommerceApp.md)
+- [Template Root README](../../Templates/EcommerceApp/README.md)
+- [Standalone Root Package](../../Templates/EcommerceApp/Package.swift)
+- [Richer Example](../../Examples/EcommerceExample/README.md)
 
 ## Next Required Capture
 
-1. home/catalog screen screenshot
-2. cart/checkout screen screenshot
-3. kisa scroll/demo clip
+1. catalog home screenshot
+2. cart or checkout screenshot
+3. short browse-to-cart demo clip

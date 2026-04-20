@@ -1,6 +1,6 @@
 # TravelPlannerApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `TravelPlannerApp`
 - Lane: `Travel`
@@ -8,20 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/TravelPlannerApp.svg](../Assets/AppCards/TravelPlannerApp.svg)
-- preview board image var: [../Assets/AppPreviews/TravelPlannerApp.svg](../Assets/AppPreviews/TravelPlannerApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/TravelPlannerApp.svg](../Assets/AppCards/TravelPlannerApp.svg)
+- preview board is published: [../Assets/AppPreviews/TravelPlannerApp.svg](../Assets/AppPreviews/TravelPlannerApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/TravelPlannerApp.md](../App-Proofs/TravelPlannerApp.md)
-- [../../Templates/TravelPlannerApp/README.md](../../Templates/TravelPlannerApp/README.md)
-- [../../Templates/TravelPlannerApp/Package.resolved](../../Templates/TravelPlannerApp/Package.resolved)
-- [../../Examples/TravelPlannerExample/README.md](../../Examples/TravelPlannerExample/README.md)
+- [App Proof Surface](../App-Proofs/TravelPlannerApp.md)
+- [Template Root README](../../Templates/TravelPlannerApp/README.md)
+- [Standalone Root Package](../../Templates/TravelPlannerApp/Package.swift)
+- [Richer Example](../../Examples/TravelPlannerExample/README.md)
 
 ## Next Required Capture
 
-1. itinerary overview screenshot
-2. booking health or destination detail screenshot
-3. short planning workflow demo clip
+1. trip overview screenshot
+2. itinerary detail screenshot
+3. short itinerary-planning demo clip

@@ -1,6 +1,6 @@
 # MessagingApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `MessagingApp`
 - Lane: `Messaging / Community`
@@ -8,20 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/MessagingApp.svg](../Assets/AppCards/MessagingApp.svg)
-- preview board image var: [../Assets/AppPreviews/MessagingApp.svg](../Assets/AppPreviews/MessagingApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/MessagingApp.svg](../Assets/AppCards/MessagingApp.svg)
+- preview board is published: [../Assets/AppPreviews/MessagingApp.svg](../Assets/AppPreviews/MessagingApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/MessagingApp.md](../App-Proofs/MessagingApp.md)
-- [../../Templates/MessagingApp/README.md](../../Templates/MessagingApp/README.md)
-- [../../Templates/MessagingApp/Package.swift](../../Templates/MessagingApp/Package.swift)
-- [../../Examples/MessagingExample/README.md](../../Examples/MessagingExample/README.md)
+- [App Proof Surface](../App-Proofs/MessagingApp.md)
+- [Template Root README](../../Templates/MessagingApp/README.md)
+- [Standalone Root Package](../../Templates/MessagingApp/Package.swift)
+- [Richer Example](../../Examples/MessagingExample/README.md)
 
 ## Next Required Capture
 
-1. inbox and room overview screenshot
-2. conversation + moderation workflow screenshot
-3. short messaging/community demo clip
+1. conversation list screenshot
+2. chat thread screenshot
+3. short open-chat demo clip

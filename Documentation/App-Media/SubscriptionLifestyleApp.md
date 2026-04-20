@@ -1,6 +1,6 @@
 # SubscriptionLifestyleApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `SubscriptionLifestyleApp`
 - Lane: `Subscription Lifestyle`
@@ -8,20 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/SubscriptionLifestyleApp.svg](../Assets/AppCards/SubscriptionLifestyleApp.svg)
-- preview board image var: [../Assets/AppPreviews/SubscriptionLifestyleApp.svg](../Assets/AppPreviews/SubscriptionLifestyleApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/SubscriptionLifestyleApp.svg](../Assets/AppCards/SubscriptionLifestyleApp.svg)
+- preview board is published: [../Assets/AppPreviews/SubscriptionLifestyleApp.svg](../Assets/AppPreviews/SubscriptionLifestyleApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/SubscriptionLifestyleApp.md](../App-Proofs/SubscriptionLifestyleApp.md)
-- [../../Templates/SubscriptionLifestyleApp/README.md](../../Templates/SubscriptionLifestyleApp/README.md)
-- [../../Templates/SubscriptionLifestyleApp/Package.swift](../../Templates/SubscriptionLifestyleApp/Package.swift)
-- [../../Examples/SubscriptionLifestyleExample/README.md](../../Examples/SubscriptionLifestyleExample/README.md)
+- [App Proof Surface](../App-Proofs/SubscriptionLifestyleApp.md)
+- [Template Root README](../../Templates/SubscriptionLifestyleApp/README.md)
+- [Standalone Root Package](../../Templates/SubscriptionLifestyleApp/Package.swift)
+- [Richer Example](../../Examples/SubscriptionLifestyleExample/README.md)
 
 ## Next Required Capture
 
-1. subscription dashboard screenshot
-2. retention and paywall workflow screenshot
-3. short member journey demo clip
+1. habit dashboard screenshot
+2. streak or premium upsell screenshot
+3. short routine-tracking demo clip

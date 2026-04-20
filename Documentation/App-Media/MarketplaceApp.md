@@ -1,6 +1,6 @@
 # MarketplaceApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `MarketplaceApp`
 - Lane: `Marketplace`
@@ -8,20 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/MarketplaceApp.svg](../Assets/AppCards/MarketplaceApp.svg)
-- preview board image var: [../Assets/AppPreviews/MarketplaceApp.svg](../Assets/AppPreviews/MarketplaceApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/MarketplaceApp.svg](../Assets/AppCards/MarketplaceApp.svg)
+- preview board is published: [../Assets/AppPreviews/MarketplaceApp.svg](../Assets/AppPreviews/MarketplaceApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/MarketplaceApp.md](../App-Proofs/MarketplaceApp.md)
-- [../../Templates/MarketplaceApp/README.md](../../Templates/MarketplaceApp/README.md)
-- [../../Templates/MarketplaceApp/Package.swift](../../Templates/MarketplaceApp/Package.swift)
-- [../../Examples/MarketplaceExample/README.md](../../Examples/MarketplaceExample/README.md)
+- [App Proof Surface](../App-Proofs/MarketplaceApp.md)
+- [Template Root README](../../Templates/MarketplaceApp/README.md)
+- [Standalone Root Package](../../Templates/MarketplaceApp/Package.swift)
+- [Richer Example](../../Examples/MarketplaceExample/README.md)
 
 ## Next Required Capture
 
-1. buyer/seller marketplace dashboard screenshot
-2. listing and trust workflow screenshot
-3. short buyer journey demo clip
+1. marketplace feed screenshot
+2. listing detail screenshot
+3. short browse-to-listing demo clip
