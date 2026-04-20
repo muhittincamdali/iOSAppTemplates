@@ -2,7 +2,7 @@
 
 Production-grade SwiftUI app starter system for Apple platforms.
 
-`iOSAppTemplates` currently ships category-level template families, generator tooling, shared package targets, and `9` standalone app roots under `Templates/`. The product goal is broader: become the canonical SwiftUI starter portfolio with `20 provable complete apps`. The repository should only claim what can be routed, built, shown, and validated today.
+`iOSAppTemplates` currently ships category-level template families, generator tooling, shared package targets, and `11` standalone app roots under `Templates/`. The product goal is broader: become the canonical SwiftUI starter portfolio with `20 provable complete apps`. The repository should only claim what can be routed, built, shown, and validated today.
 
 ## First Decision
 
@@ -17,7 +17,7 @@ This repository is not yet a full fit if you expect:
 
 - `20 complete apps` already shipping at equal maturity
 - the same proof depth for every lane today
-- published media and equal explicit iOS build proof for every standalone app
+- published media and hosted standalone iOS proof for every standalone app
 
 ## Start Here
 
@@ -40,7 +40,7 @@ This repository is not yet a full fit if you expect:
 
 - category-level template families under `Sources/`
 - `Scripts/TemplateGenerator.swift` as the generator entry point
-- `9` standalone app roots under `Templates/`:
+- `11` standalone app roots under `Templates/`:
   - `Templates/EcommerceApp`
   - `Templates/SocialMediaApp`
   - `Templates/FitnessApp`
@@ -50,6 +50,8 @@ This repository is not yet a full fit if you expect:
   - `Templates/FoodDeliveryApp`
   - `Templates/TravelPlannerApp`
   - `Templates/AIAssistantApp`
+  - `Templates/NewsBlogApp`
+  - `Templates/MusicPodcastApp`
 - a lightweight example/router layer under `Examples/`
 - active root-package validation for build, test, security, and performance
 
@@ -59,14 +61,14 @@ This repository is not yet a full fit if you expect:
 | --- | --- | --- |
 | Commerce | template family + standalone root + richer example | E-Commerce Store |
 | Social | template family + standalone root + richer example | Social Media |
-| News | template family | News / Editorial |
+| News | template family + standalone root + richer example | News / Editorial |
 | Health / Fitness | template family + standalone root | Health / Fitness |
 | Finance | template family + standalone root + richer example | Finance / Budgeting |
 | Education | template family + standalone root + richer example | Education / Learning |
 | Food Delivery | template family + standalone root + richer example | Food Delivery |
 | Travel | template family + standalone root + richer example | Travel Planner |
 | AI | template family + standalone root + richer example | AI Assistant |
-| Music / Podcast | template family | Music / Podcast |
+| Music / Podcast | template family + standalone root + richer example | Music / Podcast |
 | Productivity | template family + standalone root + richer example | Productivity / Tasks |
 
 This table is not a `complete app` claim. It is the current packaging truth of the repository.
@@ -103,6 +105,8 @@ open Templates/EducationApp/Package.swift
 open Templates/FoodDeliveryApp/Package.swift
 open Templates/TravelPlannerApp/Package.swift
 open Templates/AIAssistantApp/Package.swift
+open Templates/NewsBlogApp/Package.swift
+open Templates/MusicPodcastApp/Package.swift
 ```
 
 This proves today:
@@ -111,7 +115,7 @@ This proves today:
 - lane-specific source shell
 - standalone root packaging
 - deterministic `Package.resolved` coverage for `8` standalone roots with external packages
-- local generic iOS `xcodebuild` proof for `9` standalone roots:
+- local generic iOS `xcodebuild` proof for `11` standalone roots:
   - `EcommerceApp`
   - `SocialMediaApp`
   - `FitnessApp`
@@ -121,6 +125,8 @@ This proves today:
   - `FoodDeliveryApp`
   - `TravelPlannerApp`
   - `AIAssistantApp`
+  - `NewsBlogApp`
+  - `MusicPodcastApp`
 
 This does not yet prove today:
 
@@ -141,7 +147,7 @@ swift Scripts/TemplateGenerator.swift --list
 - active root package graph tests
 - security smoke surface exists
 - performance smoke surface exists
-- tracked local generic iOS build proof exists for `9` standalone roots
+- tracked local generic iOS build proof exists for `11` standalone roots
 - public docs are being tightened around truth-first product claims
 - the repo now has explicit app proof, media, lockfile, and portfolio routers
 
