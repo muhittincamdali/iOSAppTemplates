@@ -17,6 +17,17 @@ roots=(
   "Templates/AIAssistantApp"
 )
 
+tracked_ios_build_apps=(
+  "SocialMediaApp"
+  "FitnessApp"
+  "ProductivityApp"
+  "FinanceApp"
+  "EducationApp"
+  "FoodDeliveryApp"
+  "TravelPlannerApp"
+  "AIAssistantApp"
+)
+
 for root in "${roots[@]}"; do
   readme="$root/README.md"
   package="$root/Package.swift"
@@ -28,6 +39,12 @@ for root in "${roots[@]}"; do
   grep -Fq "../../Documentation/App-Proofs/" "$readme" || { echo "$readme missing canonical app proof link" >&2; exit 1; }
   grep -Fq "swift build" "$readme" || { echo "$readme missing repo build proof path" >&2; exit 1; }
   grep -Fq "swift test" "$readme" || { echo "$readme missing repo test proof path" >&2; exit 1; }
+done
+
+for app_name in "${tracked_ios_build_apps[@]}"; do
+  readme="Templates/${app_name}/README.md"
+  ios_build_command="xcodebuild -scheme ${app_name} -destination 'generic/platform=iOS' build"
+  grep -Fq "$ios_build_command" "$readme" || { echo "$readme missing tracked iOS build command" >&2; exit 1; }
 done
 
 grep -Fq "Templates/EcommerceApp/README.md" Documentation/App-Proofs/EcommerceApp.md || { echo "Ecommerce proof page missing template README link" >&2; exit 1; }

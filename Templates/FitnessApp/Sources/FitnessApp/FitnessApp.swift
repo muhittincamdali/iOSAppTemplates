@@ -1,4 +1,5 @@
 import SwiftUI
+import Charts
 import Firebase
 import FirebaseAuth
 import FirebaseFirestore
@@ -780,6 +781,8 @@ struct Goal: Identifiable, Codable {
 // MARK: - View Models
 @MainActor
 class WorkoutManager: ObservableObject {
+    static let shared = WorkoutManager()
+
     @Published var workouts: [Workout] = []
     @Published var recentWorkouts: [Workout] = []
     @Published var isLoading = false
@@ -850,6 +853,8 @@ class WorkoutManager: ObservableObject {
 
 @MainActor
 class ProgressManager: ObservableObject {
+    static let shared = ProgressManager()
+
     @Published var progress: [ProgressData] = []
     @Published var isLoading = false
     

@@ -59,7 +59,8 @@ See the exact contract in [Wave-1-App-Pack-Spec.md](./Wave-1-App-Pack-Spec.md).
 - Main blockers:
   - richer example
   - screenshot/video proof
-  - explicit iOS-targeted standalone build proof
+  - explicit generic iOS-targeted standalone build proof
+  - hosted standalone iOS CI proof
 
 ### 2. Social Media
 
@@ -74,7 +75,7 @@ See the exact contract in [Wave-1-App-Pack-Spec.md](./Wave-1-App-Pack-Spec.md).
 - Current maturity: strongest overall Wave 1 candidate
 - Main blockers:
   - screenshot/video proof
-  - explicit iOS-targeted standalone build proof
+  - hosted standalone iOS CI proof
   - stronger product README depth
 
 ### 3. Productivity / Tasks
@@ -89,7 +90,7 @@ See the exact contract in [Wave-1-App-Pack-Spec.md](./Wave-1-App-Pack-Spec.md).
 - Current maturity: active Wave 1 build candidate
 - Main blockers:
   - screenshot/video proof
-  - explicit iOS-targeted standalone build proof
+  - hosted standalone iOS CI proof
 
 ### 4. Finance / Budgeting
 
@@ -103,7 +104,7 @@ See the exact contract in [Wave-1-App-Pack-Spec.md](./Wave-1-App-Pack-Spec.md).
 - Current maturity: active Wave 1 build candidate
 - Main blockers:
   - screenshot/video proof
-  - explicit iOS-targeted standalone build proof
+  - hosted standalone iOS CI proof
 
 ### 5. Education / Learning
 
@@ -117,7 +118,7 @@ See the exact contract in [Wave-1-App-Pack-Spec.md](./Wave-1-App-Pack-Spec.md).
 - Current maturity: active Wave 1 build candidate
 - Main blockers:
   - screenshot/video proof
-  - explicit iOS-targeted standalone build proof
+  - hosted standalone iOS CI proof
 
 ### 6. Food Delivery
 
@@ -131,7 +132,7 @@ See the exact contract in [Wave-1-App-Pack-Spec.md](./Wave-1-App-Pack-Spec.md).
 - Current maturity: active Wave 1 build candidate
 - Main blockers:
   - screenshot/video proof
-  - explicit iOS-targeted standalone build proof
+  - hosted standalone iOS CI proof
 
 ### 7. Travel Planner
 
@@ -145,7 +146,7 @@ See the exact contract in [Wave-1-App-Pack-Spec.md](./Wave-1-App-Pack-Spec.md).
 - Current maturity: active Wave 1 build candidate
 - Main blockers:
   - screenshot/video proof
-  - explicit iOS-targeted standalone build proof
+  - hosted standalone iOS CI proof
 
 ### 8. AI Assistant
 
@@ -159,7 +160,7 @@ See the exact contract in [Wave-1-App-Pack-Spec.md](./Wave-1-App-Pack-Spec.md).
 - Current maturity: active Wave 1 build candidate
 - Main blockers:
   - screenshot/video proof
-  - explicit iOS-targeted standalone build proof
+  - hosted standalone iOS CI proof
 
 ## Build Order
 

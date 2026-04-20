@@ -87,6 +87,7 @@ A template may only be labeled `complete` if every required condition below is t
 - it has a documented start/run path
 - it has a per-app proof page
 - it has a per-app media page
+- it has explicit generic iOS-targeted standalone build proof
 - it has at least one real screenshot
 - it is included in the gallery surface
 - it builds successfully in CI or release validation
@@ -97,7 +98,7 @@ A template may only be labeled `complete` if every required condition below is t
 - smoke test
 - generator coverage
 - visual asset in README/showcase/gallery
-- explicit iOS-targeted standalone build proof
+- hosted standalone iOS CI proof
 
 ## Labeling Rules
 
@@ -129,7 +130,7 @@ Use when a reusable source package exists without full app packaging.
 
 ## Current Reality Gap
 
-The repository contains meaningful template-family material and three standalone roots, but it does not yet have `20 complete apps`.
+The repository contains meaningful template-family material and nine standalone roots, but it does not yet have `20 complete apps` or equal standalone iOS proof depth across that surface.
 
 That gap must be closed before public claims expand.
 

@@ -1,6 +1,6 @@
 # ProductivityApp
 
-Last updated: 2026-04-19
+Last updated: 2026-04-20
 
 `ProductivityApp`, `iOSAppTemplates` icindeki Productivity lane standalone root surface'idir.
 
@@ -37,6 +37,7 @@ Last updated: 2026-04-19
 - `Package.resolved` lockfile mevcut
 - `swift package dump-package` gecerli
 - local `swift test` gecerli
+- `xcodebuild -scheme ProductivityApp -destination 'generic/platform=iOS' build` gecerli
 - root repo `swift build -c release` gecerli
 - root repo `swift test` gecerli
 - canonical app proof page mevcut
@@ -45,7 +46,7 @@ Last updated: 2026-04-19
 
 - screenshot
 - demo clip
-- explicit standalone iOS-targeted CI proof
+- hosted standalone iOS CI proof
 
 ## Start Here
 
@@ -60,6 +61,12 @@ Repo-level proof:
 cd ../..
 swift build
 swift test
+```
+
+Standalone generic iOS proof:
+
+```bash
+xcodebuild -scheme ProductivityApp -destination 'generic/platform=iOS' build
 ```
 
 ## Canonical References

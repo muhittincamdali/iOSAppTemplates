@@ -16,6 +16,11 @@ Bugunku kapsam:
 - `Templates/TravelPlannerApp`
 - `Templates/AIAssistantApp`
 
+Bugun ek proof gercegi:
+
+- `8` standalone root icin local generic iOS build proof var
+- `EcommerceApp` bu kata henuz dahil degil
+
 Bu sayfalarin rolu:
 
 - `best for / not for` karari vermek

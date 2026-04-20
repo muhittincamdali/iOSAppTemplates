@@ -17,7 +17,7 @@ This repository is not yet a full fit if you expect:
 
 - `20 complete apps` already shipping at equal maturity
 - the same proof depth for every lane today
-- published media and simulator proof for every standalone app
+- published media and equal explicit iOS build proof for every standalone app
 
 ## Start Here
 
@@ -111,11 +111,21 @@ This proves today:
 - lane-specific source shell
 - standalone root packaging
 - deterministic `Package.resolved` coverage for the nine standalone roots
+- local generic iOS `xcodebuild` proof for `8` standalone roots:
+  - `SocialMediaApp`
+  - `FitnessApp`
+  - `ProductivityApp`
+  - `FinanceApp`
+  - `EducationApp`
+  - `FoodDeliveryApp`
+  - `TravelPlannerApp`
+  - `AIAssistantApp`
 
 This does not yet prove today:
 
 - published app media
-- hosted standalone iOS simulator proof
+- equal local generic iOS build proof for every standalone root
+- hosted standalone iOS CI proof for the tracked roots
 - full complete-app parity for all lanes
 
 ### 3. Use the generator
@@ -131,6 +141,7 @@ swift Scripts/TemplateGenerator.swift --list
 - active root package graph tests
 - security smoke surface exists
 - performance smoke surface exists
+- tracked local generic iOS build proof exists for `8` standalone roots
 - public docs are being tightened around truth-first product claims
 - the repo now has explicit app proof, media, lockfile, and portfolio routers
 
