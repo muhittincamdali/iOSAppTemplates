@@ -16,7 +16,7 @@ Last updated: 2026-04-19
 
 - [../App-Proofs/EcommerceApp.md](../App-Proofs/EcommerceApp.md)
 - [../../Templates/EcommerceApp/README.md](../../Templates/EcommerceApp/README.md)
-- [../../Templates/EcommerceApp/Package.resolved](../../Templates/EcommerceApp/Package.resolved)
+- [../../Templates/EcommerceApp/Package.swift](../../Templates/EcommerceApp/Package.swift)
 
 ## Next Required Capture
 

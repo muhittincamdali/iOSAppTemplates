@@ -22,7 +22,7 @@ Last updated: 2026-04-20
 
 - bugun full release-grade ecommerce app bekleyenler
 - canonical screenshot/demo proof arayanlar
-- local generic iOS build proof'unun zaten track edildigini varsayanlar
+- hosted standalone iOS CI proof'unun verildigini varsayanlar
 
 ## Product Shape Today
 
@@ -36,8 +36,9 @@ Last updated: 2026-04-20
 
 - standalone root package mevcut
 - template-root README mevcut
-- `Templates/EcommerceApp/Package.resolved` lockfile mevcut
+- `Templates/EcommerceApp/Package.swift` dependency-free app shell graph'i veriyor; no external dependency lockfile is required
 - `swift package dump-package` gecerli
+- `xcodebuild -scheme EcommerceApp -destination 'generic/platform=iOS' build` gecerli
 - root repo `swift build -c release` gecerli
 - root repo `swift test` gecerli
 - source shell mevcut
@@ -47,15 +48,14 @@ Last updated: 2026-04-20
 
 - canonical screenshot yok
 - demo clip yok
-- explicit generic iOS build proof henuz tracked degil
 - hosted standalone iOS CI proof yok
 
 ## Start Path
 
 ```bash
 open Templates/EcommerceApp/Package.swift
-open Templates/EcommerceApp/Package.resolved
 open Examples/EcommerceExample/README.md
+xcodebuild -scheme EcommerceApp -destination 'generic/platform=iOS' build
 ```
 
 Ardindan:

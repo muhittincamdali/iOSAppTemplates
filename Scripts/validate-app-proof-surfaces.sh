@@ -19,6 +19,7 @@ required_files=(
 )
 
 tracked_ios_build_apps=(
+  "EcommerceApp"
   "SocialMediaApp"
   "FitnessApp"
   "ProductivityApp"

@@ -18,8 +18,7 @@ Bugunku kapsam:
 
 Bugun ek proof gercegi:
 
-- `8` standalone root icin local generic iOS build proof var
-- `EcommerceApp` bu kata henuz dahil degil
+- `9` standalone root icin local generic iOS build proof var
 
 Bu sayfalarin rolu:
 

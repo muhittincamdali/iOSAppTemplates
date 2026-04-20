@@ -15,8 +15,11 @@ require_pattern() {
   fi
 }
 
-required_roots=(
+roots_without_external_dependencies=(
   "Templates/EcommerceApp"
+)
+
+roots_with_lockfiles=(
   "Templates/SocialMediaApp"
   "Templates/FitnessApp"
   "Templates/ProductivityApp"
@@ -50,7 +53,22 @@ required_doc_paths=(
   "Documentation/Template-Showcase.md"
 )
 
-for root in "${required_roots[@]}"; do
+for root in "${roots_without_external_dependencies[@]}"; do
+  package_file="${repo_root}/${root}/Package.swift"
+  resolved_file="${repo_root}/${root}/Package.resolved"
+
+  if [[ ! -f "${package_file}" ]]; then
+    echo "Missing package manifest: ${root}/Package.swift" >&2
+    exit 1
+  fi
+
+  if [[ -f "${resolved_file}" ]]; then
+    echo "Unexpected lockfile: ${root}/Package.resolved" >&2
+    exit 1
+  fi
+done
+
+for root in "${roots_with_lockfiles[@]}"; do
   package_file="${repo_root}/${root}/Package.swift"
   resolved_file="${repo_root}/${root}/Package.resolved"
 
@@ -88,7 +106,7 @@ for relative_path in "${required_doc_paths[@]}"; do
   fi
 done
 
-require_pattern 'Templates/EcommerceApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention EcommerceApp lockfile coverage."
+require_pattern 'Templates/EcommerceApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention EcommerceApp dependency-free proof."
 require_pattern 'Templates/SocialMediaApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention SocialMediaApp lockfile coverage."
 require_pattern 'Templates/FitnessApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention FitnessApp lockfile coverage."
 require_pattern 'Templates/ProductivityApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention ProductivityApp lockfile coverage."
@@ -97,7 +115,7 @@ require_pattern 'Templates/EducationApp/Package\.resolved' "${repo_root}/Documen
 require_pattern 'Templates/FoodDeliveryApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention FoodDeliveryApp lockfile coverage."
 require_pattern 'Templates/TravelPlannerApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention TravelPlannerApp lockfile coverage."
 require_pattern 'Templates/AIAssistantApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention AIAssistantApp lockfile coverage."
-require_pattern 'Templates/EcommerceApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/EcommerceApp.md" "EcommerceApp proof surface must mention the lockfile."
+require_pattern 'no external dependency lockfile is required' "${repo_root}/Documentation/App-Proofs/EcommerceApp.md" "EcommerceApp proof surface must mention the dependency-free graph."
 require_pattern 'Templates/SocialMediaApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/SocialMediaApp.md" "SocialMediaApp proof surface must mention the lockfile."
 require_pattern 'Templates/FitnessApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/FitnessApp.md" "FitnessApp proof surface must mention the lockfile."
 require_pattern 'Templates/ProductivityApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/ProductivityApp.md" "ProductivityApp proof surface must mention the lockfile."
@@ -106,7 +124,7 @@ require_pattern 'Templates/EducationApp/Package\.resolved.*lockfile mevcut' "${r
 require_pattern 'Templates/FoodDeliveryApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/FoodDeliveryApp.md" "FoodDeliveryApp proof surface must mention the lockfile."
 require_pattern 'Templates/TravelPlannerApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/TravelPlannerApp.md" "TravelPlannerApp proof surface must mention the lockfile."
 require_pattern 'Templates/AIAssistantApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/AIAssistantApp.md" "AIAssistantApp proof surface must mention the lockfile."
-require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/EcommerceApp/README.md" "EcommerceApp template README must mention the lockfile."
+require_pattern 'No external dependency lockfile is required today' "${repo_root}/Templates/EcommerceApp/README.md" "EcommerceApp template README must mention the dependency-free graph."
 require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/SocialMediaApp/README.md" "SocialMediaApp template README must mention the lockfile."
 require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/FitnessApp/README.md" "FitnessApp template README must mention the lockfile."
 require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/ProductivityApp/README.md" "ProductivityApp template README must mention the lockfile."

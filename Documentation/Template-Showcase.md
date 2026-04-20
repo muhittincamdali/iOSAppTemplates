@@ -22,9 +22,9 @@ Canonical app-proof router:
 - Entry: `Templates/EcommerceApp/Package.swift`
 - Extra route: `Examples/EcommerceExample`
 - Product shape: store, cart, checkout, auth shell
-- Proof today: package root exists, manifest smoke passes, `Templates/EcommerceApp/Package.resolved` exists, source shell exists, richer example surface exists
+- Proof today: package root exists, manifest smoke passes, dependency-free package graph needs no external lockfile, source shell exists, richer example surface exists, local generic iOS `xcodebuild` passes
 - Proof surface: [App-Proofs/EcommerceApp.md](./App-Proofs/EcommerceApp.md)
-- Gap: tracked generic iOS build proof, screenshot, demo
+- Gap: screenshot, demo, hosted standalone iOS CI proof
 
 ### Social: SocialMediaApp
 

@@ -1,9 +1,4 @@
 import SwiftUI
-import Firebase
-import FirebaseAuth
-import FirebaseFirestore
-import FirebaseStorage
-import Kingfisher
 
 // MARK: - E-commerce App
 @main
@@ -15,10 +10,8 @@ struct EcommerceApp: App {
     @StateObject private var orderManager = OrderManager.shared
     
     init() {
-        setupFirebase()
         setupStripe()
         setupAppearance()
-        setupAnalytics()
     }
     
     var body: some Scene {
@@ -35,11 +28,6 @@ struct EcommerceApp: App {
     }
     
     // MARK: - Setup Methods
-    private func setupFirebase() {
-        FirebaseApp.configure()
-        print("🔥 Firebase configured successfully")
-    }
-    
     private func setupStripe() {
         print("💳 Payment provider placeholder configured")
     }
@@ -65,12 +53,6 @@ struct EcommerceApp: App {
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         
         print("🎨 App appearance configured")
-    }
-    
-    private func setupAnalytics() {
-        Analytics.setAnalyticsCollectionEnabled(true)
-        Analytics.logEvent(AnalyticsEventAppOpen, parameters: nil)
-        print("📊 Analytics configured")
     }
     
     private func setupApp() {
@@ -941,40 +923,45 @@ class AuthManager: ObservableObject {
     static let shared = AuthManager()
     
     @Published var isAuthenticated = false
-    @Published var currentUser: User?
+    @Published var currentUser: EcommerceUser?
     
     private init() {}
     
     func checkAuthState() async {
-        // Check Firebase auth state
-        if let user = Auth.auth().currentUser {
-            await MainActor.run {
-                self.isAuthenticated = true
-                // Load user data
-            }
+        if currentUser != nil {
+            isAuthenticated = true
         }
     }
     
     func signIn(email: String, password: String) async throws {
-        let result = try await Auth.auth().signIn(withEmail: email, password: password)
-        await MainActor.run {
-            self.isAuthenticated = true
-            // Load user data
-        }
+        try await simulateNetworkLatency()
+        currentUser = EcommerceUser(email: email)
+        isAuthenticated = true
     }
     
     func signUp(username: String, email: String, password: String) async throws {
-        let result = try await Auth.auth().createUser(withEmail: email, password: password)
-        await MainActor.run {
-            self.isAuthenticated = true
-            // Create user profile
-        }
+        try await simulateNetworkLatency()
+        currentUser = EcommerceUser(email: email, displayName: username)
+        isAuthenticated = true
     }
     
     func signOut() {
-        try? Auth.auth().signOut()
         isAuthenticated = false
         currentUser = nil
+    }
+
+    private func simulateNetworkLatency() async throws {
+        try await Task.sleep(for: .milliseconds(200))
+    }
+}
+
+struct EcommerceUser: Equatable {
+    let email: String
+    let displayName: String?
+
+    init(email: String, displayName: String? = nil) {
+        self.email = email
+        self.displayName = displayName
     }
 }
 
@@ -1006,8 +993,8 @@ class CartManager: ObservableObject {
     }
     
     func updateQuantity(productId: String, quantity: Int) {
-        if let item = cartItems.first(where: { $0.product.id == productId }) {
-            item.quantity = quantity
+        if let itemIndex = cartItems.firstIndex(where: { $0.product.id == productId }) {
+            cartItems[itemIndex].quantity = quantity
             if quantity <= 0 {
                 removeFromCart(productId: productId)
             }
