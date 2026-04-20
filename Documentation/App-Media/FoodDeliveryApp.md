@@ -4,13 +4,14 @@ Last updated: 2026-04-20
 
 - App: `FoodDeliveryApp`
 - Lane: `Food Delivery`
-- Media status: `card-published`
+- Media status: `preview-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
 - shareable gallery card image var: [../Assets/AppCards/FoodDeliveryApp.svg](../Assets/AppCards/FoodDeliveryApp.svg)
+- preview board image var: [../Assets/AppPreviews/FoodDeliveryApp.svg](../Assets/AppPreviews/FoodDeliveryApp.svg)
 
 ## What Exists Instead
 

@@ -4,13 +4,14 @@ Last updated: 2026-04-20
 
 - App: `MusicPodcastApp`
 - Lane: `Music / Podcast`
-- Media status: `card-published`
+- Media status: `preview-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
 - shareable gallery card image var: [../Assets/AppCards/MusicPodcastApp.svg](../Assets/AppCards/MusicPodcastApp.svg)
+- preview board image var: [../Assets/AppPreviews/MusicPodcastApp.svg](../Assets/AppPreviews/MusicPodcastApp.svg)
 
 ## What Exists Instead
 

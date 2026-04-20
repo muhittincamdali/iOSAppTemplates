@@ -4,13 +4,14 @@ Last updated: 2026-04-20
 
 - App: `CRMAdminApp`
 - Lane: `CRM / Admin`
-- Media status: `card-published`
+- Media status: `preview-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
 - shareable gallery card image var: [../Assets/AppCards/CRMAdminApp.svg](../Assets/AppCards/CRMAdminApp.svg)
+- preview board image var: [../Assets/AppPreviews/CRMAdminApp.svg](../Assets/AppPreviews/CRMAdminApp.svg)
 
 ## What Exists Instead
 

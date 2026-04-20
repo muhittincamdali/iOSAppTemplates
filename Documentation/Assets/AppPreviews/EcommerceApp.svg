@@ -1,0 +1,40 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="110" y1="70" x2="1490" y2="930" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF7A18"/>
+      <stop offset="1" stop-color="#FFB347"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="130" y1="104" x2="1460" y2="908" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#020617" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#111827" stop-opacity="0.88"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="#020617"/>
+  <rect x="36" y="36" width="1528" height="928" rx="40" fill="url(#bg)"/>
+  <rect x="92" y="92" width="1416" height="816" rx="34" fill="url(#panel)"/>
+  <rect x="138" y="132" width="250" height="44" rx="22" fill="white" fill-opacity="0.12"/>
+  <text x="170" y="161" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">preview board</text>
+  <text x="138" y="274" fill="white" font-size="72" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="800">EcommerceApp</text>
+  <text x="138" y="330" fill="#D1D5DB" font-size="34" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="600">Commerce</text>
+  <text x="138" y="412" fill="#F8FAFC" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Visual product board published.</text>
+  <text x="138" y="454" fill="#E5E7EB" font-size="26" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Runtime screenshots and demo clips still pending.</text>
+  <rect x="138" y="518" width="182" height="64" rx="20" fill="white" fill-opacity="0.10"/>
+  <text x="172" y="558" fill="white" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Catalog</text>
+  <rect x="336" y="518" width="182" height="64" rx="20" fill="white" fill-opacity="0.10"/>
+  <text x="370" y="558" fill="white" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Cart</text>
+  <rect x="534" y="518" width="182" height="64" rx="20" fill="white" fill-opacity="0.10"/>
+  <text x="568" y="558" fill="white" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Checkout</text>
+
+  <rect x="840" y="144" width="524" height="680" rx="44" fill="white" fill-opacity="0.08"/>
+  <rect x="876" y="184" width="452" height="78" rx="24" fill="white" fill-opacity="0.10"/>
+  <rect x="876" y="286" width="274" height="208" rx="28" fill="white" fill-opacity="0.11"/>
+  <rect x="1170" y="286" width="158" height="98" rx="24" fill="white" fill-opacity="0.09"/>
+  <rect x="1170" y="396" width="158" height="98" rx="24" fill="white" fill-opacity="0.09"/>
+  <rect x="876" y="526" width="452" height="112" rx="28" fill="white" fill-opacity="0.10"/>
+  <rect x="876" y="662" width="214" height="110" rx="28" fill="white" fill-opacity="0.10"/>
+  <rect x="1114" y="662" width="214" height="110" rx="28" fill="white" fill-opacity="0.10"/>
+  <text x="904" y="232" fill="#F8FAFC" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">dashboard shell</text>
+  <text x="904" y="588" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">app proof route</text>
+  <text x="904" y="724" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">media route</text>
+  <text x="1142" y="724" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">gallery card</text>
+</svg>

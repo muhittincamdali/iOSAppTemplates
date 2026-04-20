@@ -4,13 +4,14 @@ Last updated: 2026-04-20
 
 - App: `SubscriptionLifestyleApp`
 - Lane: `Subscription Lifestyle`
-- Media status: `card-published`
+- Media status: `preview-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
 - shareable gallery card image var: [../Assets/AppCards/SubscriptionLifestyleApp.svg](../Assets/AppCards/SubscriptionLifestyleApp.svg)
+- preview board image var: [../Assets/AppPreviews/SubscriptionLifestyleApp.svg](../Assets/AppPreviews/SubscriptionLifestyleApp.svg)
 
 ## What Exists Instead
 

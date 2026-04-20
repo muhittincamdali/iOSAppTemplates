@@ -4,13 +4,14 @@ Last updated: 2026-04-20
 
 - App: `ProductivityApp`
 - Lane: `Productivity`
-- Media status: `card-published`
+- Media status: `preview-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
 - shareable gallery card image var: [../Assets/AppCards/ProductivityApp.svg](../Assets/AppCards/ProductivityApp.svg)
+- preview board image var: [../Assets/AppPreviews/ProductivityApp.svg](../Assets/AppPreviews/ProductivityApp.svg)
 
 ## What Exists Instead
 
