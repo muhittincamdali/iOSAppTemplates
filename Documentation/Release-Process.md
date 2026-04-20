@@ -30,6 +30,7 @@ Also verify the hosted standalone iOS route exists and stays versioned:
 
 ```bash
 bash Scripts/validate-standalone-ios-proof-surface.sh
+bash Scripts/validate-github-distribution-surface.sh
 ```
 
 ## What A Release Must Not Claim

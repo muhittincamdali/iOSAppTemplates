@@ -27,14 +27,14 @@ Last updated: 2026-04-21
 - demo clips are not published for all app packs
 - a stable green hosted standalone iOS baseline is not yet established for every app pack
 - every lane is not yet at equal production depth
-- the latest public release title is not yet aligned with the current truth-first positioning
+- the latest public release is still an older numbered baseline, not proof of equal app-pack maturity
 
 ## Current Public Gaps
 
 1. publish real runtime screenshots
 2. publish short demo clips
 3. keep the hosted standalone iOS proof route green and visible
-4. tighten GitHub metadata and release surfaces
+4. keep GitHub metadata and release surfaces aligned with the versioned policy
 5. continue converting older docs to the same English canonical quality bar
 
 ## Active Priorities
