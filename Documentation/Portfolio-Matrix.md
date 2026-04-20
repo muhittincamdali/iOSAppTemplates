@@ -19,7 +19,7 @@ It exists to:
 - `App Media Surface`: a canonical per-app media page exists
 - `Complete App Target`: the intended world-class app for that lane
 
-## Current 10-Lane Surface
+## Current 11-Lane Surface
 
 | Lane | Today | Best current route | Target complete app |
 | --- | --- | --- | --- |
@@ -31,14 +31,15 @@ It exists to:
 | Education | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/EducationApp` or `Documentation/App-Proofs/EducationApp.md` | Education / Learning |
 | Food Delivery | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/FoodDeliveryApp` or `Documentation/App-Proofs/FoodDeliveryApp.md` | Food Delivery |
 | Travel | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/TravelPlannerApp` or `Documentation/App-Proofs/TravelPlannerApp.md` | Travel Planner |
+| AI | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/AIAssistantApp` or `Documentation/App-Proofs/AIAssistantApp.md` | AI Assistant |
 | Music / Podcast | Template Family | `Sources/MusicTemplates/MusicPodcastTemplate.swift` | Music / Podcast |
 | Productivity | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/ProductivityApp` or `Documentation/App-Proofs/ProductivityApp.md` | Productivity / Tasks |
 
 ## Current Truth
 
-- the repository currently has `8` standalone app roots
+- the repository currently has `9` standalone app roots
 - the generator currently covers the broad starter map via `swift Scripts/TemplateGenerator.swift --list`
-- this `10 lane` surface does not equal `10 complete apps`
+- this `11 lane` surface does not equal `11 complete apps`
 - the `Complete App` label is governed only by [Complete-App-Standard.md](./Complete-App-Standard.md)
 
 ## 20 Complete App Expansion Map
@@ -88,6 +89,7 @@ The repository-level implementation contract for these eight apps lives in [Wave
 - `Templates/EducationApp`
 - `Templates/FoodDeliveryApp`
 - `Templates/TravelPlannerApp`
+- `Templates/AIAssistantApp`
 
 ### If you want the cleanest proof pages now
 
@@ -99,6 +101,7 @@ The repository-level implementation contract for these eight apps lives in [Wave
 - [App-Proofs/EducationApp.md](./App-Proofs/EducationApp.md)
 - [App-Proofs/FoodDeliveryApp.md](./App-Proofs/FoodDeliveryApp.md)
 - [App-Proofs/TravelPlannerApp.md](./App-Proofs/TravelPlannerApp.md)
+- [App-Proofs/AIAssistantApp.md](./App-Proofs/AIAssistantApp.md)
 
 ### If you want the canonical media router now
 

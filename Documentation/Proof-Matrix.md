@@ -19,6 +19,7 @@ Status meanings:
 | Education | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/EducationApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists | Medium | iOS-targeted standalone build + media |
 | Food Delivery | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/FoodDeliveryApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists | Medium | iOS-targeted standalone build + media |
 | Travel | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/TravelPlannerApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists | Medium | iOS-targeted standalone build + media |
+| AI | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/AIAssistantApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists | Medium | iOS-targeted standalone build + media |
 | Productivity | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/ProductivityApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists | Medium | iOS-targeted standalone build + media |
 | News | template family + generator lane | root package green, generator lane is listed | Low | standalone root or per-app proof |
 | Music / Podcast | template family + generator lane | root package green, generator lane is listed | Low | standalone root or per-app proof |
@@ -30,10 +31,10 @@ Status meanings:
 - generator `--list` passes
 - generator sample app `build + test` passes
 - standalone root manifest smoke passes
-- deterministic `Package.resolved` coverage exists for 8 standalone roots
+- deterministic `Package.resolved` coverage exists for 9 standalone roots
 - canonical per-app proof pages exist for standalone roots
-- canonical per-app media pages exist for 8 standalone roots, but media status is still `not-published`
-- local standalone `swift test` passes for `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, and `TravelPlannerApp`
+- canonical per-app media pages exist for 9 standalone roots, but media status is still `not-published`
+- local standalone `swift test` passes for `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, and `AIAssistantApp`
 - GitHub workflows are truth-based and currently green
 
 ## App Proof Router
@@ -46,6 +47,8 @@ Status meanings:
 - [App-Proofs/FinanceApp.md](./App-Proofs/FinanceApp.md)
 - [App-Proofs/EducationApp.md](./App-Proofs/EducationApp.md)
 - [App-Proofs/FoodDeliveryApp.md](./App-Proofs/FoodDeliveryApp.md)
+- [App-Proofs/TravelPlannerApp.md](./App-Proofs/TravelPlannerApp.md)
+- [App-Proofs/AIAssistantApp.md](./App-Proofs/AIAssistantApp.md)
 
 ## What Is Still Missing
 
@@ -54,7 +57,7 @@ Main missing layers before a `20 complete apps` claim:
 1. lane-specific per-app README
 2. real screenshot gallery
 3. explicit iOS-targeted per-app smoke/build proof
-4. standalone packaging for lanes beyond the current 7 roots
+4. standalone packaging for lanes beyond the current 9 roots
 
 Required Wave 1 app-pack contract:
 

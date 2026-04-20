@@ -47,6 +47,12 @@
       "lane": "Travel",
       "status": "not-published",
       "required_readme": "Documentation/App-Media/TravelPlannerApp.md"
+    },
+    {
+      "id": "AIAssistantApp",
+      "lane": "AI",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/AIAssistantApp.md"
     }
   ]
 }

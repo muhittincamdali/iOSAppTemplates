@@ -2,7 +2,7 @@
 
 Production-grade SwiftUI app starter system for Apple platforms.
 
-`iOSAppTemplates` currently ships category-level template families, generator tooling, shared package targets, and `8` standalone app roots under `Templates/`. The product goal is broader: become the canonical SwiftUI starter portfolio with `20 provable complete apps`. The repository should only claim what can be routed, built, shown, and validated today.
+`iOSAppTemplates` currently ships category-level template families, generator tooling, shared package targets, and `9` standalone app roots under `Templates/`. The product goal is broader: become the canonical SwiftUI starter portfolio with `20 provable complete apps`. The repository should only claim what can be routed, built, shown, and validated today.
 
 ## First Decision
 
@@ -40,7 +40,7 @@ This repository is not yet a full fit if you expect:
 
 - category-level template families under `Sources/`
 - `Scripts/TemplateGenerator.swift` as the generator entry point
-- `8` standalone app roots under `Templates/`:
+- `9` standalone app roots under `Templates/`:
   - `Templates/EcommerceApp`
   - `Templates/SocialMediaApp`
   - `Templates/FitnessApp`
@@ -49,6 +49,7 @@ This repository is not yet a full fit if you expect:
   - `Templates/EducationApp`
   - `Templates/FoodDeliveryApp`
   - `Templates/TravelPlannerApp`
+  - `Templates/AIAssistantApp`
 - a lightweight example/router layer under `Examples/`
 - active root-package validation for build, test, security, and performance
 
@@ -64,6 +65,7 @@ This repository is not yet a full fit if you expect:
 | Education | template family + standalone root + richer example | Education / Learning |
 | Food Delivery | template family + standalone root + richer example | Food Delivery |
 | Travel | template family + standalone root + richer example | Travel Planner |
+| AI | template family + standalone root + richer example | AI Assistant |
 | Music / Podcast | template family | Music / Podcast |
 | Productivity | template family + standalone root + richer example | Productivity / Tasks |
 
@@ -100,6 +102,7 @@ open Templates/FinanceApp/Package.swift
 open Templates/EducationApp/Package.swift
 open Templates/FoodDeliveryApp/Package.swift
 open Templates/TravelPlannerApp/Package.swift
+open Templates/AIAssistantApp/Package.swift
 ```
 
 This proves today:
@@ -107,7 +110,7 @@ This proves today:
 - manifest-valid package entry
 - lane-specific source shell
 - standalone root packaging
-- deterministic `Package.resolved` coverage for the eight standalone roots
+- deterministic `Package.resolved` coverage for the nine standalone roots
 
 This does not yet prove today:
 

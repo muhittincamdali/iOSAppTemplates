@@ -24,6 +24,7 @@ required_roots=(
   "Templates/EducationApp"
   "Templates/FoodDeliveryApp"
   "Templates/TravelPlannerApp"
+  "Templates/AIAssistantApp"
 )
 
 required_doc_paths=(
@@ -35,6 +36,7 @@ required_doc_paths=(
   "Documentation/App-Proofs/EducationApp.md"
   "Documentation/App-Proofs/FoodDeliveryApp.md"
   "Documentation/App-Proofs/TravelPlannerApp.md"
+  "Documentation/App-Proofs/AIAssistantApp.md"
   "Templates/EcommerceApp/README.md"
   "Templates/SocialMediaApp/README.md"
   "Templates/FitnessApp/README.md"
@@ -43,6 +45,7 @@ required_doc_paths=(
   "Templates/EducationApp/README.md"
   "Templates/FoodDeliveryApp/README.md"
   "Templates/TravelPlannerApp/README.md"
+  "Templates/AIAssistantApp/README.md"
   "Documentation/Proof-Matrix.md"
   "Documentation/Template-Showcase.md"
 )
@@ -93,6 +96,7 @@ require_pattern 'Templates/FinanceApp/Package\.resolved' "${repo_root}/Documenta
 require_pattern 'Templates/EducationApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention EducationApp lockfile coverage."
 require_pattern 'Templates/FoodDeliveryApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention FoodDeliveryApp lockfile coverage."
 require_pattern 'Templates/TravelPlannerApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention TravelPlannerApp lockfile coverage."
+require_pattern 'Templates/AIAssistantApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention AIAssistantApp lockfile coverage."
 require_pattern 'Templates/EcommerceApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/EcommerceApp.md" "EcommerceApp proof surface must mention the lockfile."
 require_pattern 'Templates/SocialMediaApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/SocialMediaApp.md" "SocialMediaApp proof surface must mention the lockfile."
 require_pattern 'Templates/FitnessApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/FitnessApp.md" "FitnessApp proof surface must mention the lockfile."
@@ -101,6 +105,7 @@ require_pattern 'Templates/FinanceApp/Package\.resolved.*lockfile mevcut' "${rep
 require_pattern 'Templates/EducationApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/EducationApp.md" "EducationApp proof surface must mention the lockfile."
 require_pattern 'Templates/FoodDeliveryApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/FoodDeliveryApp.md" "FoodDeliveryApp proof surface must mention the lockfile."
 require_pattern 'Templates/TravelPlannerApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/TravelPlannerApp.md" "TravelPlannerApp proof surface must mention the lockfile."
+require_pattern 'Templates/AIAssistantApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/AIAssistantApp.md" "AIAssistantApp proof surface must mention the lockfile."
 require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/EcommerceApp/README.md" "EcommerceApp template README must mention the lockfile."
 require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/SocialMediaApp/README.md" "SocialMediaApp template README must mention the lockfile."
 require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/FitnessApp/README.md" "FitnessApp template README must mention the lockfile."
@@ -109,5 +114,6 @@ require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/Fin
 require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/EducationApp/README.md" "EducationApp template README must mention the lockfile."
 require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/FoodDeliveryApp/README.md" "FoodDeliveryApp template README must mention the lockfile."
 require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/TravelPlannerApp/README.md" "TravelPlannerApp template README must mention the lockfile."
+require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/AIAssistantApp/README.md" "AIAssistantApp template README must mention the lockfile."
 
 echo "Standalone root lockfile surfaces look good."

@@ -19,6 +19,7 @@ This folder is not a full complete-app gallery yet. Its current role is:
 | [EducationExample](./EducationExample/) | richer category example | inspect a more product-like education flow |
 | [FoodDeliveryExample](./FoodDeliveryExample/) | richer category example | inspect a more product-like food delivery flow |
 | [TravelPlannerExample](./TravelPlannerExample/) | richer category example | inspect a more product-like travel planning flow |
+| [AIAssistantExample](./AIAssistantExample/) | richer category example | inspect a more product-like AI assistant flow |
 
 ## Important Truth
 
@@ -46,6 +47,7 @@ open ../Templates/FinanceApp/Package.swift
 open ../Templates/EducationApp/Package.swift
 open ../Templates/FoodDeliveryApp/Package.swift
 open ../Templates/TravelPlannerApp/Package.swift
+open ../Templates/AIAssistantApp/Package.swift
 ```
 
 ### Generator path

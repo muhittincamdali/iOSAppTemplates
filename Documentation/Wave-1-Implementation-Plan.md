@@ -151,15 +151,15 @@ See the exact contract in [Wave-1-App-Pack-Spec.md](./Wave-1-App-Pack-Spec.md).
 
 - Current lane: AI
 - Current assets:
-  - AI template family
-- Current maturity: concept visible, product package missing
-- Main blockers:
-  - canonical AI lane identity
   - standalone root
+  - AI template family
   - richer example
-  - README
-  - proof page
-  - media page
+  - app proof surface
+  - app media surface
+- Current maturity: active Wave 1 build candidate
+- Main blockers:
+  - screenshot/video proof
+  - explicit iOS-targeted standalone build proof
 
 ## Build Order
 
@@ -180,7 +180,7 @@ Reason:
 
 - Social and Commerce already have the strongest packaging base
 - Productivity and Finance have the strongest practical demand
-- AI is strategically important, but the lane needs a clearer product identity before it should count as complete
+- AI is strategically important and now has a concrete app identity, but it still needs stronger proof depth
 
 ## Delivery Rule
 
