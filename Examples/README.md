@@ -18,6 +18,7 @@ This folder is not a full complete-app gallery yet. Its current role is:
 | [FinanceExample](./FinanceExample/) | richer category example | inspect a more product-like finance flow |
 | [EducationExample](./EducationExample/) | richer category example | inspect a more product-like education flow |
 | [FoodDeliveryExample](./FoodDeliveryExample/) | richer category example | inspect a more product-like food delivery flow |
+| [TravelPlannerExample](./TravelPlannerExample/) | richer category example | inspect a more product-like travel planning flow |
 
 ## Important Truth
 
@@ -44,6 +45,7 @@ open ../Templates/ProductivityApp/Package.swift
 open ../Templates/FinanceApp/Package.swift
 open ../Templates/EducationApp/Package.swift
 open ../Templates/FoodDeliveryApp/Package.swift
+open ../Templates/TravelPlannerApp/Package.swift
 ```
 
 ### Generator path

@@ -13,6 +13,7 @@ ROOTS=(
   "Templates/FinanceApp:FinanceApp"
   "Templates/EducationApp:EducationApp"
   "Templates/FoodDeliveryApp:FoodDeliveryApp"
+  "Templates/TravelPlannerApp:TravelPlannerApp"
 )
 
 assert_exists() {

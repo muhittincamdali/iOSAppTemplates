@@ -18,7 +18,7 @@ Status meanings:
 | Finance | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/FinanceApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists | Medium | iOS-targeted standalone build + media |
 | Education | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/EducationApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists | Medium | iOS-targeted standalone build + media |
 | Food Delivery | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/FoodDeliveryApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists | Medium | iOS-targeted standalone build + media |
-| Travel | template family + generator lane | root package green, generator lane is listed | Low | standalone root or per-app proof |
+| Travel | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/TravelPlannerApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists | Medium | iOS-targeted standalone build + media |
 | Productivity | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/ProductivityApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists | Medium | iOS-targeted standalone build + media |
 | News | template family + generator lane | root package green, generator lane is listed | Low | standalone root or per-app proof |
 | Music / Podcast | template family + generator lane | root package green, generator lane is listed | Low | standalone root or per-app proof |
@@ -30,10 +30,10 @@ Status meanings:
 - generator `--list` passes
 - generator sample app `build + test` passes
 - standalone root manifest smoke passes
-- deterministic `Package.resolved` coverage exists for 7 standalone roots
+- deterministic `Package.resolved` coverage exists for 8 standalone roots
 - canonical per-app proof pages exist for standalone roots
-- canonical per-app media pages exist for 7 standalone roots, but media status is still `not-published`
-- local standalone `swift test` passes for `ProductivityApp`, `FinanceApp`, `EducationApp`, and `FoodDeliveryApp`
+- canonical per-app media pages exist for 8 standalone roots, but media status is still `not-published`
+- local standalone `swift test` passes for `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, and `TravelPlannerApp`
 - GitHub workflows are truth-based and currently green
 
 ## App Proof Router

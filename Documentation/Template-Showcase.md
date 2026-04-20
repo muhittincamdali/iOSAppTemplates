@@ -84,6 +84,16 @@ Canonical app-proof router:
 - Proof surface: [App-Proofs/FoodDeliveryApp.md](./App-Proofs/FoodDeliveryApp.md)
 - Gap: iOS-targeted standalone build proof, screenshot
 
+### Travel: TravelPlannerApp
+
+- Type: `Standalone Root + richer source shell`
+- Entry: `Templates/TravelPlannerApp/Package.swift`
+- Extra route: `Examples/TravelPlannerExample`
+- Product shape: trip overview, itinerary timeline, booking health and travel workflow
+- Proof today: package root exists, manifest smoke passes, `Templates/TravelPlannerApp/Package.resolved` exists, local standalone `swift test` passes, richer example surface exists
+- Proof surface: [App-Proofs/TravelPlannerApp.md](./App-Proofs/TravelPlannerApp.md)
+- Gap: iOS-targeted standalone build proof, screenshot
+
 ## Template Family Coverage
 
 These lanes exist today as lane-level source surfaces, but they do not yet carry standalone complete-app proof:
@@ -94,7 +104,6 @@ These lanes exist today as lane-level source surfaces, but they do not yet carry
 | Finance | Template Family | `Sources/FinanceTemplates/FinanceAppTemplate.swift` |
 | Education | Template Family | `Sources/EducationTemplates/EducationAppTemplate.swift` |
 | Food Delivery | Template Family | `Sources/FoodTemplates/FoodDeliveryTemplate.swift` |
-| Travel | Template Family | `Sources/TravelTemplates/TravelAppTemplate.swift` |
 | Music / Podcast | Template Family | `Sources/MusicTemplates/MusicPodcastTemplate.swift` |
 | Productivity | Template Family | `Sources/ProductivityTemplates/ProductivityAppTemplate.swift` |
 

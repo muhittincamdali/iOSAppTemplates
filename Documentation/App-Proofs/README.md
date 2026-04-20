@@ -1,6 +1,6 @@
 # App Proof Surfaces
 
-Last updated: 2026-04-18
+Last updated: 2026-04-20
 
 Bu klasor `iOSAppTemplates` icindeki standalone app root'lar icin canonical proof router'dir.
 
@@ -13,6 +13,7 @@ Bugunku kapsam:
 - `Templates/FinanceApp`
 - `Templates/EducationApp`
 - `Templates/FoodDeliveryApp`
+- `Templates/TravelPlannerApp`
 
 Bu sayfalarin rolu:
 
@@ -32,6 +33,7 @@ Bu sayfalarin rolu:
 | FinanceApp | Finance | standalone root + source shell + richer example | [FinanceApp.md](./FinanceApp.md) |
 | EducationApp | Education | standalone root + source shell + richer example | [EducationApp.md](./EducationApp.md) |
 | FoodDeliveryApp | Food Delivery | standalone root + source shell + richer example | [FoodDeliveryApp.md](./FoodDeliveryApp.md) |
+| TravelPlannerApp | Travel | standalone root + source shell + richer example | [TravelPlannerApp.md](./TravelPlannerApp.md) |
 
 ## Rule
 
@@ -40,7 +42,7 @@ Bu klasorde proof surface'i olan bir app otomatik olarak `Complete App` sayilmaz
 `Complete App` etiketi icin canonical standard:
 - [../Complete-App-Standard.md](../Complete-App-Standard.md)
 
-Bugun bu yedi app icin dogru etiket:
+Bugun bu sekiz app icin dogru etiket:
 
 - `Standalone Root`
 - `App-shell proof surface`
