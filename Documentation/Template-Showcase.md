@@ -23,7 +23,7 @@ Canonical app-proof router:
 - Product shape: store, cart, checkout, auth shell
 - Proof today: package root exists, manifest smoke passes, `Templates/EcommerceApp/Package.resolved` exists, source shell exists
 - Proof surface: [App-Proofs/EcommerceApp.md](./App-Proofs/EcommerceApp.md)
-- Gap: iOS-targeted standalone build proof, screenshot
+- Gap: tracked generic iOS build proof, screenshot, demo
 
 ### Social: SocialMediaApp
 
@@ -31,18 +31,18 @@ Canonical app-proof router:
 - Entry: `Templates/SocialMediaApp/Package.swift`
 - Extra route: `Examples/SocialMediaExample`
 - Product shape: auth, feed/community shell, richer UI fragments
-- Proof today: package root exists, manifest smoke passes, `Templates/SocialMediaApp/Package.resolved` exists, richer example surface exists
+- Proof today: package root exists, manifest smoke passes, `Templates/SocialMediaApp/Package.resolved` exists, richer example surface exists, local generic iOS `xcodebuild` passes
 - Proof surface: [App-Proofs/SocialMediaApp.md](./App-Proofs/SocialMediaApp.md)
-- Gap: iOS-targeted standalone build proof, screenshot
+- Gap: screenshot, demo, hosted standalone iOS CI proof
 
 ### Health / Fitness: FitnessApp
 
 - Type: `Standalone Root`
 - Entry: `Templates/FitnessApp/Package.swift`
 - Product shape: auth, workout/progress shell, HealthKit-adjacent flow
-- Proof today: package root exists, manifest smoke passes, `Templates/FitnessApp/Package.resolved` exists, source shell exists
+- Proof today: package root exists, manifest smoke passes, `Templates/FitnessApp/Package.resolved` exists, source shell exists, local generic iOS `xcodebuild` passes
 - Proof surface: [App-Proofs/FitnessApp.md](./App-Proofs/FitnessApp.md)
-- Gap: iOS-targeted standalone build proof, screenshot
+- Gap: screenshot, demo, hosted standalone iOS CI proof
 
 ### Productivity: ProductivityApp
 
@@ -50,9 +50,9 @@ Canonical app-proof router:
 - Entry: `Templates/ProductivityApp/Package.swift`
 - Extra route: `Examples/ProductivityExample`
 - Product shape: task dashboard, project summary, focus workflow
-- Proof today: package root exists, manifest smoke passes, `Templates/ProductivityApp/Package.resolved` exists, richer example surface exists
+- Proof today: package root exists, manifest smoke passes, `Templates/ProductivityApp/Package.resolved` exists, richer example surface exists, local generic iOS `xcodebuild` passes
 - Proof surface: [App-Proofs/ProductivityApp.md](./App-Proofs/ProductivityApp.md)
-- Gap: iOS-targeted standalone build proof, screenshot
+- Gap: screenshot, demo, hosted standalone iOS CI proof
 
 ### Finance: FinanceApp
 
@@ -60,9 +60,9 @@ Canonical app-proof router:
 - Entry: `Templates/FinanceApp/Package.swift`
 - Extra route: `Examples/FinanceExample`
 - Product shape: finance dashboard, accounts, budget review, cash-flow workflow
-- Proof today: package root exists, manifest smoke passes, `Templates/FinanceApp/Package.resolved` exists, richer example surface exists
+- Proof today: package root exists, manifest smoke passes, `Templates/FinanceApp/Package.resolved` exists, richer example surface exists, local generic iOS `xcodebuild` passes
 - Proof surface: [App-Proofs/FinanceApp.md](./App-Proofs/FinanceApp.md)
-- Gap: iOS-targeted standalone build proof, screenshot
+- Gap: screenshot, demo, hosted standalone iOS CI proof
 
 ### Education: EducationApp
 
@@ -70,9 +70,9 @@ Canonical app-proof router:
 - Entry: `Templates/EducationApp/Package.swift`
 - Extra route: `Examples/EducationExample`
 - Product shape: learning dashboard, course summary, quiz and progress workflow
-- Proof today: package root exists, manifest smoke passes, `Templates/EducationApp/Package.resolved` exists, local standalone `swift test` passes, richer example surface exists
+- Proof today: package root exists, manifest smoke passes, `Templates/EducationApp/Package.resolved` exists, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
 - Proof surface: [App-Proofs/EducationApp.md](./App-Proofs/EducationApp.md)
-- Gap: iOS-targeted standalone build proof, screenshot
+- Gap: screenshot, demo, hosted standalone iOS CI proof
 
 ### Food Delivery: FoodDeliveryApp
 
@@ -80,9 +80,9 @@ Canonical app-proof router:
 - Entry: `Templates/FoodDeliveryApp/Package.swift`
 - Extra route: `Examples/FoodDeliveryExample`
 - Product shape: restaurant discovery, cart, order tracking and delivery workflow
-- Proof today: package root exists, manifest smoke passes, `Templates/FoodDeliveryApp/Package.resolved` exists, local standalone `swift test` passes, richer example surface exists
+- Proof today: package root exists, manifest smoke passes, `Templates/FoodDeliveryApp/Package.resolved` exists, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
 - Proof surface: [App-Proofs/FoodDeliveryApp.md](./App-Proofs/FoodDeliveryApp.md)
-- Gap: iOS-targeted standalone build proof, screenshot
+- Gap: screenshot, demo, hosted standalone iOS CI proof
 
 ### Travel: TravelPlannerApp
 
@@ -90,9 +90,9 @@ Canonical app-proof router:
 - Entry: `Templates/TravelPlannerApp/Package.swift`
 - Extra route: `Examples/TravelPlannerExample`
 - Product shape: trip overview, itinerary timeline, booking health and travel workflow
-- Proof today: package root exists, manifest smoke passes, `Templates/TravelPlannerApp/Package.resolved` exists, local standalone `swift test` passes, richer example surface exists
+- Proof today: package root exists, manifest smoke passes, `Templates/TravelPlannerApp/Package.resolved` exists, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
 - Proof surface: [App-Proofs/TravelPlannerApp.md](./App-Proofs/TravelPlannerApp.md)
-- Gap: iOS-targeted standalone build proof, screenshot
+- Gap: screenshot, demo, hosted standalone iOS CI proof
 
 ### AI: AIAssistantApp
 
@@ -100,9 +100,9 @@ Canonical app-proof router:
 - Entry: `Templates/AIAssistantApp/Package.swift`
 - Extra route: `Examples/AIAssistantExample`
 - Product shape: assistant workspace, suggestion queue, trust surface and action workflow
-- Proof today: package root exists, manifest smoke passes, `Templates/AIAssistantApp/Package.resolved` exists, local standalone `swift test` passes, richer example surface exists
+- Proof today: package root exists, manifest smoke passes, `Templates/AIAssistantApp/Package.resolved` exists, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
 - Proof surface: [App-Proofs/AIAssistantApp.md](./App-Proofs/AIAssistantApp.md)
-- Gap: iOS-targeted standalone build proof, screenshot
+- Gap: screenshot, demo, hosted standalone iOS CI proof
 
 ## Template Family Coverage
 
@@ -160,4 +160,4 @@ It is not, by itself, complete-app proof.
 This page becomes a real world-class gallery only as these two layers arrive:
 
 1. screenshot / demo proof
-2. explicit standalone build proof
+2. equal standalone iOS proof + hosted CI proof

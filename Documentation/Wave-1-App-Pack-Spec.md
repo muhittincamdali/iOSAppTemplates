@@ -38,6 +38,7 @@ Every Wave 1 app must eventually prove:
 
 - standalone root manifest validity
 - deterministic dependency resolution
+- explicit generic iOS-targeted standalone build proof
 - root package compatibility
 - screenshot proof
 - gallery routing
@@ -47,7 +48,7 @@ Every Wave 1 app must eventually prove:
 The following are not the minimum floor, but they are required before the repository can honestly market the app as top-tier:
 
 - short demo video
-- explicit iOS-targeted build proof
+- hosted standalone iOS CI proof
 - smoke test
 - generator output parity
 - richer example parity with standalone root

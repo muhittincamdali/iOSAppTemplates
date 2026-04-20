@@ -1,6 +1,6 @@
 # FitnessApp Proof Surface
 
-Last updated: 2026-04-18
+Last updated: 2026-04-20
 
 ## Product Summary
 
@@ -21,7 +21,7 @@ Last updated: 2026-04-18
 
 - bugun tam release-grade fitness app bekleyenler
 - canonical media proof arayanlar
-- standalone iOS-targeted build proof'unun verildigini dusunenler
+- hosted standalone iOS CI proof'unun verildigini dusunenler
 
 ## Product Shape Today
 
@@ -36,6 +36,7 @@ Last updated: 2026-04-18
 - template-root README mevcut
 - `Templates/FitnessApp/Package.resolved` lockfile mevcut
 - `swift package dump-package` gecerli
+- `xcodebuild -scheme FitnessApp -destination 'generic/platform=iOS' build` gecerli
 - root repo `swift build -c release` gecerli
 - root repo `swift test` gecerli
 - source shell mevcut
@@ -44,7 +45,7 @@ Last updated: 2026-04-18
 
 - canonical screenshot yok
 - demo clip yok
-- explicit standalone iOS-targeted CI proof yok
+- hosted standalone iOS CI proof yok
 
 ## Start Path
 
@@ -58,6 +59,13 @@ Root repo proof icin:
 ```bash
 swift build
 swift test
+```
+
+Standalone generic iOS proof icin:
+
+```bash
+cd Templates/FitnessApp
+xcodebuild -scheme FitnessApp -destination 'generic/platform=iOS' build
 ```
 
 ## Canonical References

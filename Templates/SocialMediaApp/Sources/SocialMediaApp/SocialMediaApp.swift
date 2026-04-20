@@ -632,6 +632,7 @@ struct Post: Identifiable, Codable {
 }
 
 // MARK: - View Models
+@MainActor
 class FeedViewModel: ObservableObject {
     @Published var posts: [Post] = []
     @Published var isLoading = false

@@ -1,6 +1,6 @@
 # FitnessApp
 
-Last updated: 2026-04-18
+Last updated: 2026-04-20
 
 `FitnessApp`, `iOSAppTemplates` icindeki Health / Fitness lane standalone root surface'idir.
 
@@ -36,6 +36,7 @@ Last updated: 2026-04-18
 
 - `Package.resolved` lockfile mevcut
 - `swift package dump-package` gecerli
+- `xcodebuild -scheme FitnessApp -destination 'generic/platform=iOS' build` gecerli
 - root repo `swift build -c release` gecerli
 - root repo `swift test` gecerli
 - canonical app proof page mevcut
@@ -44,7 +45,7 @@ Last updated: 2026-04-18
 
 - screenshot
 - demo clip
-- explicit standalone iOS-targeted CI proof
+- hosted standalone iOS CI proof
 
 ## Start Here
 
@@ -59,6 +60,12 @@ Repo-level proof:
 cd ../..
 swift build
 swift test
+```
+
+Standalone generic iOS proof:
+
+```bash
+xcodebuild -scheme FitnessApp -destination 'generic/platform=iOS' build
 ```
 
 ## Canonical References

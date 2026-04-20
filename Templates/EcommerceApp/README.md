@@ -45,7 +45,8 @@ Last updated: 2026-04-18
 
 - screenshot
 - demo clip
-- explicit standalone iOS-targeted CI proof
+- explicit generic iOS build proof henuz tracked degil
+- hosted standalone iOS CI proof
 
 ## Start Here
 

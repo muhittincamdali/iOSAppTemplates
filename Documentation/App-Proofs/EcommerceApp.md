@@ -1,6 +1,6 @@
 # EcommerceApp Proof Surface
 
-Last updated: 2026-04-18
+Last updated: 2026-04-20
 
 ## Product Summary
 
@@ -21,7 +21,7 @@ Last updated: 2026-04-18
 
 - bugun full release-grade ecommerce app bekleyenler
 - canonical screenshot/demo proof arayanlar
-- standalone iOS CI proof'unun zaten var oldugunu varsayanlar
+- local generic iOS build proof'unun zaten track edildigini varsayanlar
 
 ## Product Shape Today
 
@@ -45,7 +45,8 @@ Last updated: 2026-04-18
 
 - canonical screenshot yok
 - demo clip yok
-- explicit standalone iOS-targeted CI proof yok
+- explicit generic iOS build proof henuz tracked degil
+- hosted standalone iOS CI proof yok
 
 ## Start Path
 
