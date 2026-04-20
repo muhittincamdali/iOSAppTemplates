@@ -9,6 +9,7 @@ Last updated: 2026-04-18
 - Label: `Standalone Root`
 - Lane: `Commerce`
 - Entry: `Package.swift`
+- Extra route: `../../Examples/EcommerceExample`
 - Product target: `E-Commerce Store`
 
 ## Best For / Not For
@@ -40,6 +41,7 @@ Last updated: 2026-04-18
 - root repo `swift build -c release` gecerli
 - root repo `swift test` gecerli
 - canonical app proof page mevcut
+- richer example route mevcut
 
 ## Missing Proof
 
@@ -53,6 +55,7 @@ Last updated: 2026-04-18
 ```bash
 open Package.swift
 open Package.resolved
+open ../../Examples/EcommerceExample/README.md
 ```
 
 Repo-level proof:

@@ -4,7 +4,6 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 import Kingfisher
-import Stripe
 
 // MARK: - E-commerce App
 @main
@@ -27,9 +26,9 @@ struct EcommerceApp: App {
             ContentView()
                 .environmentObject(authManager)
                 .environmentObject(cartManager)
-                .environmentObject(productManager)
-                .environmentObject(orderManager)
-                .onAppear {
+        .environmentObject(productManager)
+        .environmentObject(orderManager)
+        .onAppear {
                     setupApp()
                 }
         }
@@ -42,8 +41,7 @@ struct EcommerceApp: App {
     }
     
     private func setupStripe() {
-        StripeAPI.defaultPublishableKey = "pk_test_your_stripe_key"
-        print("💳 Stripe configured successfully")
+        print("💳 Payment provider placeholder configured")
     }
     
     private func setupAppearance() {
@@ -695,6 +693,8 @@ struct Product: Identifiable, Codable {
 // MARK: - View Models
 @MainActor
 class ProductManager: ObservableObject {
+    static let shared = ProductManager()
+
     @Published var products: [Product] = []
     @Published var featuredProducts: [Product] = []
     @Published var recentProducts: [Product] = []
@@ -992,8 +992,8 @@ class CartManager: ObservableObject {
     }
     
     func addToCart(product: Product) {
-        if let existingItem = cartItems.first(where: { $0.product.id == product.id }) {
-            existingItem.quantity += 1
+        if let existingIndex = cartItems.firstIndex(where: { $0.product.id == product.id }) {
+            cartItems[existingIndex].quantity += 1
         } else {
             cartItems.append(CartItem(product: product, quantity: 1))
         }

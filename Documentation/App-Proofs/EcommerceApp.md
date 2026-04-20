@@ -7,6 +7,7 @@ Last updated: 2026-04-20
 - Lane: `Commerce`
 - Label today: `Standalone Root`
 - Entry path: `Templates/EcommerceApp/Package.swift`
+- Extra route: `Examples/EcommerceExample`
 - Product target: `E-Commerce Store`
 
 ## Best For / Not For
@@ -40,6 +41,7 @@ Last updated: 2026-04-20
 - root repo `swift build -c release` gecerli
 - root repo `swift test` gecerli
 - source shell mevcut
+- `Examples/EcommerceExample` inspection route mevcut
 
 ## Missing Proof
 
@@ -53,6 +55,7 @@ Last updated: 2026-04-20
 ```bash
 open Templates/EcommerceApp/Package.swift
 open Templates/EcommerceApp/Package.resolved
+open Examples/EcommerceExample/README.md
 ```
 
 Ardindan:

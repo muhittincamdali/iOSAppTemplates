@@ -13,6 +13,7 @@ This folder is not a full complete-app gallery yet. Its current role is:
 | [BasicExample.swift](./BasicExample.swift) | single-file reference | inspect the package API quickly |
 | [BasicExample/BasicExample.swift](./BasicExample/BasicExample.swift) | small example shell | inspect minimal structure |
 | [QuickStartExample/QuickStartApp.swift](./QuickStartExample/QuickStartApp.swift) | onboarding entry | reach the fastest source-level start |
+| [EcommerceExample](./EcommerceExample/) | richer category example | inspect a more product-like commerce flow |
 | [SocialMediaExample](./SocialMediaExample/) | richer category example | inspect a more product-like social flow |
 | [ProductivityExample](./ProductivityExample/) | richer category example | inspect a more product-like productivity flow |
 | [FinanceExample](./FinanceExample/) | richer category example | inspect a more product-like finance flow |

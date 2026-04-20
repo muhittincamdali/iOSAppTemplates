@@ -57,7 +57,7 @@ This repository is not yet a full fit if you expect:
 
 | Lane | Current surface | Target complete app |
 | --- | --- | --- |
-| Commerce | template family + standalone root | E-Commerce Store |
+| Commerce | template family + standalone root + richer example | E-Commerce Store |
 | Social | template family + standalone root + richer example | Social Media |
 | News | template family | News / Editorial |
 | Health / Fitness | template family + standalone root | Health / Fitness |

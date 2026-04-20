@@ -52,12 +52,12 @@ See the exact contract in [Wave-1-App-Pack-Spec.md](./Wave-1-App-Pack-Spec.md).
 - Current assets:
   - standalone root
   - template family
+  - richer example
   - app proof surface
   - app media surface
   - template-root README
 - Current maturity: strongest Wave 1 candidate
 - Main blockers:
-  - richer example
   - screenshot/video proof
   - explicit generic iOS-targeted standalone build proof
   - hosted standalone iOS CI proof
