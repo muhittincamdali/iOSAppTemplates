@@ -1,60 +1,61 @@
 # MessagingApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`MessagingApp`, `iOSAppTemplates` icindeki Messaging / Community lane standalone root surface'idir.
+`MessagingApp` is the standalone-root surface for the `Messaging / Community` lane inside `iOSAppTemplates`.
 
 ## Today
 
-- Label: `Standalone Root`
+- Label: `Standalone Root + richer example surface`
 - Lane: `Messaging / Community`
 - Entry: `Package.swift`
-- Extra route: `../../Examples/MessagingExample`
 - Product target: `Messaging / Community`
+- Richer example: `Examples/MessagingExample`
 
 ## Best For / Not For
 
 ### Best for
 
-- realtime chat shell, inbox routing ve community moderation flow incelemek isteyen ekipler
-- messaging lane icin package-entry seviyesinde app surface gormek isteyenler
-- Wave 2 expansion icin gercek root/package kaniti isteyenler
+- teams evaluating conversation-list and chat starter flows
+- readers comparing community lanes across social and messaging surfaces
+- maintainers reviewing message-thread starter patterns
 
 ### Not for
 
-- bugun tam release-grade messaging suite parity bekleyenler
-- screenshot veya demo proof arayanlar
-- hosted standalone iOS CI proof'un verildigini varsayanlar
+- teams expecting production realtime messaging today
+- readers who assume runtime screenshots and demo clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- conversation dashboard
-- inbox and room routing
-- safety and moderation shell
-- community quick actions
+- conversation list shell
+- chat thread surface
+- contact or member routing
+- composer starter flow
+- starter messaging model
 
 ## Current Proof
 
 - No external dependency lockfile is required today
-- `swift package dump-package` gecerli
-- `cd Templates/MessagingApp && swift test` gecerli
-- `xcodebuild -scheme MessagingApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
-- richer example route mevcut
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme MessagingApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
+- richer example route exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
 ```bash
 open Package.swift
-xcodebuild -scheme MessagingApp -destination 'generic/platform=iOS' build
 open ../../Examples/MessagingExample/README.md
 ```
 
@@ -66,9 +67,16 @@ swift build
 swift test
 ```
 
+Standalone generic iOS proof:
+
+```bash
+xcodebuild -scheme MessagingApp -destination 'generic/platform=iOS' build
+```
+
 ## Canonical References
 
 - [Proof Surface](../../Documentation/App-Proofs/MessagingApp.md)
 - [Media Surface](../../Documentation/App-Media/MessagingApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/MessagingExample/README.md)

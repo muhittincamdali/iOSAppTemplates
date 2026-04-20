@@ -1,60 +1,61 @@
 # MarketplaceApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`MarketplaceApp`, `iOSAppTemplates` icindeki Marketplace lane standalone root surface'idir.
+`MarketplaceApp` is the standalone-root surface for the `Marketplace` lane inside `iOSAppTemplates`.
 
 ## Today
 
-- Label: `Standalone Root`
+- Label: `Standalone Root + richer example surface`
 - Lane: `Marketplace`
 - Entry: `Package.swift`
-- Extra route: `../../Examples/MarketplaceExample`
 - Product target: `Marketplace`
+- Richer example: `Examples/MarketplaceExample`
 
 ## Best For / Not For
 
 ### Best for
 
-- buyer/seller shell, category merchandising ve trust routing incelemek isteyen ekipler
-- marketplace lane icin package-entry seviyesinde app surface gormek isteyenler
-- Wave 2 expansion icin gercek root/package kaniti isteyenler
+- teams comparing commerce and multi-seller starter flows
+- readers who want a marketplace-specific root and example route
+- maintainers reviewing listing and seller-oriented starter surfaces
 
 ### Not for
 
-- bugun tam multi-tenant marketplace parity bekleyenler
-- screenshot veya demo proof arayanlar
-- hosted standalone iOS CI proof'un verildigini varsayanlar
+- teams expecting production seller operations today
+- readers who assume runtime screenshots and clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- buyer marketplace dashboard
-- seller trust and payout shell
-- merchandising lanes
-- dispute and protection quick actions
+- listing discovery shell
+- seller highlight cards
+- product detail starter flow
+- saved or cart-adjacent surface
+- starter marketplace domain model
 
 ## Current Proof
 
 - No external dependency lockfile is required today
-- `swift package dump-package` gecerli
-- `cd Templates/MarketplaceApp && swift test` gecerli
-- `xcodebuild -scheme MarketplaceApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
-- richer example route mevcut
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme MarketplaceApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
+- richer example route exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
 ```bash
 open Package.swift
-xcodebuild -scheme MarketplaceApp -destination 'generic/platform=iOS' build
 open ../../Examples/MarketplaceExample/README.md
 ```
 
@@ -66,9 +67,16 @@ swift build
 swift test
 ```
 
+Standalone generic iOS proof:
+
+```bash
+xcodebuild -scheme MarketplaceApp -destination 'generic/platform=iOS' build
+```
+
 ## Canonical References
 
 - [Proof Surface](../../Documentation/App-Proofs/MarketplaceApp.md)
 - [Media Surface](../../Documentation/App-Media/MarketplaceApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/MarketplaceExample/README.md)

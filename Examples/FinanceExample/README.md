@@ -1,23 +1,38 @@
-# Finance Example
+# FinanceExample
 
-Bu klasor tek basina ship edilen bir Xcode app projesi degil. `FinanceApp` hedef UX'inin daha zengin bir inspection surface'idir.
+Generated from `Documentation/app-surface-catalog.json`.
+
+`FinanceExample` is the richer example surface for the `Finance` lane.
+
+## Product Shape
+
+- account summary shell
+- transaction overview
+- budget category surface
+- spending insight cards
+
+## Best For / Not For
+
+### Best for
+
+- teams that want a second inspection route beyond `FinanceApp`
+- readers who want to inspect the `Finance / Budgeting` flow in a more product-like format
+
+### Not for
+
+- teams expecting a separate runnable Xcode project
+- readers who expect published runtime screenshots or simulator media proof today
 
 ## Current Truth
 
-- Ayrik `.xcodeproj` veya `.xcworkspace` burada ship edilmiyor.
-- Screenshot, UI test ve performance proof bu klasore bagli degil.
-- Canonical standalone package-entry root su an `Templates/FinanceApp`.
-- Canonical package validation root seviyedeki `swift build` ve `swift test`.
-
-## What This Example Is Good For
-
-- finance lane icin dashboard, budget ve account hierarchy yonunu gormek
-- Wave 1 app-pack icin richer example surface'i takip etmek
-- naming, summary cards ve action flow incelemek
+- this example is an inspection surface, not a separate shipped app project
+- the canonical standalone package-entry path lives under `Templates/`
+- canonical package validation remains the root-level `swift build` and `swift test` flow
 
 ## Start Here
 
 ```bash
+open FinanceDashboardExample.swift
 open ../../Templates/FinanceApp/Package.swift
 ```
 
@@ -28,8 +43,8 @@ swift build
 swift test
 ```
 
-## Related Docs
+## Canonical References
 
+- [FinanceApp Proof](../../Documentation/App-Proofs/FinanceApp.md)
+- [FinanceApp Media](../../Documentation/App-Media/FinanceApp.md)
 - [Wave 1 Plan](../../Documentation/Wave-1-Implementation-Plan.md)
-- [Finance Proof](../../Documentation/App-Proofs/FinanceApp.md)
-- [Finance Media](../../Documentation/App-Media/FinanceApp.md)

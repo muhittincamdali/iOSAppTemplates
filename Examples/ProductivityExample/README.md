@@ -1,23 +1,38 @@
-# Productivity Example
+# ProductivityExample
 
-Bu klasor tek basina ship edilen bir Xcode app projesi degil. `ProductivityApp` hedef UX'inin daha zengin bir inspection surface'idir.
+Generated from `Documentation/app-surface-catalog.json`.
+
+`ProductivityExample` is the richer example surface for the `Productivity` lane.
+
+## Product Shape
+
+- workspace dashboard
+- task summary surface
+- project counters
+- focus-session actions
+
+## Best For / Not For
+
+### Best for
+
+- teams that want a second inspection route beyond `ProductivityApp`
+- readers who want to inspect the `Productivity / Tasks` flow in a more product-like format
+
+### Not for
+
+- teams expecting a separate runnable Xcode project
+- readers who expect published runtime screenshots or simulator media proof today
 
 ## Current Truth
 
-- Ayrik `.xcodeproj` veya `.xcworkspace` burada ship edilmiyor.
-- Screenshot, UI test ve performance proof bu klasore bagli degil.
-- Canonical standalone package-entry root su an `Templates/ProductivityApp`.
-- Canonical package validation root seviyedeki `swift build` ve `swift test`.
-
-## What This Example Is Good For
-
-- productivity lane icin dashboard, task board ve focus flow yonunu gormek
-- Wave 1 app-pack icin richer example surface'i takip etmek
-- naming, feature slicing ve UI direction incelemek
+- this example is an inspection surface, not a separate shipped app project
+- the canonical standalone package-entry path lives under `Templates/`
+- canonical package validation remains the root-level `swift build` and `swift test` flow
 
 ## Start Here
 
 ```bash
+open ProductivityWorkspaceExample.swift
 open ../../Templates/ProductivityApp/Package.swift
 ```
 
@@ -28,8 +43,8 @@ swift build
 swift test
 ```
 
-## Related Docs
+## Canonical References
 
+- [ProductivityApp Proof](../../Documentation/App-Proofs/ProductivityApp.md)
+- [ProductivityApp Media](../../Documentation/App-Media/ProductivityApp.md)
 - [Wave 1 Plan](../../Documentation/Wave-1-Implementation-Plan.md)
-- [Productivity Proof](../../Documentation/App-Proofs/ProductivityApp.md)
-- [Productivity Media](../../Documentation/App-Media/ProductivityApp.md)

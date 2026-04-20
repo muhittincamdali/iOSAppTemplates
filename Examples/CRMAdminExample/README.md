@@ -1,19 +1,33 @@
-# CRM Admin Example
+# CRMAdminExample
 
-Bu klasor tek basina ship edilen bir Xcode app projesi degil. `CRMAdminApp` hedef UX'inin daha zengin bir inspection surface'idir.
+Generated from `Documentation/app-surface-catalog.json`.
+
+`CRMAdminExample` is the richer example surface for the `CRM / Admin` lane.
+
+## Product Shape
+
+- admin dashboard shell
+- lead or client list surface
+- pipeline starter cards
+- operations summary
+
+## Best For / Not For
+
+### Best for
+
+- teams that want a second inspection route beyond `CRMAdminApp`
+- readers who want to inspect the `CRM / Admin Companion` flow in a more product-like format
+
+### Not for
+
+- teams expecting a separate runnable Xcode project
+- readers who expect published runtime screenshots or simulator media proof today
 
 ## Current Truth
 
-- Ayrik `.xcodeproj` veya `.xcworkspace` burada ship edilmiyor.
-- Screenshot, UI test ve CRM workflow proof bu klasore bagli degil.
-- Canonical standalone package-entry root su an `Templates/CRMAdminApp`.
-- Canonical package validation root seviyedeki `swift build` ve `swift test`.
-
-## What This Example Is Good For
-
-- CRM / Admin lane icin pipeline, renewal ve SLA workflow yonunu gormek
-- Wave 3 app-pack icin richer example surface'i takip etmek
-- admin workspace naming ve operator actions incelemek
+- this example is an inspection surface, not a separate shipped app project
+- the canonical standalone package-entry path lives under `Templates/`
+- canonical package validation remains the root-level `swift build` and `swift test` flow
 
 ## Start Here
 
@@ -28,8 +42,8 @@ swift build
 swift test
 ```
 
-## Related Docs
+## Canonical References
 
-- [Portfolio Matrix](../../Documentation/Portfolio-Matrix.md)
 - [CRMAdminApp Proof](../../Documentation/App-Proofs/CRMAdminApp.md)
 - [CRMAdminApp Media](../../Documentation/App-Media/CRMAdminApp.md)
+- [Wave 1 Plan](../../Documentation/Wave-1-Implementation-Plan.md)

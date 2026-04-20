@@ -1,58 +1,63 @@
 # FinanceApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`FinanceApp`, `iOSAppTemplates` icindeki Finance lane standalone root surface'idir.
+`FinanceApp` is the standalone-root surface for the `Finance` lane inside `iOSAppTemplates`.
 
 ## Today
 
-- Label: `Standalone Root`
+- Label: `Standalone Root + richer example surface`
 - Lane: `Finance`
 - Entry: `Package.swift`
 - Product target: `Finance / Budgeting`
+- Richer example: `Examples/FinanceExample`
 
 ## Best For / Not For
 
 ### Best for
 
-- dashboard, account, budget shell incelemek isteyen ekipler
-- finance lane icin package-entry seviyesinde app surface gormek isteyenler
-- Wave 1 backlog icin gercek root/package kaniti isteyenler
+- teams inspecting budgeting and account-summary starter flows
+- readers who want a finance lane with root packaging and richer example coverage
+- maintainers reviewing starter financial UI patterns without backend claims
 
 ### Not for
 
-- bugun tam release-grade finance suite parity bekleyenler
-- screenshot veya demo proof arayanlar
-- explicit standalone iOS CI proof'un verildigini varsayanlar
+- teams expecting bank-grade integrations today
+- readers who assume published runtime screenshots and clips already exist
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- finance dashboard shell
-- account snapshot surface
-- budget review entry
-- cash-flow quick actions
+- account summary shell
+- transaction overview
+- budget category surface
+- spending insight cards
+- starter finance domain model
 
 ## Current Proof
 
-- `Package.resolved` lockfile mevcut
-- `swift package dump-package` gecerli
-- local `swift test` gecerli
-- `xcodebuild -scheme FinanceApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
+- `Package.resolved` exists as the tracked dependency lockfile
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme FinanceApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
+- richer example route exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
 ```bash
 open Package.swift
 open Package.resolved
+open ../../Examples/FinanceExample/README.md
 ```
 
 Repo-level proof:
@@ -75,3 +80,4 @@ xcodebuild -scheme FinanceApp -destination 'generic/platform=iOS' build
 - [Media Surface](../../Documentation/App-Media/FinanceApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/FinanceExample/README.md)

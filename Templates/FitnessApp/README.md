@@ -1,8 +1,8 @@
 # FitnessApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`FitnessApp`, `iOSAppTemplates` icindeki Health / Fitness lane standalone root surface'idir.
+`FitnessApp` is the standalone-root surface for the `Health / Fitness` lane inside `iOSAppTemplates`.
 
 ## Today
 
@@ -15,37 +15,40 @@ Last updated: 2026-04-20
 
 ### Best for
 
-- workout/progress shell incelemek isteyen ekipler
-- HealthKit-adjacent source surface gormek isteyenler
-- package-entry seviyesinde fitness lane app shell okumak isteyenler
+- teams reviewing a fitness app-shell package entry
+- maintainers validating HealthKit-oriented starter surfaces
+- readers comparing standalone app packaging against family-level health templates
 
 ### Not for
 
-- bugun release-grade fitness app parity bekleyenler
-- canonical screenshot veya demo proof arayanlar
-- explicit standalone iOS CI proof'u var sananlar
+- teams expecting a richer example route today
+- readers who assume canonical screenshots and demo clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- auth shell
-- workout model/manager surface
-- progress tracking shell
-- HealthKit-adjacent manager surface
+- dashboard shell
+- goal and workout surface
+- health metric cards
+- progress summary shell
+- starter health domain model
 
 ## Current Proof
 
-- `Package.resolved` lockfile mevcut
-- `swift package dump-package` gecerli
-- `xcodebuild -scheme FitnessApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
+- `Package.resolved` exists as the tracked dependency lockfile
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme FitnessApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
@@ -71,5 +74,6 @@ xcodebuild -scheme FitnessApp -destination 'generic/platform=iOS' build
 ## Canonical References
 
 - [Proof Surface](../../Documentation/App-Proofs/FitnessApp.md)
+- [Media Surface](../../Documentation/App-Media/FitnessApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)

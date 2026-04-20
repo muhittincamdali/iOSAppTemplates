@@ -1,54 +1,56 @@
 # SocialMediaApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`SocialMediaApp`, `iOSAppTemplates` icindeki Social lane standalone root surface'idir.
+`SocialMediaApp` is the standalone-root surface for the `Social` lane inside `iOSAppTemplates`.
 
 ## Today
 
 - Label: `Standalone Root + richer example surface`
 - Lane: `Social`
 - Entry: `Package.swift`
-- Extra route: `../../Examples/SocialMediaExample`
 - Product target: `Social Media`
+- Richer example: `Examples/SocialMediaExample`
 
 ## Best For / Not For
 
 ### Best for
 
-- social feed/community shell incelemek isteyen ekipler
-- standalone root ile richer example surface'i birlikte gormek isteyenler
-- auth, feed ve interaction source surface'ini ayni lane icinde okumak isteyenler
+- teams inspecting feed and community starter flows
+- teams that want a standalone root plus richer example route
+- maintainers reviewing auth, feed, and interaction shells at source level
 
 ### Not for
 
-- bugun full complete-app parity bekleyenler
-- screenshot veya demo proof'un mevcut oldugunu varsayanlar
-- explicit standalone iOS CI proof'u arayanlar
+- teams expecting full production social parity today
+- readers who assume published screenshots and clips already exist
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
 - auth shell
-- feed/community shell
-- profile/user surface
-- notification/data manager surface
+- profile model surface
+- feed and community shell
+- notification manager surface
 - richer social example route
 
 ## Current Proof
 
-- `Package.resolved` lockfile mevcut
-- `swift package dump-package` gecerli
-- `xcodebuild -scheme SocialMediaApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
-- richer example route mevcut
+- `Package.resolved` exists as the tracked dependency lockfile
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme SocialMediaApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
+- richer example route exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
@@ -75,5 +77,7 @@ xcodebuild -scheme SocialMediaApp -destination 'generic/platform=iOS' build
 ## Canonical References
 
 - [Proof Surface](../../Documentation/App-Proofs/SocialMediaApp.md)
+- [Media Surface](../../Documentation/App-Media/SocialMediaApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/SocialMediaExample/README.md)

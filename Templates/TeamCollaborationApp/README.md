@@ -1,60 +1,61 @@
 # TeamCollaborationApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`TeamCollaborationApp`, `iOSAppTemplates` icindeki Team Collaboration lane standalone root surface'idir.
+`TeamCollaborationApp` is the standalone-root surface for the `Team Collaboration` lane inside `iOSAppTemplates`.
 
 ## Today
 
-- Label: `Standalone Root`
+- Label: `Standalone Root + richer example surface`
 - Lane: `Team Collaboration`
 - Entry: `Package.swift`
-- Extra route: `../../Examples/TeamCollaborationExample`
 - Product target: `Team Collaboration`
+- Richer example: `Examples/TeamCollaborationExample`
 
 ## Best For / Not For
 
 ### Best for
 
-- team workspace, project routing ve async collaboration workflow incelemek isteyen ekipler
-- collaboration lane icin package-entry seviyesinde app surface gormek isteyenler
-- Wave 3 differentiation icin gercek root/package kaniti isteyenler
+- teams evaluating project and teammate coordination starter flows
+- readers comparing productivity and collaboration-oriented roots
+- maintainers reviewing collaboration boards and activity surfaces
 
 ### Not for
 
-- bugun tam enterprise collaboration suite parity bekleyenler
-- screenshot veya demo proof arayanlar
-- hosted standalone iOS CI proof'un verildigini varsayanlar
+- teams expecting a full collaborative backend today
+- readers who assume runtime screenshots and demo clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- collaboration dashboard
-- project and workspace routing
-- decision and handoff shell
-- async standup quick actions
+- workspace shell
+- team activity surface
+- project board starter flow
+- member cards
+- collaboration starter model
 
 ## Current Proof
 
 - No external dependency lockfile is required today
-- `swift package dump-package` gecerli
-- `cd Templates/TeamCollaborationApp && swift test` gecerli
-- `xcodebuild -scheme TeamCollaborationApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
-- richer example route mevcut
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme TeamCollaborationApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
+- richer example route exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
 ```bash
 open Package.swift
-xcodebuild -scheme TeamCollaborationApp -destination 'generic/platform=iOS' build
 open ../../Examples/TeamCollaborationExample/README.md
 ```
 
@@ -66,9 +67,16 @@ swift build
 swift test
 ```
 
+Standalone generic iOS proof:
+
+```bash
+xcodebuild -scheme TeamCollaborationApp -destination 'generic/platform=iOS' build
+```
+
 ## Canonical References
 
 - [Proof Surface](../../Documentation/App-Proofs/TeamCollaborationApp.md)
 - [Media Surface](../../Documentation/App-Media/TeamCollaborationApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/TeamCollaborationExample/README.md)

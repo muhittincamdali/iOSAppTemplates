@@ -1,44 +1,50 @@
-# Social Media Example
+# SocialMediaExample
 
-This folder is not a standalone shipped Xcode app project. It is a source-level example area that shows what the `SocialMediaApp.swift` surface can look like inside the repo.
+Generated from `Documentation/app-surface-catalog.json`.
+
+`SocialMediaExample` is the richer example surface for the `Social` lane.
+
+## Product Shape
+
+- auth shell
+- profile model surface
+- feed and community shell
+- notification manager surface
+
+## Best For / Not For
+
+### Best for
+
+- teams that want a second inspection route beyond `SocialMediaApp`
+- readers who want to inspect the `Social Media` flow in a more product-like format
+
+### Not for
+
+- teams expecting a separate runnable Xcode project
+- readers who expect published runtime screenshots or simulator media proof today
 
 ## Current Truth
 
-- No separate `.xcodeproj` or `.xcworkspace` is shipped here.
-- Screenshot, UI-test, and performance proof are not attached to this folder.
-- The canonical standalone package-entry roots live under `Templates/`.
-- Canonical package validation remains the root-level `swift build` and `swift test` flow.
-
-## What This Example Is Good For
-
-- quickly inspect `SocialTemplates` and related SwiftUI surfaces
-- see naming, state shape, and sample feature flow for the social lane
-- document target UX direction for the future complete-app gallery
-
-## What This Example Is Not
-
-- release-grade social app proof
-- release or distribution proof
-- a real media, backend, or realtime infrastructure package
+- this example is an inspection surface, not a separate shipped app project
+- the canonical standalone package-entry path lives under `Templates/`
+- canonical package validation remains the root-level `swift build` and `swift test` flow
 
 ## Start Here
 
-To validate the root package surface:
+```bash
+open SocialMediaApp.swift
+open ../../Templates/SocialMediaApp/Package.swift
+```
+
+Repo proof:
 
 ```bash
 swift build
 swift test
 ```
 
-To open the standalone social template root:
+## Canonical References
 
-```bash
-open Templates/SocialMediaApp/Package.swift
-```
-
-## Related Docs
-
-- [QuickStart](../../Documentation/Guides/QuickStart.md)
-- [Installation](../../Documentation/Guides/Installation.md)
-- [Template Guide](../../Documentation/TemplateGuide.md)
-- [Complete App Standard](../../Documentation/Complete-App-Standard.md)
+- [SocialMediaApp Proof](../../Documentation/App-Proofs/SocialMediaApp.md)
+- [SocialMediaApp Media](../../Documentation/App-Media/SocialMediaApp.md)
+- [Wave 1 Plan](../../Documentation/Wave-1-Implementation-Plan.md)

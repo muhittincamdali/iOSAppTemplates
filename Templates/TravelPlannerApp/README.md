@@ -1,8 +1,8 @@
 # TravelPlannerApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`TravelPlannerApp`, `iOSAppTemplates` icindeki Travel lane standalone root surface'idir.
+`TravelPlannerApp` is the standalone-root surface for the `Travel` lane inside `iOSAppTemplates`.
 
 ## Today
 
@@ -10,49 +10,54 @@ Last updated: 2026-04-20
 - Lane: `Travel`
 - Entry: `Package.swift`
 - Product target: `Travel Planner`
+- Richer example: `Examples/TravelPlannerExample`
 
 ## Best For / Not For
 
 ### Best for
 
-- destination, itinerary ve booking shell incelemek isteyen ekipler
-- travel lane icin package-entry seviyesinde app surface gormek isteyenler
-- Wave 1 icin gercek travel packaging kaniti isteyenler
+- teams evaluating trip and itinerary planning shells
+- readers comparing travel lane packaging and richer example routing
+- maintainers reviewing booking-adjacent trip surfaces
 
 ### Not for
 
-- bugun tam release-grade travel suite parity bekleyenler
-- screenshot veya demo proof arayanlar
-- explicit standalone iOS CI proof'un verildigini varsayanlar
+- teams expecting full booking network integrations today
+- readers who assume published runtime screenshots and clips already exist
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- trip overview dashboard
-- itinerary timeline
-- booking health summary
-- flight and hotel management quick actions
+- trip overview shell
+- itinerary cards
+- destination highlights
+- booking-adjacent planning surface
+- starter travel domain model
 
 ## Current Proof
 
-- `Package.resolved` lockfile mevcut
-- `swift package dump-package` gecerli
-- local `swift test` gecerli
-- `xcodebuild -scheme TravelPlannerApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
+- `Package.resolved` exists as the tracked dependency lockfile
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme TravelPlannerApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
+- richer example route exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
 ```bash
 open Package.swift
 open Package.resolved
+open ../../Examples/TravelPlannerExample/README.md
 ```
 
 Repo-level proof:
@@ -75,3 +80,4 @@ xcodebuild -scheme TravelPlannerApp -destination 'generic/platform=iOS' build
 - [Media Surface](../../Documentation/App-Media/TravelPlannerApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/TravelPlannerExample/README.md)

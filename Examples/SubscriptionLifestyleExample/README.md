@@ -1,19 +1,33 @@
-# Subscription Lifestyle Example
+# SubscriptionLifestyleExample
 
-Bu klasor tek basina ship edilen bir Xcode app projesi degil. `SubscriptionLifestyleApp` hedef UX'inin daha zengin bir inspection surface'idir.
+Generated from `Documentation/app-surface-catalog.json`.
+
+`SubscriptionLifestyleExample` is the richer example surface for the `Subscription Lifestyle` lane.
+
+## Product Shape
+
+- habit dashboard shell
+- streak and progress surface
+- premium plan starter cards
+- routine detail routing
+
+## Best For / Not For
+
+### Best for
+
+- teams that want a second inspection route beyond `SubscriptionLifestyleApp`
+- readers who want to inspect the `Subscription Lifestyle / Habit Tracker` flow in a more product-like format
+
+### Not for
+
+- teams expecting a separate runnable Xcode project
+- readers who expect published runtime screenshots or simulator media proof today
 
 ## Current Truth
 
-- Ayrik `.xcodeproj` veya `.xcworkspace` burada ship edilmiyor.
-- Screenshot, UI test ve subscription workflow proof bu klasore bagli degil.
-- Canonical standalone package-entry root su an `Templates/SubscriptionLifestyleApp`.
-- Canonical package validation root seviyedeki `swift build` ve `swift test`.
-
-## What This Example Is Good For
-
-- subscription lifestyle lane icin retention, streak ve paywall workflow yonunu gormek
-- Wave 3 app-pack icin richer example surface'i takip etmek
-- membership operations naming ve retention actions incelemek
+- this example is an inspection surface, not a separate shipped app project
+- the canonical standalone package-entry path lives under `Templates/`
+- canonical package validation remains the root-level `swift build` and `swift test` flow
 
 ## Start Here
 
@@ -28,8 +42,8 @@ swift build
 swift test
 ```
 
-## Related Docs
+## Canonical References
 
-- [Portfolio Matrix](../../Documentation/Portfolio-Matrix.md)
 - [SubscriptionLifestyleApp Proof](../../Documentation/App-Proofs/SubscriptionLifestyleApp.md)
 - [SubscriptionLifestyleApp Media](../../Documentation/App-Media/SubscriptionLifestyleApp.md)
+- [Wave 1 Plan](../../Documentation/Wave-1-Implementation-Plan.md)

@@ -1,19 +1,33 @@
-# NewsBlog Example
+# NewsBlogExample
 
-Bu klasor tek basina ship edilen bir Xcode app projesi degil. `NewsBlogApp` hedef UX'inin daha zengin bir inspection surface'idir.
+Generated from `Documentation/app-surface-catalog.json`.
+
+`NewsBlogExample` is the richer example surface for the `News` lane.
+
+## Product Shape
+
+- headline list shell
+- article detail surface
+- category routing
+- saved or trending content shell
+
+## Best For / Not For
+
+### Best for
+
+- teams that want a second inspection route beyond `NewsBlogApp`
+- readers who want to inspect the `News / Editorial` flow in a more product-like format
+
+### Not for
+
+- teams expecting a separate runnable Xcode project
+- readers who expect published runtime screenshots or simulator media proof today
 
 ## Current Truth
 
-- Ayrik `.xcodeproj` veya `.xcworkspace` burada ship edilmiyor.
-- Screenshot, UI test ve newsroom workflow proof bu klasore bagli degil.
-- Canonical standalone package-entry root su an `Templates/NewsBlogApp`.
-- Canonical package validation root seviyedeki `swift build` ve `swift test`.
-
-## What This Example Is Good For
-
-- news/editorial lane icin briefing, section feed ve reader mode yonunu gormek
-- Wave 2 app-pack icin richer example surface'i takip etmek
-- editorial decision surface ve content workflow naming incelemek
+- this example is an inspection surface, not a separate shipped app project
+- the canonical standalone package-entry path lives under `Templates/`
+- canonical package validation remains the root-level `swift build` and `swift test` flow
 
 ## Start Here
 
@@ -28,8 +42,8 @@ swift build
 swift test
 ```
 
-## Related Docs
+## Canonical References
 
-- [Portfolio Matrix](../../Documentation/Portfolio-Matrix.md)
-- [NewsBlog Proof](../../Documentation/App-Proofs/NewsBlogApp.md)
-- [NewsBlog Media](../../Documentation/App-Media/NewsBlogApp.md)
+- [NewsBlogApp Proof](../../Documentation/App-Proofs/NewsBlogApp.md)
+- [NewsBlogApp Media](../../Documentation/App-Media/NewsBlogApp.md)
+- [Wave 1 Plan](../../Documentation/Wave-1-Implementation-Plan.md)

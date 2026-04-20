@@ -1,19 +1,33 @@
-# Notes Knowledge Example
+# NotesKnowledgeExample
 
-Bu klasor tek basina ship edilen bir Xcode app projesi degil. `NotesKnowledgeApp` hedef UX'inin daha zengin bir inspection surface'idir.
+Generated from `Documentation/app-surface-catalog.json`.
+
+`NotesKnowledgeExample` is the richer example surface for the `Notes / Knowledge` lane.
+
+## Product Shape
+
+- notes list shell
+- note detail surface
+- tag or workspace routing
+- search starter flow
+
+## Best For / Not For
+
+### Best for
+
+- teams that want a second inspection route beyond `NotesKnowledgeApp`
+- readers who want to inspect the `Notes / Knowledge Base` flow in a more product-like format
+
+### Not for
+
+- teams expecting a separate runnable Xcode project
+- readers who expect published runtime screenshots or simulator media proof today
 
 ## Current Truth
 
-- Ayrik `.xcodeproj` veya `.xcworkspace` burada ship edilmiyor.
-- Screenshot, UI test ve knowledge workflow proof bu klasore bagli degil.
-- Canonical standalone package-entry root su an `Templates/NotesKnowledgeApp`.
-- Canonical package validation root seviyedeki `swift build` ve `swift test`.
-
-## What This Example Is Good For
-
-- notes lane icin capture, collection routing ve shared-space workflow yonunu gormek
-- Wave 2 app-pack icin richer example surface'i takip etmek
-- knowledge system naming ve review flow incelemek
+- this example is an inspection surface, not a separate shipped app project
+- the canonical standalone package-entry path lives under `Templates/`
+- canonical package validation remains the root-level `swift build` and `swift test` flow
 
 ## Start Here
 
@@ -28,8 +42,8 @@ swift build
 swift test
 ```
 
-## Related Docs
+## Canonical References
 
-- [Portfolio Matrix](../../Documentation/Portfolio-Matrix.md)
-- [NotesKnowledge Proof](../../Documentation/App-Proofs/NotesKnowledgeApp.md)
-- [NotesKnowledge Media](../../Documentation/App-Media/NotesKnowledgeApp.md)
+- [NotesKnowledgeApp Proof](../../Documentation/App-Proofs/NotesKnowledgeApp.md)
+- [NotesKnowledgeApp Media](../../Documentation/App-Media/NotesKnowledgeApp.md)
+- [Wave 1 Plan](../../Documentation/Wave-1-Implementation-Plan.md)

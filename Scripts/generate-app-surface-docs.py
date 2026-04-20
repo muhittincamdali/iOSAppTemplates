@@ -30,6 +30,29 @@ def relative_doc_link(path: str) -> str:
     return "../../" + path if path.startswith("Templates/") or path.startswith("Examples/") else "../" + path.removeprefix("Documentation/")
 
 
+def path_from_root(path: str) -> Path:
+    return REPO_ROOT / path
+
+
+def example_name(app: dict[str, Any]) -> str:
+    example_path = app.get("example_path")
+    if not example_path:
+        raise ValueError(f"App {app['app']} has no example path")
+    return Path(example_path).parent.name
+
+
+def example_source_path(app: dict[str, Any]) -> str | None:
+    example_path = app.get("example_path")
+    if not example_path:
+        return None
+
+    example_dir = path_from_root(example_path).parent
+    swift_files = sorted(path.name for path in example_dir.glob("*.swift"))
+    if not swift_files:
+        return None
+    return swift_files[0]
+
+
 def proof_page(app: dict[str, Any]) -> str:
     app_name = app["app"]
     example_path = app.get("example_path")
@@ -167,6 +190,177 @@ def media_page(app: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def template_root_page(app: dict[str, Any]) -> str:
+    app_name = app["app"]
+    lockfile_path = app.get("lockfile_path")
+    example_path = app.get("example_path")
+    lines: list[str] = [
+        f"# {app_name}",
+        "",
+        "Generated from `Documentation/app-surface-catalog.json`.",
+        "",
+        f"`{app_name}` is the standalone-root surface for the `{app['lane']}` lane inside `iOSAppTemplates`.",
+        "",
+        "## Today",
+        "",
+        f"- Label: `{app['label_today']}`",
+        f"- Lane: `{app['lane']}`",
+        f"- Entry: `{Path(app['entry_path']).name}`",
+        f"- Product target: `{app['product_target']}`",
+    ]
+    if example_path:
+        lines.append(f"- Richer example: `{Path(example_path).parent.as_posix()}`")
+    lines.extend([
+        "",
+        "## Best For / Not For",
+        "",
+        "### Best for",
+        "",
+    ])
+    lines.extend([f"- {item}" for item in app["best_for"]])
+    lines.extend([
+        "",
+        "### Not for",
+        "",
+    ])
+    lines.extend([f"- {item}" for item in app["not_for"]])
+    lines.extend([
+        "",
+        "## Product Shape",
+        "",
+    ])
+    lines.extend([f"- {item}" for item in app["product_shape"]])
+    lines.extend([
+        "",
+        "## Current Proof",
+        "",
+    ])
+    if lockfile_path:
+        lines.append("- `Package.resolved` exists as the tracked dependency lockfile")
+    else:
+        lines.append("- No external dependency lockfile is required today")
+    lines.extend([
+        "- `swift package dump-package` passes",
+        "- local `swift test` passes",
+        f"- `xcodebuild -scheme {app_name} -destination 'generic/platform=iOS' build` passes",
+        "- root repo `swift build -c release` passes",
+        "- root repo `swift test` passes",
+        "- canonical app proof page exists",
+        "- canonical app media page exists",
+    ])
+    if example_path:
+        lines.append("- richer example route exists")
+    lines.extend([
+        "",
+        "## Missing Proof",
+        "",
+        "- runtime screenshot",
+        "- demo clip",
+        "- stable green hosted standalone iOS baseline on current `master`",
+        "",
+        "## Start Here",
+        "",
+        "```bash",
+        "open Package.swift",
+    ])
+    if lockfile_path:
+        lines.append("open Package.resolved")
+    if example_path:
+        lines.append(f"open ../../{example_path}")
+    lines.extend([
+        "```",
+        "",
+        "Repo-level proof:",
+        "",
+        "```bash",
+        "cd ../..",
+        "swift build",
+        "swift test",
+        "```",
+        "",
+        "Standalone generic iOS proof:",
+        "",
+        "```bash",
+        f"xcodebuild -scheme {app_name} -destination 'generic/platform=iOS' build",
+        "```",
+        "",
+        "## Canonical References",
+        "",
+        f"- {md_link('Proof Surface', f'../../Documentation/App-Proofs/{app_name}.md')}",
+        f"- {md_link('Media Surface', f'../../Documentation/App-Media/{app_name}.md')}",
+        f"- {md_link('Template Showcase', '../../Documentation/Template-Showcase.md')}",
+        f"- {md_link('Proof Matrix', '../../Documentation/Proof-Matrix.md')}",
+    ])
+    if example_path:
+        lines.append(f"- {md_link('Richer Example', f'../../{example_path}')}")
+    return "\n".join(lines) + "\n"
+
+
+def example_page(app: dict[str, Any]) -> str:
+    example_path = app.get("example_path")
+    if not example_path:
+        raise ValueError(f"App {app['app']} has no example path")
+
+    title = example_name(app)
+    app_name = app["app"]
+    source_path = example_source_path(app)
+    lines: list[str] = [
+        f"# {title}",
+        "",
+        "Generated from `Documentation/app-surface-catalog.json`.",
+        "",
+        f"`{title}` is the richer example surface for the `{app['lane']}` lane.",
+        "",
+        "## Product Shape",
+        "",
+    ]
+    lines.extend([f"- {item}" for item in app["product_shape"][:4]])
+    lines.extend([
+        "",
+        "## Best For / Not For",
+        "",
+        "### Best for",
+        "",
+        f"- teams that want a second inspection route beyond `{app['app']}`",
+        f"- readers who want to inspect the `{app['product_target']}` flow in a more product-like format",
+        "",
+        "### Not for",
+        "",
+        "- teams expecting a separate runnable Xcode project",
+        "- readers who expect published runtime screenshots or simulator media proof today",
+        "",
+        "## Current Truth",
+        "",
+        "- this example is an inspection surface, not a separate shipped app project",
+        "- the canonical standalone package-entry path lives under `Templates/`",
+        "- canonical package validation remains the root-level `swift build` and `swift test` flow",
+        "",
+        "## Start Here",
+        "",
+        "```bash",
+    ])
+    if source_path:
+        lines.append(f"open {source_path}")
+    lines.append(f"open ../../Templates/{app['app']}/Package.swift")
+    lines.extend([
+        "```",
+        "",
+        "Repo proof:",
+        "",
+        "```bash",
+        "swift build",
+        "swift test",
+        "```",
+        "",
+        "## Canonical References",
+        "",
+        f"- {md_link(app_name + ' Proof', f'../../Documentation/App-Proofs/{app_name}.md')}",
+        f"- {md_link(app_name + ' Media', f'../../Documentation/App-Media/{app_name}.md')}",
+        f"- {md_link('Wave 1 Plan', '../../Documentation/Wave-1-Implementation-Plan.md')}",
+    ])
+    return "\n".join(lines) + "\n"
+
+
 def proof_router(catalog: list[dict[str, Any]]) -> str:
     richer_examples = sum(1 for app in catalog if app.get("example_path"))
     lines: list[str] = [
@@ -296,6 +490,9 @@ def main() -> int:
     for app in catalog:
         ok &= write_if_changed(PROOFS_DIR / f"{app['app']}.md", proof_page(app), args.check)
         ok &= write_if_changed(MEDIA_DIR / f"{app['app']}.md", media_page(app), args.check)
+        ok &= write_if_changed(path_from_root(app["readme_path"]), template_root_page(app), args.check)
+        if app.get("example_path"):
+            ok &= write_if_changed(path_from_root(app["example_path"]), example_page(app), args.check)
 
     ok &= write_if_changed(PROOFS_DIR / "README.md", proof_router(catalog), args.check)
     ok &= write_if_changed(MEDIA_DIR / "README.md", media_router(catalog), args.check)

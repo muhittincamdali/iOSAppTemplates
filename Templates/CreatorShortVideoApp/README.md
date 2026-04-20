@@ -1,60 +1,61 @@
 # CreatorShortVideoApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`CreatorShortVideoApp`, `iOSAppTemplates` icindeki Creator / Short Video lane standalone root surface'idir.
+`CreatorShortVideoApp` is the standalone-root surface for the `Creator / Short Video` lane inside `iOSAppTemplates`.
 
 ## Today
 
-- Label: `Standalone Root`
+- Label: `Standalone Root + richer example surface`
 - Lane: `Creator / Short Video`
 - Entry: `Package.swift`
-- Extra route: `../../Examples/CreatorShortVideoExample`
 - Product target: `Creator / Short Video`
+- Richer example: `Examples/CreatorShortVideoExample`
 
 ## Best For / Not For
 
 ### Best for
 
-- creator studio, clip routing ve publishing workflow incelemek isteyen ekipler
-- creator lane icin package-entry seviyesinde app surface gormek isteyenler
-- Wave 2 expansion icin gercek root/package kaniti isteyenler
+- teams evaluating creator feed and publishing starter surfaces
+- readers comparing creator-economy packaging with a richer example
+- maintainers reviewing short-video oriented UI patterns
 
 ### Not for
 
-- bugun tam creator economy suite parity bekleyenler
-- screenshot veya demo proof arayanlar
-- hosted standalone iOS CI proof'un verildigini varsayanlar
+- teams expecting production video pipelines today
+- readers who assume runtime screenshots and demo clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- creator studio dashboard
-- clip and channel routing
-- moderation and monetization shell
-- publishing quick actions
+- creator feed shell
+- clip card surface
+- engagement starter routing
+- publish or upload shell
+- creator starter domain model
 
 ## Current Proof
 
 - No external dependency lockfile is required today
-- `swift package dump-package` gecerli
-- `cd Templates/CreatorShortVideoApp && swift test` gecerli
-- `xcodebuild -scheme CreatorShortVideoApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
-- richer example route mevcut
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme CreatorShortVideoApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
+- richer example route exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
 ```bash
 open Package.swift
-xcodebuild -scheme CreatorShortVideoApp -destination 'generic/platform=iOS' build
 open ../../Examples/CreatorShortVideoExample/README.md
 ```
 
@@ -66,9 +67,16 @@ swift build
 swift test
 ```
 
+Standalone generic iOS proof:
+
+```bash
+xcodebuild -scheme CreatorShortVideoApp -destination 'generic/platform=iOS' build
+```
+
 ## Canonical References
 
 - [Proof Surface](../../Documentation/App-Proofs/CreatorShortVideoApp.md)
 - [Media Surface](../../Documentation/App-Media/CreatorShortVideoApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/CreatorShortVideoExample/README.md)

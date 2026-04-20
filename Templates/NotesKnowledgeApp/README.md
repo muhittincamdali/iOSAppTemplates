@@ -1,60 +1,61 @@
 # NotesKnowledgeApp
 
-Last updated: 2026-04-20
+Generated from `Documentation/app-surface-catalog.json`.
 
-`NotesKnowledgeApp`, `iOSAppTemplates` icindeki Notes / Knowledge lane standalone root surface'idir.
+`NotesKnowledgeApp` is the standalone-root surface for the `Notes / Knowledge` lane inside `iOSAppTemplates`.
 
 ## Today
 
-- Label: `Standalone Root`
+- Label: `Standalone Root + richer example surface`
 - Lane: `Notes / Knowledge`
 - Entry: `Package.swift`
-- Extra route: `../../Examples/NotesKnowledgeExample`
 - Product target: `Notes / Knowledge Base`
+- Richer example: `Examples/NotesKnowledgeExample`
 
 ## Best For / Not For
 
 ### Best for
 
-- note capture, knowledge routing ve shared-space workflow incelemek isteyen ekipler
-- notes lane icin package-entry seviyesinde app surface gormek isteyenler
-- Wave 2 expansion icin gercek root/package kaniti isteyenler
+- teams evaluating note and knowledge starter flows
+- readers comparing productivity and PKM-oriented surfaces
+- maintainers reviewing list and detail note patterns
 
 ### Not for
 
-- bugun tam PKM suite parity bekleyenler
-- screenshot veya demo proof arayanlar
-- hosted standalone iOS CI proof'un verildigini varsayanlar
+- teams expecting a full PKM platform today
+- readers who assume runtime screenshots and demo clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- note and knowledge dashboard
-- collection and space routing
-- offline-first knowledge shell
-- review and capture quick actions
+- notes list shell
+- note detail surface
+- tag or workspace routing
+- search starter flow
+- knowledge starter model
 
 ## Current Proof
 
 - No external dependency lockfile is required today
-- `swift package dump-package` gecerli
-- `cd Templates/NotesKnowledgeApp && swift test` gecerli
-- `xcodebuild -scheme NotesKnowledgeApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- canonical app proof page mevcut
-- richer example route mevcut
+- `swift package dump-package` passes
+- local `swift test` passes
+- `xcodebuild -scheme NotesKnowledgeApp -destination 'generic/platform=iOS' build` passes
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- canonical app proof page exists
+- canonical app media page exists
+- richer example route exists
 
 ## Missing Proof
 
-- screenshot
+- runtime screenshot
 - demo clip
-- hosted standalone iOS CI proof
+- stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here
 
 ```bash
 open Package.swift
-xcodebuild -scheme NotesKnowledgeApp -destination 'generic/platform=iOS' build
 open ../../Examples/NotesKnowledgeExample/README.md
 ```
 
@@ -66,9 +67,16 @@ swift build
 swift test
 ```
 
+Standalone generic iOS proof:
+
+```bash
+xcodebuild -scheme NotesKnowledgeApp -destination 'generic/platform=iOS' build
+```
+
 ## Canonical References
 
 - [Proof Surface](../../Documentation/App-Proofs/NotesKnowledgeApp.md)
 - [Media Surface](../../Documentation/App-Media/NotesKnowledgeApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/NotesKnowledgeExample/README.md)
