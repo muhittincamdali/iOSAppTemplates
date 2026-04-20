@@ -1,20 +1,20 @@
 # Quick Start Guide
 
-Bu repo ile en hizli ilk basari yolu `generator-style` API degil, mevcut package ve standalone template roots'larini incelemektir.
+The fastest first success path in `iOSAppTemplates` is not a one-command generator flow. It is inspecting the active package graph, the tracked standalone app roots, and the public proof surfaces that describe what is true today.
 
 ## Fastest Paths
 
-### 1. Root package'i incele
+### 1. Validate the root package graph
 
 ```bash
 git clone https://github.com/muhittincamdali/iOSAppTemplates.git
 cd iOSAppTemplates
 open Package.swift
-swift build
+swift build -c release
 swift test
 ```
 
-Sonra su surface ile basla:
+Then inspect the public root surface:
 
 ```swift
 import iOSAppTemplates
@@ -25,70 +25,93 @@ let commerce = manager.getTemplates(category: .commerce)
 let social = manager.searchTemplates(query: "social")
 ```
 
-Bu yol:
-- root metadata surface'ini
-- category/complexity map'ini
-- arama davranisini
-dogrular.
+This path validates:
 
-### 2. Standalone template root incele
+- the root metadata surface
+- the category and complexity map
+- the search behavior
+- the current maintained package graph
 
-Bugun repo icindeki en net standalone roots:
+### 2. Inspect a standalone app root
+
+The clearest current standalone roots are:
 
 ```bash
 open Templates/SocialMediaApp/Package.swift
 open Templates/EcommerceApp/Package.swift
 open Templates/FitnessApp/Package.swift
+open Templates/ProductivityApp/Package.swift
+open Templates/FinanceApp/Package.swift
 ```
 
-Bu yol:
+This path validates:
+
 - manifest-valid package entry
-- app shell source surface
+- app-shell source surface
 - lane-specific packaging
-gosterir.
+- current standalone-root truth
+
+### 3. Inspect the public proof and gallery routers
+
+Start with:
+
+- [Template Showcase](../Template-Showcase.md)
+- [Proof Matrix](../Proof-Matrix.md)
+- [App Proof Surfaces](../App-Proofs/README.md)
+- [App Media Surfaces](../App-Media/README.md)
+- [App Gallery](../App-Gallery.md)
 
 ## Which Path Should You Pick?
 
-### Repo'yu hizli degerlendirmek istiyorsan
+### If you want to evaluate the repo quickly
+
 - `Package.swift`
 - `Sources/iOSAppTemplates/iOSAppTemplates.swift`
-- `Documentation/Complete-App-Standard.md`
-- `Documentation/Template-Showcase.md`
-- `Documentation/App-Proofs/README.md`
+- [Complete App Standard](../Complete-App-Standard.md)
+- [Portfolio Matrix](../Portfolio-Matrix.md)
+- [Template Showcase](../Template-Showcase.md)
+- [Proof Matrix](../Proof-Matrix.md)
 
-### UI-first bir lane ile baslamak istiyorsan
+### If you want to start from a visible app pack
+
 - `Templates/SocialMediaApp`
 - `Templates/EcommerceApp`
 - `Templates/FitnessApp`
+- `Templates/ProductivityApp`
+- `Templates/FinanceApp`
 
-### Daha genis source surface istiyorsan
-- `Sources/SocialTemplates`
-- `Sources/CommerceTemplates`
-- `Sources/HealthTemplates`
-- `Sources/ProductivityTemplates`
-- `Sources/FinanceTemplates`
+### If you want to inspect the broad portfolio story
+
+- [PROJECT_STATUS.md](../../PROJECT_STATUS.md)
+- [GitHub Distribution](../GitHub-Distribution.md)
+- [Release Process](../Release-Process.md)
 
 ## Current Truth
 
-Bu repo bugun:
-- root package discovery surface sunuyor
-- birden fazla template family modulu sunuyor
-- `3` net standalone template root tasiyor
+This repository currently ships:
 
-Bu repo bugun otomatik olarak sunmuyor:
-- tek adimda generated shippable app
-- store submission proof
-- `20 complete apps` galerisi
-- hosted standalone build proof
+- a maintained root package graph
+- `20` standalone app roots under `Templates/`
+- per-app proof pages for `20` roots
+- per-app media pages for `20` roots
+- published gallery cards and preview boards for `20` roots
 
-O iddia icin canonical standard:
+This repository does not yet publicly prove:
+
+- runtime screenshots for every app pack
+- demo clips for every app pack
+- hosted standalone iOS CI proof for every app pack
+- equal complete-app maturity across all `20` lanes
+
+The canonical standard for those claims is:
+
 - [Complete App Standard](../Complete-App-Standard.md)
 
 ## Recommended Reading Order
 
 1. [Installation](./Installation.md)
-2. [First App Tutorial](../FirstApp.md)
-3. [Template Guide](../TemplateGuide.md)
+2. [Complete App Standard](../Complete-App-Standard.md)
+3. [Portfolio Matrix](../Portfolio-Matrix.md)
 4. [Template Showcase](../Template-Showcase.md)
-5. [App Proof Surfaces](../App-Proofs/README.md)
-6. [API Reference](../API-Reference.md)
+5. [Proof Matrix](../Proof-Matrix.md)
+6. [App Gallery](../App-Gallery.md)

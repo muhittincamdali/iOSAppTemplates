@@ -22,6 +22,9 @@ This page is the canonical documentation router for `iOSAppTemplates`.
 | See canonical app proof pages | [App-Proofs/README.md](./App-Proofs/README.md) |
 | See canonical app media pages | [App-Media/README.md](./App-Media/README.md) |
 | See published gallery cards and preview boards | [App-Gallery.md](./App-Gallery.md) |
+| See the current repo status | [../PROJECT_STATUS.md](../PROJECT_STATUS.md) |
+| See GitHub distribution rules | [GitHub-Distribution.md](./GitHub-Distribution.md) |
+| See release rules | [Release-Process.md](./Release-Process.md) |
 | Read the market-backed 20-app strategy | [World-Class-20-App-Strategy-2026-04-19.md](./World-Class-20-App-Strategy-2026-04-19.md) |
 | See the Wave 1 execution plan | [Wave-1-Implementation-Plan.md](./Wave-1-Implementation-Plan.md) |
 | Inspect template families | [TemplateGuide.md](./TemplateGuide.md) |
@@ -81,8 +84,12 @@ This page is the canonical documentation router for `iOSAppTemplates`.
 ### Validation And Trust
 
 - [Guides/TestingGuide.md](./Guides/TestingGuide.md)
+- [GitHub-Distribution.md](./GitHub-Distribution.md)
+- [Release-Process.md](./Release-Process.md)
 - [../SECURITY.md](../SECURITY.md)
+- [../SUPPORT.md](../SUPPORT.md)
 - [../CONTRIBUTING.md](../CONTRIBUTING.md)
+- [../PROJECT_STATUS.md](../PROJECT_STATUS.md)
 - [World-Class-Audit-2026-04-15.md](./World-Class-Audit-2026-04-15.md)
 
 ## What To Treat Carefully

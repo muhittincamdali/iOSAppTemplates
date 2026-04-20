@@ -1,5 +1,5 @@
 name: 🐛 Bug Report
-description: Report a bug or issue with iOS App Templates
+description: Report a bug in the root package, standalone app packs, docs, or validation surfaces
 title: "[BUG] "
 labels: ["bug", "triage"]
 assignees: []
@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for reporting a bug! Please fill out the information below to help us resolve the issue quickly.
+        Thank you for reporting a bug. Please keep the report scoped and tie it to an exact path, app pack, or public surface.
 
   - type: checkboxes
     id: checklist
@@ -20,36 +20,32 @@ body:
           required: true
         - label: I have read the [Contributing Guidelines](../../CONTRIBUTING.md)
           required: true
-        - label: I am using the latest version of iOS App Templates
+        - label: I checked the current repo truth in the README or PROJECT_STATUS page
           required: true
 
   - type: input
     id: version
     attributes:
-      label: iOS App Templates Version
-      description: Which version are you using?
-      placeholder: "e.g., 2.0.0"
+      label: Commit, tag, or branch
+      description: Which revision are you using?
+      placeholder: "e.g., master, v2.0.0, or a commit SHA"
     validations:
       required: true
 
   - type: dropdown
     id: template
     attributes:
-      label: Affected Template
-      description: Which template is experiencing the issue?
+      label: Affected Surface
+      description: Which repo surface is affected?
       options:
-        - TCA Templates
-        - Vision Pro Templates  
-        - AI/ML Templates
-        - Performance Templates
-        - Security Templates
-        - Social Templates
-        - Commerce Templates
-        - Health Templates
-        - Education Templates
-        - Finance Templates
-        - Travel Templates
-        - Other/Multiple
+        - Root package graph
+        - Template family under Sources
+        - Standalone app root under Templates
+        - Example surface under Examples
+        - Proof, media, or gallery docs
+        - Workflow or validator
+        - Release or distribution surface
+        - Other
     validations:
       required: true
 
@@ -61,11 +57,11 @@ body:
       multiple: true
       options:
         - iOS 18.0+
-        - iOS 17.x
-        - visionOS 2.0+
         - macOS 15.0+
+        - visionOS 2.0+
         - tvOS 18.0+
         - watchOS 11.0+
+        - Not platform-specific
     validations:
       required: true
 
@@ -77,9 +73,16 @@ body:
       options:
         - Xcode 16.0
         - Xcode 15.4
-        - Xcode 15.3
-        - Xcode 15.2
         - Other
+    validations:
+      required: true
+
+  - type: input
+    id: affected_path
+    attributes:
+      label: Affected Path
+      description: Which exact file, app root, or doc page is affected?
+      placeholder: "e.g., Templates/FinanceApp/Package.swift"
     validations:
       required: true
 
@@ -87,7 +90,7 @@ body:
     id: description
     attributes:
       label: Bug Description
-      description: A clear and concise description of the bug
+      description: A clear description of the bug
       placeholder: Describe what happened and what you expected to happen
     validations:
       required: true
@@ -146,9 +149,13 @@ body:
   - type: textarea
     id: screenshots
     attributes:
-      label: Screenshots/Videos
-      description: If applicable, add screenshots or videos to help explain the problem
-      placeholder: Drag and drop images or videos here
+      label: Validation Output
+      description: Paste the exact failing command output if you have it
+      render: shell
+      placeholder: |
+        swift build -c release
+        swift test
+        bash Scripts/validate-portfolio-surface.sh
 
   - type: dropdown
     id: severity
@@ -166,23 +173,6 @@ body:
   - type: textarea
     id: workaround
     attributes:
-      label: Workaround
-      description: Have you found any workaround for this issue?
-      placeholder: Describe any workaround you've found
-
-  - type: textarea
-    id: additional
-    attributes:
       label: Additional Context
       description: Any other context about the problem
-      placeholder: Add any other context, environment details, or relevant information
-
-  - type: checkboxes
-    id: contribution
-    attributes:
-      label: Contribution
-      description: Would you like to contribute a fix?
-      options:
-        - label: I would like to work on fixing this issue
-        - label: I can provide additional testing
-        - label: I can help with documentation updates
+      placeholder: Include links, screenshots, or proof/media impact if relevant

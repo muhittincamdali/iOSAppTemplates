@@ -50,9 +50,23 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         body: |
-          ## What's Changed
+          ## What Changed
           ${{ steps.changelog.outputs.changelog }}
           
+          ## Current Repo Truth
+
+          - `iOSAppTemplates` is a starter-portfolio repository, not a claim that all app packs have equal production maturity.
+          - Use the README, portfolio matrix, proof matrix, and app gallery as the canonical public surfaces.
+          - Do not treat a version tag alone as proof of full complete-app parity.
+
+          ## Start Here
+
+          - README: https://github.com/${{ github.repository }}#readme
+          - Documentation Hub: https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/Documentation/README.md
+          - Portfolio Matrix: https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/Documentation/Portfolio-Matrix.md
+          - Proof Matrix: https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/Documentation/Proof-Matrix.md
+          - App Gallery: https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/Documentation/App-Gallery.md
+
           ## Installation
           
           ### Swift Package Manager

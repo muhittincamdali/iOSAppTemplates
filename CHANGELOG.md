@@ -12,11 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Current repo audit and complete-app standard docs
 - Root package search fix for empty queries
 - Truthful smoke coverage for the active package test graph
+- GitHub distribution, release-process, and project-status docs
 
 ### Changed
 - Package graph and tests aligned with the current public surface
 - Public docs tightened to match current repo maturity
 - Template package baselines aligned with the current Swift/Xcode floor
+- Community, security, and contribution surfaces aligned with current repo truth
 
 ### Fixed
 - Swift 6 build issues across active template families
@@ -172,52 +174,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## Release Notes
+For current repo truth, use:
 
-### Version 1.0.0
-This is the first stable public release of iOS App Templates Collection. It introduced the initial template roots, documentation surface, and starter package coverage.
-
-### Key Features
-- **Starter Templates**: Initial public app roots and source-based template families
-- **Architecture Coverage**: SwiftUI-first examples with multiple implementation styles
-- **SwiftUI**: Modern UI framework with declarative syntax
-- **Initial Testing**: Early package-level coverage
-- **Documentation**: API reference, guides, and examples
-- **Apple Platform Focus**: iOS-first package surface with Apple-platform expansion paths
-
-### Migration Guide
-This is the initial release, so no migration is required. All templates are designed to be used as starting points for new projects.
-
-### Breaking Changes
-None in this release.
-
-### Deprecations
-None in this release.
-
-### Known Issues
-- None reported
-
-### Security
-- Security posture should be re-evaluated against the current dependency graph and workflow state
-- Treat this release as a starter baseline, not as an immutable security proof
-
-### Performance
-- Performance expectations should be validated in the consuming app shell
-- This changelog entry is not a benchmark proof artifact
-
-### Accessibility
-- Full accessibility support
-- VoiceOver compatibility
-- Dynamic Type support
-- High contrast mode support
-
----
-
-For more information about this release, see the [README.md](README.md) file. # iOSAppTemplates - Update 1
-# iOSAppTemplates - Update 2
-# iOSAppTemplates - Update 3
-# iOSAppTemplates - Update 4
-# iOSAppTemplates - Update 5
+- [README.md](README.md)
+- [PROJECT_STATUS.md](PROJECT_STATUS.md)
+- [Documentation/Release-Process.md](Documentation/Release-Process.md)
 # iOSAppTemplates - Update 6
 # iOSAppTemplates - Update 7
 # iOSAppTemplates - Update 8
