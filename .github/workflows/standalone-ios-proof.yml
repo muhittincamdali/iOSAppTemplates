@@ -1,0 +1,42 @@
+name: Standalone iOS Proof
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  standalone-ios-builds:
+    name: Standalone iOS Proof (${{ matrix.shard.name }})
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        shard:
+          - name: wave1-core
+            apps: "EcommerceApp SocialMediaApp FitnessApp ProductivityApp FinanceApp"
+          - name: wave1-expansion
+            apps: "EducationApp FoodDeliveryApp TravelPlannerApp AIAssistantApp NewsBlogApp"
+          - name: wave2-surface
+            apps: "MusicPodcastApp MarketplaceApp MessagingApp BookingReservationsApp NotesKnowledgeApp"
+          - name: wave3-surface
+            apps: "CreatorShortVideoApp TeamCollaborationApp CRMAdminApp SubscriptionLifestyleApp PrivacyVaultApp"
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Select Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Reset SwiftPM artifact caches
+        run: |
+          rm -rf ~/Library/Caches/org.swift.swiftpm/artifacts
+          rm -rf .build/artifacts
+
+      - name: Validate standalone iOS builds
+        run: bash Scripts/validate-standalone-ios-builds.sh ${{ matrix.shard.apps }}

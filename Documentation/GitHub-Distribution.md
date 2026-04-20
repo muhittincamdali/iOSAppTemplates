@@ -45,6 +45,7 @@ That latest release title is stale and overclaims the current repository story. 
 - release titles and release bodies must stay truth-first
 - issue templates and PR template must ask for public-claim or proof impact when relevant
 - GitHub-hosted workflows should stay enabled and truthful on `master`
+- standalone iOS proof should be represented by a real hosted workflow, not only by local maintainer claims
 
 ## First Links For New Visitors
 

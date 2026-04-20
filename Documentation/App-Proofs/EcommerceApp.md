@@ -22,7 +22,7 @@ Last updated: 2026-04-20
 
 - bugun full release-grade ecommerce app bekleyenler
 - canonical screenshot/demo proof arayanlar
-- hosted standalone iOS CI proof'unun verildigini varsayanlar
+- teams that assume hosted standalone iOS proof is already green for this app pack
 
 ## Product Shape Today
 
@@ -48,7 +48,7 @@ Last updated: 2026-04-20
 
 - canonical screenshot yok
 - demo clip yok
-- hosted standalone iOS CI proof yok
+- hosted standalone iOS proof workflow is active; check live GitHub status on master
 
 ## Start Path
 

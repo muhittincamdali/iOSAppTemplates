@@ -17,6 +17,7 @@ Last updated: 2026-04-21
   - a gallery card
   - a preview board
 - local generic iOS `xcodebuild` proof is tracked for the standalone roots
+- the hosted standalone iOS proof workflow is active for the same `20` roots
 - root-level validators exist for portfolio, proof, media, gallery, preview, and visual surfaces
 - README and documentation routing are now English-first
 
@@ -24,7 +25,7 @@ Last updated: 2026-04-21
 
 - runtime screenshots are not published for all app packs
 - demo clips are not published for all app packs
-- hosted standalone iOS CI proof is not yet published for every app pack
+- a stable green hosted standalone iOS baseline is not yet established for every app pack
 - every lane is not yet at equal production depth
 - the latest public release title is not yet aligned with the current truth-first positioning
 
@@ -32,7 +33,7 @@ Last updated: 2026-04-21
 
 1. publish real runtime screenshots
 2. publish short demo clips
-3. add hosted standalone iOS CI proof
+3. keep the hosted standalone iOS proof route green and visible
 4. tighten GitHub metadata and release surfaces
 5. continue converting older docs to the same English canonical quality bar
 
@@ -46,4 +47,4 @@ Last updated: 2026-04-21
 
 ## Status Summary
 
-The repo has crossed from starter collection into a tracked portfolio system. The next quality jump is not more naming or more promises; it is stronger runtime media, stronger hosted proof, and tighter public distribution discipline.
+The repo has crossed from starter collection into a tracked portfolio system. The next quality jump is not more naming or more promises; it is stronger runtime media, a stable hosted standalone iOS baseline, and tighter public distribution discipline.
