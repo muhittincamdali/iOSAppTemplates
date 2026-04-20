@@ -21,10 +21,12 @@ Bugunku kapsam:
 - `Templates/MessagingApp`
 - `Templates/BookingReservationsApp`
 - `Templates/NotesKnowledgeApp`
+- `Templates/CreatorShortVideoApp`
+- `Templates/TeamCollaborationApp`
 
 Bugun ek proof gercegi:
 
-- `15` standalone root icin local generic iOS build proof var
+- `17` standalone root icin local generic iOS build proof var
 
 Bu sayfalarin rolu:
 
@@ -52,6 +54,8 @@ Bu sayfalarin rolu:
 | MessagingApp | Messaging / Community | standalone root + source shell + richer example | [MessagingApp.md](./MessagingApp.md) |
 | BookingReservationsApp | Booking / Reservations | standalone root + source shell + richer example | [BookingReservationsApp.md](./BookingReservationsApp.md) |
 | NotesKnowledgeApp | Notes / Knowledge | standalone root + source shell + richer example | [NotesKnowledgeApp.md](./NotesKnowledgeApp.md) |
+| CreatorShortVideoApp | Creator / Short Video | standalone root + source shell + richer example | [CreatorShortVideoApp.md](./CreatorShortVideoApp.md) |
+| TeamCollaborationApp | Team Collaboration | standalone root + source shell + richer example | [TeamCollaborationApp.md](./TeamCollaborationApp.md) |
 
 ## Rule
 

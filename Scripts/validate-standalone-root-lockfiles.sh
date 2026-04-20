@@ -23,6 +23,8 @@ roots_without_external_dependencies=(
   "Templates/MessagingApp"
   "Templates/BookingReservationsApp"
   "Templates/NotesKnowledgeApp"
+  "Templates/CreatorShortVideoApp"
+  "Templates/TeamCollaborationApp"
 )
 
 roots_with_lockfiles=(
@@ -52,6 +54,8 @@ required_doc_paths=(
   "Documentation/App-Proofs/MessagingApp.md"
   "Documentation/App-Proofs/BookingReservationsApp.md"
   "Documentation/App-Proofs/NotesKnowledgeApp.md"
+  "Documentation/App-Proofs/CreatorShortVideoApp.md"
+  "Documentation/App-Proofs/TeamCollaborationApp.md"
   "Templates/EcommerceApp/README.md"
   "Templates/SocialMediaApp/README.md"
   "Templates/FitnessApp/README.md"
@@ -67,6 +71,8 @@ required_doc_paths=(
   "Templates/MessagingApp/README.md"
   "Templates/BookingReservationsApp/README.md"
   "Templates/NotesKnowledgeApp/README.md"
+  "Templates/CreatorShortVideoApp/README.md"
+  "Templates/TeamCollaborationApp/README.md"
   "Documentation/Proof-Matrix.md"
   "Documentation/Template-Showcase.md"
 )
@@ -131,6 +137,8 @@ require_pattern 'Templates/MarketplaceApp/Package\.swift.*no external dependency
 require_pattern 'Templates/MessagingApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention MessagingApp dependency-free proof."
 require_pattern 'Templates/BookingReservationsApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention BookingReservationsApp dependency-free proof."
 require_pattern 'Templates/NotesKnowledgeApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention NotesKnowledgeApp dependency-free proof."
+require_pattern 'Templates/CreatorShortVideoApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention CreatorShortVideoApp dependency-free proof."
+require_pattern 'Templates/TeamCollaborationApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention TeamCollaborationApp dependency-free proof."
 require_pattern 'Templates/SocialMediaApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention SocialMediaApp lockfile coverage."
 require_pattern 'Templates/FitnessApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention FitnessApp lockfile coverage."
 require_pattern 'Templates/ProductivityApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention ProductivityApp lockfile coverage."
@@ -146,6 +154,8 @@ require_pattern 'no external dependency lockfile is required' "${repo_root}/Docu
 require_pattern 'no external dependency lockfile is required' "${repo_root}/Documentation/App-Proofs/MessagingApp.md" "MessagingApp proof surface must mention the dependency-free graph."
 require_pattern 'no external dependency lockfile is required' "${repo_root}/Documentation/App-Proofs/BookingReservationsApp.md" "BookingReservationsApp proof surface must mention the dependency-free graph."
 require_pattern 'no external dependency lockfile is required' "${repo_root}/Documentation/App-Proofs/NotesKnowledgeApp.md" "NotesKnowledgeApp proof surface must mention the dependency-free graph."
+require_pattern 'no external dependency lockfile is required' "${repo_root}/Documentation/App-Proofs/CreatorShortVideoApp.md" "CreatorShortVideoApp proof surface must mention the dependency-free graph."
+require_pattern 'no external dependency lockfile is required' "${repo_root}/Documentation/App-Proofs/TeamCollaborationApp.md" "TeamCollaborationApp proof surface must mention the dependency-free graph."
 require_pattern 'Templates/SocialMediaApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/SocialMediaApp.md" "SocialMediaApp proof surface must mention the lockfile."
 require_pattern 'Templates/FitnessApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/FitnessApp.md" "FitnessApp proof surface must mention the lockfile."
 require_pattern 'Templates/ProductivityApp/Package\.resolved.*lockfile mevcut' "${repo_root}/Documentation/App-Proofs/ProductivityApp.md" "ProductivityApp proof surface must mention the lockfile."
@@ -161,6 +171,8 @@ require_pattern 'No external dependency lockfile is required today' "${repo_root
 require_pattern 'No external dependency lockfile is required today' "${repo_root}/Templates/MessagingApp/README.md" "MessagingApp template README must mention the dependency-free graph."
 require_pattern 'No external dependency lockfile is required today' "${repo_root}/Templates/BookingReservationsApp/README.md" "BookingReservationsApp template README must mention the dependency-free graph."
 require_pattern 'No external dependency lockfile is required today' "${repo_root}/Templates/NotesKnowledgeApp/README.md" "NotesKnowledgeApp template README must mention the dependency-free graph."
+require_pattern 'No external dependency lockfile is required today' "${repo_root}/Templates/CreatorShortVideoApp/README.md" "CreatorShortVideoApp template README must mention the dependency-free graph."
+require_pattern 'No external dependency lockfile is required today' "${repo_root}/Templates/TeamCollaborationApp/README.md" "TeamCollaborationApp template README must mention the dependency-free graph."
 require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/SocialMediaApp/README.md" "SocialMediaApp template README must mention the lockfile."
 require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/FitnessApp/README.md" "FitnessApp template README must mention the lockfile."
 require_pattern 'Package\.resolved.*lockfile mevcut' "${repo_root}/Templates/ProductivityApp/README.md" "ProductivityApp template README must mention the lockfile."

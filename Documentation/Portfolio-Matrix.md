@@ -19,7 +19,7 @@ It exists to:
 - `App Media Surface`: a canonical per-app media page exists
 - `Complete App Target`: the intended world-class app for that lane
 
-## Current 15-Lane Surface
+## Current 17-Lane Surface
 
 | Lane | Today | Best current route | Target complete app |
 | --- | --- | --- | --- |
@@ -30,6 +30,8 @@ It exists to:
 | Messaging / Community | Standalone Root + Example Surface + App Proof Surface + App Media Surface | `Templates/MessagingApp` or `Documentation/App-Proofs/MessagingApp.md` | Messaging / Community |
 | Booking / Reservations | Standalone Root + Example Surface + App Proof Surface + App Media Surface | `Templates/BookingReservationsApp` or `Documentation/App-Proofs/BookingReservationsApp.md` | Booking & Reservations |
 | Notes / Knowledge | Standalone Root + Example Surface + App Proof Surface + App Media Surface | `Templates/NotesKnowledgeApp` or `Documentation/App-Proofs/NotesKnowledgeApp.md` | Notes / Knowledge Base |
+| Creator / Short Video | Standalone Root + Example Surface + App Proof Surface + App Media Surface | `Templates/CreatorShortVideoApp` or `Documentation/App-Proofs/CreatorShortVideoApp.md` | Creator / Short Video |
+| Team Collaboration | Standalone Root + Example Surface + App Proof Surface + App Media Surface | `Templates/TeamCollaborationApp` or `Documentation/App-Proofs/TeamCollaborationApp.md` | Team Collaboration |
 | Health / Fitness | Standalone Root + Template Family + App Proof Surface + App Media Surface | `Templates/FitnessApp` or `Documentation/App-Proofs/FitnessApp.md` | Health / Fitness |
 | Finance | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/FinanceApp` or `Documentation/App-Proofs/FinanceApp.md` | Finance / Budgeting |
 | Education | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/EducationApp` or `Documentation/App-Proofs/EducationApp.md` | Education / Learning |
@@ -41,9 +43,9 @@ It exists to:
 
 ## Current Truth
 
-- the repository currently has `15` standalone app roots
+- the repository currently has `17` standalone app roots
 - the generator currently covers the broad starter map via `swift Scripts/TemplateGenerator.swift --list`
-- this `15 lane` surface does not equal `15 complete apps`
+- this `17 lane` surface does not equal `17 complete apps`
 - the `Complete App` label is governed only by [Complete-App-Standard.md](./Complete-App-Standard.md)
 
 ## 20 Complete App Expansion Map
@@ -100,6 +102,8 @@ The repository-level implementation contract for these eight apps lives in [Wave
 - `Templates/MessagingApp`
 - `Templates/BookingReservationsApp`
 - `Templates/NotesKnowledgeApp`
+- `Templates/CreatorShortVideoApp`
+- `Templates/TeamCollaborationApp`
 
 ### If you want the cleanest proof pages now
 
@@ -118,6 +122,8 @@ The repository-level implementation contract for these eight apps lives in [Wave
 - [App-Proofs/MessagingApp.md](./App-Proofs/MessagingApp.md)
 - [App-Proofs/BookingReservationsApp.md](./App-Proofs/BookingReservationsApp.md)
 - [App-Proofs/NotesKnowledgeApp.md](./App-Proofs/NotesKnowledgeApp.md)
+- [App-Proofs/CreatorShortVideoApp.md](./App-Proofs/CreatorShortVideoApp.md)
+- [App-Proofs/TeamCollaborationApp.md](./App-Proofs/TeamCollaborationApp.md)
 
 ### If you want the canonical media router now
 
