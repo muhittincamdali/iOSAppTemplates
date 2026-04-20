@@ -41,6 +41,12 @@
       "lane": "Food Delivery",
       "status": "not-published",
       "required_readme": "Documentation/App-Media/FoodDeliveryApp.md"
+    },
+    {
+      "id": "TravelPlannerApp",
+      "lane": "Travel",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/TravelPlannerApp.md"
     }
   ]
 }

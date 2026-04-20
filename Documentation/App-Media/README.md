@@ -13,6 +13,7 @@ Bugunku truth:
 - `FinanceApp` media `not-published`
 - `EducationApp` media `not-published`
 - `FoodDeliveryApp` media `not-published`
+- `TravelPlannerApp` media `not-published`
 
 Bu yuzeyin rolu:
 
@@ -31,6 +32,7 @@ Bu yuzeyin rolu:
 | FinanceApp | Finance | `not-published` | [FinanceApp.md](./FinanceApp.md) |
 | EducationApp | Education | `not-published` | [EducationApp.md](./EducationApp.md) |
 | FoodDeliveryApp | Food Delivery | `not-published` | [FoodDeliveryApp.md](./FoodDeliveryApp.md) |
+| TravelPlannerApp | Travel | `not-published` | [TravelPlannerApp.md](./TravelPlannerApp.md) |
 
 ## Rule
 
