@@ -1,16 +1,16 @@
 # FoodDeliveryApp Media Surface
 
-Last updated: 2026-04-19
+Last updated: 2026-04-20
 
 - App: `FoodDeliveryApp`
 - Lane: `Food Delivery`
-- Media status: `not-published`
+- Media status: `card-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
-- shareable gallery card image yok
+- shareable gallery card image var: [../Assets/AppCards/FoodDeliveryApp.svg](../Assets/AppCards/FoodDeliveryApp.svg)
 
 ## What Exists Instead
 

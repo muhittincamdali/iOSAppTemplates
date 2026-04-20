@@ -1,0 +1,31 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="140" y1="80" x2="1460" y2="820" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0061FF"/>
+      <stop offset="1" stop-color="#60EFFF"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="280" y1="150" x2="1300" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#111827" stop-opacity="0.82"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="#09111F"/>
+  <rect x="48" y="48" width="1504" height="804" rx="36" fill="url(#bg)" opacity="0.95"/>
+  <circle cx="1320" cy="160" r="180" fill="white" fill-opacity="0.08"/>
+  <circle cx="240" cy="760" r="220" fill="white" fill-opacity="0.06"/>
+  <rect x="120" y="112" width="1360" height="676" rx="34" fill="url(#panel)"/>
+  <rect x="170" y="164" width="210" height="44" rx="22" fill="white" fill-opacity="0.13"/>
+  <text x="196" y="193" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">iOSAppTemplates</text>
+  <text x="170" y="308" fill="white" font-size="78" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="800">SocialMediaApp</text>
+  <text x="170" y="366" fill="#D1D5DB" font-size="34" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="600">Social</text>
+  <text x="170" y="456" fill="#E5E7EB" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Standalone root</text>
+  <text x="170" y="504" fill="#E5E7EB" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Generic iOS build proof</text>
+  <text x="170" y="552" fill="#E5E7EB" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Per-app proof and media surface</text>
+  <rect x="170" y="636" width="420" height="88" rx="24" fill="white" fill-opacity="0.12"/>
+  <text x="208" y="692" fill="white" font-size="32" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">world-class lane card</text>
+  <rect x="1026" y="208" width="304" height="304" rx="34" fill="white" fill-opacity="0.10"/>
+  <rect x="892" y="368" width="364" height="214" rx="30" fill="white" fill-opacity="0.08"/>
+  <rect x="1120" y="420" width="208" height="208" rx="30" fill="white" fill-opacity="0.10"/>
+  <text x="1028" y="690" fill="#F9FAFB" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Card published</text>
+  <text x="1028" y="730" fill="#D1D5DB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Screenshots and demo clips pending</text>
+</svg>

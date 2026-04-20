@@ -42,7 +42,7 @@ Status meanings:
 - standalone root manifest smoke passes
 - deterministic `Package.resolved` coverage exists for 8 standalone roots with external packages
 - canonical per-app proof pages exist for standalone roots
-- canonical per-app media pages exist for 20 standalone roots, but media status is still `not-published`
+- canonical per-app media pages exist for 20 standalone roots and shareable gallery cards are published
 - local generic iOS `xcodebuild` passes for `EcommerceApp`, `SocialMediaApp`, `FitnessApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, `SubscriptionLifestyleApp`, and `PrivacyVaultApp`
 - local standalone `swift test` passes for `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, `SubscriptionLifestyleApp`, and `PrivacyVaultApp`
 - GitHub workflows are truth-based and currently green
@@ -76,7 +76,7 @@ Status meanings:
 Main missing layers before a `20 complete apps` claim:
 
 1. lane-specific per-app README
-2. real screenshot gallery
+2. real screenshots beyond the current card layer
 3. hosted standalone iOS CI proof for the tracked roots
 4. screenshot and demo production for the current 20 roots
 

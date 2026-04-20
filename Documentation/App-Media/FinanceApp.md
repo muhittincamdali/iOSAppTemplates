@@ -1,16 +1,16 @@
 # FinanceApp Media Surface
 
-Last updated: 2026-04-19
+Last updated: 2026-04-20
 
 - App: `FinanceApp`
 - Lane: `Finance`
-- Media status: `not-published`
+- Media status: `card-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
-- shareable gallery card image yok
+- shareable gallery card image var: [../Assets/AppCards/FinanceApp.svg](../Assets/AppCards/FinanceApp.svg)
 
 ## What Exists Instead
 

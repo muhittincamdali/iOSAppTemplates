@@ -3,121 +3,121 @@
     {
       "id": "EcommerceApp",
       "lane": "Commerce",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/EcommerceApp.md"
     },
     {
       "id": "SocialMediaApp",
       "lane": "Social",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/SocialMediaApp.md"
     },
     {
       "id": "FitnessApp",
       "lane": "Health / Fitness",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/FitnessApp.md"
     },
     {
       "id": "ProductivityApp",
       "lane": "Productivity",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/ProductivityApp.md"
     },
     {
       "id": "FinanceApp",
       "lane": "Finance",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/FinanceApp.md"
     },
     {
       "id": "EducationApp",
       "lane": "Education",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/EducationApp.md"
     },
     {
       "id": "FoodDeliveryApp",
       "lane": "Food Delivery",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/FoodDeliveryApp.md"
     },
     {
       "id": "TravelPlannerApp",
       "lane": "Travel",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/TravelPlannerApp.md"
     },
     {
       "id": "AIAssistantApp",
       "lane": "AI",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/AIAssistantApp.md"
     },
     {
       "id": "NewsBlogApp",
       "lane": "News",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/NewsBlogApp.md"
     },
     {
       "id": "MusicPodcastApp",
       "lane": "Music / Podcast",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/MusicPodcastApp.md"
     },
     {
       "id": "MarketplaceApp",
       "lane": "Marketplace",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/MarketplaceApp.md"
     },
     {
       "id": "MessagingApp",
       "lane": "Messaging / Community",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/MessagingApp.md"
     },
     {
       "id": "BookingReservationsApp",
       "lane": "Booking / Reservations",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/BookingReservationsApp.md"
     },
     {
       "id": "NotesKnowledgeApp",
       "lane": "Notes / Knowledge",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/NotesKnowledgeApp.md"
     },
     {
       "id": "CreatorShortVideoApp",
       "lane": "Creator / Short Video",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/CreatorShortVideoApp.md"
     },
     {
       "id": "TeamCollaborationApp",
       "lane": "Team Collaboration",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/TeamCollaborationApp.md"
     },
     {
       "id": "CRMAdminApp",
       "lane": "CRM / Admin",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/CRMAdminApp.md"
     },
     {
       "id": "SubscriptionLifestyleApp",
       "lane": "Subscription Lifestyle",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/SubscriptionLifestyleApp.md"
     },
     {
       "id": "PrivacyVaultApp",
       "lane": "Privacy / Secure Vault",
-      "status": "not-published",
+      "status": "card-published",
       "required_readme": "Documentation/App-Media/PrivacyVaultApp.md"
     }
   ]

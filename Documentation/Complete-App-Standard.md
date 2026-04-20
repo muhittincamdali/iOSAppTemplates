@@ -170,7 +170,7 @@ Each of these must satisfy the complete-app definition before the next wave expa
 
 ### Sprint 3: Showcase And Media System
 
-- real screenshot cards
+- real gallery cards
 - per-app gallery entries
 - per-app media truth
 - README and docs surfaces that route to those assets
