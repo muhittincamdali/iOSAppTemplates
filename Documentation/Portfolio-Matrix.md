@@ -23,7 +23,7 @@ It exists to:
 
 | Lane | Today | Best current route | Target complete app |
 | --- | --- | --- | --- |
-| Commerce | Standalone Root + Template Family + App Proof Surface + App Media Surface | `Templates/EcommerceApp` or `Documentation/App-Proofs/EcommerceApp.md` | E-Commerce Store |
+| Commerce | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/EcommerceApp` or `Documentation/App-Proofs/EcommerceApp.md` | E-Commerce Store |
 | Social | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/SocialMediaApp` or `Documentation/App-Proofs/SocialMediaApp.md` | Social Media |
 | News | Template Family | `Sources/NewsTemplates/NewsBlogTemplate.swift` | News / Editorial |
 | Health / Fitness | Standalone Root + Template Family + App Proof Surface + App Media Surface | `Templates/FitnessApp` or `Documentation/App-Proofs/FitnessApp.md` | Health / Fitness |
