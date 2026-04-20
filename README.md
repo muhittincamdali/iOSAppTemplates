@@ -2,7 +2,7 @@
 
 Production-grade SwiftUI app starter system for Apple platforms.
 
-`iOSAppTemplates` currently ships category-level template families, generator tooling, shared package targets, and `15` standalone app roots under `Templates/`. The product goal is broader: become the canonical SwiftUI starter portfolio with `20 provable complete apps`. The repository should only claim what can be routed, built, shown, and validated today.
+`iOSAppTemplates` currently ships category-level template families, generator tooling, shared package targets, and `17` standalone app roots under `Templates/`. The product goal is broader: become the canonical SwiftUI starter portfolio with `20 provable complete apps`. The repository should only claim what can be routed, built, shown, and validated today.
 
 ## First Decision
 
@@ -40,7 +40,7 @@ This repository is not yet a full fit if you expect:
 
 - category-level template families under `Sources/`
 - `Scripts/TemplateGenerator.swift` as the generator entry point
-- `15` standalone app roots under `Templates/`:
+- `17` standalone app roots under `Templates/`:
   - `Templates/EcommerceApp`
   - `Templates/SocialMediaApp`
   - `Templates/FitnessApp`
@@ -56,6 +56,8 @@ This repository is not yet a full fit if you expect:
   - `Templates/MessagingApp`
   - `Templates/BookingReservationsApp`
   - `Templates/NotesKnowledgeApp`
+  - `Templates/CreatorShortVideoApp`
+  - `Templates/TeamCollaborationApp`
 - a lightweight example/router layer under `Examples/`
 - active root-package validation for build, test, security, and performance
 
@@ -70,6 +72,8 @@ This repository is not yet a full fit if you expect:
 | Messaging / Community | social family + standalone root + richer example | Messaging / Community |
 | Booking / Reservations | travel family + standalone root + richer example | Booking & Reservations |
 | Notes / Knowledge | productivity family + standalone root + richer example | Notes / Knowledge Base |
+| Creator / Short Video | entertainment family + standalone root + richer example | Creator / Short Video |
+| Team Collaboration | productivity family + standalone root + richer example | Team Collaboration |
 | Health / Fitness | template family + standalone root | Health / Fitness |
 | Finance | template family + standalone root + richer example | Finance / Budgeting |
 | Education | template family + standalone root + richer example | Education / Learning |
@@ -119,6 +123,8 @@ open Templates/MarketplaceApp/Package.swift
 open Templates/MessagingApp/Package.swift
 open Templates/BookingReservationsApp/Package.swift
 open Templates/NotesKnowledgeApp/Package.swift
+open Templates/CreatorShortVideoApp/Package.swift
+open Templates/TeamCollaborationApp/Package.swift
 ```
 
 This proves today:
@@ -127,7 +133,7 @@ This proves today:
 - lane-specific source shell
 - standalone root packaging
 - deterministic `Package.resolved` coverage for `8` standalone roots with external packages
-- local generic iOS `xcodebuild` proof for `15` standalone roots:
+- local generic iOS `xcodebuild` proof for `17` standalone roots:
   - `EcommerceApp`
   - `SocialMediaApp`
   - `FitnessApp`
@@ -143,6 +149,8 @@ This proves today:
   - `MessagingApp`
   - `BookingReservationsApp`
   - `NotesKnowledgeApp`
+  - `CreatorShortVideoApp`
+  - `TeamCollaborationApp`
 
 This does not yet prove today:
 
@@ -163,7 +171,7 @@ swift Scripts/TemplateGenerator.swift --list
 - active root package graph tests
 - security smoke surface exists
 - performance smoke surface exists
-- tracked local generic iOS build proof exists for `15` standalone roots
+- tracked local generic iOS build proof exists for `17` standalone roots
 - public docs are being tightened around truth-first product claims
 - the repo now has explicit app proof, media, lockfile, and portfolio routers
 

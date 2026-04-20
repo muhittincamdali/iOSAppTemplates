@@ -21,6 +21,8 @@ Bugunku truth:
 - `MessagingApp` media `not-published`
 - `BookingReservationsApp` media `not-published`
 - `NotesKnowledgeApp` media `not-published`
+- `CreatorShortVideoApp` media `not-published`
+- `TeamCollaborationApp` media `not-published`
 
 Bu yuzeyin rolu:
 
@@ -47,6 +49,8 @@ Bu yuzeyin rolu:
 | MessagingApp | Messaging / Community | `not-published` | [MessagingApp.md](./MessagingApp.md) |
 | BookingReservationsApp | Booking / Reservations | `not-published` | [BookingReservationsApp.md](./BookingReservationsApp.md) |
 | NotesKnowledgeApp | Notes / Knowledge | `not-published` | [NotesKnowledgeApp.md](./NotesKnowledgeApp.md) |
+| CreatorShortVideoApp | Creator / Short Video | `not-published` | [CreatorShortVideoApp.md](./CreatorShortVideoApp.md) |
+| TeamCollaborationApp | Team Collaboration | `not-published` | [TeamCollaborationApp.md](./TeamCollaborationApp.md) |
 
 ## Rule
 

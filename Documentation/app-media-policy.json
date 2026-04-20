@@ -89,6 +89,18 @@
       "lane": "Notes / Knowledge",
       "status": "not-published",
       "required_readme": "Documentation/App-Media/NotesKnowledgeApp.md"
+    },
+    {
+      "id": "CreatorShortVideoApp",
+      "lane": "Creator / Short Video",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/CreatorShortVideoApp.md"
+    },
+    {
+      "id": "TeamCollaborationApp",
+      "lane": "Team Collaboration",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/TeamCollaborationApp.md"
     }
   ]
 }

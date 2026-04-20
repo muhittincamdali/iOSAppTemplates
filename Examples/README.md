@@ -27,6 +27,8 @@ This folder is not a full complete-app gallery yet. Its current role is:
 | [MessagingExample](./MessagingExample/) | richer category example | inspect a more product-like messaging and community flow |
 | [BookingReservationsExample](./BookingReservationsExample/) | richer category example | inspect a more product-like booking and reservations flow |
 | [NotesKnowledgeExample](./NotesKnowledgeExample/) | richer category example | inspect a more product-like notes and knowledge flow |
+| [CreatorShortVideoExample](./CreatorShortVideoExample/) | richer category example | inspect a more product-like creator and short video flow |
+| [TeamCollaborationExample](./TeamCollaborationExample/) | richer category example | inspect a more product-like collaboration flow |
 
 ## Important Truth
 
@@ -61,6 +63,8 @@ open ../Templates/MarketplaceApp/Package.swift
 open ../Templates/MessagingApp/Package.swift
 open ../Templates/BookingReservationsApp/Package.swift
 open ../Templates/NotesKnowledgeApp/Package.swift
+open ../Templates/CreatorShortVideoApp/Package.swift
+open ../Templates/TeamCollaborationApp/Package.swift
 ```
 
 ### Generator path

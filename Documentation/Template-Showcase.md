@@ -76,6 +76,26 @@ Canonical app-proof router:
 - Proof surface: [App-Proofs/NotesKnowledgeApp.md](./App-Proofs/NotesKnowledgeApp.md)
 - Gap: screenshot, demo, hosted standalone iOS CI proof
 
+### Creator / Short Video: CreatorShortVideoApp
+
+- Type: `Standalone Root + richer source shell`
+- Entry: `Templates/CreatorShortVideoApp/Package.swift`
+- Extra route: `Examples/CreatorShortVideoExample`
+- Product shape: creator studio, clip routing, moderation and publishing workflow
+- Proof today: package root exists, manifest smoke passes, dependency-free package graph needs no external lockfile, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
+- Proof surface: [App-Proofs/CreatorShortVideoApp.md](./App-Proofs/CreatorShortVideoApp.md)
+- Gap: screenshot, demo, hosted standalone iOS CI proof
+
+### Team Collaboration: TeamCollaborationApp
+
+- Type: `Standalone Root + richer source shell`
+- Entry: `Templates/TeamCollaborationApp/Package.swift`
+- Extra route: `Examples/TeamCollaborationExample`
+- Product shape: workspace dashboard, project routing, async handoff and decision workflow
+- Proof today: package root exists, manifest smoke passes, dependency-free package graph needs no external lockfile, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
+- Proof surface: [App-Proofs/TeamCollaborationApp.md](./App-Proofs/TeamCollaborationApp.md)
+- Gap: screenshot, demo, hosted standalone iOS CI proof
+
 ### Health / Fitness: FitnessApp
 
 - Type: `Standalone Root`

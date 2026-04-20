@@ -22,6 +22,8 @@ required_files=(
   "Documentation/App-Proofs/MessagingApp.md"
   "Documentation/App-Proofs/BookingReservationsApp.md"
   "Documentation/App-Proofs/NotesKnowledgeApp.md"
+  "Documentation/App-Proofs/CreatorShortVideoApp.md"
+  "Documentation/App-Proofs/TeamCollaborationApp.md"
 )
 
 tracked_ios_build_apps=(
@@ -40,6 +42,8 @@ tracked_ios_build_apps=(
   "MessagingApp"
   "BookingReservationsApp"
   "NotesKnowledgeApp"
+  "CreatorShortVideoApp"
+  "TeamCollaborationApp"
 )
 
 for file in "${required_files[@]}"; do
