@@ -1,16 +1,14 @@
 # App Gallery
 
-Last updated: 2026-04-20
+This page is the canonical visual router for `iOSAppTemplates`.
 
-Bu sayfa `iOSAppTemplates` icin canonical visual router'dir.
+Current truth:
 
-Bugunku truth:
-
-- `20` app icin shareable gallery card asset var
-- `20` app icin preview board asset var
-- canonical screenshots hala eksik
-- demo clips hala eksik
-- bu yuzey visual routing saglar, complete-app parity iddiasi vermez
+- `20` apps have published shareable gallery-card assets
+- `20` apps have published preview-board assets
+- canonical runtime screenshots are still missing
+- demo clips are still missing
+- this surface provides visual routing; it does not make a complete-app parity claim
 
 ## Current Visual Router
 
@@ -39,10 +37,10 @@ Bugunku truth:
 
 ## Rule
 
-Gallery card var diye bir app `complete` sayilmaz.
+A published gallery card does not make an app `complete`.
 
-Bu sayfa sadece su uc seyi kanitlar:
+This page only proves three things:
 
-- shareable visual card published
-- preview board published
-- proof/media router canonical halde
+- a shareable visual card is published
+- a preview board is published
+- the proof and media routers are canonical

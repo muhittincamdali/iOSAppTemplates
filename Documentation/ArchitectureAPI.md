@@ -1,27 +1,27 @@
 # Architecture API
 
-Bu repo tek bir zorunlu architecture contract sunmuyor. Bunun yerine farkli template family'lerinde tekrarlanan birkac desen var:
+This repo does not enforce a single mandatory architecture contract. Instead, a few patterns repeat across different template families:
 
-- `SwiftUI-first app shells`
-- `ObservableObject` tabanli store/manager yapilari
-- domain models + sample data
-- secili alanlarda `TCA`
-- secili alanlarda `visionOS` ve `AI` reference surfaces
+- `SwiftUI`-first app shells
+- `ObservableObject`-based store and manager structures
+- domain models plus sample data
+- `TCA` in selected areas
+- `visionOS` and `AI` reference surfaces in selected areas
 
-Bu sayfa canonical architecture map'tir; premium delivery guarantee belgesi degildir.
+This page is a canonical architecture map, not a premium-delivery guarantee.
 
 ## Repo-Level Architecture Map
 
 ### 1. Root Discovery Layer
 
-Kaynak:
+Source:
 - `Sources/iOSAppTemplates/iOSAppTemplates.swift`
 
-Rol:
-- template metadata'yi expose eder
-- category/complexity/search uzerinden template discovery yapar
+Role:
+- exposes template metadata
+- performs template discovery through category, complexity, and search
 
-Ana tipler:
+Core types:
 - `TemplateManager`
 - `AppTemplate`
 - `TemplateCategory`
@@ -29,7 +29,7 @@ Ana tipler:
 
 ### 2. Template Family Modules
 
-Her family kendi product lane'ini tasir:
+Each family carries its own product lane:
 
 - `Sources/SocialTemplates`
 - `Sources/CommerceTemplates`
@@ -41,20 +41,20 @@ Her family kendi product lane'ini tasir:
 - `Sources/EntertainmentTemplates`
 - `Sources/FoodTemplates`
 
-Genel pattern:
-- domain model'ler
-- manager/store tipleri
+General pattern:
+- domain models
+- manager or store types
 - sample data
 - SwiftUI views
-- bazen standalone `App` girisleri
+- sometimes standalone `App` entries
 
-Bu family'ler ayni abstraction seviyesinde degildir. Bazi moduller daha cok reference implementation, bazilari daha fazla UI surface tasir.
+These families are not all at the same abstraction level. Some modules are closer to reference implementations, while others carry broader UI surfaces.
 
 ## Architecture Patterns Present Today
 
 ### SwiftUI + ObservableObject
 
-En yaygin pattern bu:
+Most common pattern:
 
 ```swift
 @MainActor
@@ -64,11 +64,11 @@ final class ExampleStore: ObservableObject {
 }
 ```
 
-Bu desen sosyal, finance, health ve productivity surface'lerinde tekrar eder.
+This pattern repeats across social, finance, health, and productivity surfaces.
 
 ### Domain Models + Sample Data
 
-Bir cok template family su yapida ilerler:
+Many template families follow a shape like this:
 
 ```swift
 public struct Product: Identifiable, Codable {
@@ -81,16 +81,16 @@ public enum CommerceSampleData {
 }
 ```
 
-Bu repo'nun bugunku en guclu tarafi burada: yeniden kullanilabilir model + sample content + SwiftUI view kombinasyonu.
+This is one of the strongest current traits of the repo: reusable models plus sample content plus SwiftUI views.
 
 ### TCA Reference Surface
 
-Kaynak:
+Source:
 - `Sources/TCATemplates/SocialMediaTCATemplate.swift`
 
-Repo'da `TCA` support reference seviyesinde vardir. Bu, tum template'lerin `TCA` kullandigi anlamina gelmez.
+`TCA` support exists at a reference level in the repo. It does not mean every template uses `TCA`.
 
-Ornek tipler:
+Example types:
 - `SocialMediaApp`
 - `PostsFeature`
 - `ProfileFeature`
@@ -98,45 +98,47 @@ Ornek tipler:
 
 ### visionOS Reference Surface
 
-Kaynak:
+Source:
 - `Sources/VisionOSTemplates/SpatialSocialTemplate.swift`
 
-Bu alan spatial UI ve immersive scene orgusu icin reference surface sunar. Bugun icin bu alan:
+This area provides a reference surface for spatial UI and immersive-scene composition. Today it is more valuable for:
+
 - category expansion
 - spatial UI reference
 - API exploration
-amaciyla daha anlamlidir; tam product proof degildir.
+
+It is not complete product proof.
 
 ### AI Reference Surface
 
-Kaynak:
+Source:
 - `Sources/AITemplates/SmartPhotoTemplate.swift`
 
-AI lane su an:
+The AI lane currently provides a reference or sample surface through:
+
 - photo analysis
 - smart search
 - enhancement client abstractions
-uzerinden reference/sample surface sunar.
 
 ## What This Repo Does Not Guarantee
 
-Bu repo su anda asagidakileri canonical contract olarak garanti etmez:
+This repo does not currently guarantee the following as a canonical contract:
 
-- tek resmi architecture pattern
-- uniform dependency injection contract
-- tum lane'lerde ayni test depth
-- tum lane'lerde ayni production hardening
-- tum lane'lerde standalone shippable app maturity
+- one official architecture pattern
+- a uniform dependency-injection contract
+- identical test depth in every lane
+- identical production hardening in every lane
+- standalone shippable maturity in every lane
 
-Bu nedenle `architecture guide` ile `complete app claim` ayni sey degildir.
+So an `architecture guide` is not the same thing as a `complete app` claim.
 
 ## Recommended Reading Order
 
 1. [API Reference](./API-Reference.md)
 2. [Complete App Standard](./Complete-App-Standard.md)
 3. `Sources/iOSAppTemplates/iOSAppTemplates.swift`
-4. ilgilendigin lane icin ilgili `Sources/*Templates/*.swift`
-5. `Templates/` altindaki standalone roots
+4. the relevant `Sources/*Templates/*.swift` file for your lane
+5. the standalone roots under `Templates/`
 
 ## External References
 

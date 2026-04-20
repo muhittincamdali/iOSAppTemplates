@@ -1,36 +1,36 @@
 # Social Media Example
 
-Bu klasor su an tek basina ship edilen bir Xcode app projesi degil. Repo icindeki `SocialMediaApp.swift` yuzeyinin nasil gorunebilecegini gosteren kaynak-ornek alanidir.
+This folder is not a standalone shipped Xcode app project. It is a source-level example area that shows what the `SocialMediaApp.swift` surface can look like inside the repo.
 
 ## Current Truth
 
-- Ayrik `.xcodeproj` veya `.xcworkspace` burada ship edilmiyor.
-- Screenshot, UI test ve performance proof bu klasore bagli degil.
-- Canonical standalone package-entry roots su an `Templates/` altindaki bagimsiz app paketleridir.
-- Canonical package validation ise root seviyedeki `swift build` ve `swift test` komutlaridir.
+- No separate `.xcodeproj` or `.xcworkspace` is shipped here.
+- Screenshot, UI-test, and performance proof are not attached to this folder.
+- The canonical standalone package-entry roots live under `Templates/`.
+- Canonical package validation remains the root-level `swift build` and `swift test` flow.
 
 ## What This Example Is Good For
 
-- `SocialTemplates` ve ilgili SwiftUI yuzeylerini hizli incelemek
-- Social lane icin naming, state ve sample feature akisini gormek
-- Gelecekteki complete-app gallery icin hedef UX yonunu belgelemek
+- quickly inspect `SocialTemplates` and related SwiftUI surfaces
+- see naming, state shape, and sample feature flow for the social lane
+- document target UX direction for the future complete-app gallery
 
 ## What This Example Is Not
 
 - release-grade social app proof
-- release/distribution kaniti
-- gercek media, backend veya realtime infrastructure paketi
+- release or distribution proof
+- a real media, backend, or realtime infrastructure package
 
 ## Start Here
 
-Root package yuzeyini dogrulamak icin:
+To validate the root package surface:
 
 ```bash
 swift build
 swift test
 ```
 
-Standalone social template root'unu acmak icin:
+To open the standalone social template root:
 
 ```bash
 open Templates/SocialMediaApp/Package.swift

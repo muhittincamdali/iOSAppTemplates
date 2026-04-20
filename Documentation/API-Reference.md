@@ -1,10 +1,10 @@
 # API Reference
 
-Bu sayfa root package tarafinda dogrudan gorunen stabil surface'i ozetler. Daha genis app/template API'leri icin ilgili `Sources/*Templates/*.swift` dosyalarini incele.
+This page summarizes the stable surface that is directly visible from the root package. For broader app and template APIs, inspect the relevant `Sources/*Templates/*.swift` files.
 
 ## Canonical Entry Points
 
-Root package icin en onemli public tipler:
+Most important public types at the root package level:
 
 - `iOSAppTemplates`
 - `TemplateManager`
@@ -13,7 +13,7 @@ Root package icin en onemli public tipler:
 - `TemplateComplexity`
 - `TemplateError`
 
-Kaynak:
+Source:
 - `Sources/iOSAppTemplates/iOSAppTemplates.swift`
 
 ## iOSAppTemplates
@@ -45,13 +45,13 @@ public struct iOSAppTemplates {
 }
 ```
 
-Not:
-- Bu `configure` cagrisi runtime feature toggles benzeri hafif bir helper'dir.
-- Security/performance/test guarantees vermez.
+Notes:
+- `configure` is a lightweight bootstrap helper, not a runtime feature-flag system.
+- It does not provide security, performance, or release guarantees.
 
 ## TemplateManager
 
-Root package icindeki canonical discovery surface:
+Canonical discovery surface exposed by the root package:
 
 ```swift
 @MainActor
@@ -71,7 +71,7 @@ public class TemplateManager: ObservableObject {
 }
 ```
 
-Ornek:
+Example:
 
 ```swift
 let manager = TemplateManager.shared
@@ -81,15 +81,13 @@ let socialMatch = manager.searchTemplates(query: "social")
 ```
 
 Current truth:
-- Root `TemplateManager` bugun package icinde `3` curated top-level template kaydi expose eder:
-  - `Social Media App`
-  - `E-commerce App`
-  - `Fitness App`
-- Daha genis template family surface'i `Sources/*Templates` altindadir.
+- `TemplateManager` remains a lightweight discovery layer.
+- The broader product surface now lives across the lane modules under `Sources/*Templates` and the `20` standalone roots under `Templates/`.
+- Use [Portfolio Matrix](./Portfolio-Matrix.md) and [Template Showcase](./Template-Showcase.md) for the current packaging map.
 
 ## AppTemplate
 
-`TemplateManager` tarafindan donen hafif metadata modeli:
+Lightweight metadata model returned by `TemplateManager`:
 
 ```swift
 public struct AppTemplate: Identifiable, Codable {
@@ -106,7 +104,7 @@ public struct AppTemplate: Identifiable, Codable {
 
 ## TemplateCategory
 
-Root package discovery icin kullanilan kategori enum'u:
+Category enum used by the root package discovery layer:
 
 ```swift
 public enum TemplateCategory: String, CaseIterable, Codable {
@@ -121,7 +119,7 @@ public enum TemplateCategory: String, CaseIterable, Codable {
 }
 ```
 
-Bu enum ayrica basit `icon` ve `color` helper'lari da expose eder.
+This enum also exposes lightweight `icon` and `color` helpers.
 
 ## TemplateComplexity
 
@@ -134,10 +132,9 @@ public enum TemplateComplexity: String, CaseIterable, Codable {
 }
 ```
 
-Her seviye icin:
+Each level also exposes:
 - `description`
 - `estimatedExperience`
-helper'lari vardir.
 
 ## TemplateError
 
@@ -152,12 +149,12 @@ public enum TemplateError: LocalizedError {
 
 ## Template Family APIs
 
-Repo sadece root metadata surface'den ibaret degil. Daha genis product-lane API'leri ilgili source dosyalarinda:
+The repo is not just a root metadata surface. Broader product-lane APIs live in:
 
 - `Sources/SocialTemplates/SocialTemplates.swift`
 - `Sources/CommerceTemplates/CommerceTemplates.swift`
 - `Sources/HealthTemplates/HealthTemplates.swift`
-- `Sources/FinanceTemplates/FinanceTemplates.swift`
+- `Sources/FinanceTemplates/FinanceAppTemplate.swift`
 - `Sources/ProductivityTemplates/ProductivityTemplates.swift`
 - `Sources/EducationTemplates/EducationTemplates.swift`
 - `Sources/TravelTemplates/TravelTemplates.swift`
@@ -165,11 +162,10 @@ Repo sadece root metadata surface'den ibaret degil. Daha genis product-lane API'
 - `Sources/AITemplates/SmartPhotoTemplate.swift`
 - `Sources/VisionOSTemplates/SpatialSocialTemplate.swift`
 
-Bu family'ler:
+These families contain:
 - domain models
-- stores/managers
+- stores or managers
 - SwiftUI views
 - sample data
-icerir.
 
-Ancak hepsi ayni maturity seviyesinde degildir; "complete app" claim'i icin [Complete-App-Standard.md](./Complete-App-Standard.md) referans alinmalidir.
+They are not all at the same maturity level. For any `complete app` claim, use [Complete-App-Standard.md](./Complete-App-Standard.md).

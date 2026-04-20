@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import json
-from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -13,7 +12,6 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 CATALOG_PATH = REPO_ROOT / "Documentation" / "app-surface-catalog.json"
 PROOFS_DIR = REPO_ROOT / "Documentation" / "App-Proofs"
 MEDIA_DIR = REPO_ROOT / "Documentation" / "App-Media"
-TODAY = date.today().isoformat()
 
 
 def load_catalog() -> list[dict[str, Any]]:
@@ -39,7 +37,7 @@ def proof_page(app: dict[str, Any]) -> str:
     lines: list[str] = [
         f"# {app_name} Proof Surface",
         "",
-        f"Last updated: {TODAY}",
+        "Generated from `Documentation/app-surface-catalog.json`.",
         "",
         "## Product Summary",
         "",
@@ -137,7 +135,7 @@ def media_page(app: dict[str, Any]) -> str:
     lines: list[str] = [
         f"# {app_name} Media Surface",
         "",
-        f"Last updated: {TODAY}",
+        "Generated from `Documentation/app-surface-catalog.json`.",
         "",
         f"- App: `{app_name}`",
         f"- Lane: `{app['lane']}`",
@@ -172,7 +170,7 @@ def proof_router(catalog: list[dict[str, Any]]) -> str:
     lines: list[str] = [
         "# App Proof Surfaces",
         "",
-        f"Last updated: {TODAY}",
+        "Generated from `Documentation/app-surface-catalog.json`.",
         "",
         "This directory is the canonical proof router for the standalone app roots inside `iOSAppTemplates`.",
         "",
@@ -226,7 +224,7 @@ def media_router(catalog: list[dict[str, Any]]) -> str:
     lines: list[str] = [
         "# App Media Surfaces",
         "",
-        f"Last updated: {TODAY}",
+        "Generated from `Documentation/app-surface-catalog.json`.",
         "",
         "This directory is the canonical media router for the standalone app roots inside `iOSAppTemplates`.",
         "",

@@ -1,25 +1,24 @@
 # Template Guide
 
-Bu sayfa repo icindeki template surface'lerin bugunku yapisini anlatir. Sahte dosya isimleri veya garanti edilmeyen deployment claim'leri kullanmaz.
+This page explains the current template surfaces in the repository. It avoids invented file contracts and unproven deployment claims.
 
 ## Current Template Surface
 
-Repo bugun uc farkli katmandan olusuyor:
+The repository currently has three major layers:
 
 ### 1. Root package discovery
 
-Kaynak:
+Source:
 - `Sources/iOSAppTemplates/iOSAppTemplates.swift`
 
-Bu katman:
-- category map
-- complexity map
-- template discovery/search
-icin kullanilir.
+This layer is used for:
+- category mapping
+- complexity mapping
+- template discovery and search
 
 ### 2. Template family modules
 
-Kaynak:
+Source:
 - `Sources/SocialTemplates`
 - `Sources/CommerceTemplates`
 - `Sources/HealthTemplates`
@@ -32,46 +31,53 @@ Kaynak:
 - `Sources/AITemplates`
 - `Sources/VisionOSTemplates`
 
-Bu katman:
+This layer provides:
 - models
-- stores/managers
+- stores or managers
 - sample data
 - SwiftUI views
-- bazen app entry points
-tasir.
+- sometimes app entry points
+
+These families are not all at the same abstraction level. Some modules are closer to reference implementations, while others carry broader UI surfaces.
 
 ### 3. Standalone template roots
 
-Bugun public repo icinde net standalone roots:
+The public repo now tracks `20` standalone roots under `Templates/`.
+
+Good first-entry roots:
 
 - `Templates/SocialMediaApp`
 - `Templates/EcommerceApp`
-- `Templates/FitnessApp`
+- `Templates/ProductivityApp`
+- `Templates/FinanceApp`
+- `Templates/TravelPlannerApp`
 
-Bu roots bugunku en yakin "open package and inspect app shell" yuzeyidir. Manifest smoke gecerler; app-specific build proof ise henuz ayri bir katmandir.
+For the full routed list, use [Portfolio-Matrix.md](./Portfolio-Matrix.md).
+
+These roots are the closest `open package and inspect app shell` surfaces in the repo. Generic iOS build proof is tracked separately from screenshot or demo proof.
 
 ## How To Choose A Starting Point
 
-### Social/product feed akisi istiyorsan
+### If you want a social or feed flow
 - `Sources/SocialTemplates/SocialMediaTemplate.swift`
 - `Templates/SocialMediaApp`
 
-### Commerce/catalog akisi istiyorsan
+### If you want a commerce or catalog flow
 - `Sources/CommerceTemplates/CommerceTemplates.swift`
 - `Templates/EcommerceApp`
 
-### Health/workout akisi istiyorsan
+### If you want a health or workout flow
 - `Sources/HealthTemplates/FitnessHealthTemplate.swift`
 - `Templates/FitnessApp`
 
-### Reference-only advanced lanes
+### Reference-heavy advanced lanes
 - `Sources/TCATemplates/SocialMediaTCATemplate.swift`
 - `Sources/AITemplates/SmartPhotoTemplate.swift`
 - `Sources/VisionOSTemplates/SpatialSocialTemplate.swift`
 
 ## What You Can Safely Customize Today
 
-Bugun repo gercegine gore en guvenli customization alanlari:
+Based on the current repo truth, the safest customization areas are:
 
 - sample data
 - domain models
@@ -80,7 +86,7 @@ Bugun repo gercegine gore en guvenli customization alanlari:
 - navigation flow
 - category-specific feature slices
 
-Her template family'de ayni config dosya isimleri veya ayni design token sistemi yoktur. Bu nedenle `AppColors.swift`, `AppFonts.swift`, `AppConfig.swift` gibi sabit bir contract varsayilmamalidir.
+Not every template family has the same config filenames or design-token contract. Do not assume a fixed shape such as `AppColors.swift`, `AppFonts.swift`, or `AppConfig.swift` across every lane.
 
 ## Build And Inspection Flow
 
@@ -98,46 +104,48 @@ swift test
 open Templates/SocialMediaApp/Package.swift
 open Templates/EcommerceApp/Package.swift
 open Templates/FitnessApp/Package.swift
+open Templates/ProductivityApp/Package.swift
+open Templates/FinanceApp/Package.swift
 ```
 
-Bugun bu akisin garanti ettigi sey:
-- package manifest gecerliligi
-- lane-specific source shell
+What this flow proves today:
+- package manifest validity
+- lane-specific source shells
+- tracked generic iOS build proof for the standalone roots
 
-Bugun bu akisin garanti etmedigi sey:
-- standalone iOS build proof
-- per-app media proof
+What it does not prove yet:
+- runtime screenshots
+- demo clips
+- equal release maturity across all lanes
 
 ## Deployment And App Store Notes
 
-Bu repo bugun:
+This repo currently provides:
 - template families
 - standalone roots
 - reference implementations
-sunar.
 
-Bu repo bugun su seyi otomatik garanti etmez:
+It does not automatically guarantee:
 - App Store submission readiness
-- TestFlight-ready binary
-- uniform CI proof for every template lane
-- standalone iOS build proof for every root
+- a TestFlight-ready binary
+- identical CI proof depth for every lane
+- runtime media proof for every root
 
-Bir template'i ship etmek istiyorsan en dogru akış:
+If you want to ship a template, the safe flow is:
 
-1. ilgili lane veya standalone root'u sec
-2. branding ve data surface'i ozellestir
-3. kendi signing / bundle / privacy setup'ini ekle
-4. kendi QA ve release proof'unu uret
+1. choose the relevant lane or standalone root
+2. customize branding and data surfaces
+3. add your own signing, bundle, and privacy setup
+4. generate your own QA and release proof
 
 ## Complete App Claim
 
-Bir template'i `complete app` olarak saymak icin [Complete-App-Standard.md](./Complete-App-Standard.md) takip edilmelidir.
+To count any template as a `complete app`, follow [Complete-App-Standard.md](./Complete-App-Standard.md).
 
-Bu standardin disinda kalanlar:
-- template family
-- example surface
-- reference implementation
-olarak dusunulmelidir.
+Anything outside that standard should be treated as:
+- a template family
+- an example surface
+- a reference implementation
 
 ## Next Reading
 

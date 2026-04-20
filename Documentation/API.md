@@ -1,21 +1,22 @@
 # API
 
-Bu sayfa generator-style taslak API degil, repo icindeki bugunku gercek surface'e yonlendirir.
+This page does not describe an imagined generator-style API. It routes to the real public surface that exists in the repository today.
 
-Canonical kaynaklar:
+Canonical sources:
 
 - [API Reference](./API-Reference.md)
 - [Architecture API](./ArchitectureAPI.md)
 
-Bugunku public truth:
+Current public truth:
 
-- root package discovery surface var
-- template family source modulleri var
-- secili standalone template roots var
-- tek ve stabil bir public `TemplateGenerator` executable API'si bugun package icinde yayinlanmis degil
+- there is a root package discovery surface
+- there are template-family source modules
+- there are tracked standalone template roots under `Templates/`
+- there is still no single stable public executable API for `TemplateGenerator` published through the package graph
 
-En dogru baslangic:
+Best starting points:
 
 1. `Sources/iOSAppTemplates/iOSAppTemplates.swift`
-2. ilgili `Sources/*Templates/*.swift`
-3. `Templates/SocialMediaApp`, `Templates/EcommerceApp`, `Templates/FitnessApp`
+2. the relevant `Sources/*Templates/*.swift` lane module
+3. `Templates/` for the tracked standalone roots
+4. [Portfolio Matrix](./Portfolio-Matrix.md) for the current-vs-target map
