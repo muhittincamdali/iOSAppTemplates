@@ -56,6 +56,26 @@ Canonical app-proof router:
 - Proof surface: [App-Proofs/MessagingApp.md](./App-Proofs/MessagingApp.md)
 - Gap: screenshot, demo, hosted standalone iOS CI proof
 
+### Booking / Reservations: BookingReservationsApp
+
+- Type: `Standalone Root + richer source shell`
+- Entry: `Templates/BookingReservationsApp/Package.swift`
+- Extra route: `Examples/BookingReservationsExample`
+- Product shape: reservation dashboard, property routing, support and occupancy workflow
+- Proof today: package root exists, manifest smoke passes, dependency-free package graph needs no external lockfile, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
+- Proof surface: [App-Proofs/BookingReservationsApp.md](./App-Proofs/BookingReservationsApp.md)
+- Gap: screenshot, demo, hosted standalone iOS CI proof
+
+### Notes / Knowledge: NotesKnowledgeApp
+
+- Type: `Standalone Root + richer source shell`
+- Entry: `Templates/NotesKnowledgeApp/Package.swift`
+- Extra route: `Examples/NotesKnowledgeExample`
+- Product shape: note dashboard, collection routing, knowledge sync and capture workflow
+- Proof today: package root exists, manifest smoke passes, dependency-free package graph needs no external lockfile, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
+- Proof surface: [App-Proofs/NotesKnowledgeApp.md](./App-Proofs/NotesKnowledgeApp.md)
+- Gap: screenshot, demo, hosted standalone iOS CI proof
+
 ### Health / Fitness: FitnessApp
 
 - Type: `Standalone Root`

@@ -77,6 +77,18 @@
       "lane": "Messaging / Community",
       "status": "not-published",
       "required_readme": "Documentation/App-Media/MessagingApp.md"
+    },
+    {
+      "id": "BookingReservationsApp",
+      "lane": "Booking / Reservations",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/BookingReservationsApp.md"
+    },
+    {
+      "id": "NotesKnowledgeApp",
+      "lane": "Notes / Knowledge",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/NotesKnowledgeApp.md"
     }
   ]
 }

@@ -25,6 +25,8 @@ This folder is not a full complete-app gallery yet. Its current role is:
 | [MusicPodcastExample](./MusicPodcastExample/) | richer category example | inspect a more product-like music and podcast flow |
 | [MarketplaceExample](./MarketplaceExample/) | richer category example | inspect a more product-like marketplace flow |
 | [MessagingExample](./MessagingExample/) | richer category example | inspect a more product-like messaging and community flow |
+| [BookingReservationsExample](./BookingReservationsExample/) | richer category example | inspect a more product-like booking and reservations flow |
+| [NotesKnowledgeExample](./NotesKnowledgeExample/) | richer category example | inspect a more product-like notes and knowledge flow |
 
 ## Important Truth
 
@@ -57,6 +59,8 @@ open ../Templates/NewsBlogApp/Package.swift
 open ../Templates/MusicPodcastApp/Package.swift
 open ../Templates/MarketplaceApp/Package.swift
 open ../Templates/MessagingApp/Package.swift
+open ../Templates/BookingReservationsApp/Package.swift
+open ../Templates/NotesKnowledgeApp/Package.swift
 ```
 
 ### Generator path
