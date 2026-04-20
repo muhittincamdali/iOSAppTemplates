@@ -20,8 +20,8 @@ with path.open("r", encoding="utf-8") as handle:
     payload = json.load(handle)
 
 apps = payload.get("apps")
-if not isinstance(apps, list) or len(apps) != 11:
-    raise SystemExit("Media policy must define exactly 11 standalone apps.")
+if not isinstance(apps, list) or len(apps) != 13:
+    raise SystemExit("Media policy must define exactly 13 standalone apps.")
 
 for item in apps:
     for key in ("id", "lane", "status", "required_readme"):
@@ -44,6 +44,8 @@ required_docs=(
   "Documentation/App-Media/AIAssistantApp.md"
   "Documentation/App-Media/NewsBlogApp.md"
   "Documentation/App-Media/MusicPodcastApp.md"
+  "Documentation/App-Media/MarketplaceApp.md"
+  "Documentation/App-Media/MessagingApp.md"
   "Documentation/app-media-policy.json"
   "Documentation/Proof-Matrix.md"
   "Documentation/App-Proofs/README.md"
@@ -78,6 +80,8 @@ require_pattern 'TravelPlannerApp.*not-published' "${repo_root}/Documentation/Ap
 require_pattern 'AIAssistantApp.*not-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention AIAssistantApp status."
 require_pattern 'NewsBlogApp.*not-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention NewsBlogApp status."
 require_pattern 'MusicPodcastApp.*not-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention MusicPodcastApp status."
+require_pattern 'MarketplaceApp.*not-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention MarketplaceApp status."
+require_pattern 'MessagingApp.*not-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention MessagingApp status."
 require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/EcommerceApp.md" "EcommerceApp media page must declare status."
 require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/SocialMediaApp.md" "SocialMediaApp media page must declare status."
 require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/FitnessApp.md" "FitnessApp media page must declare status."
@@ -89,6 +93,8 @@ require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-
 require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/AIAssistantApp.md" "AIAssistantApp media page must declare status."
 require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/NewsBlogApp.md" "NewsBlogApp media page must declare status."
 require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/MusicPodcastApp.md" "MusicPodcastApp media page must declare status."
+require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/MarketplaceApp.md" "MarketplaceApp media page must declare status."
+require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/MessagingApp.md" "MessagingApp media page must declare status."
 require_pattern 'App-Media/README\.md' "${repo_root}/Documentation/App-Proofs/README.md" "App proof router must link to media router."
 require_pattern 'canonical per-app media pages exist' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention canonical media router."
 

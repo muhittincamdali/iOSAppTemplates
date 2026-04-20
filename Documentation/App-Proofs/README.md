@@ -17,10 +17,12 @@ Bugunku kapsam:
 - `Templates/AIAssistantApp`
 - `Templates/NewsBlogApp`
 - `Templates/MusicPodcastApp`
+- `Templates/MarketplaceApp`
+- `Templates/MessagingApp`
 
 Bugun ek proof gercegi:
 
-- `11` standalone root icin local generic iOS build proof var
+- `13` standalone root icin local generic iOS build proof var
 
 Bu sayfalarin rolu:
 
@@ -44,6 +46,8 @@ Bu sayfalarin rolu:
 | AIAssistantApp | AI | standalone root + source shell + richer example | [AIAssistantApp.md](./AIAssistantApp.md) |
 | NewsBlogApp | News | standalone root + source shell + richer example | [NewsBlogApp.md](./NewsBlogApp.md) |
 | MusicPodcastApp | Music / Podcast | standalone root + source shell + richer example | [MusicPodcastApp.md](./MusicPodcastApp.md) |
+| MarketplaceApp | Marketplace | standalone root + source shell + richer example | [MarketplaceApp.md](./MarketplaceApp.md) |
+| MessagingApp | Messaging / Community | standalone root + source shell + richer example | [MessagingApp.md](./MessagingApp.md) |
 
 ## Rule
 
@@ -52,7 +56,7 @@ Bu klasorde proof surface'i olan bir app otomatik olarak `Complete App` sayilmaz
 `Complete App` etiketi icin canonical standard:
 - [../Complete-App-Standard.md](../Complete-App-Standard.md)
 
-Bugun bu dokuz app icin dogru etiket:
+Bugun bu app'ler icin dogru etiket:
 
 - `Standalone Root`
 - `App-shell proof surface`

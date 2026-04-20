@@ -14,6 +14,8 @@ Status meanings:
 | --- | --- | --- | --- | --- |
 | Commerce | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/EcommerceApp/Package.swift` is dependency-free so no external dependency lockfile is required, source shell exists, richer example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
 | Social | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/SocialMediaApp/Package.resolved` exists, richer source/example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
+| Marketplace | standalone root + example | root package green, standalone manifest smoke green, `Templates/MarketplaceApp/Package.swift` is dependency-free so no external dependency lockfile is required, local standalone `swift test` passes, richer example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
+| Messaging / Community | standalone root + example | root package green, standalone manifest smoke green, `Templates/MessagingApp/Package.swift` is dependency-free so no external dependency lockfile is required, local standalone `swift test` passes, richer example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
 | Health / Fitness | standalone root + template family | root package green, standalone manifest smoke green, `Templates/FitnessApp/Package.resolved` exists, source shell exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
 | Finance | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/FinanceApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
 | Education | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/EducationApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
@@ -33,9 +35,9 @@ Status meanings:
 - standalone root manifest smoke passes
 - deterministic `Package.resolved` coverage exists for 8 standalone roots with external packages
 - canonical per-app proof pages exist for standalone roots
-- canonical per-app media pages exist for 11 standalone roots, but media status is still `not-published`
-- local generic iOS `xcodebuild` passes for `EcommerceApp`, `SocialMediaApp`, `FitnessApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, and `MusicPodcastApp`
-- local standalone `swift test` passes for `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, and `MusicPodcastApp`
+- canonical per-app media pages exist for 13 standalone roots, but media status is still `not-published`
+- local generic iOS `xcodebuild` passes for `EcommerceApp`, `SocialMediaApp`, `FitnessApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, and `MessagingApp`
+- local standalone `swift test` passes for `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, and `MessagingApp`
 - GitHub workflows are truth-based and currently green
 
 ## App Proof Router
@@ -52,6 +54,8 @@ Status meanings:
 - [App-Proofs/AIAssistantApp.md](./App-Proofs/AIAssistantApp.md)
 - [App-Proofs/NewsBlogApp.md](./App-Proofs/NewsBlogApp.md)
 - [App-Proofs/MusicPodcastApp.md](./App-Proofs/MusicPodcastApp.md)
+- [App-Proofs/MarketplaceApp.md](./App-Proofs/MarketplaceApp.md)
+- [App-Proofs/MessagingApp.md](./App-Proofs/MessagingApp.md)
 
 ## What Is Still Missing
 
@@ -60,7 +64,7 @@ Main missing layers before a `20 complete apps` claim:
 1. lane-specific per-app README
 2. real screenshot gallery
 3. hosted standalone iOS CI proof for the tracked roots
-4. standalone packaging for lanes beyond the current 11 roots
+4. standalone packaging for lanes beyond the current 13 roots
 
 Required Wave 1 app-pack contract:
 
