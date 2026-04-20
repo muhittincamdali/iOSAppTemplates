@@ -36,7 +36,7 @@ for app in "${apps[@]}"; do
   [[ -f "$preview" ]] || { echo "Missing preview board: $preview" >&2; exit 1; }
   grep -Fq "${app}.svg" "$gallery" || { echo "$gallery missing preview reference for $app" >&2; exit 1; }
   grep -Fq "../Assets/AppPreviews/${app}.svg" "$media" || { echo "$media missing preview reference for $app" >&2; exit 1; }
-  grep -Fq 'preview board image var' "$media" || { echo "$media missing preview board truth" >&2; exit 1; }
+  grep -Fq 'preview board is published' "$media" || { echo "$media missing preview board truth" >&2; exit 1; }
 done
 
 echo "App preview boards validation passed."
