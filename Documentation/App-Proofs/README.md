@@ -14,6 +14,7 @@ Bugunku kapsam:
 - `Templates/EducationApp`
 - `Templates/FoodDeliveryApp`
 - `Templates/TravelPlannerApp`
+- `Templates/AIAssistantApp`
 
 Bu sayfalarin rolu:
 
@@ -34,6 +35,7 @@ Bu sayfalarin rolu:
 | EducationApp | Education | standalone root + source shell + richer example | [EducationApp.md](./EducationApp.md) |
 | FoodDeliveryApp | Food Delivery | standalone root + source shell + richer example | [FoodDeliveryApp.md](./FoodDeliveryApp.md) |
 | TravelPlannerApp | Travel | standalone root + source shell + richer example | [TravelPlannerApp.md](./TravelPlannerApp.md) |
+| AIAssistantApp | AI | standalone root + source shell + richer example | [AIAssistantApp.md](./AIAssistantApp.md) |
 
 ## Rule
 
@@ -42,7 +44,7 @@ Bu klasorde proof surface'i olan bir app otomatik olarak `Complete App` sayilmaz
 `Complete App` etiketi icin canonical standard:
 - [../Complete-App-Standard.md](../Complete-App-Standard.md)
 
-Bugun bu sekiz app icin dogru etiket:
+Bugun bu dokuz app icin dogru etiket:
 
 - `Standalone Root`
 - `App-shell proof surface`
