@@ -1,0 +1,17 @@
+{
+  "description": "SwiftUI starter portfolio with 20 tracked app templates, standalone roots, proof surfaces, and gallery assets.",
+  "homepage": "https://github.com/muhittincamdali/iOSAppTemplates#readme",
+  "topics": [
+    "app-templates",
+    "clean-architecture",
+    "ios",
+    "ios-app-templates",
+    "ios-development",
+    "mvvm",
+    "starter-kit",
+    "swift",
+    "swift-package-manager",
+    "swiftui"
+  ],
+  "release_title_prefix": "truth-first starter portfolio baseline"
+}

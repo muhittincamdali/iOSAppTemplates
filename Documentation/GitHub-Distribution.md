@@ -8,7 +8,7 @@ This page defines the public GitHub-facing metadata and presentation rules for `
 
 Source of truth checked against the GitHub repository API on 2026-04-21.
 
-- description: `🚀 Production-ready iOS app templates with best practices`
+- description: `SwiftUI starter portfolio with 20 tracked app templates, standalone roots, proof surfaces, and gallery assets.`
 - homepage: `https://github.com/muhittincamdali/iOSAppTemplates#readme`
 - default branch: `master`
 - primary repo URL: `https://github.com/muhittincamdali/iOSAppTemplates`
@@ -18,23 +18,41 @@ Source of truth checked against the GitHub repository API on 2026-04-21.
 - `app-templates`
 - `clean-architecture`
 - `ios`
+- `ios-app-templates`
 - `ios-development`
 - `mvvm`
-- `production-ready`
+- `starter-kit`
 - `swift`
 - `swift-package-manager`
 - `swiftui`
-- `uikit`
 
 ## Current Release Surface
 
 Latest published release checked on 2026-04-21:
 
 - tag: `v2.0.0`
-- title: `Enterprise iOS Framework with 100% GLOBAL_AI_STANDARDS Compliance`
+- title: `v2.0.0 - truth-first starter portfolio baseline`
 - published at: `2025-08-17T14:30:22Z`
+- release body now points readers back to the maintained README, docs hub, portfolio matrix, proof matrix, and app gallery
 
-That latest release title is stale and overclaims the current repository story. Treat the README, project status, portfolio matrix, proof matrix, and app gallery as the canonical public truth until the next numbered release resets this surface.
+## Versioned Policy
+
+The canonical metadata policy lives in:
+
+- [github-distribution-policy.json](./github-distribution-policy.json)
+
+Validate it locally with:
+
+```bash
+python3 Scripts/validate-github-distribution-policy.py Documentation/github-distribution-policy.json
+bash Scripts/validate-github-distribution-surface.sh
+```
+
+Sync the live About box and topics with:
+
+```bash
+bash Scripts/sync-github-distribution.sh
+```
 
 ## Distribution Rules
 
@@ -46,6 +64,8 @@ That latest release title is stale and overclaims the current repository story. 
 - issue templates and PR template must ask for public-claim or proof impact when relevant
 - GitHub-hosted workflows should stay enabled and truthful on `master`
 - standalone iOS proof should be represented by a real hosted workflow, not only by local maintainer claims
+- live About box and topics should be derivable from the versioned policy file
+- historical release surfaces should be corrected when they materially misrepresent the current repo story
 
 ## First Links For New Visitors
 

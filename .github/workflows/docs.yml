@@ -18,6 +18,8 @@ jobs:
         run: bash Scripts/validate-portfolio-surface.sh
       - name: Validate trust surfaces
         run: bash Scripts/validate-trust-surfaces.sh
+      - name: Validate GitHub distribution surface
+        run: bash Scripts/validate-github-distribution-surface.sh
       - name: Validate generated app surfaces
         run: bash Scripts/validate-generated-app-surfaces.sh
       - name: Validate standalone iOS proof surface
