@@ -105,18 +105,36 @@ Canonical app-proof router:
 - Proof surface: [App-Proofs/AIAssistantApp.md](./App-Proofs/AIAssistantApp.md)
 - Gap: screenshot, demo, hosted standalone iOS CI proof
 
+### News: NewsBlogApp
+
+- Type: `Standalone Root + richer source shell`
+- Entry: `Templates/NewsBlogApp/Package.swift`
+- Extra route: `Examples/NewsBlogExample`
+- Product shape: editorial briefing, section routing, reader mode and newsletter workflow
+- Proof today: package root exists, manifest smoke passes, dependency-free package graph needs no external lockfile, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
+- Proof surface: [App-Proofs/NewsBlogApp.md](./App-Proofs/NewsBlogApp.md)
+- Gap: screenshot, demo, hosted standalone iOS CI proof
+
+### Music / Podcast: MusicPodcastApp
+
+- Type: `Standalone Root + richer source shell`
+- Entry: `Templates/MusicPodcastApp/Package.swift`
+- Extra route: `Examples/MusicPodcastExample`
+- Product shape: playback center, playlist routing, podcast queue and offline workflow
+- Proof today: package root exists, manifest smoke passes, dependency-free package graph needs no external lockfile, local standalone `swift test` passes, richer example surface exists, local generic iOS `xcodebuild` passes
+- Proof surface: [App-Proofs/MusicPodcastApp.md](./App-Proofs/MusicPodcastApp.md)
+- Gap: screenshot, demo, hosted standalone iOS CI proof
+
 ## Template Family Coverage
 
 These lanes exist today as lane-level source surfaces, but they do not yet carry standalone complete-app proof:
 
 | Lane | Current Type | Best Route |
 | --- | --- | --- |
-| News | Template Family | `Sources/NewsTemplates/NewsBlogTemplate.swift` |
 | Finance | Template Family | `Sources/FinanceTemplates/FinanceAppTemplate.swift` |
 | Education | Template Family | `Sources/EducationTemplates/EducationAppTemplate.swift` |
 | Food Delivery | Template Family | `Sources/FoodTemplates/FoodDeliveryTemplate.swift` |
 | AI | Template Family | `Sources/AITemplates/SmartPhotoTemplate.swift` |
-| Music / Podcast | Template Family | `Sources/MusicTemplates/MusicPodcastTemplate.swift` |
 | Productivity | Template Family | `Sources/ProductivityTemplates/ProductivityAppTemplate.swift` |
 
 ## Generator Coverage

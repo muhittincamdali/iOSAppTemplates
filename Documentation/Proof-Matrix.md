@@ -20,9 +20,9 @@ Status meanings:
 | Food Delivery | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/FoodDeliveryApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
 | Travel | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/TravelPlannerApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
 | AI | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/AIAssistantApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
+| News | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/NewsBlogApp/Package.swift` is dependency-free so no external dependency lockfile is required, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
+| Music / Podcast | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/MusicPodcastApp/Package.swift` is dependency-free so no external dependency lockfile is required, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
 | Productivity | standalone root + template family + example | root package green, standalone manifest smoke green, `Templates/ProductivityApp/Package.resolved` exists, local standalone `swift test` passes, richer source/example surface exists, per-app proof surface exists, template-root README exists, local generic iOS `xcodebuild` passes | Medium | media + hosted standalone iOS CI proof |
-| News | template family + generator lane | root package green, generator lane is listed | Low | standalone root or per-app proof |
-| Music / Podcast | template family + generator lane | root package green, generator lane is listed | Low | standalone root or per-app proof |
 
 ## Current Global Proof
 
@@ -33,9 +33,9 @@ Status meanings:
 - standalone root manifest smoke passes
 - deterministic `Package.resolved` coverage exists for 8 standalone roots with external packages
 - canonical per-app proof pages exist for standalone roots
-- canonical per-app media pages exist for 9 standalone roots, but media status is still `not-published`
-- local generic iOS `xcodebuild` passes for `EcommerceApp`, `SocialMediaApp`, `FitnessApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, and `AIAssistantApp`
-- local standalone `swift test` passes for `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, and `AIAssistantApp`
+- canonical per-app media pages exist for 11 standalone roots, but media status is still `not-published`
+- local generic iOS `xcodebuild` passes for `EcommerceApp`, `SocialMediaApp`, `FitnessApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, and `MusicPodcastApp`
+- local standalone `swift test` passes for `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, and `MusicPodcastApp`
 - GitHub workflows are truth-based and currently green
 
 ## App Proof Router
@@ -50,6 +50,8 @@ Status meanings:
 - [App-Proofs/FoodDeliveryApp.md](./App-Proofs/FoodDeliveryApp.md)
 - [App-Proofs/TravelPlannerApp.md](./App-Proofs/TravelPlannerApp.md)
 - [App-Proofs/AIAssistantApp.md](./App-Proofs/AIAssistantApp.md)
+- [App-Proofs/NewsBlogApp.md](./App-Proofs/NewsBlogApp.md)
+- [App-Proofs/MusicPodcastApp.md](./App-Proofs/MusicPodcastApp.md)
 
 ## What Is Still Missing
 
@@ -58,7 +60,7 @@ Main missing layers before a `20 complete apps` claim:
 1. lane-specific per-app README
 2. real screenshot gallery
 3. hosted standalone iOS CI proof for the tracked roots
-4. standalone packaging for lanes beyond the current 9 roots
+4. standalone packaging for lanes beyond the current 11 roots
 
 Required Wave 1 app-pack contract:
 

@@ -53,6 +53,18 @@
       "lane": "AI",
       "status": "not-published",
       "required_readme": "Documentation/App-Media/AIAssistantApp.md"
+    },
+    {
+      "id": "NewsBlogApp",
+      "lane": "News",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/NewsBlogApp.md"
+    },
+    {
+      "id": "MusicPodcastApp",
+      "lane": "Music / Podcast",
+      "status": "not-published",
+      "required_readme": "Documentation/App-Media/MusicPodcastApp.md"
     }
   ]
 }

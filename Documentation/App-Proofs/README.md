@@ -15,10 +15,12 @@ Bugunku kapsam:
 - `Templates/FoodDeliveryApp`
 - `Templates/TravelPlannerApp`
 - `Templates/AIAssistantApp`
+- `Templates/NewsBlogApp`
+- `Templates/MusicPodcastApp`
 
 Bugun ek proof gercegi:
 
-- `9` standalone root icin local generic iOS build proof var
+- `11` standalone root icin local generic iOS build proof var
 
 Bu sayfalarin rolu:
 
@@ -40,6 +42,8 @@ Bu sayfalarin rolu:
 | FoodDeliveryApp | Food Delivery | standalone root + source shell + richer example | [FoodDeliveryApp.md](./FoodDeliveryApp.md) |
 | TravelPlannerApp | Travel | standalone root + source shell + richer example | [TravelPlannerApp.md](./TravelPlannerApp.md) |
 | AIAssistantApp | AI | standalone root + source shell + richer example | [AIAssistantApp.md](./AIAssistantApp.md) |
+| NewsBlogApp | News | standalone root + source shell + richer example | [NewsBlogApp.md](./NewsBlogApp.md) |
+| MusicPodcastApp | Music / Podcast | standalone root + source shell + richer example | [MusicPodcastApp.md](./MusicPodcastApp.md) |
 
 ## Rule
 

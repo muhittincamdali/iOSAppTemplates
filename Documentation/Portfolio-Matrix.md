@@ -25,19 +25,19 @@ It exists to:
 | --- | --- | --- | --- |
 | Commerce | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/EcommerceApp` or `Documentation/App-Proofs/EcommerceApp.md` | E-Commerce Store |
 | Social | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/SocialMediaApp` or `Documentation/App-Proofs/SocialMediaApp.md` | Social Media |
-| News | Template Family | `Sources/NewsTemplates/NewsBlogTemplate.swift` | News / Editorial |
+| News | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/NewsBlogApp` or `Documentation/App-Proofs/NewsBlogApp.md` | News / Editorial |
 | Health / Fitness | Standalone Root + Template Family + App Proof Surface + App Media Surface | `Templates/FitnessApp` or `Documentation/App-Proofs/FitnessApp.md` | Health / Fitness |
 | Finance | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/FinanceApp` or `Documentation/App-Proofs/FinanceApp.md` | Finance / Budgeting |
 | Education | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/EducationApp` or `Documentation/App-Proofs/EducationApp.md` | Education / Learning |
 | Food Delivery | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/FoodDeliveryApp` or `Documentation/App-Proofs/FoodDeliveryApp.md` | Food Delivery |
 | Travel | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/TravelPlannerApp` or `Documentation/App-Proofs/TravelPlannerApp.md` | Travel Planner |
 | AI | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/AIAssistantApp` or `Documentation/App-Proofs/AIAssistantApp.md` | AI Assistant |
-| Music / Podcast | Template Family | `Sources/MusicTemplates/MusicPodcastTemplate.swift` | Music / Podcast |
+| Music / Podcast | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/MusicPodcastApp` or `Documentation/App-Proofs/MusicPodcastApp.md` | Music / Podcast |
 | Productivity | Standalone Root + Template Family + Example Surface + App Proof Surface + App Media Surface | `Templates/ProductivityApp` or `Documentation/App-Proofs/ProductivityApp.md` | Productivity / Tasks |
 
 ## Current Truth
 
-- the repository currently has `9` standalone app roots
+- the repository currently has `11` standalone app roots
 - the generator currently covers the broad starter map via `swift Scripts/TemplateGenerator.swift --list`
 - this `11 lane` surface does not equal `11 complete apps`
 - the `Complete App` label is governed only by [Complete-App-Standard.md](./Complete-App-Standard.md)
@@ -90,6 +90,8 @@ The repository-level implementation contract for these eight apps lives in [Wave
 - `Templates/FoodDeliveryApp`
 - `Templates/TravelPlannerApp`
 - `Templates/AIAssistantApp`
+- `Templates/NewsBlogApp`
+- `Templates/MusicPodcastApp`
 
 ### If you want the cleanest proof pages now
 
@@ -102,6 +104,8 @@ The repository-level implementation contract for these eight apps lives in [Wave
 - [App-Proofs/FoodDeliveryApp.md](./App-Proofs/FoodDeliveryApp.md)
 - [App-Proofs/TravelPlannerApp.md](./App-Proofs/TravelPlannerApp.md)
 - [App-Proofs/AIAssistantApp.md](./App-Proofs/AIAssistantApp.md)
+- [App-Proofs/NewsBlogApp.md](./App-Proofs/NewsBlogApp.md)
+- [App-Proofs/MusicPodcastApp.md](./App-Proofs/MusicPodcastApp.md)
 
 ### If you want the canonical media router now
 
