@@ -1,29 +1,52 @@
-## Description
-Brief description of the changes.
+## Summary
 
-## Type of Change
-- [ ] Bug fix (non-breaking change fixing an issue)
-- [ ] New feature (non-breaking change adding functionality)
-- [ ] Breaking change (fix or feature causing existing functionality to change)
-- [ ] Documentation update
+What problem does this PR solve?
 
-## Changes Made
-- Change 1
-- Change 2
+## Type
 
-## Testing
-- [ ] Unit tests pass
-- [ ] UI tests pass (if applicable)
-- [ ] Tested on iOS Simulator
-- [ ] Tested on physical device
+- [ ] Bug fix
+- [ ] Feature
+- [ ] Docs or proof update
+- [ ] Refactor
+- [ ] Workflow or validator update
+
+## Surface Changed
+
+- [ ] Root package graph
+- [ ] Template family under `Sources/`
+- [ ] Standalone app root under `Templates/`
+- [ ] Example surface under `Examples/`
+- [ ] Proof, media, gallery, or README surface
+- [ ] GitHub distribution or release surface
+
+## Public Claim Impact
+
+- [ ] No public claim changed
+- [ ] Public claim wording changed
+- [ ] Proof or media routing changed
+- [ ] GitHub distribution or release wording changed
+
+Describe the impact:
+
+## Validation
+
+List the exact commands you ran.
+
+```bash
+swift build -c release
+swift test
+```
+
+Add any relevant validator or `xcodebuild` commands here.
 
 ## Checklist
-- [ ] Code follows project style guidelines
-- [ ] Self-reviewed the code
-- [ ] Commented hard-to-understand areas
-- [ ] Updated documentation
-- [ ] No new warnings
 
-## Screenshots (if applicable)
-Before | After
---- | ---
+- [ ] I kept the change scoped
+- [ ] I updated docs where the public surface changed
+- [ ] I did not add placeholders or fabricated claims
+- [ ] I included the affected lane, app pack, or path in the description
+- [ ] I listed the validation commands I actually ran
+
+## Visuals
+
+If the PR changes public visuals, attach before/after assets or screenshots.

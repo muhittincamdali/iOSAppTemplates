@@ -45,6 +45,9 @@ This repository is not yet a full fit if you expect:
 | See canonical app proof pages | [Documentation/App-Proofs/README.md](Documentation/App-Proofs/README.md) |
 | See canonical app media pages | [Documentation/App-Media/README.md](Documentation/App-Media/README.md) |
 | See published gallery cards and preview boards | [Documentation/App-Gallery.md](Documentation/App-Gallery.md) |
+| See the current repo status | [PROJECT_STATUS.md](PROJECT_STATUS.md) |
+| See GitHub distribution rules | [Documentation/GitHub-Distribution.md](Documentation/GitHub-Distribution.md) |
+| See release rules | [Documentation/Release-Process.md](Documentation/Release-Process.md) |
 | Read the 20-app market strategy | [Documentation/World-Class-20-App-Strategy-2026-04-19.md](Documentation/World-Class-20-App-Strategy-2026-04-19.md) |
 | See the Wave 1 execution plan | [Documentation/Wave-1-Implementation-Plan.md](Documentation/Wave-1-Implementation-Plan.md) |
 | Inspect template families | [Documentation/TemplateGuide.md](Documentation/TemplateGuide.md) |
@@ -217,6 +220,9 @@ If you add a product claim, add the proof path too.
 - [CONTRIBUTING.md](CONTRIBUTING.md)
 - [SECURITY.md](SECURITY.md)
 - [SUPPORT.md](SUPPORT.md)
+- [PROJECT_STATUS.md](PROJECT_STATUS.md)
+- [Documentation/GitHub-Distribution.md](Documentation/GitHub-Distribution.md)
+- [Documentation/Release-Process.md](Documentation/Release-Process.md)
 
 ## License
 

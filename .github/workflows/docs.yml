@@ -16,6 +16,8 @@ jobs:
       - uses: actions/checkout@v5
       - name: Validate portfolio surface
         run: bash Scripts/validate-portfolio-surface.sh
+      - name: Validate trust surfaces
+        run: bash Scripts/validate-trust-surfaces.sh
       - name: Validate README visual assets
         run: bash Scripts/validate-readme-visual-assets.sh
       - name: Validate app proof surfaces

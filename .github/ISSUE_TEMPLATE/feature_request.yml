@@ -1,5 +1,5 @@
 name: 💡 Feature Request
-description: Suggest a new feature or enhancement for iOS App Templates
+description: Suggest a scoped feature, app-pack expansion, or documentation improvement
 title: "[FEATURE] "
 labels: ["enhancement", "triage"]
 assignees: []
@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for suggesting a new feature! Please provide detailed information to help us understand and prioritize your request.
+        Thank you for suggesting a feature. Please keep the request tied to a lane, app pack, or public repo surface.
 
   - type: checkboxes
     id: checklist
@@ -20,32 +20,33 @@ body:
           required: true
         - label: I have read the [Contributing Guidelines](../../CONTRIBUTING.md)
           required: true
-        - label: This feature aligns with the project's goals and scope
+        - label: I checked the current repo truth and this request fits the stated direction
           required: true
 
   - type: dropdown
     id: category
     attributes:
       label: Feature Category
-      description: Which area does this feature request relate to?
+      description: Which area does this request relate to?
       options:
-        - Templates & Architectures
-        - TCA (The Composable Architecture)
-        - Vision Pro & visionOS
-        - AI/ML Integration
-        - Performance & Optimization
-        - Security & Privacy
-        - Social & Networking
-        - Commerce & Payments
-        - Health & Fitness
-        - Education & Learning
-        - Finance & Banking
-        - Travel & Transportation
-        - Developer Tools & Utilities
-        - Documentation & Guides
-        - Testing & Quality Assurance
-        - CI/CD & DevOps
+        - New app pack or lane
+        - Existing standalone app root
+        - Template family under Sources
+        - Examples router
+        - Proof, media, or gallery surface
+        - Documentation or onboarding
+        - Validation or CI workflow
+        - Release or GitHub distribution surface
         - Other
+    validations:
+      required: true
+
+  - type: input
+    id: affected_lane
+    attributes:
+      label: Affected Lane or App Pack
+      description: Which lane, app pack, or path does this request target?
+      placeholder: "e.g., MarketplaceApp or Commerce lane"
     validations:
       required: true
 
@@ -119,13 +120,12 @@ body:
   - type: dropdown
     id: complexity
     attributes:
-      label: Estimated Complexity
-      description: Based on your understanding, how complex do you think this feature would be to implement?
+      label: Proof Impact
+      description: Would this request require new proof, media, or public-claim changes?
       options:
-        - Simple - Minor changes or additions
-        - Moderate - Requires some new components or logic
-        - Complex - Significant architectural changes needed
-        - Unknown - I'm not sure about the technical complexity
+        - Yes - It changes public proof or claim surfaces
+        - Maybe - It likely affects docs or gallery routing
+        - No - It is internal only
 
   - type: textarea
     id: dependencies
@@ -157,12 +157,12 @@ body:
   - type: textarea
     id: testing
     attributes:
-      label: Testing Considerations
-      description: How should this feature be tested? What edge cases should be considered?
+      label: Validation Considerations
+      description: How should this feature be validated? What edge cases should be considered?
       placeholder: |
-        - Unit tests: [describe test scenarios]
-        - Integration tests: [describe]
-        - Edge cases: [list potential issues]
+        - Root build/test: [describe]
+        - Standalone app root validation: [describe]
+        - Docs/proof/media validation: [describe]
 
   - type: textarea
     id: additional_context
@@ -174,21 +174,12 @@ body:
         - External resources: [links]
         - Screenshots or mockups: [attach files]
 
-  - type: checkboxes
-    id: contribution
-    attributes:
-      label: Contribution Interest
-      description: Would you like to contribute to implementing this feature?
-      options:
-        - label: I would like to implement this feature myself
-        - label: I can help with design and planning
-        - label: I can provide testing and feedback
-        - label: I can help with documentation
-        - label: I can provide code review and guidance
-
   - type: textarea
-    id: timeline
+    id: success
     attributes:
-      label: Preferred Timeline
-      description: Do you have any timeline requirements or preferences?
-      placeholder: "This feature would be most valuable if implemented by [timeframe] because [reason]..."
+      label: Success Criteria
+      description: How would you know this feature is complete?
+      placeholder: |
+        - New paths or app packs added
+        - New proof or media surface added
+        - Validation commands that should pass

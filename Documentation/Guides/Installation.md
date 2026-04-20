@@ -1,26 +1,24 @@
 # Installation Guide
 
-Bu sayfa mevcut repo yapisina gore gercek kurulum yolunu anlatir. Ship edilmeyen custom generator veya distribution contract'lerini varsaymaz.
+This page explains the truthful installation path for the current repository. It does not assume generator features, distribution contracts, or shipping guarantees that are not published today.
 
 ## Prerequisites
 
 ### Required
-- macOS uzerinde Swift Package build ortami
+
+- macOS with a working Swift Package toolchain
 - Xcode `16+`
 - Swift `6+`
 
-### Helpful but optional
-- Apple Developer account
-- visionOS simulator
-- Firebase/third-party service hesaplari
+### Helpful But Optional
 
-Not:
-- Apple Developer account sadece device signing veya distribution icin gerekir
-- root package build/test icin zorunlu degildir
+- Apple Developer account for signing or device deployment
+- Simulator runtimes for iOS or visionOS exploration
+- third-party service accounts when adapting templates into a real product
 
-## Installation Method 1: Clone The Repo
+## Installation Method 1: Clone The Repository
 
-En dogru ilk kurulum:
+This is the canonical first path:
 
 ```bash
 git clone https://github.com/muhittincamdali/iOSAppTemplates.git
@@ -28,18 +26,16 @@ cd iOSAppTemplates
 open Package.swift
 ```
 
-Dogrulama:
+Verify the current maintained graph:
 
 ```bash
-swift build
+swift build -c release
 swift test
 ```
 
-## Installation Method 2: Add As Swift Package Dependency
+## Installation Method 2: Add As A Swift Package Dependency
 
-SPM ile baglamak istiyorsan mevcut public package products'tan sec.
-
-Minimal ornek:
+If you want to consume the root package products from another app:
 
 ```swift
 // swift-tools-version: 6.0
@@ -64,7 +60,8 @@ let package = Package(
 )
 ```
 
-Ihtiyaca gore product secenekleri:
+Current product options include:
+
 - `iOSAppTemplates`
 - `SocialTemplates`
 - `CommerceTemplates`
@@ -80,47 +77,50 @@ Ihtiyaca gore product secenekleri:
 - `PerformanceTemplates`
 - `SecurityTemplates`
 
-Not:
-- versioned release yerine branch pinlemek burada daha dogru ornek; cunku repo truth-reset asamasinda ve latest public version surface ayrica dogrulanmali
+Branch pinning is the most truthful example today because the live latest release surface is still being tightened.
 
 ## First Verification
 
-Root package'ta:
+At the repo root:
 
 ```bash
-swift build
+swift build -c release
 swift test
 ```
 
-Beklenen truth:
-- package compile olmali
-- aktif package test graph gecmeli
+Expected current truth:
 
-## Standalone Template Roots
+- the root package should compile
+- the active package test graph should pass
 
-Bugun acikca gorunen standalone roots:
+## Standalone App Roots
+
+The standalone app roots live under `Templates/` and are iOS-focused app-shell surfaces. Start with:
 
 ```bash
 open Templates/SocialMediaApp/Package.swift
 open Templates/EcommerceApp/Package.swift
 open Templates/FitnessApp/Package.swift
+open Templates/ProductivityApp/Package.swift
+open Templates/FinanceApp/Package.swift
 ```
 
-Bu roots, root package'tan farkli olarak daha dogrudan iOS app-shell inspection yuzeyi sunar.
+Use [Portfolio Matrix](../Portfolio-Matrix.md) and [Proof Matrix](../Proof-Matrix.md) to see what each root currently proves.
 
 ## What This Page Does Not Assume
 
-Bu guide su contract'leri varsaymaz:
-- Xcode template wizard
-- automatic project generator API
-- ready-made `.env` or `Config.xcconfig` contract
-- guaranteed App Store distribution setup
+This guide does not assume:
 
-Bunlar consuming app tarafinda ayri kurulmalidir.
+- an Xcode template wizard
+- one-command project generation to a finished shipping app
+- ready-made `.env` or `Config.xcconfig` contracts
+- guaranteed App Store distribution readiness
+
+Those concerns still belong to the consuming product app.
 
 ## Recommended Next Steps
 
 1. [Quick Start](./QuickStart.md)
-2. [Template Guide](../TemplateGuide.md)
-3. [First App Tutorial](../FirstApp.md)
-4. [Complete App Standard](../Complete-App-Standard.md)
+2. [Complete App Standard](../Complete-App-Standard.md)
+3. [Portfolio Matrix](../Portfolio-Matrix.md)
+4. [Release Process](../Release-Process.md)

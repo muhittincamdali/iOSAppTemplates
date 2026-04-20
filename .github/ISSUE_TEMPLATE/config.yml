@@ -1,8 +1,14 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 📖 Documentation
+  - name: Documentation Hub
     url: https://github.com/muhittincamdali/iOSAppTemplates#readme
-    about: Check out the documentation first
-  - name: 💬 Discussions
+    about: Start with the canonical repo router
+  - name: Support Router
+    url: https://github.com/muhittincamdali/iOSAppTemplates/blob/master/SUPPORT.md
+    about: Choose the right support path before opening an issue
+  - name: Security Policy
+    url: https://github.com/muhittincamdali/iOSAppTemplates/blob/master/SECURITY.md
+    about: Use this route for vulnerabilities instead of public issues
+  - name: GitHub Discussions
     url: https://github.com/muhittincamdali/iOSAppTemplates/discussions
     about: Ask questions and discuss ideas
