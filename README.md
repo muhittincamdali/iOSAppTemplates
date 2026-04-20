@@ -30,6 +30,7 @@ This repository is not yet a full fit if you expect:
 | See lane-by-lane proof status | [Documentation/Proof-Matrix.md](Documentation/Proof-Matrix.md) |
 | See canonical app proof pages | [Documentation/App-Proofs/README.md](Documentation/App-Proofs/README.md) |
 | See canonical app media pages | [Documentation/App-Media/README.md](Documentation/App-Media/README.md) |
+| See published gallery cards | [Documentation/App-Gallery.md](Documentation/App-Gallery.md) |
 | Read the 20-app market strategy | [Documentation/World-Class-20-App-Strategy-2026-04-19.md](Documentation/World-Class-20-App-Strategy-2026-04-19.md) |
 | See the Wave 1 execution plan | [Documentation/Wave-1-Implementation-Plan.md](Documentation/Wave-1-Implementation-Plan.md) |
 | Inspect template families | [Documentation/TemplateGuide.md](Documentation/TemplateGuide.md) |
@@ -186,6 +187,7 @@ swift Scripts/TemplateGenerator.swift --list
 - tracked local generic iOS build proof exists for `20` standalone roots
 - public docs are being tightened around truth-first product claims
 - the repo now has explicit app proof, media, lockfile, and portfolio routers
+- the repo now has published gallery cards for `20` standalone roots
 
 ## Canonical Docs
 

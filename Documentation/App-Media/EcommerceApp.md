@@ -1,16 +1,16 @@
 # EcommerceApp Media Surface
 
-Last updated: 2026-04-19
+Last updated: 2026-04-20
 
 - App: `EcommerceApp`
 - Lane: `Commerce`
-- Media status: `not-published`
+- Media status: `card-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
-- shareable gallery card image yok
+- shareable gallery card image var: [../Assets/AppCards/EcommerceApp.svg](../Assets/AppCards/EcommerceApp.svg)
 
 ## What Exists Instead
 

@@ -4,13 +4,13 @@ Last updated: 2026-04-20
 
 - App: `NotesKnowledgeApp`
 - Lane: `Notes / Knowledge`
-- Media status: `not-published`
+- Media status: `card-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
-- shareable gallery card image yok
+- shareable gallery card image var: [../Assets/AppCards/NotesKnowledgeApp.svg](../Assets/AppCards/NotesKnowledgeApp.svg)
 
 ## What Exists Instead
 

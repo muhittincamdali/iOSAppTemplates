@@ -6,26 +6,10 @@ Bu klasor `iOSAppTemplates` icindeki standalone app root'lar icin canonical medi
 
 Bugunku truth:
 
-- `EcommerceApp` media `not-published`
-- `SocialMediaApp` media `not-published`
-- `FitnessApp` media `not-published`
-- `ProductivityApp` media `not-published`
-- `FinanceApp` media `not-published`
-- `EducationApp` media `not-published`
-- `FoodDeliveryApp` media `not-published`
-- `TravelPlannerApp` media `not-published`
-- `AIAssistantApp` media `not-published`
-- `NewsBlogApp` media `not-published`
-- `MusicPodcastApp` media `not-published`
-- `MarketplaceApp` media `not-published`
-- `MessagingApp` media `not-published`
-- `BookingReservationsApp` media `not-published`
-- `NotesKnowledgeApp` media `not-published`
-- `CreatorShortVideoApp` media `not-published`
-- `TeamCollaborationApp` media `not-published`
-- `CRMAdminApp` media `not-published`
-- `SubscriptionLifestyleApp` media `not-published`
-- `PrivacyVaultApp` media `not-published`
+- `20` standalone root icin shareable gallery card image var
+- canonical screenshots hala yok
+- demo clips hala yok
+- bu yuzey screenshot/demo eksigini gizlemeden card layer'i acikca gosterir
 
 Bu yuzeyin rolu:
 
@@ -37,39 +21,40 @@ Bu yuzeyin rolu:
 
 | App | Lane | Media Status | Surface |
 | --- | --- | --- | --- |
-| EcommerceApp | Commerce | `not-published` | [EcommerceApp.md](./EcommerceApp.md) |
-| SocialMediaApp | Social | `not-published` | [SocialMediaApp.md](./SocialMediaApp.md) |
-| FitnessApp | Health / Fitness | `not-published` | [FitnessApp.md](./FitnessApp.md) |
-| ProductivityApp | Productivity | `not-published` | [ProductivityApp.md](./ProductivityApp.md) |
-| FinanceApp | Finance | `not-published` | [FinanceApp.md](./FinanceApp.md) |
-| EducationApp | Education | `not-published` | [EducationApp.md](./EducationApp.md) |
-| FoodDeliveryApp | Food Delivery | `not-published` | [FoodDeliveryApp.md](./FoodDeliveryApp.md) |
-| TravelPlannerApp | Travel | `not-published` | [TravelPlannerApp.md](./TravelPlannerApp.md) |
-| AIAssistantApp | AI | `not-published` | [AIAssistantApp.md](./AIAssistantApp.md) |
-| NewsBlogApp | News | `not-published` | [NewsBlogApp.md](./NewsBlogApp.md) |
-| MusicPodcastApp | Music / Podcast | `not-published` | [MusicPodcastApp.md](./MusicPodcastApp.md) |
-| MarketplaceApp | Marketplace | `not-published` | [MarketplaceApp.md](./MarketplaceApp.md) |
-| MessagingApp | Messaging / Community | `not-published` | [MessagingApp.md](./MessagingApp.md) |
-| BookingReservationsApp | Booking / Reservations | `not-published` | [BookingReservationsApp.md](./BookingReservationsApp.md) |
-| NotesKnowledgeApp | Notes / Knowledge | `not-published` | [NotesKnowledgeApp.md](./NotesKnowledgeApp.md) |
-| CreatorShortVideoApp | Creator / Short Video | `not-published` | [CreatorShortVideoApp.md](./CreatorShortVideoApp.md) |
-| TeamCollaborationApp | Team Collaboration | `not-published` | [TeamCollaborationApp.md](./TeamCollaborationApp.md) |
-| CRMAdminApp | CRM / Admin | `not-published` | [CRMAdminApp.md](./CRMAdminApp.md) |
-| SubscriptionLifestyleApp | Subscription Lifestyle | `not-published` | [SubscriptionLifestyleApp.md](./SubscriptionLifestyleApp.md) |
-| PrivacyVaultApp | Privacy / Secure Vault | `not-published` | [PrivacyVaultApp.md](./PrivacyVaultApp.md) |
+| EcommerceApp | Commerce | `card-published` | [EcommerceApp.md](./EcommerceApp.md) |
+| SocialMediaApp | Social | `card-published` | [SocialMediaApp.md](./SocialMediaApp.md) |
+| FitnessApp | Health / Fitness | `card-published` | [FitnessApp.md](./FitnessApp.md) |
+| ProductivityApp | Productivity | `card-published` | [ProductivityApp.md](./ProductivityApp.md) |
+| FinanceApp | Finance | `card-published` | [FinanceApp.md](./FinanceApp.md) |
+| EducationApp | Education | `card-published` | [EducationApp.md](./EducationApp.md) |
+| FoodDeliveryApp | Food Delivery | `card-published` | [FoodDeliveryApp.md](./FoodDeliveryApp.md) |
+| TravelPlannerApp | Travel | `card-published` | [TravelPlannerApp.md](./TravelPlannerApp.md) |
+| AIAssistantApp | AI | `card-published` | [AIAssistantApp.md](./AIAssistantApp.md) |
+| NewsBlogApp | News | `card-published` | [NewsBlogApp.md](./NewsBlogApp.md) |
+| MusicPodcastApp | Music / Podcast | `card-published` | [MusicPodcastApp.md](./MusicPodcastApp.md) |
+| MarketplaceApp | Marketplace | `card-published` | [MarketplaceApp.md](./MarketplaceApp.md) |
+| MessagingApp | Messaging / Community | `card-published` | [MessagingApp.md](./MessagingApp.md) |
+| BookingReservationsApp | Booking / Reservations | `card-published` | [BookingReservationsApp.md](./BookingReservationsApp.md) |
+| NotesKnowledgeApp | Notes / Knowledge | `card-published` | [NotesKnowledgeApp.md](./NotesKnowledgeApp.md) |
+| CreatorShortVideoApp | Creator / Short Video | `card-published` | [CreatorShortVideoApp.md](./CreatorShortVideoApp.md) |
+| TeamCollaborationApp | Team Collaboration | `card-published` | [TeamCollaborationApp.md](./TeamCollaborationApp.md) |
+| CRMAdminApp | CRM / Admin | `card-published` | [CRMAdminApp.md](./CRMAdminApp.md) |
+| SubscriptionLifestyleApp | Subscription Lifestyle | `card-published` | [SubscriptionLifestyleApp.md](./SubscriptionLifestyleApp.md) |
+| PrivacyVaultApp | Privacy / Secure Vault | `card-published` | [PrivacyVaultApp.md](./PrivacyVaultApp.md) |
 
 ## Rule
 
 Bir app icin media surface var diye o app `complete` sayilmaz.
 
-Bir app icin media surface `not-published` ise:
+Bir app icin media surface `card-published` ise:
 
-- screenshot yok
-- demo clip yok
-- gallery card icin son visual proof yok
+- shareable gallery card image var
+- screenshot hala yok olabilir
+- demo clip hala yok olabilir
 
 ## Related Surfaces
 
+- [../App-Gallery.md](../App-Gallery.md)
 - [../App-Proofs/README.md](../App-Proofs/README.md)
 - [../Proof-Matrix.md](../Proof-Matrix.md)
 - [../Template-Showcase.md](../Template-Showcase.md)

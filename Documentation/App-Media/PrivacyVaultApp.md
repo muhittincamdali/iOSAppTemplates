@@ -4,13 +4,13 @@ Last updated: 2026-04-20
 
 - App: `PrivacyVaultApp`
 - Lane: `Privacy / Secure Vault`
-- Media status: `not-published`
+- Media status: `card-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
-- shareable gallery card image yok
+- shareable gallery card image var: [../Assets/AppCards/PrivacyVaultApp.svg](../Assets/AppCards/PrivacyVaultApp.svg)
 
 ## What Exists Instead
 

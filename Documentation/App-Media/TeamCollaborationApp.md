@@ -4,13 +4,13 @@ Last updated: 2026-04-20
 
 - App: `TeamCollaborationApp`
 - Lane: `Team Collaboration`
-- Media status: `not-published`
+- Media status: `card-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
-- shareable gallery card image yok
+- shareable gallery card image var: [../Assets/AppCards/TeamCollaborationApp.svg](../Assets/AppCards/TeamCollaborationApp.svg)
 
 ## What Exists Instead
 
