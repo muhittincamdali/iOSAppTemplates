@@ -1,0 +1,43 @@
+<svg width="1600" height="920" viewBox="0 0 1600 920" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hero-bg" x1="118" y1="76" x2="1492" y2="844" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="0.45" stop-color="#1D4ED8"/>
+      <stop offset="1" stop-color="#F97316"/>
+    </linearGradient>
+    <linearGradient id="hero-panel" x1="168" y1="128" x2="1412" y2="794" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#020617" stop-opacity="0.94"/>
+      <stop offset="1" stop-color="#111827" stop-opacity="0.86"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="920" fill="#020617"/>
+  <rect x="40" y="40" width="1520" height="840" rx="40" fill="url(#hero-bg)"/>
+  <circle cx="1320" cy="170" r="210" fill="white" fill-opacity="0.08"/>
+  <circle cx="230" cy="760" r="240" fill="white" fill-opacity="0.06"/>
+  <rect x="104" y="92" width="1392" height="736" rx="36" fill="url(#hero-panel)"/>
+  <rect x="156" y="142" width="226" height="46" rx="23" fill="white" fill-opacity="0.12"/>
+  <text x="188" y="172" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">iOSAppTemplates</text>
+  <text x="156" y="290" fill="white" font-size="84" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="800">20 SwiftUI app roots.</text>
+  <text x="156" y="356" fill="#E5E7EB" font-size="40" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="600">One canonical portfolio system for Apple-native starter apps.</text>
+  <text x="156" y="448" fill="#F8FAFC" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Manifest-valid packaging, generic iOS build proof, app proof pages, media routing, and shareable gallery cards.</text>
+  <rect x="156" y="532" width="214" height="72" rx="22" fill="white" fill-opacity="0.12"/>
+  <text x="188" y="578" fill="white" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">20 roots live</text>
+  <rect x="394" y="532" width="250" height="72" rx="22" fill="white" fill-opacity="0.10"/>
+  <text x="426" y="578" fill="white" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">20 gallery cards</text>
+  <rect x="668" y="532" width="310" height="72" rx="22" fill="white" fill-opacity="0.10"/>
+  <text x="700" y="578" fill="white" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">20 app proof surfaces</text>
+  <rect x="156" y="642" width="408" height="122" rx="28" fill="white" fill-opacity="0.10"/>
+  <text x="190" y="694" fill="#F8FAFC" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Current truth</text>
+  <text x="190" y="734" fill="#D1D5DB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Cards published. Screenshots and demo clips still pending.</text>
+  <rect x="1018" y="178" width="330" height="176" rx="28" fill="white" fill-opacity="0.11"/>
+  <text x="1052" y="228" fill="#F8FAFC" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">5 lanes</text>
+  <text x="1052" y="270" fill="#D1D5DB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Commerce, Social, Work, Utility, Premium</text>
+  <text x="1052" y="320" fill="#F8FAFC" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Wave 1 complete</text>
+  <text x="1052" y="362" fill="#D1D5DB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Commerce, Social, Productivity, Finance, Education, Food Delivery, Travel, AI</text>
+  <rect x="924" y="420" width="424" height="280" rx="34" fill="white" fill-opacity="0.09"/>
+  <text x="958" y="474" fill="#F8FAFC" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Top routes</text>
+  <text x="958" y="528" fill="#E5E7EB" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif">QuickStart</text>
+  <text x="958" y="572" fill="#E5E7EB" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Portfolio Matrix</text>
+  <text x="958" y="616" fill="#E5E7EB" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Proof Matrix</text>
+  <text x="958" y="660" fill="#E5E7EB" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif">App Gallery</text>
+</svg>

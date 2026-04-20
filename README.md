@@ -4,6 +4,18 @@ Production-grade SwiftUI app starter system for Apple platforms.
 
 `iOSAppTemplates` currently ships category-level template families, generator tooling, shared package targets, and `20` standalone app roots under `Templates/`. The product goal is broader: become the canonical SwiftUI starter portfolio with `20 provable complete apps`. The repository should only claim what can be routed, built, shown, and validated today.
 
+![iOSAppTemplates Hero](Documentation/Assets/Readme/iosapptemplates-hero.svg)
+
+## Signal Surface
+
+| Signal | Current truth |
+| --- | --- |
+| Root coverage | `20` standalone app roots under `Templates/` |
+| Build proof | local generic iOS `xcodebuild` tracked for `20` roots |
+| Public proof | per-app proof and media pages exist for `20` roots |
+| Visual layer | shareable gallery cards published for `20` roots |
+| Remaining gap | screenshots, demo clips, hosted standalone iOS CI proof |
+
 ## First Decision
 
 This repository is a strong fit if you want to:
@@ -18,6 +30,8 @@ This repository is not yet a full fit if you expect:
 - `20 complete apps` already shipping at equal maturity
 - the same proof depth for every lane today
 - published media and hosted standalone iOS proof for every standalone app
+
+![Portfolio Board](Documentation/Assets/Readme/iosapptemplates-portfolio-board.svg)
 
 ## Start Here
 

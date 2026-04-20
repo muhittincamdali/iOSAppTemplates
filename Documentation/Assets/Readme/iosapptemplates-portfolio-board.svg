@@ -1,0 +1,48 @@
+<svg width="1600" height="1040" viewBox="0 0 1600 1040" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="board-bg" x1="120" y1="92" x2="1486" y2="956" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="0.5" stop-color="#1E3A8A"/>
+      <stop offset="1" stop-color="#7C2D12"/>
+    </linearGradient>
+    <linearGradient id="board-panel" x1="138" y1="120" x2="1460" y2="944" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#030712" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#0F172A" stop-opacity="0.88"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1040" fill="#020617"/>
+  <rect x="36" y="36" width="1528" height="968" rx="40" fill="url(#board-bg)"/>
+  <rect x="96" y="88" width="1408" height="864" rx="36" fill="url(#board-panel)"/>
+  <text x="140" y="166" fill="white" font-size="62" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="800">Portfolio Board</text>
+  <text x="140" y="214" fill="#D1D5DB" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif">20 app roots grouped by the five portfolio lanes.</text>
+
+  <rect x="140" y="266" width="612" height="156" rx="28" fill="white" fill-opacity="0.08"/>
+  <text x="174" y="318" fill="#F8FAFC" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Commerce</text>
+  <text x="174" y="364" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">EcommerceApp, MarketplaceApp, FoodDeliveryApp, BookingReservationsApp</text>
+
+  <rect x="814" y="266" width="646" height="156" rx="28" fill="white" fill-opacity="0.08"/>
+  <text x="848" y="318" fill="#F8FAFC" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Social &amp; Media</text>
+  <text x="848" y="364" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">SocialMediaApp, MessagingApp, CreatorShortVideoApp, NewsBlogApp, MusicPodcastApp</text>
+
+  <rect x="140" y="462" width="612" height="188" rx="28" fill="white" fill-opacity="0.08"/>
+  <text x="174" y="514" fill="#F8FAFC" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Productivity &amp; Work</text>
+  <text x="174" y="560" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">ProductivityApp, NotesKnowledgeApp, TeamCollaborationApp, CRMAdminApp</text>
+  <text x="174" y="604" fill="#D1D5DB" font-size="22" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Focus workflow, knowledge routing, collaboration, admin operations</text>
+
+  <rect x="814" y="462" width="646" height="188" rx="28" fill="white" fill-opacity="0.08"/>
+  <text x="848" y="514" fill="#F8FAFC" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Personal Utility</text>
+  <text x="848" y="560" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">FinanceApp, FitnessApp, EducationApp, TravelPlannerApp</text>
+  <text x="848" y="604" fill="#D1D5DB" font-size="22" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Budgeting, health, learning, travel planning</text>
+
+  <rect x="140" y="690" width="1320" height="184" rx="30" fill="white" fill-opacity="0.08"/>
+  <text x="174" y="744" fill="#F8FAFC" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Premium Growth Themes</text>
+  <text x="174" y="792" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">AIAssistantApp, SubscriptionLifestyleApp, PrivacyVaultApp</text>
+  <text x="174" y="836" fill="#D1D5DB" font-size="22" font-family="SF Pro Display, Helvetica, Arial, sans-serif">AI workflow, subscription retention, privacy-first secure vault</text>
+
+  <rect x="140" y="902" width="422" height="72" rx="22" fill="white" fill-opacity="0.10"/>
+  <text x="172" y="948" fill="white" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">20 standalone roots tracked</text>
+  <rect x="592" y="902" width="444" height="72" rx="22" fill="white" fill-opacity="0.10"/>
+  <text x="624" y="948" fill="white" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">20 proof surfaces and media routes</text>
+  <rect x="1066" y="902" width="394" height="72" rx="22" fill="white" fill-opacity="0.10"/>
+  <text x="1098" y="948" fill="white" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Screenshots still pending</text>
+</svg>
