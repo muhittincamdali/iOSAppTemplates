@@ -1,6 +1,6 @@
 # App Media Surfaces
 
-Last updated: 2026-04-21
+Generated from `Documentation/app-surface-catalog.json`.
 
 This directory is the canonical media router for the standalone app roots inside `iOSAppTemplates`.
 

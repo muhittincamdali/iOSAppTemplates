@@ -1,39 +1,39 @@
 # Testing Guide
 
-Bu sayfa `iOSAppTemplates` repo gercegine gore aktif test yuzeyini anlatir. Uydurma coverage yuzdeleri, zorunlu UI suite'leri veya ship edilmeyen test infrastructure'larini varsaymaz.
+This page describes the active test surface based on the real `iOSAppTemplates` repo state. It does not assume fake coverage percentages, mandatory UI suites, or infrastructure that is not shipped.
 
 ## Current Test Surface
 
-Bugun dogrudan dogrulanan komutlar:
+Commands that are directly validated today:
 
 ```bash
 swift build
 swift test
 ```
 
-Ek aktif suite'ler:
+Additional active suites:
 
-- package smoke/unit testleri
+- package smoke and unit tests
 - `PerformanceBenchmarkTests`
 - `SecuritySurfaceTests`
 
-Bu suite'ler repo icindeki aktif package graph'a baglidir.
+These suites are wired to the active package graph in the repo.
 
 ## What The Current Tests Prove
 
-- aktif Swift package target'lari compile oluyor
-- temel model/manager contract'lari stabil
-- arama ve template discovery yuzeyi regress olmuyor
-- security template yuzeyinde temel smoke davranislari calisiyor
-- benchmark suite en azindan package seviyesinde kosabiliyor
+- active Swift package targets compile
+- core model and manager contracts stay stable
+- search and template discovery do not regress
+- the security template surface has working smoke coverage
+- the benchmark suite runs at the package level
 
 ## What They Do Not Prove Yet
 
-- tum template aileleri icin complete-app parity
+- complete-app parity across all template families
 - UI automation parity
 - distribution readiness
 - release-grade performance certification
-- gercek device matrix coverage
+- real device-matrix coverage
 
 ## Recommended Local Flow
 
@@ -43,7 +43,7 @@ swift build
 swift test
 ```
 
-Belirli suite calistirmak icin:
+To run a specific suite:
 
 ```bash
 swift test --filter PerformanceBenchmarkTests
@@ -52,36 +52,36 @@ swift test --filter SecuritySurfaceTests
 
 ## When To Add Tests
 
-Su degisikliklerde test beklenir:
+Tests are expected when:
 
-- package-level behavior degisiyorsa
-- arama, selection veya template discovery degisiyorsa
-- security template surface degisiyorsa
-- benchmark veya validation workflow degisiyorsa
+- package-level behavior changes
+- search, selection, or template discovery changes
+- the security template surface changes
+- benchmark or validation workflows change
 
-Su degisikliklerde test opsiyoneldir:
+Tests are optional when:
 
-- sadece docs/router guncellemesi
-- sadece copy cleanup
-- inactive example narrative duzeltmeleri
+- the change is only a docs or router update
+- the change is only copy cleanup
+- the change is only inactive example narrative cleanup
 
 ## Test Quality Bar
 
-- kritik contract degisiyorsa regression test ekle
-- fake coverage cümlesi ekleme
-- UI testi yoksa varmis gibi yazma
-- test README ve workflow dili gercek suite adlariyla uyumlu olsun
+- add a regression test when a critical contract changes
+- do not write fake coverage claims
+- do not imply UI tests exist if they do not
+- keep README and workflow language aligned with the real suite names
 
 ## CI Alignment
 
-Canonical CI komutlari da package surface'e dayanir:
+Canonical CI commands are also package-surface based:
 
 ```bash
 swift build
 swift test
 ```
 
-Security ve performance workflow'lari da bu gercek package graph ustunde calisir.
+Security and performance workflows also run on this real package graph.
 
 ## Related Docs
 

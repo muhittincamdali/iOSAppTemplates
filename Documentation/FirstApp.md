@@ -1,44 +1,44 @@
 # First App Tutorial
 
-Bu repo ile en hizli ilk basari iki farkli yoldan gelir:
+The fastest first success in this repository comes from two paths:
 
-1. root package surface'ini incelemek
-2. `Templates/` altindaki standalone app roots'lari acmak
+1. inspect the root package surface
+2. open one of the standalone app roots under `Templates/`
 
-Bu sayfa bugunku repo gercegine gore en kisa ilk yol'u anlatir. Uydurma generator/config API'leri kullanmaz.
+This page describes the shortest credible path based on the current repository truth. It does not rely on invented generator or config APIs.
 
-## Hangi Ilk Yol Daha Dogru?
+## Which First Path Is Better?
 
-### Hemen standalone bir app shell incelemek istiyorsan
+### If you want to inspect an app shell immediately
 
-Su klasorlerden biriyle basla:
+Start with one of these standalone roots:
 
 - `Templates/SocialMediaApp`
 - `Templates/EcommerceApp`
-- `Templates/FitnessApp`
+- `Templates/ProductivityApp`
+- `Templates/FinanceApp`
 
-Bu yuzeyler repo icindeki bugunku en net standalone roots'lardir. Manifest smoke gecerler; app-specific build proof ise ayri backlog katmanidir.
+These are the clearest first-entry standalone roots. They have package-level proof and tracked generic iOS build proof.
 
-### Once package surface'ini anlamak istiyorsan
+### If you want to understand the package surface first
 
-Su dosyayla basla:
+Start here:
 
 - `Sources/iOSAppTemplates/iOSAppTemplates.swift`
 
-Burada:
+This gives you:
 - `TemplateManager.shared`
 - category filtering
 - complexity filtering
-- search
-gorursun.
+- search behavior
 
 ## Prerequisites
 
 - Xcode `16+`
 - Swift `6+`
-- macOS uzerinde Swift Package build calistirabilecek ortam
+- a macOS environment that can run Swift Package builds
 
-## Option A: Root Package'i Calistir ve Incele
+## Option A: Build and Inspect the Root Package
 
 ```bash
 git clone https://github.com/muhittincamdali/iOSAppTemplates.git
@@ -46,7 +46,7 @@ cd iOSAppTemplates
 open Package.swift
 ```
 
-Sonra package dogrulamasi:
+Then validate the package:
 
 ```bash
 swift build
@@ -64,38 +64,36 @@ let commerceTemplates = manager.getTemplates(category: .commerce)
 let socialTemplates = manager.searchTemplates(query: "social")
 ```
 
-Bu yol:
-- root metadata surface'ini
-- category map'i
-- search davranisini
-dogrular.
+This path validates:
+- the root metadata surface
+- the category map
+- the search behavior
 
-## Option B: Standalone Template Root Ac ve Incele
+## Option B: Open and Inspect a Standalone Root
 
-En hizli UI-first yol:
+Fastest UI-first path:
 
 ```bash
 open Templates/SocialMediaApp/Package.swift
 ```
 
-Ayni pattern su roots icin de gecerli:
+The same pattern also applies to:
 
 ```bash
 open Templates/EcommerceApp/Package.swift
 open Templates/FitnessApp/Package.swift
+open Templates/TravelPlannerApp/Package.swift
+open Templates/AIAssistantApp/Package.swift
 ```
 
-Bu roots:
-- standalone app shell
-- package-level app entry
-- kendi dependency ve platform baseline'i
-tasir
+These roots provide:
+- a standalone app shell
+- a package-level app entry
+- their own dependency and platform baseline
 
-ama bugun henuz otomatik olarak su seyi kanitlamaz:
-- standalone iOS build proof
-- per-app media proof
+They do not automatically prove runtime screenshots or demo clips.
 
-## Sonra Nereye Bakmali?
+## Where To Go Next
 
 ### Social lane
 - `Sources/SocialTemplates/SocialMediaTemplate.swift`
@@ -108,18 +106,18 @@ ama bugun henuz otomatik olarak su seyi kanitlamaz:
 - `Sources/HealthTemplates/FitnessHealthTemplate.swift`
 - `Sources/HealthTemplates/HealthTemplates.swift`
 
-## Bu Sayfa Ne Vaad Etmiyor?
+## What This Page Does Not Promise
 
-Bu tutorial su claim'leri vermez:
+This tutorial does not claim:
 
-- tek adimda shipping-level app
-- store submission proof
-- hardened security guarantee
-- fixed coverage/launch/performance metricleri
+- one-step shipping readiness
+- store-submission proof
+- hardened security guarantees
+- fixed coverage, launch, or performance metrics
 
-Bugunku dogru claim:
-- repo, template family + standalone root + reference implementation kombinasyonu sunuyor
-- tam `complete app` standardi icin [Complete-App-Standard.md](./Complete-App-Standard.md) takip edilmeli
+Current truthful claim:
+- the repo offers a combination of template family, standalone root, and reference implementation surfaces
+- for the stricter `complete app` bar, follow [Complete-App-Standard.md](./Complete-App-Standard.md)
 
 ## Recommended Next Steps
 

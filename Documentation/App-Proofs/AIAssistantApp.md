@@ -1,6 +1,6 @@
 # AIAssistantApp Proof Surface
 
-Last updated: 2026-04-21
+Generated from `Documentation/app-surface-catalog.json`.
 
 ## Product Summary
 

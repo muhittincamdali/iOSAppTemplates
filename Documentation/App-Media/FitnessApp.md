@@ -1,6 +1,6 @@
 # FitnessApp Media Surface
 
-Last updated: 2026-04-21
+Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `FitnessApp`
 - Lane: `Health / Fitness`

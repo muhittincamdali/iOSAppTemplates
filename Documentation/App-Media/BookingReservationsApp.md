@@ -1,6 +1,6 @@
 # BookingReservationsApp Media Surface
 
-Last updated: 2026-04-21
+Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `BookingReservationsApp`
 - Lane: `Booking / Reservations`

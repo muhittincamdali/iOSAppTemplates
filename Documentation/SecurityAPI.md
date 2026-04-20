@@ -1,14 +1,14 @@
 # Security API
 
-Bu sayfa repo icindeki security-related source surface'i ozetler. Bu alan yararli reference code icerir; tek basina audited security proof sayilmaz.
+This page summarizes the security-related source surface in the repo. It contains useful reference code, but it should not be treated as audited security proof on its own.
 
-Canonical kaynak:
+Canonical source:
 
 - `Sources/SecurityTemplates/SecureAppTemplate.swift`
 
 ## Current Surface
 
-Bugun dokumante edilmeye deger public tipler:
+Public types worth documenting today:
 
 - `SecureAppTemplate`
 - `BiometricAuthManager`
@@ -25,11 +25,11 @@ public struct SecureAppTemplate {
 }
 ```
 
-Bu tip bir umbrella entry olarak durur; asil davranis manager ve helper tiplerindedir.
+This type acts as an umbrella entry point. Most behavior lives in the managers and helper types.
 
 ## BiometricAuthManager
 
-`LocalAuthentication` uzerinden biometric availability ve login-style auth helper'i sunar.
+Provides biometric-availability and login-style authentication helpers on top of `LocalAuthentication`.
 
 ```swift
 @Observable
@@ -48,7 +48,7 @@ public class BiometricAuthManager {
 
 ## SecureStorageManager
 
-Keychain-backed basit storage helper:
+Simple Keychain-backed storage helper:
 
 ```swift
 @MainActor
@@ -65,7 +65,7 @@ public class SecureStorageManager {
 
 ## EncryptionManager
 
-`CryptoKit` tabanli simetrik encryption helper'i:
+`CryptoKit`-based symmetric-encryption helper:
 
 ```swift
 @MainActor
@@ -84,36 +84,35 @@ public class EncryptionManager {
 
 ## SecureNetworkManager
 
-`Alamofire` uzerinden stricter request setup ornegi sunar.
+Provides a stricter request-setup example on top of `Alamofire`.
 
 Current truth:
-- secure headers ekler
-- trusted host allowlist kullanir
-- stricter TLS/session config uygular
-- pinned certificate evaluator setup'i gosterir
+- adds secure headers
+- uses a trusted-host allowlist
+- applies stricter TLS and session configuration
+- shows a pinned-certificate evaluator setup
 
-Bu surface bir reference implementation'dir. Gercek production setup'ta:
-- kendi host listeni
-- kendi certificate strategy'ni
-- kendi threat model'ini
-ayri dogrulaman gerekir.
+This surface is a reference implementation. In a real production setup you still need to validate separately:
+- your own host list
+- your own certificate strategy
+- your own threat model
 
 ## DataValidator
 
-Input validation helper surface'i de ayni kaynak dosyada yer alir. Form/data acceptance kurallarini merkezi tutmak icin referans olarak kullanilabilir.
+The same source file also contains an input-validation helper surface. It can be used as a reference for centralizing form and data-acceptance rules.
 
 ## What This Page Does Not Claim
 
-Bu dokuman su garantileri vermez:
+This document does not claim:
 
 - audited security certification
-- immutable zero-trust posture
-- store review approval
+- an immutable zero-trust posture
+- store-review approval
 - end-to-end secure production deployment
 
-Bugunku dogru claim:
-- repo icinde kullanisli security reference code var
-- ama bunu shipping proof ile karistirmamak gerekir
+Current truthful claim:
+- the repo contains useful security reference code
+- it should not be confused with shipping proof
 
 ## Related Reading
 
