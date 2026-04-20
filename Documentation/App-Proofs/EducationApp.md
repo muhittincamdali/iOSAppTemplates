@@ -37,7 +37,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 - standalone root package exists
 - template-root README exists
 - `Templates/EducationApp/Package.swift` exists
-- `Templates/EducationApp/Package.resolved` exists
+- `Templates/EducationApp/Package.resolved` exists as the tracked dependency lockfile
 - local generic iOS build proof is tracked via `xcodebuild -scheme EducationApp -destination 'generic/platform=iOS' build`
 - the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
 - root repo `swift build -c release` passes

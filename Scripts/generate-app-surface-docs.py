@@ -77,7 +77,9 @@ def proof_page(app: dict[str, Any]) -> str:
         f"- {code_link(app['entry_path'])} exists",
     ])
     if lockfile_path:
-        lines.append(f"- {code_link(lockfile_path)} exists")
+        lines.append(f"- {code_link(lockfile_path)} exists as the tracked dependency lockfile")
+    else:
+        lines.append("- no external dependency lockfile is required today")
     lines.extend([
         f"- local generic iOS build proof is tracked via `xcodebuild -scheme {app_name} -destination 'generic/platform=iOS' build`",
         "- the hosted standalone iOS proof workflow is active; check live GitHub status on `master`",

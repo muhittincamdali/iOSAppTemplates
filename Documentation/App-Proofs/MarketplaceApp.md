@@ -37,6 +37,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 - standalone root package exists
 - template-root README exists
 - `Templates/MarketplaceApp/Package.swift` exists
+- no external dependency lockfile is required today
 - local generic iOS build proof is tracked via `xcodebuild -scheme MarketplaceApp -destination 'generic/platform=iOS' build`
 - the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
 - root repo `swift build -c release` passes
