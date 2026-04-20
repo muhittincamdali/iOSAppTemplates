@@ -23,6 +23,9 @@ roots=(
   "Templates/NotesKnowledgeApp"
   "Templates/CreatorShortVideoApp"
   "Templates/TeamCollaborationApp"
+  "Templates/CRMAdminApp"
+  "Templates/SubscriptionLifestyleApp"
+  "Templates/PrivacyVaultApp"
 )
 
 tracked_ios_build_apps=(
@@ -43,6 +46,9 @@ tracked_ios_build_apps=(
   "NotesKnowledgeApp"
   "CreatorShortVideoApp"
   "TeamCollaborationApp"
+  "CRMAdminApp"
+  "SubscriptionLifestyleApp"
+  "PrivacyVaultApp"
 )
 
 for root in "${roots[@]}"; do
@@ -81,5 +87,8 @@ grep -Fq "Templates/BookingReservationsApp/README.md" Documentation/App-Proofs/B
 grep -Fq "Templates/NotesKnowledgeApp/README.md" Documentation/App-Proofs/NotesKnowledgeApp.md || { echo "NotesKnowledge proof page missing template README link" >&2; exit 1; }
 grep -Fq "Templates/CreatorShortVideoApp/README.md" Documentation/App-Proofs/CreatorShortVideoApp.md || { echo "CreatorShortVideo proof page missing template README link" >&2; exit 1; }
 grep -Fq "Templates/TeamCollaborationApp/README.md" Documentation/App-Proofs/TeamCollaborationApp.md || { echo "TeamCollaboration proof page missing template README link" >&2; exit 1; }
+grep -Fq "Templates/CRMAdminApp/README.md" Documentation/App-Proofs/CRMAdminApp.md || { echo "CRMAdmin proof page missing template README link" >&2; exit 1; }
+grep -Fq "Templates/SubscriptionLifestyleApp/README.md" Documentation/App-Proofs/SubscriptionLifestyleApp.md || { echo "SubscriptionLifestyle proof page missing template README link" >&2; exit 1; }
+grep -Fq "Templates/PrivacyVaultApp/README.md" Documentation/App-Proofs/PrivacyVaultApp.md || { echo "PrivacyVault proof page missing template README link" >&2; exit 1; }
 
 echo "Template root README validation passed."

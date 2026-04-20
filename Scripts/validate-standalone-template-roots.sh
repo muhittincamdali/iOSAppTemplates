@@ -23,6 +23,9 @@ ROOTS=(
   "Templates/NotesKnowledgeApp:NotesKnowledgeApp"
   "Templates/CreatorShortVideoApp:CreatorShortVideoApp"
   "Templates/TeamCollaborationApp:TeamCollaborationApp"
+  "Templates/CRMAdminApp:CRMAdminApp"
+  "Templates/SubscriptionLifestyleApp:SubscriptionLifestyleApp"
+  "Templates/PrivacyVaultApp:PrivacyVaultApp"
 )
 
 assert_exists() {

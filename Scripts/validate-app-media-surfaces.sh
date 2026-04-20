@@ -20,8 +20,8 @@ with path.open("r", encoding="utf-8") as handle:
     payload = json.load(handle)
 
 apps = payload.get("apps")
-if not isinstance(apps, list) or len(apps) != 17:
-    raise SystemExit("Media policy must define exactly 17 standalone apps.")
+if not isinstance(apps, list) or len(apps) != 20:
+    raise SystemExit("Media policy must define exactly 20 standalone apps.")
 
 for item in apps:
     for key in ("id", "lane", "status", "required_readme"):
@@ -50,6 +50,9 @@ required_docs=(
   "Documentation/App-Media/NotesKnowledgeApp.md"
   "Documentation/App-Media/CreatorShortVideoApp.md"
   "Documentation/App-Media/TeamCollaborationApp.md"
+  "Documentation/App-Media/CRMAdminApp.md"
+  "Documentation/App-Media/SubscriptionLifestyleApp.md"
+  "Documentation/App-Media/PrivacyVaultApp.md"
   "Documentation/app-media-policy.json"
   "Documentation/Proof-Matrix.md"
   "Documentation/App-Proofs/README.md"
@@ -90,6 +93,9 @@ require_pattern 'BookingReservationsApp.*not-published' "${repo_root}/Documentat
 require_pattern 'NotesKnowledgeApp.*not-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention NotesKnowledgeApp status."
 require_pattern 'CreatorShortVideoApp.*not-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention CreatorShortVideoApp status."
 require_pattern 'TeamCollaborationApp.*not-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention TeamCollaborationApp status."
+require_pattern 'CRMAdminApp.*not-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention CRMAdminApp status."
+require_pattern 'SubscriptionLifestyleApp.*not-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention SubscriptionLifestyleApp status."
+require_pattern 'PrivacyVaultApp.*not-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention PrivacyVaultApp status."
 require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/EcommerceApp.md" "EcommerceApp media page must declare status."
 require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/SocialMediaApp.md" "SocialMediaApp media page must declare status."
 require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/FitnessApp.md" "FitnessApp media page must declare status."
@@ -107,6 +113,9 @@ require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-
 require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/NotesKnowledgeApp.md" "NotesKnowledgeApp media page must declare status."
 require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/CreatorShortVideoApp.md" "CreatorShortVideoApp media page must declare status."
 require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/TeamCollaborationApp.md" "TeamCollaborationApp media page must declare status."
+require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/CRMAdminApp.md" "CRMAdminApp media page must declare status."
+require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/SubscriptionLifestyleApp.md" "SubscriptionLifestyleApp media page must declare status."
+require_pattern 'Media status: `not-published`' "${repo_root}/Documentation/App-Media/PrivacyVaultApp.md" "PrivacyVaultApp media page must declare status."
 require_pattern 'App-Media/README\.md' "${repo_root}/Documentation/App-Proofs/README.md" "App proof router must link to media router."
 require_pattern 'canonical per-app media pages exist' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention canonical media router."
 

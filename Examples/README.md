@@ -29,6 +29,9 @@ This folder is not a full complete-app gallery yet. Its current role is:
 | [NotesKnowledgeExample](./NotesKnowledgeExample/) | richer category example | inspect a more product-like notes and knowledge flow |
 | [CreatorShortVideoExample](./CreatorShortVideoExample/) | richer category example | inspect a more product-like creator and short video flow |
 | [TeamCollaborationExample](./TeamCollaborationExample/) | richer category example | inspect a more product-like collaboration flow |
+| [CRMAdminExample](./CRMAdminExample/) | richer category example | inspect a more product-like CRM and admin flow |
+| [SubscriptionLifestyleExample](./SubscriptionLifestyleExample/) | richer category example | inspect a more product-like subscription lifestyle flow |
+| [PrivacyVaultExample](./PrivacyVaultExample/) | richer category example | inspect a more product-like privacy vault flow |
 
 ## Important Truth
 
@@ -65,6 +68,9 @@ open ../Templates/BookingReservationsApp/Package.swift
 open ../Templates/NotesKnowledgeApp/Package.swift
 open ../Templates/CreatorShortVideoApp/Package.swift
 open ../Templates/TeamCollaborationApp/Package.swift
+open ../Templates/CRMAdminApp/Package.swift
+open ../Templates/SubscriptionLifestyleApp/Package.swift
+open ../Templates/PrivacyVaultApp/Package.swift
 ```
 
 ### Generator path
