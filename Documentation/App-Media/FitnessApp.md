@@ -1,6 +1,6 @@
 # FitnessApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `FitnessApp`
 - Lane: `Health / Fitness`
@@ -8,19 +8,19 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/FitnessApp.svg](../Assets/AppCards/FitnessApp.svg)
-- preview board image var: [../Assets/AppPreviews/FitnessApp.svg](../Assets/AppPreviews/FitnessApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/FitnessApp.svg](../Assets/AppCards/FitnessApp.svg)
+- preview board is published: [../Assets/AppPreviews/FitnessApp.svg](../Assets/AppPreviews/FitnessApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/FitnessApp.md](../App-Proofs/FitnessApp.md)
-- [../../Templates/FitnessApp/README.md](../../Templates/FitnessApp/README.md)
-- [../../Templates/FitnessApp/Package.resolved](../../Templates/FitnessApp/Package.resolved)
+- [App Proof Surface](../App-Proofs/FitnessApp.md)
+- [Template Root README](../../Templates/FitnessApp/README.md)
+- [Standalone Root Package](../../Templates/FitnessApp/Package.swift)
 
 ## Next Required Capture
 
-1. dashboard/progress screenshot
-2. workout detail screenshot
-3. kisa progress/demo clip
+1. fitness dashboard screenshot
+2. goal or activity detail screenshot
+3. short progress-overview demo clip

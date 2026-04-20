@@ -1,6 +1,6 @@
 # SocialMediaApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `SocialMediaApp`
 - Lane: `Social`
@@ -8,20 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/SocialMediaApp.svg](../Assets/AppCards/SocialMediaApp.svg)
-- preview board image var: [../Assets/AppPreviews/SocialMediaApp.svg](../Assets/AppPreviews/SocialMediaApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/SocialMediaApp.svg](../Assets/AppCards/SocialMediaApp.svg)
+- preview board is published: [../Assets/AppPreviews/SocialMediaApp.svg](../Assets/AppPreviews/SocialMediaApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/SocialMediaApp.md](../App-Proofs/SocialMediaApp.md)
-- [../../Templates/SocialMediaApp/README.md](../../Templates/SocialMediaApp/README.md)
-- [../../Templates/SocialMediaApp/Package.resolved](../../Templates/SocialMediaApp/Package.resolved)
-- [../../Examples/SocialMediaExample/README.md](../../Examples/SocialMediaExample/README.md)
+- [App Proof Surface](../App-Proofs/SocialMediaApp.md)
+- [Template Root README](../../Templates/SocialMediaApp/README.md)
+- [Standalone Root Package](../../Templates/SocialMediaApp/Package.swift)
+- [Richer Example](../../Examples/SocialMediaExample/README.md)
 
 ## Next Required Capture
 
-1. auth/profile entry screenshot
-2. feed/community screen screenshot
-3. kisa interaction/demo clip
+1. feed timeline screenshot
+2. profile or community screenshot
+3. short sign-in-to-feed demo clip

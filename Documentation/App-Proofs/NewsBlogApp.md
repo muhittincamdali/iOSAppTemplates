@@ -1,6 +1,6 @@
 # NewsBlogApp Proof Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 ## Product Summary
 
@@ -14,66 +14,61 @@ Last updated: 2026-04-20
 
 ### Best for
 
-- editorial dashboard, section routing ve quick action shell incelemek isteyen ekipler
-- standalone root ile richer example surface'i birlikte gormek isteyenler
-- Wave 2 icin gercek news/editorial packaging kaniti isteyenler
+- teams evaluating editorial and article-list starter shells
+- readers comparing news lane packaging and richer example routing
+- maintainers reviewing content-first list and detail patterns
 
 ### Not for
 
-- bugun complete newsroom parity bekleyenler
-- screenshot/demo proof'un zaten mevcut oldugunu varsayanlar
-- teams that assume hosted standalone iOS proof is already green for this app pack
+- teams expecting a production newsroom platform today
+- readers who assume runtime screenshots and clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- editorial briefing shell
-- section/category routing
-- reader mode entry
-- newsletter and moderation quick actions
-- richer news/editorial example route
+- headline list shell
+- article detail surface
+- category routing
+- saved or trending content shell
+- starter editorial model
 
 ## Current Proof
 
-- standalone root package mevcut
-- template-root README mevcut
-- `Templates/NewsBlogApp/Package.swift` dependency-free app shell graph'i veriyor; no external dependency lockfile is required
-- `swift package dump-package` gecerli
-- `cd Templates/NewsBlogApp && swift test` gecerli
-- `xcodebuild -scheme NewsBlogApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- `Examples/NewsBlogExample` inspection route mevcut
+- standalone root package exists
+- template-root README exists
+- `Templates/NewsBlogApp/Package.swift` exists
+- local generic iOS build proof is tracked via `xcodebuild -scheme NewsBlogApp -destination 'generic/platform=iOS' build`
+- the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- `Examples/NewsBlogExample` inspection route exists
 
 ## Missing Proof
 
-- canonical screenshot yok
-- demo clip yok
-- hosted standalone iOS proof workflow is active; check live GitHub status on master
+- runtime screenshot not yet published
+- demo clip not yet published
+- stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path
 
 ```bash
 open Templates/NewsBlogApp/Package.swift
 open Examples/NewsBlogExample/README.md
-```
-
-Root repo proof icin:
-
-```bash
-swift build
-swift test
-```
-
-Standalone generic iOS proof icin:
-
-```bash
-cd Templates/NewsBlogApp
 xcodebuild -scheme NewsBlogApp -destination 'generic/platform=iOS' build
+```
+
+Then validate the root package:
+
+```bash
+swift build -c release
+swift test
 ```
 
 ## Canonical References
 
 - [Template Root README](../../Templates/NewsBlogApp/README.md)
-- [../Template-Showcase.md](../Template-Showcase.md)
-- [../Proof-Matrix.md](../Proof-Matrix.md)
-- [../Portfolio-Matrix.md](../Portfolio-Matrix.md)
+- [Richer Example](../../Examples/NewsBlogExample/README.md)
+- [App Media Surface](../App-Media/NewsBlogApp.md)
+- [Template Showcase](../Template-Showcase.md)
+- [Proof Matrix](../Proof-Matrix.md)
+- [Portfolio Matrix](../Portfolio-Matrix.md)

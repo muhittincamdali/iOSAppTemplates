@@ -1,6 +1,6 @@
 # BookingReservationsApp Proof Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 ## Product Summary
 
@@ -14,65 +14,61 @@ Last updated: 2026-04-20
 
 ### Best for
 
-- reservation dashboard, property routing ve guest operations flow incelemek isteyen ekipler
-- standalone root ile richer example surface'i birlikte gormek isteyenler
-- Wave 2 icin gercek booking/reservations packaging kaniti isteyenler
+- teams evaluating booking, calendar, and reservation starter flows
+- readers comparing travel-adjacent booking surfaces
+- maintainers reviewing appointment or reservation starter patterns
 
 ### Not for
 
-- bugun complete hospitality parity bekleyenler
-- screenshot/demo proof'un zaten mevcut oldugunu varsayanlar
-- teams that assume hosted standalone iOS proof is already green for this app pack
+- teams expecting production reservation backends today
+- readers who assume runtime screenshots and clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- reservation operations shell
-- property and stay routing
-- support and payment health surface
-- richer booking example route
+- availability shell
+- reservation detail surface
+- calendar or timeslot routing
+- confirmation starter flow
+- reservation domain model
 
 ## Current Proof
 
-- standalone root package mevcut
-- template-root README mevcut
-- `Templates/BookingReservationsApp/Package.swift` dependency-free app shell graph'i veriyor; no external dependency lockfile is required
-- `swift package dump-package` gecerli
-- `cd Templates/BookingReservationsApp && swift test` gecerli
-- `xcodebuild -scheme BookingReservationsApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- `Examples/BookingReservationsExample` inspection route mevcut
+- standalone root package exists
+- template-root README exists
+- `Templates/BookingReservationsApp/Package.swift` exists
+- local generic iOS build proof is tracked via `xcodebuild -scheme BookingReservationsApp -destination 'generic/platform=iOS' build`
+- the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- `Examples/BookingReservationsExample` inspection route exists
 
 ## Missing Proof
 
-- canonical screenshot yok
-- demo clip yok
-- hosted standalone iOS proof workflow is active; check live GitHub status on master
+- runtime screenshot not yet published
+- demo clip not yet published
+- stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path
 
 ```bash
 open Templates/BookingReservationsApp/Package.swift
 open Examples/BookingReservationsExample/README.md
-```
-
-Root repo proof icin:
-
-```bash
-swift build
-swift test
-```
-
-Standalone generic iOS proof icin:
-
-```bash
-cd Templates/BookingReservationsApp
 xcodebuild -scheme BookingReservationsApp -destination 'generic/platform=iOS' build
+```
+
+Then validate the root package:
+
+```bash
+swift build -c release
+swift test
 ```
 
 ## Canonical References
 
 - [Template Root README](../../Templates/BookingReservationsApp/README.md)
-- [../Template-Showcase.md](../Template-Showcase.md)
-- [../Proof-Matrix.md](../Proof-Matrix.md)
-- [../Portfolio-Matrix.md](../Portfolio-Matrix.md)
+- [Richer Example](../../Examples/BookingReservationsExample/README.md)
+- [App Media Surface](../App-Media/BookingReservationsApp.md)
+- [Template Showcase](../Template-Showcase.md)
+- [Proof Matrix](../Proof-Matrix.md)
+- [Portfolio Matrix](../Portfolio-Matrix.md)

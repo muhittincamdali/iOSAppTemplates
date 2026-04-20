@@ -1,6 +1,6 @@
 # NotesKnowledgeApp Proof Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 ## Product Summary
 
@@ -14,65 +14,61 @@ Last updated: 2026-04-20
 
 ### Best for
 
-- note capture, collection routing ve knowledge workflow incelemek isteyen ekipler
-- standalone root ile richer example surface'i birlikte gormek isteyenler
-- Wave 2 icin gercek notes/knowledge packaging kaniti isteyenler
+- teams evaluating note and knowledge starter flows
+- readers comparing productivity and PKM-oriented surfaces
+- maintainers reviewing list and detail note patterns
 
 ### Not for
 
-- bugun complete PKM parity bekleyenler
-- screenshot/demo proof'un zaten mevcut oldugunu varsayanlar
-- teams that assume hosted standalone iOS proof is already green for this app pack
+- teams expecting a full PKM platform today
+- readers who assume runtime screenshots and demo clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- note and knowledge dashboard shell
-- collections and shared-space routing
-- offline-first knowledge quick actions
-- richer knowledge example route
+- notes list shell
+- note detail surface
+- tag or workspace routing
+- search starter flow
+- knowledge starter model
 
 ## Current Proof
 
-- standalone root package mevcut
-- template-root README mevcut
-- `Templates/NotesKnowledgeApp/Package.swift` dependency-free app shell graph'i veriyor; no external dependency lockfile is required
-- `swift package dump-package` gecerli
-- `cd Templates/NotesKnowledgeApp && swift test` gecerli
-- `xcodebuild -scheme NotesKnowledgeApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- `Examples/NotesKnowledgeExample` inspection route mevcut
+- standalone root package exists
+- template-root README exists
+- `Templates/NotesKnowledgeApp/Package.swift` exists
+- local generic iOS build proof is tracked via `xcodebuild -scheme NotesKnowledgeApp -destination 'generic/platform=iOS' build`
+- the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- `Examples/NotesKnowledgeExample` inspection route exists
 
 ## Missing Proof
 
-- canonical screenshot yok
-- demo clip yok
-- hosted standalone iOS proof workflow is active; check live GitHub status on master
+- runtime screenshot not yet published
+- demo clip not yet published
+- stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path
 
 ```bash
 open Templates/NotesKnowledgeApp/Package.swift
 open Examples/NotesKnowledgeExample/README.md
-```
-
-Root repo proof icin:
-
-```bash
-swift build
-swift test
-```
-
-Standalone generic iOS proof icin:
-
-```bash
-cd Templates/NotesKnowledgeApp
 xcodebuild -scheme NotesKnowledgeApp -destination 'generic/platform=iOS' build
+```
+
+Then validate the root package:
+
+```bash
+swift build -c release
+swift test
 ```
 
 ## Canonical References
 
 - [Template Root README](../../Templates/NotesKnowledgeApp/README.md)
-- [../Template-Showcase.md](../Template-Showcase.md)
-- [../Proof-Matrix.md](../Proof-Matrix.md)
-- [../Portfolio-Matrix.md](../Portfolio-Matrix.md)
+- [Richer Example](../../Examples/NotesKnowledgeExample/README.md)
+- [App Media Surface](../App-Media/NotesKnowledgeApp.md)
+- [Template Showcase](../Template-Showcase.md)
+- [Proof Matrix](../Proof-Matrix.md)
+- [Portfolio Matrix](../Portfolio-Matrix.md)

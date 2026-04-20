@@ -1,6 +1,6 @@
 # PrivacyVaultApp Proof Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 ## Product Summary
 
@@ -14,65 +14,61 @@ Last updated: 2026-04-20
 
 ### Best for
 
-- privacy-first secure vault shell, access review ve recovery routing incelemek isteyen ekipler
-- standalone root ile richer example surface'i birlikte gormek isteyenler
-- Wave 3 premium differentiation lane'i icin gercek packaging kaniti isteyenler
+- teams evaluating a privacy-first storage starter shell
+- readers comparing security-oriented packaging with a richer example route
+- maintainers reviewing secure-list and vault UI patterns
 
 ### Not for
 
-- bugun full encryption backend parity veya production secure storage proof bekleyenler
-- screenshot/demo proof'un zaten mevcut oldugunu varsayanlar
-- teams that assume hosted standalone iOS proof is already green for this app pack
+- teams expecting production audited secure storage today
+- readers who assume runtime screenshots and demo clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- vault dashboard shell
-- secure collection lanes
-- access alert and recovery workflow
-- richer privacy example route
+- vault overview shell
+- secure item list surface
+- detail and reveal starter flow
+- privacy settings shell
+- secure-vault starter model
 
 ## Current Proof
 
-- standalone root package mevcut
-- template-root README mevcut
-- `Templates/PrivacyVaultApp/Package.swift` dependency-free app shell graph'i veriyor; no external dependency lockfile is required
-- `swift package dump-package` gecerli
-- `cd Templates/PrivacyVaultApp && swift test` gecerli
-- `xcodebuild -scheme PrivacyVaultApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- `Examples/PrivacyVaultExample` inspection route mevcut
+- standalone root package exists
+- template-root README exists
+- `Templates/PrivacyVaultApp/Package.swift` exists
+- local generic iOS build proof is tracked via `xcodebuild -scheme PrivacyVaultApp -destination 'generic/platform=iOS' build`
+- the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- `Examples/PrivacyVaultExample` inspection route exists
 
 ## Missing Proof
 
-- canonical screenshot yok
-- demo clip yok
-- hosted standalone iOS proof workflow is active; check live GitHub status on master
+- runtime screenshot not yet published
+- demo clip not yet published
+- stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path
 
 ```bash
 open Templates/PrivacyVaultApp/Package.swift
 open Examples/PrivacyVaultExample/README.md
-```
-
-Root repo proof icin:
-
-```bash
-swift build
-swift test
-```
-
-Standalone generic iOS proof icin:
-
-```bash
-cd Templates/PrivacyVaultApp
 xcodebuild -scheme PrivacyVaultApp -destination 'generic/platform=iOS' build
+```
+
+Then validate the root package:
+
+```bash
+swift build -c release
+swift test
 ```
 
 ## Canonical References
 
 - [Template Root README](../../Templates/PrivacyVaultApp/README.md)
-- [../Template-Showcase.md](../Template-Showcase.md)
-- [../Proof-Matrix.md](../Proof-Matrix.md)
-- [../Portfolio-Matrix.md](../Portfolio-Matrix.md)
+- [Richer Example](../../Examples/PrivacyVaultExample/README.md)
+- [App Media Surface](../App-Media/PrivacyVaultApp.md)
+- [Template Showcase](../Template-Showcase.md)
+- [Proof Matrix](../Proof-Matrix.md)
+- [Portfolio Matrix](../Portfolio-Matrix.md)

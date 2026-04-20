@@ -1,6 +1,6 @@
 # FoodDeliveryApp Proof Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 ## Product Summary
 
@@ -14,41 +14,41 @@ Last updated: 2026-04-20
 
 ### Best for
 
-- restaurant, cart ve tracking shell incelemek isteyen ekipler
-- standalone root ile richer example surface'i birlikte gormek isteyenler
-- Wave 1 icin gercek food delivery packaging kaniti isteyenler
+- teams inspecting restaurant and order-flow starter surfaces
+- readers who want a delivery lane with a richer example route
+- maintainers reviewing map, cart, and order-status starter patterns
 
 ### Not for
 
-- bugun complete food delivery parity bekleyenler
-- screenshot/demo proof'un zaten mevcut oldugunu varsayanlar
-- teams that assume hosted standalone iOS proof is already green for this app pack
+- teams expecting production delivery logistics today
+- readers who assume published runtime screenshots and clips already exist
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
 - restaurant discovery shell
-- cart entry
-- order status workflow
-- delivery summary surface
-- richer food delivery example route
+- menu and item cards
+- cart flow
+- order tracking shell
+- starter delivery domain model
 
 ## Current Proof
 
-- standalone root package mevcut
-- template-root README mevcut
-- `Templates/FoodDeliveryApp/Package.resolved` lockfile mevcut
-- `swift package dump-package` gecerli
-- `cd Templates/FoodDeliveryApp && swift test` gecerli
-- `xcodebuild -scheme FoodDeliveryApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- `Examples/FoodDeliveryExample` inspection route mevcut
+- standalone root package exists
+- template-root README exists
+- `Templates/FoodDeliveryApp/Package.swift` exists
+- `Templates/FoodDeliveryApp/Package.resolved` exists
+- local generic iOS build proof is tracked via `xcodebuild -scheme FoodDeliveryApp -destination 'generic/platform=iOS' build`
+- the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- `Examples/FoodDeliveryExample` inspection route exists
 
 ## Missing Proof
 
-- canonical screenshot yok
-- demo clip yok
-- hosted standalone iOS proof workflow is active; check live GitHub status on master
+- runtime screenshot not yet published
+- demo clip not yet published
+- stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path
 
@@ -56,25 +56,21 @@ Last updated: 2026-04-20
 open Templates/FoodDeliveryApp/Package.swift
 open Templates/FoodDeliveryApp/Package.resolved
 open Examples/FoodDeliveryExample/README.md
-```
-
-Root repo proof icin:
-
-```bash
-swift build
-swift test
-```
-
-Standalone generic iOS proof icin:
-
-```bash
-cd Templates/FoodDeliveryApp
 xcodebuild -scheme FoodDeliveryApp -destination 'generic/platform=iOS' build
+```
+
+Then validate the root package:
+
+```bash
+swift build -c release
+swift test
 ```
 
 ## Canonical References
 
 - [Template Root README](../../Templates/FoodDeliveryApp/README.md)
-- [../Template-Showcase.md](../Template-Showcase.md)
-- [../Proof-Matrix.md](../Proof-Matrix.md)
-- [../Portfolio-Matrix.md](../Portfolio-Matrix.md)
+- [Richer Example](../../Examples/FoodDeliveryExample/README.md)
+- [App Media Surface](../App-Media/FoodDeliveryApp.md)
+- [Template Showcase](../Template-Showcase.md)
+- [Proof Matrix](../Proof-Matrix.md)
+- [Portfolio Matrix](../Portfolio-Matrix.md)

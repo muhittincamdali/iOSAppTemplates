@@ -1,0 +1,642 @@
+[
+  {
+    "app": "EcommerceApp",
+    "lane": "Commerce",
+    "product_target": "E-Commerce Store",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/EcommerceApp/Package.swift",
+    "readme_path": "Templates/EcommerceApp/README.md",
+    "example_path": "Examples/EcommerceExample/README.md",
+    "lockfile_path": null,
+    "best_for": [
+      "teams evaluating a catalog and checkout starter shell",
+      "commerce lanes that need a SwiftUI package entry first",
+      "maintainers comparing standalone root packaging against the richer example"
+    ],
+    "not_for": [
+      "teams that expect release-grade commerce integrations today",
+      "readers who assume runtime screenshots and demo clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "auth shell",
+      "catalog and featured-product surface",
+      "cart flow",
+      "checkout shell",
+      "order domain surface"
+    ],
+    "capture_targets": [
+      "catalog home screenshot",
+      "cart or checkout screenshot",
+      "short browse-to-cart demo clip"
+    ]
+  },
+  {
+    "app": "SocialMediaApp",
+    "lane": "Social",
+    "product_target": "Social Media",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/SocialMediaApp/Package.swift",
+    "readme_path": "Templates/SocialMediaApp/README.md",
+    "example_path": "Examples/SocialMediaExample/README.md",
+    "lockfile_path": "Templates/SocialMediaApp/Package.resolved",
+    "best_for": [
+      "teams inspecting feed and community starter flows",
+      "teams that want a standalone root plus richer example route",
+      "maintainers reviewing auth, feed, and interaction shells at source level"
+    ],
+    "not_for": [
+      "teams expecting full production social parity today",
+      "readers who assume published screenshots and clips already exist",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "auth shell",
+      "profile model surface",
+      "feed and community shell",
+      "notification manager surface",
+      "richer social example route"
+    ],
+    "capture_targets": [
+      "feed timeline screenshot",
+      "profile or community screenshot",
+      "short sign-in-to-feed demo clip"
+    ]
+  },
+  {
+    "app": "FitnessApp",
+    "lane": "Health / Fitness",
+    "product_target": "Health / Fitness",
+    "label_today": "Standalone Root",
+    "entry_path": "Templates/FitnessApp/Package.swift",
+    "readme_path": "Templates/FitnessApp/README.md",
+    "example_path": null,
+    "lockfile_path": "Templates/FitnessApp/Package.resolved",
+    "best_for": [
+      "teams reviewing a fitness app-shell package entry",
+      "maintainers validating HealthKit-oriented starter surfaces",
+      "readers comparing standalone app packaging against family-level health templates"
+    ],
+    "not_for": [
+      "teams expecting a richer example route today",
+      "readers who assume canonical screenshots and demo clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "dashboard shell",
+      "goal and workout surface",
+      "health metric cards",
+      "progress summary shell",
+      "starter health domain model"
+    ],
+    "capture_targets": [
+      "fitness dashboard screenshot",
+      "goal or activity detail screenshot",
+      "short progress-overview demo clip"
+    ]
+  },
+  {
+    "app": "ProductivityApp",
+    "lane": "Productivity",
+    "product_target": "Productivity / Tasks",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/ProductivityApp/Package.swift",
+    "readme_path": "Templates/ProductivityApp/README.md",
+    "example_path": "Examples/ProductivityExample/README.md",
+    "lockfile_path": "Templates/ProductivityApp/Package.resolved",
+    "best_for": [
+      "teams evaluating a dashboard-first productivity starter",
+      "readers comparing root package and standalone shell packaging",
+      "maintainers reviewing a reusable task and focus workspace surface"
+    ],
+    "not_for": [
+      "teams expecting a fully integrated collaboration suite today",
+      "readers who assume runtime screenshots and clips already exist",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "workspace dashboard",
+      "task summary surface",
+      "project counters",
+      "focus-session actions",
+      "starter quick-action model"
+    ],
+    "capture_targets": [
+      "workspace dashboard screenshot",
+      "task list or project board screenshot",
+      "short focus-session workflow clip"
+    ]
+  },
+  {
+    "app": "FinanceApp",
+    "lane": "Finance",
+    "product_target": "Finance / Budgeting",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/FinanceApp/Package.swift",
+    "readme_path": "Templates/FinanceApp/README.md",
+    "example_path": "Examples/FinanceExample/README.md",
+    "lockfile_path": "Templates/FinanceApp/Package.resolved",
+    "best_for": [
+      "teams inspecting budgeting and account-summary starter flows",
+      "readers who want a finance lane with root packaging and richer example coverage",
+      "maintainers reviewing starter financial UI patterns without backend claims"
+    ],
+    "not_for": [
+      "teams expecting bank-grade integrations today",
+      "readers who assume published runtime screenshots and clips already exist",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "account summary shell",
+      "transaction overview",
+      "budget category surface",
+      "spending insight cards",
+      "starter finance domain model"
+    ],
+    "capture_targets": [
+      "finance dashboard screenshot",
+      "budget or transaction screenshot",
+      "short account-overview demo clip"
+    ]
+  },
+  {
+    "app": "EducationApp",
+    "lane": "Education",
+    "product_target": "Education / Learning",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/EducationApp/Package.swift",
+    "readme_path": "Templates/EducationApp/README.md",
+    "example_path": "Examples/EducationExample/README.md",
+    "lockfile_path": "Templates/EducationApp/Package.resolved",
+    "best_for": [
+      "teams evaluating a course and lesson starter shell",
+      "readers comparing education family targets with a standalone root",
+      "maintainers reviewing study-session and content models"
+    ],
+    "not_for": [
+      "teams expecting a fully instrumented LMS today",
+      "readers who assume runtime screenshots and clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "course overview shell",
+      "lesson routing",
+      "assignment and quiz models",
+      "study-session summary",
+      "starter learning progress surface"
+    ],
+    "capture_targets": [
+      "course overview screenshot",
+      "lesson or quiz screenshot",
+      "short lesson-to-progress demo clip"
+    ]
+  },
+  {
+    "app": "FoodDeliveryApp",
+    "lane": "Food Delivery",
+    "product_target": "Food Delivery",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/FoodDeliveryApp/Package.swift",
+    "readme_path": "Templates/FoodDeliveryApp/README.md",
+    "example_path": "Examples/FoodDeliveryExample/README.md",
+    "lockfile_path": "Templates/FoodDeliveryApp/Package.resolved",
+    "best_for": [
+      "teams inspecting restaurant and order-flow starter surfaces",
+      "readers who want a delivery lane with a richer example route",
+      "maintainers reviewing map, cart, and order-status starter patterns"
+    ],
+    "not_for": [
+      "teams expecting production delivery logistics today",
+      "readers who assume published runtime screenshots and clips already exist",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "restaurant discovery shell",
+      "menu and item cards",
+      "cart flow",
+      "order tracking shell",
+      "starter delivery domain model"
+    ],
+    "capture_targets": [
+      "restaurant list screenshot",
+      "cart or order-tracking screenshot",
+      "short browse-to-order demo clip"
+    ]
+  },
+  {
+    "app": "TravelPlannerApp",
+    "lane": "Travel",
+    "product_target": "Travel Planner",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/TravelPlannerApp/Package.swift",
+    "readme_path": "Templates/TravelPlannerApp/README.md",
+    "example_path": "Examples/TravelPlannerExample/README.md",
+    "lockfile_path": "Templates/TravelPlannerApp/Package.resolved",
+    "best_for": [
+      "teams evaluating trip and itinerary planning shells",
+      "readers comparing travel lane packaging and richer example routing",
+      "maintainers reviewing booking-adjacent trip surfaces"
+    ],
+    "not_for": [
+      "teams expecting full booking network integrations today",
+      "readers who assume published runtime screenshots and clips already exist",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "trip overview shell",
+      "itinerary cards",
+      "destination highlights",
+      "booking-adjacent planning surface",
+      "starter travel domain model"
+    ],
+    "capture_targets": [
+      "trip overview screenshot",
+      "itinerary detail screenshot",
+      "short itinerary-planning demo clip"
+    ]
+  },
+  {
+    "app": "AIAssistantApp",
+    "lane": "AI",
+    "product_target": "AI Assistant",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/AIAssistantApp/Package.swift",
+    "readme_path": "Templates/AIAssistantApp/README.md",
+    "example_path": "Examples/AIAssistantExample/README.md",
+    "lockfile_path": "Templates/AIAssistantApp/Package.resolved",
+    "best_for": [
+      "teams reviewing an assistant-style conversation shell",
+      "readers comparing AI lane packaging with a richer example route",
+      "maintainers validating a privacy-aware assistant starter surface"
+    ],
+    "not_for": [
+      "teams expecting a production AI stack today",
+      "readers who assume runtime screenshots and demo clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "conversation shell",
+      "prompt and response surface",
+      "assistant suggestion cards",
+      "starter tool action surface",
+      "AI lane example route"
+    ],
+    "capture_targets": [
+      "assistant conversation screenshot",
+      "tool or suggestion screenshot",
+      "short ask-and-response demo clip"
+    ]
+  },
+  {
+    "app": "NewsBlogApp",
+    "lane": "News",
+    "product_target": "News / Editorial",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/NewsBlogApp/Package.swift",
+    "readme_path": "Templates/NewsBlogApp/README.md",
+    "example_path": "Examples/NewsBlogExample/README.md",
+    "lockfile_path": null,
+    "best_for": [
+      "teams evaluating editorial and article-list starter shells",
+      "readers comparing news lane packaging and richer example routing",
+      "maintainers reviewing content-first list and detail patterns"
+    ],
+    "not_for": [
+      "teams expecting a production newsroom platform today",
+      "readers who assume runtime screenshots and clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "headline list shell",
+      "article detail surface",
+      "category routing",
+      "saved or trending content shell",
+      "starter editorial model"
+    ],
+    "capture_targets": [
+      "headline list screenshot",
+      "article detail screenshot",
+      "short article-discovery demo clip"
+    ]
+  },
+  {
+    "app": "MusicPodcastApp",
+    "lane": "Music / Podcast",
+    "product_target": "Music / Podcast",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/MusicPodcastApp/Package.swift",
+    "readme_path": "Templates/MusicPodcastApp/README.md",
+    "example_path": "Examples/MusicPodcastExample/README.md",
+    "lockfile_path": null,
+    "best_for": [
+      "teams evaluating media-library and player starter shells",
+      "readers comparing entertainment packaging and richer example routing",
+      "maintainers reviewing audio-first UI patterns"
+    ],
+    "not_for": [
+      "teams expecting production streaming infrastructure today",
+      "readers who assume runtime screenshots and demo clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "library shell",
+      "player surface",
+      "episode or track cards",
+      "queue starter flow",
+      "media content model"
+    ],
+    "capture_targets": [
+      "library screenshot",
+      "player or episode detail screenshot",
+      "short browse-to-play demo clip"
+    ]
+  },
+  {
+    "app": "MarketplaceApp",
+    "lane": "Marketplace",
+    "product_target": "Marketplace",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/MarketplaceApp/Package.swift",
+    "readme_path": "Templates/MarketplaceApp/README.md",
+    "example_path": "Examples/MarketplaceExample/README.md",
+    "lockfile_path": null,
+    "best_for": [
+      "teams comparing commerce and multi-seller starter flows",
+      "readers who want a marketplace-specific root and example route",
+      "maintainers reviewing listing and seller-oriented starter surfaces"
+    ],
+    "not_for": [
+      "teams expecting production seller operations today",
+      "readers who assume runtime screenshots and clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "listing discovery shell",
+      "seller highlight cards",
+      "product detail starter flow",
+      "saved or cart-adjacent surface",
+      "starter marketplace domain model"
+    ],
+    "capture_targets": [
+      "marketplace feed screenshot",
+      "listing detail screenshot",
+      "short browse-to-listing demo clip"
+    ]
+  },
+  {
+    "app": "MessagingApp",
+    "lane": "Messaging / Community",
+    "product_target": "Messaging / Community",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/MessagingApp/Package.swift",
+    "readme_path": "Templates/MessagingApp/README.md",
+    "example_path": "Examples/MessagingExample/README.md",
+    "lockfile_path": null,
+    "best_for": [
+      "teams evaluating conversation-list and chat starter flows",
+      "readers comparing community lanes across social and messaging surfaces",
+      "maintainers reviewing message-thread starter patterns"
+    ],
+    "not_for": [
+      "teams expecting production realtime messaging today",
+      "readers who assume runtime screenshots and demo clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "conversation list shell",
+      "chat thread surface",
+      "contact or member routing",
+      "composer starter flow",
+      "starter messaging model"
+    ],
+    "capture_targets": [
+      "conversation list screenshot",
+      "chat thread screenshot",
+      "short open-chat demo clip"
+    ]
+  },
+  {
+    "app": "BookingReservationsApp",
+    "lane": "Booking / Reservations",
+    "product_target": "Booking & Reservations",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/BookingReservationsApp/Package.swift",
+    "readme_path": "Templates/BookingReservationsApp/README.md",
+    "example_path": "Examples/BookingReservationsExample/README.md",
+    "lockfile_path": null,
+    "best_for": [
+      "teams evaluating booking, calendar, and reservation starter flows",
+      "readers comparing travel-adjacent booking surfaces",
+      "maintainers reviewing appointment or reservation starter patterns"
+    ],
+    "not_for": [
+      "teams expecting production reservation backends today",
+      "readers who assume runtime screenshots and clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "availability shell",
+      "reservation detail surface",
+      "calendar or timeslot routing",
+      "confirmation starter flow",
+      "reservation domain model"
+    ],
+    "capture_targets": [
+      "availability or schedule screenshot",
+      "booking detail screenshot",
+      "short selection-to-confirmation demo clip"
+    ]
+  },
+  {
+    "app": "NotesKnowledgeApp",
+    "lane": "Notes / Knowledge",
+    "product_target": "Notes / Knowledge Base",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/NotesKnowledgeApp/Package.swift",
+    "readme_path": "Templates/NotesKnowledgeApp/README.md",
+    "example_path": "Examples/NotesKnowledgeExample/README.md",
+    "lockfile_path": null,
+    "best_for": [
+      "teams evaluating note and knowledge starter flows",
+      "readers comparing productivity and PKM-oriented surfaces",
+      "maintainers reviewing list and detail note patterns"
+    ],
+    "not_for": [
+      "teams expecting a full PKM platform today",
+      "readers who assume runtime screenshots and demo clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "notes list shell",
+      "note detail surface",
+      "tag or workspace routing",
+      "search starter flow",
+      "knowledge starter model"
+    ],
+    "capture_targets": [
+      "notes list screenshot",
+      "note detail screenshot",
+      "short capture-to-review demo clip"
+    ]
+  },
+  {
+    "app": "CreatorShortVideoApp",
+    "lane": "Creator / Short Video",
+    "product_target": "Creator / Short Video",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/CreatorShortVideoApp/Package.swift",
+    "readme_path": "Templates/CreatorShortVideoApp/README.md",
+    "example_path": "Examples/CreatorShortVideoExample/README.md",
+    "lockfile_path": null,
+    "best_for": [
+      "teams evaluating creator feed and publishing starter surfaces",
+      "readers comparing creator-economy packaging with a richer example",
+      "maintainers reviewing short-video oriented UI patterns"
+    ],
+    "not_for": [
+      "teams expecting production video pipelines today",
+      "readers who assume runtime screenshots and demo clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "creator feed shell",
+      "clip card surface",
+      "engagement starter routing",
+      "publish or upload shell",
+      "creator starter domain model"
+    ],
+    "capture_targets": [
+      "creator feed screenshot",
+      "clip detail or upload screenshot",
+      "short browse-to-publish demo clip"
+    ]
+  },
+  {
+    "app": "TeamCollaborationApp",
+    "lane": "Team Collaboration",
+    "product_target": "Team Collaboration",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/TeamCollaborationApp/Package.swift",
+    "readme_path": "Templates/TeamCollaborationApp/README.md",
+    "example_path": "Examples/TeamCollaborationExample/README.md",
+    "lockfile_path": null,
+    "best_for": [
+      "teams evaluating project and teammate coordination starter flows",
+      "readers comparing productivity and collaboration-oriented roots",
+      "maintainers reviewing collaboration boards and activity surfaces"
+    ],
+    "not_for": [
+      "teams expecting a full collaborative backend today",
+      "readers who assume runtime screenshots and demo clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "workspace shell",
+      "team activity surface",
+      "project board starter flow",
+      "member cards",
+      "collaboration starter model"
+    ],
+    "capture_targets": [
+      "workspace board screenshot",
+      "team activity screenshot",
+      "short board-to-task demo clip"
+    ]
+  },
+  {
+    "app": "CRMAdminApp",
+    "lane": "CRM / Admin",
+    "product_target": "CRM / Admin Companion",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/CRMAdminApp/Package.swift",
+    "readme_path": "Templates/CRMAdminApp/README.md",
+    "example_path": "Examples/CRMAdminExample/README.md",
+    "lockfile_path": null,
+    "best_for": [
+      "teams evaluating admin and lead-management starter flows",
+      "readers comparing CRM-style surfaces against collaboration roots",
+      "maintainers reviewing operations-first dashboards"
+    ],
+    "not_for": [
+      "teams expecting backend-integrated CRM operations today",
+      "readers who assume runtime screenshots and demo clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "admin dashboard shell",
+      "lead or client list surface",
+      "pipeline starter cards",
+      "operations summary",
+      "CRM starter domain model"
+    ],
+    "capture_targets": [
+      "admin dashboard screenshot",
+      "pipeline or lead-detail screenshot",
+      "short review-to-update demo clip"
+    ]
+  },
+  {
+    "app": "SubscriptionLifestyleApp",
+    "lane": "Subscription Lifestyle",
+    "product_target": "Subscription Lifestyle / Habit Tracker",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/SubscriptionLifestyleApp/Package.swift",
+    "readme_path": "Templates/SubscriptionLifestyleApp/README.md",
+    "example_path": "Examples/SubscriptionLifestyleExample/README.md",
+    "lockfile_path": null,
+    "best_for": [
+      "teams evaluating premium lifestyle and habit starter flows",
+      "readers comparing subscription-oriented packaging surfaces",
+      "maintainers reviewing routine and premium UI patterns"
+    ],
+    "not_for": [
+      "teams expecting production billing and entitlement flows today",
+      "readers who assume runtime screenshots and demo clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "habit dashboard shell",
+      "streak and progress surface",
+      "premium plan starter cards",
+      "routine detail routing",
+      "lifestyle starter domain model"
+    ],
+    "capture_targets": [
+      "habit dashboard screenshot",
+      "streak or premium upsell screenshot",
+      "short routine-tracking demo clip"
+    ]
+  },
+  {
+    "app": "PrivacyVaultApp",
+    "lane": "Privacy / Secure Vault",
+    "product_target": "Privacy / Secure Vault",
+    "label_today": "Standalone Root + richer example surface",
+    "entry_path": "Templates/PrivacyVaultApp/Package.swift",
+    "readme_path": "Templates/PrivacyVaultApp/README.md",
+    "example_path": "Examples/PrivacyVaultExample/README.md",
+    "lockfile_path": null,
+    "best_for": [
+      "teams evaluating a privacy-first storage starter shell",
+      "readers comparing security-oriented packaging with a richer example route",
+      "maintainers reviewing secure-list and vault UI patterns"
+    ],
+    "not_for": [
+      "teams expecting production audited secure storage today",
+      "readers who assume runtime screenshots and demo clips are already published",
+      "teams that assume the hosted standalone iOS workflow is already green for this app pack"
+    ],
+    "product_shape": [
+      "vault overview shell",
+      "secure item list surface",
+      "detail and reveal starter flow",
+      "privacy settings shell",
+      "secure-vault starter model"
+    ],
+    "capture_targets": [
+      "vault overview screenshot",
+      "secure item detail screenshot",
+      "short unlock-to-review demo clip"
+    ]
+  }
+]

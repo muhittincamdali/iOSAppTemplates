@@ -1,6 +1,6 @@
 # ProductivityApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `ProductivityApp`
 - Lane: `Productivity`
@@ -8,20 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/ProductivityApp.svg](../Assets/AppCards/ProductivityApp.svg)
-- preview board image var: [../Assets/AppPreviews/ProductivityApp.svg](../Assets/AppPreviews/ProductivityApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/ProductivityApp.svg](../Assets/AppCards/ProductivityApp.svg)
+- preview board is published: [../Assets/AppPreviews/ProductivityApp.svg](../Assets/AppPreviews/ProductivityApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/ProductivityApp.md](../App-Proofs/ProductivityApp.md)
-- [../../Templates/ProductivityApp/README.md](../../Templates/ProductivityApp/README.md)
-- [../../Templates/ProductivityApp/Package.resolved](../../Templates/ProductivityApp/Package.resolved)
-- [../../Examples/ProductivityExample/README.md](../../Examples/ProductivityExample/README.md)
+- [App Proof Surface](../App-Proofs/ProductivityApp.md)
+- [Template Root README](../../Templates/ProductivityApp/README.md)
+- [Standalone Root Package](../../Templates/ProductivityApp/Package.swift)
+- [Richer Example](../../Examples/ProductivityExample/README.md)
 
 ## Next Required Capture
 
-1. dashboard/inbox screenshot
-2. focus or project board screenshot
-3. short productivity workflow demo clip
+1. workspace dashboard screenshot
+2. task list or project board screenshot
+3. short focus-session workflow clip

@@ -1,6 +1,6 @@
 # MusicPodcastApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `MusicPodcastApp`
 - Lane: `Music / Podcast`
@@ -8,20 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/MusicPodcastApp.svg](../Assets/AppCards/MusicPodcastApp.svg)
-- preview board image var: [../Assets/AppPreviews/MusicPodcastApp.svg](../Assets/AppPreviews/MusicPodcastApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/MusicPodcastApp.svg](../Assets/AppCards/MusicPodcastApp.svg)
+- preview board is published: [../Assets/AppPreviews/MusicPodcastApp.svg](../Assets/AppPreviews/MusicPodcastApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/MusicPodcastApp.md](../App-Proofs/MusicPodcastApp.md)
-- [../../Templates/MusicPodcastApp/README.md](../../Templates/MusicPodcastApp/README.md)
-- [../../Templates/MusicPodcastApp/Package.swift](../../Templates/MusicPodcastApp/Package.swift)
-- [../../Examples/MusicPodcastExample/README.md](../../Examples/MusicPodcastExample/README.md)
+- [App Proof Surface](../App-Proofs/MusicPodcastApp.md)
+- [Template Root README](../../Templates/MusicPodcastApp/README.md)
+- [Standalone Root Package](../../Templates/MusicPodcastApp/Package.swift)
+- [Richer Example](../../Examples/MusicPodcastExample/README.md)
 
 ## Next Required Capture
 
-1. playback dashboard screenshot
-2. playlist / podcast queue screenshot
-3. short playback workflow demo clip
+1. library screenshot
+2. player or episode detail screenshot
+3. short browse-to-play demo clip

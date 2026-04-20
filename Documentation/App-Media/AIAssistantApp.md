@@ -1,6 +1,6 @@
 # AIAssistantApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `AIAssistantApp`
 - Lane: `AI`
@@ -8,20 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/AIAssistantApp.svg](../Assets/AppCards/AIAssistantApp.svg)
-- preview board image var: [../Assets/AppPreviews/AIAssistantApp.svg](../Assets/AppPreviews/AIAssistantApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/AIAssistantApp.svg](../Assets/AppCards/AIAssistantApp.svg)
+- preview board is published: [../Assets/AppPreviews/AIAssistantApp.svg](../Assets/AppPreviews/AIAssistantApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/AIAssistantApp.md](../App-Proofs/AIAssistantApp.md)
-- [../../Templates/AIAssistantApp/README.md](../../Templates/AIAssistantApp/README.md)
-- [../../Templates/AIAssistantApp/Package.resolved](../../Templates/AIAssistantApp/Package.resolved)
-- [../../Examples/AIAssistantExample/README.md](../../Examples/AIAssistantExample/README.md)
+- [App Proof Surface](../App-Proofs/AIAssistantApp.md)
+- [Template Root README](../../Templates/AIAssistantApp/README.md)
+- [Standalone Root Package](../../Templates/AIAssistantApp/Package.swift)
+- [Richer Example](../../Examples/AIAssistantExample/README.md)
 
 ## Next Required Capture
 
-1. workspace overview screenshot
-2. suggestion or trust surface screenshot
-3. short assistant workflow demo clip
+1. assistant conversation screenshot
+2. tool or suggestion screenshot
+3. short ask-and-response demo clip

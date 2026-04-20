@@ -1,6 +1,6 @@
 # SubscriptionLifestyleApp Proof Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 ## Product Summary
 
@@ -14,65 +14,61 @@ Last updated: 2026-04-20
 
 ### Best for
 
-- subscription-first lifestyle shell, retention workflow ve streak program routing incelemek isteyen ekipler
-- standalone root ile richer example surface'i birlikte gormek isteyenler
-- Wave 3 premium differentiation lane'i icin gercek packaging kaniti isteyenler
+- teams evaluating premium lifestyle and habit starter flows
+- readers comparing subscription-oriented packaging surfaces
+- maintainers reviewing routine and premium UI patterns
 
 ### Not for
 
-- bugun StoreKit parity veya production subscription backend proof bekleyenler
-- screenshot/demo proof'un zaten mevcut oldugunu varsayanlar
-- teams that assume hosted standalone iOS proof is already green for this app pack
+- teams expecting production billing and entitlement flows today
+- readers who assume runtime screenshots and demo clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- subscription dashboard shell
-- membership and streak program lanes
-- churn watch and retention workflow
-- richer lifestyle example route
+- habit dashboard shell
+- streak and progress surface
+- premium plan starter cards
+- routine detail routing
+- lifestyle starter domain model
 
 ## Current Proof
 
-- standalone root package mevcut
-- template-root README mevcut
-- `Templates/SubscriptionLifestyleApp/Package.swift` dependency-free app shell graph'i veriyor; no external dependency lockfile is required
-- `swift package dump-package` gecerli
-- `cd Templates/SubscriptionLifestyleApp && swift test` gecerli
-- `xcodebuild -scheme SubscriptionLifestyleApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- `Examples/SubscriptionLifestyleExample` inspection route mevcut
+- standalone root package exists
+- template-root README exists
+- `Templates/SubscriptionLifestyleApp/Package.swift` exists
+- local generic iOS build proof is tracked via `xcodebuild -scheme SubscriptionLifestyleApp -destination 'generic/platform=iOS' build`
+- the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- `Examples/SubscriptionLifestyleExample` inspection route exists
 
 ## Missing Proof
 
-- canonical screenshot yok
-- demo clip yok
-- hosted standalone iOS proof workflow is active; check live GitHub status on master
+- runtime screenshot not yet published
+- demo clip not yet published
+- stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path
 
 ```bash
 open Templates/SubscriptionLifestyleApp/Package.swift
 open Examples/SubscriptionLifestyleExample/README.md
-```
-
-Root repo proof icin:
-
-```bash
-swift build
-swift test
-```
-
-Standalone generic iOS proof icin:
-
-```bash
-cd Templates/SubscriptionLifestyleApp
 xcodebuild -scheme SubscriptionLifestyleApp -destination 'generic/platform=iOS' build
+```
+
+Then validate the root package:
+
+```bash
+swift build -c release
+swift test
 ```
 
 ## Canonical References
 
 - [Template Root README](../../Templates/SubscriptionLifestyleApp/README.md)
-- [../Template-Showcase.md](../Template-Showcase.md)
-- [../Proof-Matrix.md](../Proof-Matrix.md)
-- [../Portfolio-Matrix.md](../Portfolio-Matrix.md)
+- [Richer Example](../../Examples/SubscriptionLifestyleExample/README.md)
+- [App Media Surface](../App-Media/SubscriptionLifestyleApp.md)
+- [Template Showcase](../Template-Showcase.md)
+- [Proof Matrix](../Proof-Matrix.md)
+- [Portfolio Matrix](../Portfolio-Matrix.md)

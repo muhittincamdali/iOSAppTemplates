@@ -1,6 +1,6 @@
 # FoodDeliveryApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `FoodDeliveryApp`
 - Lane: `Food Delivery`
@@ -8,20 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/FoodDeliveryApp.svg](../Assets/AppCards/FoodDeliveryApp.svg)
-- preview board image var: [../Assets/AppPreviews/FoodDeliveryApp.svg](../Assets/AppPreviews/FoodDeliveryApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/FoodDeliveryApp.svg](../Assets/AppCards/FoodDeliveryApp.svg)
+- preview board is published: [../Assets/AppPreviews/FoodDeliveryApp.svg](../Assets/AppPreviews/FoodDeliveryApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/FoodDeliveryApp.md](../App-Proofs/FoodDeliveryApp.md)
-- [../../Templates/FoodDeliveryApp/README.md](../../Templates/FoodDeliveryApp/README.md)
-- [../../Templates/FoodDeliveryApp/Package.resolved](../../Templates/FoodDeliveryApp/Package.resolved)
-- [../../Examples/FoodDeliveryExample/README.md](../../Examples/FoodDeliveryExample/README.md)
+- [App Proof Surface](../App-Proofs/FoodDeliveryApp.md)
+- [Template Root README](../../Templates/FoodDeliveryApp/README.md)
+- [Standalone Root Package](../../Templates/FoodDeliveryApp/Package.swift)
+- [Richer Example](../../Examples/FoodDeliveryExample/README.md)
 
 ## Next Required Capture
 
-1. restaurant discovery screenshot
+1. restaurant list screenshot
 2. cart or order-tracking screenshot
-3. short delivery workflow demo clip
+3. short browse-to-order demo clip

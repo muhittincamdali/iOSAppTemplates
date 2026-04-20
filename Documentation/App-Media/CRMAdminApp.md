@@ -1,6 +1,6 @@
 # CRMAdminApp Media Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 - App: `CRMAdminApp`
 - Lane: `CRM / Admin`
@@ -8,20 +8,20 @@ Last updated: 2026-04-20
 
 ## Current Truth
 
-- canonical screenshot yok
-- demo clip yok
-- shareable gallery card image var: [../Assets/AppCards/CRMAdminApp.svg](../Assets/AppCards/CRMAdminApp.svg)
-- preview board image var: [../Assets/AppPreviews/CRMAdminApp.svg](../Assets/AppPreviews/CRMAdminApp.svg)
+- shareable gallery card is published: [../Assets/AppCards/CRMAdminApp.svg](../Assets/AppCards/CRMAdminApp.svg)
+- preview board is published: [../Assets/AppPreviews/CRMAdminApp.svg](../Assets/AppPreviews/CRMAdminApp.svg)
+- runtime screenshot is not yet published
+- demo clip is not yet published
 
 ## What Exists Instead
 
-- [../App-Proofs/CRMAdminApp.md](../App-Proofs/CRMAdminApp.md)
-- [../../Templates/CRMAdminApp/README.md](../../Templates/CRMAdminApp/README.md)
-- [../../Templates/CRMAdminApp/Package.swift](../../Templates/CRMAdminApp/Package.swift)
-- [../../Examples/CRMAdminExample/README.md](../../Examples/CRMAdminExample/README.md)
+- [App Proof Surface](../App-Proofs/CRMAdminApp.md)
+- [Template Root README](../../Templates/CRMAdminApp/README.md)
+- [Standalone Root Package](../../Templates/CRMAdminApp/Package.swift)
+- [Richer Example](../../Examples/CRMAdminExample/README.md)
 
 ## Next Required Capture
 
-1. CRM dashboard screenshot
-2. renewal and SLA workflow screenshot
-3. short operator journey demo clip
+1. admin dashboard screenshot
+2. pipeline or lead-detail screenshot
+3. short review-to-update demo clip

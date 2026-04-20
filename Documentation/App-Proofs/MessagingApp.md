@@ -1,6 +1,6 @@
 # MessagingApp Proof Surface
 
-Last updated: 2026-04-20
+Last updated: 2026-04-21
 
 ## Product Summary
 
@@ -14,65 +14,61 @@ Last updated: 2026-04-20
 
 ### Best for
 
-- inbox, room routing ve moderation shell incelemek isteyen ekipler
-- standalone root ile richer example surface'i birlikte gormek isteyenler
-- Wave 2 icin gercek messaging/community packaging kaniti isteyenler
+- teams evaluating conversation-list and chat starter flows
+- readers comparing community lanes across social and messaging surfaces
+- maintainers reviewing message-thread starter patterns
 
 ### Not for
 
-- bugun complete messaging parity bekleyenler
-- screenshot/demo proof'un zaten mevcut oldugunu varsayanlar
-- teams that assume hosted standalone iOS proof is already green for this app pack
+- teams expecting production realtime messaging today
+- readers who assume runtime screenshots and demo clips are already published
+- teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- conversation dashboard shell
-- inbox and room routing
-- safety and moderation quick actions
-- richer messaging/community example route
+- conversation list shell
+- chat thread surface
+- contact or member routing
+- composer starter flow
+- starter messaging model
 
 ## Current Proof
 
-- standalone root package mevcut
-- template-root README mevcut
-- `Templates/MessagingApp/Package.swift` dependency-free app shell graph'i veriyor; no external dependency lockfile is required
-- `swift package dump-package` gecerli
-- `cd Templates/MessagingApp && swift test` gecerli
-- `xcodebuild -scheme MessagingApp -destination 'generic/platform=iOS' build` gecerli
-- root repo `swift build -c release` gecerli
-- root repo `swift test` gecerli
-- `Examples/MessagingExample` inspection route mevcut
+- standalone root package exists
+- template-root README exists
+- `Templates/MessagingApp/Package.swift` exists
+- local generic iOS build proof is tracked via `xcodebuild -scheme MessagingApp -destination 'generic/platform=iOS' build`
+- the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
+- root repo `swift build -c release` passes
+- root repo `swift test` passes
+- `Examples/MessagingExample` inspection route exists
 
 ## Missing Proof
 
-- canonical screenshot yok
-- demo clip yok
-- hosted standalone iOS proof workflow is active; check live GitHub status on master
+- runtime screenshot not yet published
+- demo clip not yet published
+- stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path
 
 ```bash
 open Templates/MessagingApp/Package.swift
 open Examples/MessagingExample/README.md
-```
-
-Root repo proof icin:
-
-```bash
-swift build
-swift test
-```
-
-Standalone generic iOS proof icin:
-
-```bash
-cd Templates/MessagingApp
 xcodebuild -scheme MessagingApp -destination 'generic/platform=iOS' build
+```
+
+Then validate the root package:
+
+```bash
+swift build -c release
+swift test
 ```
 
 ## Canonical References
 
 - [Template Root README](../../Templates/MessagingApp/README.md)
-- [../Template-Showcase.md](../Template-Showcase.md)
-- [../Proof-Matrix.md](../Proof-Matrix.md)
-- [../Portfolio-Matrix.md](../Portfolio-Matrix.md)
+- [Richer Example](../../Examples/MessagingExample/README.md)
+- [App Media Surface](../App-Media/MessagingApp.md)
+- [Template Showcase](../Template-Showcase.md)
+- [Proof Matrix](../Proof-Matrix.md)
+- [Portfolio Matrix](../Portfolio-Matrix.md)
