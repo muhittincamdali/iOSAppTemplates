@@ -43,7 +43,7 @@ for app in "${apps[@]}"; do
 
   grep -Fq "${app}.svg" "$gallery_doc" || { echo "$gallery_doc missing asset link for $app" >&2; exit 1; }
   grep -Fq "${app}.svg" "$media_doc" || { echo "$media_doc missing asset link for $app" >&2; exit 1; }
-  grep -Fq 'Media status: `card-published`' "$media_doc" || { echo "$media_doc missing card-published status" >&2; exit 1; }
+  grep -Fq 'Media status: `preview-published`' "$media_doc" || { echo "$media_doc missing preview-published status" >&2; exit 1; }
 done
 
 echo "App gallery cards validation passed."

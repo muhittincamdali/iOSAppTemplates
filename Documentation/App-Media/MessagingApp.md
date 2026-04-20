@@ -4,13 +4,14 @@ Last updated: 2026-04-20
 
 - App: `MessagingApp`
 - Lane: `Messaging / Community`
-- Media status: `card-published`
+- Media status: `preview-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
 - shareable gallery card image var: [../Assets/AppCards/MessagingApp.svg](../Assets/AppCards/MessagingApp.svg)
+- preview board image var: [../Assets/AppPreviews/MessagingApp.svg](../Assets/AppPreviews/MessagingApp.svg)
 
 ## What Exists Instead
 

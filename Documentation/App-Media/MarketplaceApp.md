@@ -4,13 +4,14 @@ Last updated: 2026-04-20
 
 - App: `MarketplaceApp`
 - Lane: `Marketplace`
-- Media status: `card-published`
+- Media status: `preview-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
 - shareable gallery card image var: [../Assets/AppCards/MarketplaceApp.svg](../Assets/AppCards/MarketplaceApp.svg)
+- preview board image var: [../Assets/AppPreviews/MarketplaceApp.svg](../Assets/AppPreviews/MarketplaceApp.svg)
 
 ## What Exists Instead
 

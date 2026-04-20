@@ -4,13 +4,14 @@ Last updated: 2026-04-20
 
 - App: `NewsBlogApp`
 - Lane: `News`
-- Media status: `card-published`
+- Media status: `preview-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
 - shareable gallery card image var: [../Assets/AppCards/NewsBlogApp.svg](../Assets/AppCards/NewsBlogApp.svg)
+- preview board image var: [../Assets/AppPreviews/NewsBlogApp.svg](../Assets/AppPreviews/NewsBlogApp.svg)
 
 ## What Exists Instead
 

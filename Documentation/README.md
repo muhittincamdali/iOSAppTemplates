@@ -21,7 +21,7 @@ This page is the canonical documentation router for `iOSAppTemplates`.
 | See lane-by-lane proof status | [Proof-Matrix.md](./Proof-Matrix.md) |
 | See canonical app proof pages | [App-Proofs/README.md](./App-Proofs/README.md) |
 | See canonical app media pages | [App-Media/README.md](./App-Media/README.md) |
-| See published gallery cards | [App-Gallery.md](./App-Gallery.md) |
+| See published gallery cards and preview boards | [App-Gallery.md](./App-Gallery.md) |
 | Read the market-backed 20-app strategy | [World-Class-20-App-Strategy-2026-04-19.md](./World-Class-20-App-Strategy-2026-04-19.md) |
 | See the Wave 1 execution plan | [Wave-1-Implementation-Plan.md](./Wave-1-Implementation-Plan.md) |
 | Inspect template families | [TemplateGuide.md](./TemplateGuide.md) |

@@ -4,13 +4,14 @@ Last updated: 2026-04-20
 
 - App: `CreatorShortVideoApp`
 - Lane: `Creator / Short Video`
-- Media status: `card-published`
+- Media status: `preview-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
 - shareable gallery card image var: [../Assets/AppCards/CreatorShortVideoApp.svg](../Assets/AppCards/CreatorShortVideoApp.svg)
+- preview board image var: [../Assets/AppPreviews/CreatorShortVideoApp.svg](../Assets/AppPreviews/CreatorShortVideoApp.svg)
 
 ## What Exists Instead
 

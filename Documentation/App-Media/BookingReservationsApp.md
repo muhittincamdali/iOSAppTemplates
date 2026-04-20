@@ -4,13 +4,14 @@ Last updated: 2026-04-20
 
 - App: `BookingReservationsApp`
 - Lane: `Booking / Reservations`
-- Media status: `card-published`
+- Media status: `preview-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
 - shareable gallery card image var: [../Assets/AppCards/BookingReservationsApp.svg](../Assets/AppCards/BookingReservationsApp.svg)
+- preview board image var: [../Assets/AppPreviews/BookingReservationsApp.svg](../Assets/AppPreviews/BookingReservationsApp.svg)
 
 ## What Exists Instead
 

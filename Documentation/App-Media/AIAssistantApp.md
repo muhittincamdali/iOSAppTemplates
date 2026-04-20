@@ -4,13 +4,14 @@ Last updated: 2026-04-20
 
 - App: `AIAssistantApp`
 - Lane: `AI`
-- Media status: `card-published`
+- Media status: `preview-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
 - shareable gallery card image var: [../Assets/AppCards/AIAssistantApp.svg](../Assets/AppCards/AIAssistantApp.svg)
+- preview board image var: [../Assets/AppPreviews/AIAssistantApp.svg](../Assets/AppPreviews/AIAssistantApp.svg)
 
 ## What Exists Instead
 

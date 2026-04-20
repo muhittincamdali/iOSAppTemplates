@@ -4,13 +4,14 @@ Last updated: 2026-04-20
 
 - App: `EducationApp`
 - Lane: `Education`
-- Media status: `card-published`
+- Media status: `preview-published`
 
 ## Current Truth
 
 - canonical screenshot yok
 - demo clip yok
 - shareable gallery card image var: [../Assets/AppCards/EducationApp.svg](../Assets/AppCards/EducationApp.svg)
+- preview board image var: [../Assets/AppPreviews/EducationApp.svg](../Assets/AppPreviews/EducationApp.svg)
 
 ## What Exists Instead
 
