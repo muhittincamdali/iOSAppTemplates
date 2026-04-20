@@ -37,7 +37,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 - standalone root package exists
 - template-root README exists
 - `Templates/SocialMediaApp/Package.swift` exists
-- `Templates/SocialMediaApp/Package.resolved` exists
+- `Templates/SocialMediaApp/Package.resolved` exists as the tracked dependency lockfile
 - local generic iOS build proof is tracked via `xcodebuild -scheme SocialMediaApp -destination 'generic/platform=iOS' build`
 - the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
 - root repo `swift build -c release` passes
