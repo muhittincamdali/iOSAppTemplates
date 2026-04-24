@@ -12,6 +12,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 CATALOG_PATH = REPO_ROOT / "Documentation" / "app-surface-catalog.json"
 PROOFS_DIR = REPO_ROOT / "Documentation" / "App-Proofs"
 MEDIA_DIR = REPO_ROOT / "Documentation" / "App-Media"
+EXAMPLES_HUB_PATH = REPO_ROOT / "Examples" / "README.md"
 
 
 def load_catalog() -> list[dict[str, Any]]:
@@ -361,6 +362,78 @@ def example_page(app: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def examples_hub(catalog: list[dict[str, Any]]) -> str:
+    richer_examples = [app for app in catalog if app.get("example_path")]
+    lines: list[str] = [
+        "# Examples Hub",
+        "",
+        "Generated from `Documentation/app-surface-catalog.json`.",
+        "",
+        "This folder is not a complete-app gallery. Its current role is:",
+        "",
+        "- source-level reference",
+        "- lightweight onboarding example",
+        f"- richer lane examples for `{len(richer_examples)}` tracked app packs",
+        "",
+        "## Canonical Example Router",
+        "",
+        "| Surface | Type | Use it for |",
+        "| --- | --- | --- |",
+        "| [BasicExample.swift](./BasicExample.swift) | single-file reference | inspect the package API quickly |",
+        "| [BasicExample/BasicExample.swift](./BasicExample/BasicExample.swift) | small example shell | inspect minimal structure |",
+        "| [QuickStartExample/QuickStartApp.swift](./QuickStartExample/QuickStartApp.swift) | onboarding entry | reach the fastest source-level start |",
+    ]
+    for app in richer_examples:
+        title = example_name(app)
+        lines.append(
+            f"| [{title}](./{Path(app['example_path']).parent.name}/) | richer category example | inspect a more product-like {app['product_target'].lower()} flow |"
+        )
+    lines.extend([
+        "",
+        "## Important Truth",
+        "",
+        "- Not everything in this folder is a separate runnable Xcode project.",
+        "- The most reliable standalone package-entry path today is under `Templates/`.",
+        "- The most reliable repo validation path today is root `swift build` and `swift test`.",
+        "",
+        "## If You Want To Run Something",
+        "",
+        "### Package truth",
+        "",
+        "```bash",
+        "swift build",
+        "swift test",
+        "```",
+        "",
+        "### Inspect standalone roots",
+        "",
+        "```bash",
+    ])
+    for app in catalog:
+        lines.append(f"open ../Templates/{app['app']}/Package.swift")
+    lines.extend([
+        "```",
+        "",
+        "### Generator path",
+        "",
+        "```bash",
+        "swift ../Scripts/TemplateGenerator.swift --interactive",
+        "```",
+        "",
+        "## Related Docs",
+        "",
+        "- [../Documentation/Guides/QuickStart.md](../Documentation/Guides/QuickStart.md)",
+        "- [../Documentation/Portfolio-Matrix.md](../Documentation/Portfolio-Matrix.md)",
+        "- [../Documentation/Template-Showcase.md](../Documentation/Template-Showcase.md)",
+        "- [../Documentation/TemplateGuide.md](../Documentation/TemplateGuide.md)",
+        "- [../Documentation/Proof-Matrix.md](../Documentation/Proof-Matrix.md)",
+        "- [../Documentation/App-Proofs/README.md](../Documentation/App-Proofs/README.md)",
+        "- [../Documentation/Complete-App-Standard.md](../Documentation/Complete-App-Standard.md)",
+        "- [../Documentation/Wave-1-Implementation-Plan.md](../Documentation/Wave-1-Implementation-Plan.md)",
+    ])
+    return "\n".join(lines) + "\n"
+
+
 def proof_router(catalog: list[dict[str, Any]]) -> str:
     richer_examples = sum(1 for app in catalog if app.get("example_path"))
     lines: list[str] = [
@@ -496,6 +569,7 @@ def main() -> int:
 
     ok &= write_if_changed(PROOFS_DIR / "README.md", proof_router(catalog), args.check)
     ok &= write_if_changed(MEDIA_DIR / "README.md", media_router(catalog), args.check)
+    ok &= write_if_changed(EXAMPLES_HUB_PATH, examples_hub(catalog), args.check)
 
     if not ok and args.check:
         print("Generated app surface docs are out of date.")

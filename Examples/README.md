@@ -1,10 +1,12 @@
 # Examples Hub
 
-This folder is not a full complete-app gallery yet. Its current role is:
+Generated from `Documentation/app-surface-catalog.json`.
+
+This folder is not a complete-app gallery. Its current role is:
 
 - source-level reference
 - lightweight onboarding example
-- richer lane examples for tracked app packs
+- richer lane examples for `19` tracked app packs
 
 ## Canonical Example Router
 
@@ -13,25 +15,25 @@ This folder is not a full complete-app gallery yet. Its current role is:
 | [BasicExample.swift](./BasicExample.swift) | single-file reference | inspect the package API quickly |
 | [BasicExample/BasicExample.swift](./BasicExample/BasicExample.swift) | small example shell | inspect minimal structure |
 | [QuickStartExample/QuickStartApp.swift](./QuickStartExample/QuickStartApp.swift) | onboarding entry | reach the fastest source-level start |
-| [EcommerceExample](./EcommerceExample/) | richer category example | inspect a more product-like commerce flow |
-| [SocialMediaExample](./SocialMediaExample/) | richer category example | inspect a more product-like social flow |
-| [ProductivityExample](./ProductivityExample/) | richer category example | inspect a more product-like productivity flow |
-| [FinanceExample](./FinanceExample/) | richer category example | inspect a more product-like finance flow |
-| [EducationExample](./EducationExample/) | richer category example | inspect a more product-like education flow |
+| [EcommerceExample](./EcommerceExample/) | richer category example | inspect a more product-like e-commerce store flow |
+| [SocialMediaExample](./SocialMediaExample/) | richer category example | inspect a more product-like social media flow |
+| [ProductivityExample](./ProductivityExample/) | richer category example | inspect a more product-like productivity / tasks flow |
+| [FinanceExample](./FinanceExample/) | richer category example | inspect a more product-like finance / budgeting flow |
+| [EducationExample](./EducationExample/) | richer category example | inspect a more product-like education / learning flow |
 | [FoodDeliveryExample](./FoodDeliveryExample/) | richer category example | inspect a more product-like food delivery flow |
-| [TravelPlannerExample](./TravelPlannerExample/) | richer category example | inspect a more product-like travel planning flow |
-| [AIAssistantExample](./AIAssistantExample/) | richer category example | inspect a more product-like AI assistant flow |
-| [NewsBlogExample](./NewsBlogExample/) | richer category example | inspect a more product-like editorial/news flow |
-| [MusicPodcastExample](./MusicPodcastExample/) | richer category example | inspect a more product-like music and podcast flow |
+| [TravelPlannerExample](./TravelPlannerExample/) | richer category example | inspect a more product-like travel planner flow |
+| [AIAssistantExample](./AIAssistantExample/) | richer category example | inspect a more product-like ai assistant flow |
+| [NewsBlogExample](./NewsBlogExample/) | richer category example | inspect a more product-like news / editorial flow |
+| [MusicPodcastExample](./MusicPodcastExample/) | richer category example | inspect a more product-like music / podcast flow |
 | [MarketplaceExample](./MarketplaceExample/) | richer category example | inspect a more product-like marketplace flow |
-| [MessagingExample](./MessagingExample/) | richer category example | inspect a more product-like messaging and community flow |
-| [BookingReservationsExample](./BookingReservationsExample/) | richer category example | inspect a more product-like booking and reservations flow |
-| [NotesKnowledgeExample](./NotesKnowledgeExample/) | richer category example | inspect a more product-like notes and knowledge flow |
-| [CreatorShortVideoExample](./CreatorShortVideoExample/) | richer category example | inspect a more product-like creator and short video flow |
-| [TeamCollaborationExample](./TeamCollaborationExample/) | richer category example | inspect a more product-like collaboration flow |
-| [CRMAdminExample](./CRMAdminExample/) | richer category example | inspect a more product-like CRM and admin flow |
-| [SubscriptionLifestyleExample](./SubscriptionLifestyleExample/) | richer category example | inspect a more product-like subscription lifestyle flow |
-| [PrivacyVaultExample](./PrivacyVaultExample/) | richer category example | inspect a more product-like privacy vault flow |
+| [MessagingExample](./MessagingExample/) | richer category example | inspect a more product-like messaging / community flow |
+| [BookingReservationsExample](./BookingReservationsExample/) | richer category example | inspect a more product-like booking & reservations flow |
+| [NotesKnowledgeExample](./NotesKnowledgeExample/) | richer category example | inspect a more product-like notes / knowledge base flow |
+| [CreatorShortVideoExample](./CreatorShortVideoExample/) | richer category example | inspect a more product-like creator / short video flow |
+| [TeamCollaborationExample](./TeamCollaborationExample/) | richer category example | inspect a more product-like team collaboration flow |
+| [CRMAdminExample](./CRMAdminExample/) | richer category example | inspect a more product-like crm / admin companion flow |
+| [SubscriptionLifestyleExample](./SubscriptionLifestyleExample/) | richer category example | inspect a more product-like subscription lifestyle / habit tracker flow |
+| [PrivacyVaultExample](./PrivacyVaultExample/) | richer category example | inspect a more product-like privacy / secure vault flow |
 
 ## Important Truth
 
@@ -51,8 +53,8 @@ swift test
 ### Inspect standalone roots
 
 ```bash
-open ../Templates/SocialMediaApp/Package.swift
 open ../Templates/EcommerceApp/Package.swift
+open ../Templates/SocialMediaApp/Package.swift
 open ../Templates/FitnessApp/Package.swift
 open ../Templates/ProductivityApp/Package.swift
 open ../Templates/FinanceApp/Package.swift
