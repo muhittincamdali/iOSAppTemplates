@@ -4,13 +4,13 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `SocialMediaApp`
 - Lane: `Social`
-- Media status: `preview-published`
+- Media status: `screenshot-published`
 
 ## Current Truth
 
+- runtime screenshot is published: [../Assets/AppScreenshots/SocialMediaApp.png](../Assets/AppScreenshots/SocialMediaApp.png)
 - shareable gallery card is published: [../Assets/AppCards/SocialMediaApp.svg](../Assets/AppCards/SocialMediaApp.svg)
 - preview board is published: [../Assets/AppPreviews/SocialMediaApp.svg](../Assets/AppPreviews/SocialMediaApp.svg)
-- runtime screenshot is not yet published
 - demo clip is not yet published
 
 ## What Exists Instead

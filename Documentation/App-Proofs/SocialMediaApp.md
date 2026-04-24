@@ -42,11 +42,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 - the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
 - root repo `swift build -c release` passes
 - root repo `swift test` passes
+- runtime screenshot is published: [../Assets/AppScreenshots/SocialMediaApp.png](../Assets/AppScreenshots/SocialMediaApp.png)
 - `Examples/SocialMediaExample` inspection route exists
 
 ## Missing Proof
 
-- runtime screenshot not yet published
 - demo clip not yet published
 - stable green hosted standalone iOS baseline should be checked on current `master`
 

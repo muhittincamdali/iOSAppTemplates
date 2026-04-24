@@ -8,9 +8,9 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Current Truth
 
+- runtime screenshot is not yet published
 - shareable gallery card is published: [../Assets/AppCards/PrivacyVaultApp.svg](../Assets/AppCards/PrivacyVaultApp.svg)
 - preview board is published: [../Assets/AppPreviews/PrivacyVaultApp.svg](../Assets/AppPreviews/PrivacyVaultApp.svg)
-- runtime screenshot is not yet published
 - demo clip is not yet published
 
 ## What Exists Instead

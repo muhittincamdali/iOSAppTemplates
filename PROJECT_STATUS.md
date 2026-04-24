@@ -1,6 +1,6 @@
 # iOSAppTemplates Project Status
 
-Last updated: 2026-04-21
+Last updated: 2026-04-24
 
 ## Repository Status
 
@@ -16,6 +16,7 @@ Last updated: 2026-04-21
   - a canonical media page
   - a gallery card
   - a preview board
+- runtime screenshots are already published for `EcommerceApp`, `SocialMediaApp`, and `ProductivityApp`
 - local generic iOS `xcodebuild` proof is tracked for the standalone roots
 - the hosted standalone iOS proof workflow is active for the same `20` roots
 - root-level validators exist for portfolio, proof, media, gallery, preview, and visual surfaces
@@ -31,7 +32,7 @@ Last updated: 2026-04-21
 
 ## Current Public Gaps
 
-1. publish real runtime screenshots
+1. expand real runtime screenshots from `3` published roots to all `20`
 2. publish short demo clips
 3. keep the hosted standalone iOS proof route green and visible
 4. keep GitHub metadata and release surfaces aligned with the versioned policy

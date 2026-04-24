@@ -13,8 +13,8 @@ Production-grade SwiftUI app starter system for Apple platforms.
 | Root coverage | `20` standalone app roots under `Templates/` |
 | Build proof | local generic iOS `xcodebuild` tracked for `20` roots; hosted standalone iOS workflow is versioned |
 | Public proof | per-app proof and media pages exist for `20` roots |
-| Visual layer | shareable gallery cards published for `20` roots |
-| Remaining gap | screenshots, demo clips, stable green hosted standalone iOS baseline |
+| Visual layer | gallery cards and preview boards published for `20` roots; runtime screenshots published for `3` roots |
+| Remaining gap | full `20`-app screenshot coverage, demo clips, stable green hosted standalone iOS baseline |
 
 ## First Decision
 
@@ -185,7 +185,7 @@ This proves today:
 
 This does not yet prove today:
 
-- published app media
+- full runtime media coverage for all `20` roots
 - stable green hosted standalone iOS proof baseline for the tracked roots
 - full complete-app parity for all lanes
 
@@ -207,6 +207,7 @@ swift Scripts/TemplateGenerator.swift --list
 - public docs are being tightened around truth-first product claims
 - the repo now has explicit app proof, media, lockfile, and portfolio routers
 - the repo now has published gallery cards and preview boards for `20` standalone roots
+- the repo now has published runtime screenshots for `EcommerceApp`, `SocialMediaApp`, and `ProductivityApp`
 
 ## Canonical Docs
 

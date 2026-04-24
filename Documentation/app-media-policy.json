@@ -3,13 +3,13 @@
     {
       "id": "EcommerceApp",
       "lane": "Commerce",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/EcommerceApp.md"
     },
     {
       "id": "SocialMediaApp",
       "lane": "Social",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/SocialMediaApp.md"
     },
     {
@@ -21,7 +21,7 @@
     {
       "id": "ProductivityApp",
       "lane": "Productivity",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/ProductivityApp.md"
     },
     {

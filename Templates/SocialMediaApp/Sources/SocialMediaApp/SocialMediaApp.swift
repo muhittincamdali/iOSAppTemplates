@@ -5,6 +5,10 @@ import FirebaseFirestore
 import FirebaseStorage
 import Kingfisher
 
+private enum RuntimeCaptureMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_SCREENSHOT_MODE"] == "1"
+}
+
 // MARK: - Social Media App
 @main
 struct SocialMediaApp: App {
@@ -33,6 +37,7 @@ struct SocialMediaApp: App {
     
     // MARK: - Setup Methods
     private func setupFirebase() {
+        guard !RuntimeCaptureMode.isEnabled else { return }
         FirebaseApp.configure()
         print("🔥 Firebase configured successfully")
     }
@@ -61,12 +66,32 @@ struct SocialMediaApp: App {
     }
     
     private func setupAnalytics() {
+        guard !RuntimeCaptureMode.isEnabled else { return }
         Analytics.setAnalyticsCollectionEnabled(true)
         Analytics.logEvent(AnalyticsEventAppOpen, parameters: nil)
         print("📊 Analytics configured")
     }
     
     private func setupApp() {
+        if RuntimeCaptureMode.isEnabled {
+            authManager.currentUser = User(
+                id: "preview-user",
+                username: "preview",
+                email: "preview@iosapptemplates.dev",
+                displayName: "Preview User",
+                avatarURL: nil,
+                bio: "Runtime screenshot mode",
+                followersCount: 320,
+                followingCount: 124,
+                postsCount: 48,
+                isVerified: true,
+                createdAt: Date(),
+                lastActiveAt: Date()
+            )
+            authManager.isAuthenticated = true
+            return
+        }
+
         Task {
             await authManager.checkAuthState()
             await dataManager.initialize()
@@ -93,7 +118,8 @@ struct ContentView: View {
         .animation(.easeInOut(duration: 0.3), value: authManager.isAuthenticated)
         .animation(.easeInOut(duration: 0.3), value: isLoading)
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            let delay = RuntimeCaptureMode.isEnabled ? 0.1 : 2.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 withAnimation {
                     isLoading = false
                 }

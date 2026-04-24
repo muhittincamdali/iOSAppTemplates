@@ -48,7 +48,6 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Missing Proof
 
-- runtime screenshot
 - demo clip
 - stable green hosted standalone iOS baseline on current `master`
 

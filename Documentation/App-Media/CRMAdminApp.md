@@ -8,9 +8,9 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Current Truth
 
+- runtime screenshot is not yet published
 - shareable gallery card is published: [../Assets/AppCards/CRMAdminApp.svg](../Assets/AppCards/CRMAdminApp.svg)
 - preview board is published: [../Assets/AppPreviews/CRMAdminApp.svg](../Assets/AppPreviews/CRMAdminApp.svg)
-- runtime screenshot is not yet published
 - demo clip is not yet published
 
 ## What Exists Instead

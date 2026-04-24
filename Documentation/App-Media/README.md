@@ -8,7 +8,7 @@ Current truth:
 
 - `20` standalone roots have published shareable gallery cards
 - `20` standalone roots have published preview boards
-- canonical runtime screenshots are still missing
+- `3` standalone roots already have published runtime screenshots
 - demo clips are still missing
 - this surface separates visual layers instead of hiding the screenshot and demo gap
 
@@ -22,10 +22,10 @@ This surface exists to:
 
 | App | Lane | Media Status | Surface |
 | --- | --- | --- | --- |
-| EcommerceApp | Commerce | `preview-published` | [EcommerceApp.md](./EcommerceApp.md) |
-| SocialMediaApp | Social | `preview-published` | [SocialMediaApp.md](./SocialMediaApp.md) |
+| EcommerceApp | Commerce | `screenshot-published` | [EcommerceApp.md](./EcommerceApp.md) |
+| SocialMediaApp | Social | `screenshot-published` | [SocialMediaApp.md](./SocialMediaApp.md) |
 | FitnessApp | Health / Fitness | `preview-published` | [FitnessApp.md](./FitnessApp.md) |
-| ProductivityApp | Productivity | `preview-published` | [ProductivityApp.md](./ProductivityApp.md) |
+| ProductivityApp | Productivity | `screenshot-published` | [ProductivityApp.md](./ProductivityApp.md) |
 | FinanceApp | Finance | `preview-published` | [FinanceApp.md](./FinanceApp.md) |
 | EducationApp | Education | `preview-published` | [EducationApp.md](./EducationApp.md) |
 | FoodDeliveryApp | Food Delivery | `preview-published` | [FoodDeliveryApp.md](./FoodDeliveryApp.md) |
@@ -52,6 +52,13 @@ If an app is marked `preview-published`, it means:
 - a shareable gallery card exists
 - a preview board exists
 - a real screenshot may still be missing
+- a demo clip may still be missing
+
+If an app is marked `screenshot-published`, it means:
+
+- a shareable gallery card exists
+- a preview board exists
+- at least one runtime screenshot is now published
 - a demo clip may still be missing
 
 ## Related Surfaces

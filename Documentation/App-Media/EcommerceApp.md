@@ -4,13 +4,13 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `EcommerceApp`
 - Lane: `Commerce`
-- Media status: `preview-published`
+- Media status: `screenshot-published`
 
 ## Current Truth
 
+- runtime screenshot is published: [../Assets/AppScreenshots/EcommerceApp.png](../Assets/AppScreenshots/EcommerceApp.png)
 - shareable gallery card is published: [../Assets/AppCards/EcommerceApp.svg](../Assets/AppCards/EcommerceApp.svg)
 - preview board is published: [../Assets/AppPreviews/EcommerceApp.svg](../Assets/AppPreviews/EcommerceApp.svg)
-- runtime screenshot is not yet published
 - demo clip is not yet published
 
 ## What Exists Instead

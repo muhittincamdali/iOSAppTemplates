@@ -7,6 +7,10 @@ import FirebaseStorage
 import HealthKit
 import DGCharts
 
+private enum RuntimeCaptureMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_SCREENSHOT_MODE"] == "1"
+}
+
 // MARK: - Fitness App
 @main
 struct FitnessApp: App {
@@ -37,6 +41,7 @@ struct FitnessApp: App {
     
     // MARK: - Setup Methods
     private func setupFirebase() {
+        guard !RuntimeCaptureMode.isEnabled else { return }
         FirebaseApp.configure()
         print("🔥 Firebase configured successfully")
     }
@@ -65,12 +70,36 @@ struct FitnessApp: App {
     }
     
     private func setupAnalytics() {
+        guard !RuntimeCaptureMode.isEnabled else { return }
         Analytics.setAnalyticsCollectionEnabled(true)
         Analytics.logEvent(AnalyticsEventAppOpen, parameters: nil)
         print("📊 Analytics configured")
     }
     
     private func setupApp() {
+        if RuntimeCaptureMode.isEnabled {
+            authManager.currentUser = User(
+                id: "preview-user",
+                username: "preview",
+                email: "preview@iosapptemplates.dev",
+                displayName: "Preview User",
+                avatarURL: nil,
+                height: 180,
+                weight: 78,
+                age: 29,
+                fitnessLevel: "Intermediate",
+                createdAt: Date(),
+                updatedAt: Date()
+            )
+            authManager.isAuthenticated = true
+
+            Task {
+                await workoutManager.loadWorkouts()
+                await progressManager.loadProgress()
+            }
+            return
+        }
+
         Task {
             await authManager.checkAuthState()
             await healthKitManager.requestAuthorization()
@@ -98,7 +127,8 @@ struct ContentView: View {
         .animation(.easeInOut(duration: 0.3), value: authManager.isAuthenticated)
         .animation(.easeInOut(duration: 0.3), value: isLoading)
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            let delay = RuntimeCaptureMode.isEnabled ? 0.1 : 2.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 withAnimation {
                     isLoading = false
                 }

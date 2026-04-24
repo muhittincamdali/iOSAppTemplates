@@ -8,9 +8,9 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Current Truth
 
+- runtime screenshot is not yet published
 - shareable gallery card is published: [../Assets/AppCards/FitnessApp.svg](../Assets/AppCards/FitnessApp.svg)
 - preview board is published: [../Assets/AppPreviews/FitnessApp.svg](../Assets/AppPreviews/FitnessApp.svg)
-- runtime screenshot is not yet published
 - demo clip is not yet published
 
 ## What Exists Instead
