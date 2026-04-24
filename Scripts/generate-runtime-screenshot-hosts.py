@@ -220,7 +220,11 @@ def create_project_spec() -> dict[str, object]:
         targets[f"{app_name}Runtime"] = runtime_app_target(
             app_name,
             generated_main_path,
-            [target_dependency_target(app_name)],
+            [
+                target_dependency_target(app_name),
+                target_dependency_target(ui_target_name),
+                target_dependency_target(core_target_name),
+            ],
         )
 
     packages = {name: REMOTE_PACKAGES[name] for name in sorted(all_used_packages)}

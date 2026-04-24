@@ -23,7 +23,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting backend-integrated CRM operations today
-- readers who assume runtime screenshots and demo clips are already published
+- readers who assume demo clips and stable hosted standalone iOS proof already exist
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
@@ -40,10 +40,12 @@ Generated from `Documentation/app-surface-catalog.json`.
 - `swift package dump-package` passes
 - local `swift test` passes
 - `xcodebuild -scheme CRMAdminApp -destination 'generic/platform=iOS' build` passes
+- `bash Scripts/validate-runtime-app-launches.sh CRMAdminApp` passes locally
 - root repo `swift build -c release` passes
 - root repo `swift test` passes
 - canonical app proof page exists
 - canonical app media page exists
+- runtime screenshot is published
 - richer example route exists
 
 ## Missing Proof

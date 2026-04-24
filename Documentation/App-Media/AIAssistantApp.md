@@ -4,11 +4,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `AIAssistantApp`
 - Lane: `AI`
-- Media status: `preview-published`
+- Media status: `screenshot-published`
 
 ## Current Truth
 
-- runtime screenshot is not yet published
+- runtime screenshot is published: [../Assets/AppScreenshots/AIAssistantApp.png](../Assets/AppScreenshots/AIAssistantApp.png)
 - shareable gallery card is published: [../Assets/AppCards/AIAssistantApp.svg](../Assets/AppCards/AIAssistantApp.svg)
 - preview board is published: [../Assets/AppPreviews/AIAssistantApp.svg](../Assets/AppPreviews/AIAssistantApp.svg)
 - demo clip is not yet published

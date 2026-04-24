@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting full booking network integrations today
-- readers who assume published runtime screenshots and clips already exist
+- readers who assume demo clips and stable hosted standalone iOS proof already exist
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
@@ -39,14 +39,15 @@ Generated from `Documentation/app-surface-catalog.json`.
 - `Templates/TravelPlannerApp/Package.swift` exists
 - `Templates/TravelPlannerApp/Package.resolved` exists as the tracked dependency lockfile
 - local generic iOS build proof is tracked via `xcodebuild -scheme TravelPlannerApp -destination 'generic/platform=iOS' build`
+- local simulator runtime launch proof is tracked via `bash Scripts/validate-runtime-app-launches.sh TravelPlannerApp`
 - the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
 - root repo `swift build -c release` passes
 - root repo `swift test` passes
+- runtime screenshot is published: [../Assets/AppScreenshots/TravelPlannerApp.png](../Assets/AppScreenshots/TravelPlannerApp.png)
 - `Examples/TravelPlannerExample` inspection route exists
 
 ## Missing Proof
 
-- runtime screenshot not yet published
 - demo clip not yet published
 - stable green hosted standalone iOS baseline should be checked on current `master`
 

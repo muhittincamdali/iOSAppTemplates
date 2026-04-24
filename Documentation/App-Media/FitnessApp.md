@@ -4,11 +4,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `FitnessApp`
 - Lane: `Health / Fitness`
-- Media status: `preview-published`
+- Media status: `screenshot-published`
 
 ## Current Truth
 
-- runtime screenshot is not yet published
+- runtime screenshot is published: [../Assets/AppScreenshots/FitnessApp.png](../Assets/AppScreenshots/FitnessApp.png)
 - shareable gallery card is published: [../Assets/AppCards/FitnessApp.svg](../Assets/AppCards/FitnessApp.svg)
 - preview board is published: [../Assets/AppPreviews/FitnessApp.svg](../Assets/AppPreviews/FitnessApp.svg)
 - demo clip is not yet published

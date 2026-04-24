@@ -116,6 +116,7 @@ def proof_page(app: dict[str, Any]) -> str:
         lines.append("- no external dependency lockfile is required today")
     lines.extend([
         f"- local generic iOS build proof is tracked via `xcodebuild -scheme {app_name} -destination 'generic/platform=iOS' build`",
+        f"- local simulator runtime launch proof is tracked via `bash Scripts/validate-runtime-app-launches.sh {app_name}`",
         "- the hosted standalone iOS proof workflow is active; check live GitHub status on `master`",
         "- root repo `swift build -c release` passes",
         "- root repo `swift test` passes",
@@ -263,11 +264,14 @@ def template_root_page(app: dict[str, Any]) -> str:
         "- `swift package dump-package` passes",
         "- local `swift test` passes",
         f"- `xcodebuild -scheme {app_name} -destination 'generic/platform=iOS' build` passes",
+        f"- `bash Scripts/validate-runtime-app-launches.sh {app_name}` passes locally",
         "- root repo `swift build -c release` passes",
         "- root repo `swift test` passes",
         "- canonical app proof page exists",
         "- canonical app media page exists",
     ])
+    if has_screenshot:
+        lines.append("- runtime screenshot is published")
     if example_path:
         lines.append("- richer example route exists")
     lines.extend([

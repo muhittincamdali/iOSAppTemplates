@@ -4,11 +4,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `TeamCollaborationApp`
 - Lane: `Team Collaboration`
-- Media status: `preview-published`
+- Media status: `screenshot-published`
 
 ## Current Truth
 
-- runtime screenshot is not yet published
+- runtime screenshot is published: [../Assets/AppScreenshots/TeamCollaborationApp.png](../Assets/AppScreenshots/TeamCollaborationApp.png)
 - shareable gallery card is published: [../Assets/AppCards/TeamCollaborationApp.svg](../Assets/AppCards/TeamCollaborationApp.svg)
 - preview board is published: [../Assets/AppPreviews/TeamCollaborationApp.svg](../Assets/AppPreviews/TeamCollaborationApp.svg)
 - demo clip is not yet published

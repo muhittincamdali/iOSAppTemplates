@@ -23,6 +23,7 @@ This page is the canonical documentation router for `iOSAppTemplates`.
 | See canonical app media pages | [App-Media/README.md](./App-Media/README.md) |
 | See published gallery cards and preview boards | [App-Gallery.md](./App-Gallery.md) |
 | See hosted standalone iOS proof workflow | [../.github/workflows/standalone-ios-proof.yml](../.github/workflows/standalone-ios-proof.yml) |
+| Run local simulator launch proof | [../Scripts/validate-runtime-app-launches.sh](../Scripts/validate-runtime-app-launches.sh) |
 | See the current repo status | [../PROJECT_STATUS.md](../PROJECT_STATUS.md) |
 | See GitHub distribution rules | [GitHub-Distribution.md](./GitHub-Distribution.md) |
 | See release rules | [Release-Process.md](./Release-Process.md) |

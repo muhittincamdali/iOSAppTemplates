@@ -39,14 +39,15 @@ Generated from `Documentation/app-surface-catalog.json`.
 - `Templates/MarketplaceApp/Package.swift` exists
 - no external dependency lockfile is required today
 - local generic iOS build proof is tracked via `xcodebuild -scheme MarketplaceApp -destination 'generic/platform=iOS' build`
+- local simulator runtime launch proof is tracked via `bash Scripts/validate-runtime-app-launches.sh MarketplaceApp`
 - the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
 - root repo `swift build -c release` passes
 - root repo `swift test` passes
+- runtime screenshot is published: [../Assets/AppScreenshots/MarketplaceApp.png](../Assets/AppScreenshots/MarketplaceApp.png)
 - `Examples/MarketplaceExample` inspection route exists
 
 ## Missing Proof
 
-- runtime screenshot not yet published
 - demo clip not yet published
 - stable green hosted standalone iOS baseline should be checked on current `master`
 

@@ -4,11 +4,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `FinanceApp`
 - Lane: `Finance`
-- Media status: `preview-published`
+- Media status: `screenshot-published`
 
 ## Current Truth
 
-- runtime screenshot is not yet published
+- runtime screenshot is published: [../Assets/AppScreenshots/FinanceApp.png](../Assets/AppScreenshots/FinanceApp.png)
 - shareable gallery card is published: [../Assets/AppCards/FinanceApp.svg](../Assets/AppCards/FinanceApp.svg)
 - preview board is published: [../Assets/AppPreviews/FinanceApp.svg](../Assets/AppPreviews/FinanceApp.svg)
 - demo clip is not yet published
