@@ -4,11 +4,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `MessagingApp`
 - Lane: `Messaging / Community`
-- Media status: `preview-published`
+- Media status: `screenshot-published`
 
 ## Current Truth
 
-- runtime screenshot is not yet published
+- runtime screenshot is published: [../Assets/AppScreenshots/MessagingApp.png](../Assets/AppScreenshots/MessagingApp.png)
 - shareable gallery card is published: [../Assets/AppCards/MessagingApp.svg](../Assets/AppCards/MessagingApp.svg)
 - preview board is published: [../Assets/AppPreviews/MessagingApp.svg](../Assets/AppPreviews/MessagingApp.svg)
 - demo clip is not yet published

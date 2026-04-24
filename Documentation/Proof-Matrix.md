@@ -42,8 +42,9 @@ Status meanings:
 - standalone root manifest smoke passes
 - deterministic `Package.resolved` coverage exists for 8 standalone roots with external packages
 - canonical per-app proof pages exist for standalone roots
-- canonical per-app media pages exist for 20 standalone roots, shareable gallery cards are published, and preview boards are published
+- canonical per-app media pages exist for 20 standalone roots, shareable gallery cards are published, preview boards are published, and runtime screenshots are published
 - local generic iOS `xcodebuild` passes for `EcommerceApp`, `SocialMediaApp`, `FitnessApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, `SubscriptionLifestyleApp`, and `PrivacyVaultApp`
+- local simulator runtime launch proof passes for `EcommerceApp`, `SocialMediaApp`, `FitnessApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, `SubscriptionLifestyleApp`, and `PrivacyVaultApp`
 - local standalone `swift test` passes for `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, `SubscriptionLifestyleApp`, and `PrivacyVaultApp`
 - hosted standalone iOS proof workflow is active for the same `20` roots; live green status should be checked on `master`
 - GitHub workflows are truth-based and currently green
@@ -76,10 +77,10 @@ Status meanings:
 
 Main missing layers before a `20 complete apps` claim:
 
-1. lane-specific per-app README
-2. real runtime screenshots beyond the current card and preview layer
-3. stable green hosted standalone iOS baseline for the tracked roots
-4. screenshot and demo production for the current 20 roots
+1. demo clips for the current 20 roots
+2. stable green hosted standalone iOS baseline for the tracked roots
+3. equal production depth across the current 20 roots
+4. stronger runtime scenario coverage beyond the current first-screen proof
 
 Required Wave 1 app-pack contract:
 
@@ -93,6 +94,10 @@ Tracked local standalone iOS build validator:
 Hosted standalone iOS workflow:
 
 - [../.github/workflows/standalone-ios-proof.yml](../.github/workflows/standalone-ios-proof.yml)
+
+Tracked local runtime launch validator:
+
+- [../Scripts/validate-runtime-app-launches.sh](../Scripts/validate-runtime-app-launches.sh)
 
 ## Rule
 

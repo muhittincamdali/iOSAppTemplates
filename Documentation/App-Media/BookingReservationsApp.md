@@ -4,11 +4,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `BookingReservationsApp`
 - Lane: `Booking / Reservations`
-- Media status: `preview-published`
+- Media status: `screenshot-published`
 
 ## Current Truth
 
-- runtime screenshot is not yet published
+- runtime screenshot is published: [../Assets/AppScreenshots/BookingReservationsApp.png](../Assets/AppScreenshots/BookingReservationsApp.png)
 - shareable gallery card is published: [../Assets/AppCards/BookingReservationsApp.svg](../Assets/AppCards/BookingReservationsApp.svg)
 - preview board is published: [../Assets/AppPreviews/BookingReservationsApp.svg](../Assets/AppPreviews/BookingReservationsApp.svg)
 - demo clip is not yet published

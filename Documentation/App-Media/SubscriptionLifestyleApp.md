@@ -4,11 +4,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `SubscriptionLifestyleApp`
 - Lane: `Subscription Lifestyle`
-- Media status: `preview-published`
+- Media status: `screenshot-published`
 
 ## Current Truth
 
-- runtime screenshot is not yet published
+- runtime screenshot is published: [../Assets/AppScreenshots/SubscriptionLifestyleApp.png](../Assets/AppScreenshots/SubscriptionLifestyleApp.png)
 - shareable gallery card is published: [../Assets/AppCards/SubscriptionLifestyleApp.svg](../Assets/AppCards/SubscriptionLifestyleApp.svg)
 - preview board is published: [../Assets/AppPreviews/SubscriptionLifestyleApp.svg](../Assets/AppPreviews/SubscriptionLifestyleApp.svg)
 - demo clip is not yet published

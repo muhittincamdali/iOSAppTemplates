@@ -12,9 +12,10 @@ Production-grade SwiftUI app starter system for Apple platforms.
 | --- | --- |
 | Root coverage | `20` standalone app roots under `Templates/` |
 | Build proof | local generic iOS `xcodebuild` tracked for `20` roots; hosted standalone iOS workflow is versioned |
+| Runtime proof | local simulator launch proof tracked for `20` roots via `Scripts/validate-runtime-app-launches.sh` |
 | Public proof | per-app proof and media pages exist for `20` roots |
-| Visual layer | gallery cards and preview boards published for `20` roots; runtime screenshots published for `3` roots |
-| Remaining gap | full `20`-app screenshot coverage, demo clips, stable green hosted standalone iOS baseline |
+| Visual layer | gallery cards, preview boards, and runtime screenshots published for `20` roots |
+| Remaining gap | demo clips, stable green hosted standalone iOS baseline, equal depth across all lanes |
 
 ## First Decision
 
@@ -46,6 +47,7 @@ This repository is not yet a full fit if you expect:
 | See canonical app media pages | [Documentation/App-Media/README.md](Documentation/App-Media/README.md) |
 | See published gallery cards and preview boards | [Documentation/App-Gallery.md](Documentation/App-Gallery.md) |
 | See hosted standalone iOS proof workflow | [.github/workflows/standalone-ios-proof.yml](.github/workflows/standalone-ios-proof.yml) |
+| Run local simulator launch proof | [Scripts/validate-runtime-app-launches.sh](Scripts/validate-runtime-app-launches.sh) |
 | See the current repo status | [PROJECT_STATUS.md](PROJECT_STATUS.md) |
 | See GitHub distribution rules | [Documentation/GitHub-Distribution.md](Documentation/GitHub-Distribution.md) |
 | See release rules | [Documentation/Release-Process.md](Documentation/Release-Process.md) |
@@ -182,12 +184,16 @@ This proves today:
   - `CRMAdminApp`
   - `SubscriptionLifestyleApp`
   - `PrivacyVaultApp`
+- local simulator runtime launch proof for the same `20` standalone roots:
+  - `bash Scripts/validate-runtime-app-launches.sh`
+- published runtime screenshots for the same `20` standalone roots:
+  - `Documentation/Assets/AppScreenshots/*.png`
 
 This does not yet prove today:
 
-- full runtime media coverage for all `20` roots
 - stable green hosted standalone iOS proof baseline for the tracked roots
 - full complete-app parity for all lanes
+- demo clip coverage for the tracked roots
 
 ### 3. Use the generator
 
@@ -203,11 +209,12 @@ swift Scripts/TemplateGenerator.swift --list
 - security smoke surface exists
 - performance smoke surface exists
 - tracked local generic iOS build proof exists for `20` standalone roots
+- tracked local simulator runtime launch proof exists for the same `20` roots
 - hosted standalone iOS proof workflow is now versioned for the same `20` roots
 - public docs are being tightened around truth-first product claims
 - the repo now has explicit app proof, media, lockfile, and portfolio routers
 - the repo now has published gallery cards and preview boards for `20` standalone roots
-- the repo now has published runtime screenshots for `EcommerceApp`, `SocialMediaApp`, and `ProductivityApp`
+- the repo now has published runtime screenshots for `20` standalone roots
 
 ## Canonical Docs
 

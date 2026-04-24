@@ -4,11 +4,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `MusicPodcastApp`
 - Lane: `Music / Podcast`
-- Media status: `preview-published`
+- Media status: `screenshot-published`
 
 ## Current Truth
 
-- runtime screenshot is not yet published
+- runtime screenshot is published: [../Assets/AppScreenshots/MusicPodcastApp.png](../Assets/AppScreenshots/MusicPodcastApp.png)
 - shareable gallery card is published: [../Assets/AppCards/MusicPodcastApp.svg](../Assets/AppCards/MusicPodcastApp.svg)
 - preview board is published: [../Assets/AppPreviews/MusicPodcastApp.svg](../Assets/AppPreviews/MusicPodcastApp.svg)
 - demo clip is not yet published

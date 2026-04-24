@@ -38,13 +38,14 @@ Generated from `Documentation/app-surface-catalog.json`.
 - `Templates/FitnessApp/Package.swift` exists
 - `Templates/FitnessApp/Package.resolved` exists as the tracked dependency lockfile
 - local generic iOS build proof is tracked via `xcodebuild -scheme FitnessApp -destination 'generic/platform=iOS' build`
+- local simulator runtime launch proof is tracked via `bash Scripts/validate-runtime-app-launches.sh FitnessApp`
 - the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
 - root repo `swift build -c release` passes
 - root repo `swift test` passes
+- runtime screenshot is published: [../Assets/AppScreenshots/FitnessApp.png](../Assets/AppScreenshots/FitnessApp.png)
 
 ## Missing Proof
 
-- runtime screenshot not yet published
 - demo clip not yet published
 - stable green hosted standalone iOS baseline should be checked on current `master`
 

@@ -4,11 +4,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `NewsBlogApp`
 - Lane: `News`
-- Media status: `preview-published`
+- Media status: `screenshot-published`
 
 ## Current Truth
 
-- runtime screenshot is not yet published
+- runtime screenshot is published: [../Assets/AppScreenshots/NewsBlogApp.png](../Assets/AppScreenshots/NewsBlogApp.png)
 - shareable gallery card is published: [../Assets/AppCards/NewsBlogApp.svg](../Assets/AppCards/NewsBlogApp.svg)
 - preview board is published: [../Assets/AppPreviews/NewsBlogApp.svg](../Assets/AppPreviews/NewsBlogApp.svg)
 - demo clip is not yet published

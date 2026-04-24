@@ -15,7 +15,7 @@
     {
       "id": "FitnessApp",
       "lane": "Health / Fitness",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/FitnessApp.md"
     },
     {
@@ -27,97 +27,97 @@
     {
       "id": "FinanceApp",
       "lane": "Finance",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/FinanceApp.md"
     },
     {
       "id": "EducationApp",
       "lane": "Education",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/EducationApp.md"
     },
     {
       "id": "FoodDeliveryApp",
       "lane": "Food Delivery",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/FoodDeliveryApp.md"
     },
     {
       "id": "TravelPlannerApp",
       "lane": "Travel",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/TravelPlannerApp.md"
     },
     {
       "id": "AIAssistantApp",
       "lane": "AI",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/AIAssistantApp.md"
     },
     {
       "id": "NewsBlogApp",
       "lane": "News",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/NewsBlogApp.md"
     },
     {
       "id": "MusicPodcastApp",
       "lane": "Music / Podcast",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/MusicPodcastApp.md"
     },
     {
       "id": "MarketplaceApp",
       "lane": "Marketplace",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/MarketplaceApp.md"
     },
     {
       "id": "MessagingApp",
       "lane": "Messaging / Community",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/MessagingApp.md"
     },
     {
       "id": "BookingReservationsApp",
       "lane": "Booking / Reservations",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/BookingReservationsApp.md"
     },
     {
       "id": "NotesKnowledgeApp",
       "lane": "Notes / Knowledge",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/NotesKnowledgeApp.md"
     },
     {
       "id": "CreatorShortVideoApp",
       "lane": "Creator / Short Video",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/CreatorShortVideoApp.md"
     },
     {
       "id": "TeamCollaborationApp",
       "lane": "Team Collaboration",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/TeamCollaborationApp.md"
     },
     {
       "id": "CRMAdminApp",
       "lane": "CRM / Admin",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/CRMAdminApp.md"
     },
     {
       "id": "SubscriptionLifestyleApp",
       "lane": "Subscription Lifestyle",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/SubscriptionLifestyleApp.md"
     },
     {
       "id": "PrivacyVaultApp",
       "lane": "Privacy / Secure Vault",
-      "status": "preview-published",
+      "status": "screenshot-published",
       "required_readme": "Documentation/App-Media/PrivacyVaultApp.md"
     }
   ]

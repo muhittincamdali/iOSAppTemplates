@@ -39,6 +39,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 - `Templates/SocialMediaApp/Package.swift` exists
 - `Templates/SocialMediaApp/Package.resolved` exists as the tracked dependency lockfile
 - local generic iOS build proof is tracked via `xcodebuild -scheme SocialMediaApp -destination 'generic/platform=iOS' build`
+- local simulator runtime launch proof is tracked via `bash Scripts/validate-runtime-app-launches.sh SocialMediaApp`
 - the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
 - root repo `swift build -c release` passes
 - root repo `swift test` passes

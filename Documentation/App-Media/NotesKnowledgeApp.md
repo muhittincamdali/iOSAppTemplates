@@ -4,11 +4,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `NotesKnowledgeApp`
 - Lane: `Notes / Knowledge`
-- Media status: `preview-published`
+- Media status: `screenshot-published`
 
 ## Current Truth
 
-- runtime screenshot is not yet published
+- runtime screenshot is published: [../Assets/AppScreenshots/NotesKnowledgeApp.png](../Assets/AppScreenshots/NotesKnowledgeApp.png)
 - shareable gallery card is published: [../Assets/AppCards/NotesKnowledgeApp.svg](../Assets/AppCards/NotesKnowledgeApp.svg)
 - preview board is published: [../Assets/AppPreviews/NotesKnowledgeApp.svg](../Assets/AppPreviews/NotesKnowledgeApp.svg)
 - demo clip is not yet published

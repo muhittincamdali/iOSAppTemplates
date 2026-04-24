@@ -33,6 +33,10 @@ jobs:
         with:
           xcode-version: latest-stable
 
+      - name: Install XcodeGen
+        run: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+
       - name: Reset SwiftPM artifact caches
         run: |
           rm -rf ~/Library/Caches/org.swift.swiftpm/artifacts
@@ -40,3 +44,6 @@ jobs:
 
       - name: Validate standalone iOS builds
         run: bash Scripts/validate-standalone-ios-builds.sh ${{ matrix.shard.apps }}
+
+      - name: Validate runtime launches
+        run: bash Scripts/validate-runtime-app-launches.sh ${{ matrix.shard.apps }}

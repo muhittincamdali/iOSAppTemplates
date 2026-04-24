@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting a fully integrated collaboration suite today
-- readers who assume runtime screenshots and clips already exist
+- readers who assume demo clips and stable hosted standalone iOS proof already exist
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
@@ -39,6 +39,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 - `Templates/ProductivityApp/Package.swift` exists
 - `Templates/ProductivityApp/Package.resolved` exists as the tracked dependency lockfile
 - local generic iOS build proof is tracked via `xcodebuild -scheme ProductivityApp -destination 'generic/platform=iOS' build`
+- local simulator runtime launch proof is tracked via `bash Scripts/validate-runtime-app-launches.sh ProductivityApp`
 - the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
 - root repo `swift build -c release` passes
 - root repo `swift test` passes

@@ -8,7 +8,7 @@ Current truth:
 
 - `20` standalone roots have published shareable gallery cards
 - `20` standalone roots have published preview boards
-- `3` standalone roots already have published runtime screenshots
+- `20` standalone roots already have published runtime screenshots
 - demo clips are still missing
 - this surface separates visual layers instead of hiding the screenshot and demo gap
 
@@ -24,24 +24,24 @@ This surface exists to:
 | --- | --- | --- | --- |
 | EcommerceApp | Commerce | `screenshot-published` | [EcommerceApp.md](./EcommerceApp.md) |
 | SocialMediaApp | Social | `screenshot-published` | [SocialMediaApp.md](./SocialMediaApp.md) |
-| FitnessApp | Health / Fitness | `preview-published` | [FitnessApp.md](./FitnessApp.md) |
+| FitnessApp | Health / Fitness | `screenshot-published` | [FitnessApp.md](./FitnessApp.md) |
 | ProductivityApp | Productivity | `screenshot-published` | [ProductivityApp.md](./ProductivityApp.md) |
-| FinanceApp | Finance | `preview-published` | [FinanceApp.md](./FinanceApp.md) |
-| EducationApp | Education | `preview-published` | [EducationApp.md](./EducationApp.md) |
-| FoodDeliveryApp | Food Delivery | `preview-published` | [FoodDeliveryApp.md](./FoodDeliveryApp.md) |
-| TravelPlannerApp | Travel | `preview-published` | [TravelPlannerApp.md](./TravelPlannerApp.md) |
-| AIAssistantApp | AI | `preview-published` | [AIAssistantApp.md](./AIAssistantApp.md) |
-| NewsBlogApp | News | `preview-published` | [NewsBlogApp.md](./NewsBlogApp.md) |
-| MusicPodcastApp | Music / Podcast | `preview-published` | [MusicPodcastApp.md](./MusicPodcastApp.md) |
-| MarketplaceApp | Marketplace | `preview-published` | [MarketplaceApp.md](./MarketplaceApp.md) |
-| MessagingApp | Messaging / Community | `preview-published` | [MessagingApp.md](./MessagingApp.md) |
-| BookingReservationsApp | Booking / Reservations | `preview-published` | [BookingReservationsApp.md](./BookingReservationsApp.md) |
-| NotesKnowledgeApp | Notes / Knowledge | `preview-published` | [NotesKnowledgeApp.md](./NotesKnowledgeApp.md) |
-| CreatorShortVideoApp | Creator / Short Video | `preview-published` | [CreatorShortVideoApp.md](./CreatorShortVideoApp.md) |
-| TeamCollaborationApp | Team Collaboration | `preview-published` | [TeamCollaborationApp.md](./TeamCollaborationApp.md) |
-| CRMAdminApp | CRM / Admin | `preview-published` | [CRMAdminApp.md](./CRMAdminApp.md) |
-| SubscriptionLifestyleApp | Subscription Lifestyle | `preview-published` | [SubscriptionLifestyleApp.md](./SubscriptionLifestyleApp.md) |
-| PrivacyVaultApp | Privacy / Secure Vault | `preview-published` | [PrivacyVaultApp.md](./PrivacyVaultApp.md) |
+| FinanceApp | Finance | `screenshot-published` | [FinanceApp.md](./FinanceApp.md) |
+| EducationApp | Education | `screenshot-published` | [EducationApp.md](./EducationApp.md) |
+| FoodDeliveryApp | Food Delivery | `screenshot-published` | [FoodDeliveryApp.md](./FoodDeliveryApp.md) |
+| TravelPlannerApp | Travel | `screenshot-published` | [TravelPlannerApp.md](./TravelPlannerApp.md) |
+| AIAssistantApp | AI | `screenshot-published` | [AIAssistantApp.md](./AIAssistantApp.md) |
+| NewsBlogApp | News | `screenshot-published` | [NewsBlogApp.md](./NewsBlogApp.md) |
+| MusicPodcastApp | Music / Podcast | `screenshot-published` | [MusicPodcastApp.md](./MusicPodcastApp.md) |
+| MarketplaceApp | Marketplace | `screenshot-published` | [MarketplaceApp.md](./MarketplaceApp.md) |
+| MessagingApp | Messaging / Community | `screenshot-published` | [MessagingApp.md](./MessagingApp.md) |
+| BookingReservationsApp | Booking / Reservations | `screenshot-published` | [BookingReservationsApp.md](./BookingReservationsApp.md) |
+| NotesKnowledgeApp | Notes / Knowledge | `screenshot-published` | [NotesKnowledgeApp.md](./NotesKnowledgeApp.md) |
+| CreatorShortVideoApp | Creator / Short Video | `screenshot-published` | [CreatorShortVideoApp.md](./CreatorShortVideoApp.md) |
+| TeamCollaborationApp | Team Collaboration | `screenshot-published` | [TeamCollaborationApp.md](./TeamCollaborationApp.md) |
+| CRMAdminApp | CRM / Admin | `screenshot-published` | [CRMAdminApp.md](./CRMAdminApp.md) |
+| SubscriptionLifestyleApp | Subscription Lifestyle | `screenshot-published` | [SubscriptionLifestyleApp.md](./SubscriptionLifestyleApp.md) |
+| PrivacyVaultApp | Privacy / Secure Vault | `screenshot-published` | [PrivacyVaultApp.md](./PrivacyVaultApp.md) |
 
 ## Rule
 

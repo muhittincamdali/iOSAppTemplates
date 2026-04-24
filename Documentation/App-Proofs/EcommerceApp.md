@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams that expect release-grade commerce integrations today
-- readers who assume runtime screenshots and demo clips are already published
+- readers who assume demo clips and stable hosted standalone iOS proof already exist
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
@@ -39,6 +39,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 - `Templates/EcommerceApp/Package.swift` exists
 - no external dependency lockfile is required today
 - local generic iOS build proof is tracked via `xcodebuild -scheme EcommerceApp -destination 'generic/platform=iOS' build`
+- local simulator runtime launch proof is tracked via `bash Scripts/validate-runtime-app-launches.sh EcommerceApp`
 - the hosted standalone iOS proof workflow is active; check live GitHub status on `master`
 - root repo `swift build -c release` passes
 - root repo `swift test` passes
