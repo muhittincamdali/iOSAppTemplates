@@ -13,6 +13,7 @@ CATALOG_PATH = REPO_ROOT / "Documentation" / "app-surface-catalog.json"
 PROOFS_DIR = REPO_ROOT / "Documentation" / "App-Proofs"
 MEDIA_DIR = REPO_ROOT / "Documentation" / "App-Media"
 EXAMPLES_HUB_PATH = REPO_ROOT / "Examples" / "README.md"
+SCREENSHOTS_DIR = REPO_ROOT / "Documentation" / "Assets" / "AppScreenshots"
 
 
 def load_catalog() -> list[dict[str, Any]]:
@@ -33,6 +34,14 @@ def relative_doc_link(path: str) -> str:
 
 def path_from_root(path: str) -> Path:
     return REPO_ROOT / path
+
+
+def screenshot_relative_path(app_name: str) -> str:
+    return f"../Assets/AppScreenshots/{app_name}.png"
+
+
+def screenshot_exists(app_name: str) -> bool:
+    return (SCREENSHOTS_DIR / f"{app_name}.png").exists()
 
 
 def example_name(app: dict[str, Any]) -> str:
@@ -58,6 +67,7 @@ def proof_page(app: dict[str, Any]) -> str:
     app_name = app["app"]
     example_path = app.get("example_path")
     lockfile_path = app.get("lockfile_path")
+    has_screenshot = screenshot_exists(app_name)
     lines: list[str] = [
         f"# {app_name} Proof Surface",
         "",
@@ -110,13 +120,14 @@ def proof_page(app: dict[str, Any]) -> str:
         "- root repo `swift build -c release` passes",
         "- root repo `swift test` passes",
     ])
+    if has_screenshot:
+        lines.append(f"- runtime screenshot is published: {md_link(screenshot_relative_path(app_name), screenshot_relative_path(app_name))}")
     if example_path:
         lines.append(f"- {code_link(example_path.removesuffix('/README.md'))} inspection route exists")
     lines.extend([
         "",
         "## Missing Proof",
         "",
-        "- runtime screenshot not yet published",
         "- demo clip not yet published",
         "- stable green hosted standalone iOS baseline should be checked on current `master`",
         "",
@@ -152,12 +163,16 @@ def proof_page(app: dict[str, Any]) -> str:
         f"- {md_link('Proof Matrix', '../Proof-Matrix.md')}",
         f"- {md_link('Portfolio Matrix', '../Portfolio-Matrix.md')}",
     ])
+    if not has_screenshot:
+        lines.insert(lines.index("- demo clip not yet published"), "- runtime screenshot not yet published")
     return "\n".join(lines) + "\n"
 
 
 def media_page(app: dict[str, Any]) -> str:
     app_name = app["app"]
     example_path = app.get("example_path")
+    has_screenshot = screenshot_exists(app_name)
+    media_status = "screenshot-published" if has_screenshot else "preview-published"
     lines: list[str] = [
         f"# {app_name} Media Surface",
         "",
@@ -165,13 +180,12 @@ def media_page(app: dict[str, Any]) -> str:
         "",
         f"- App: `{app_name}`",
         f"- Lane: `{app['lane']}`",
-        "- Media status: `preview-published`",
+        f"- Media status: `{media_status}`",
         "",
         "## Current Truth",
         "",
         f"- shareable gallery card is published: {md_link('../Assets/AppCards/' + app_name + '.svg', '../Assets/AppCards/' + app_name + '.svg')}",
         f"- preview board is published: {md_link('../Assets/AppPreviews/' + app_name + '.svg', '../Assets/AppPreviews/' + app_name + '.svg')}",
-        "- runtime screenshot is not yet published",
         "- demo clip is not yet published",
         "",
         "## What Exists Instead",
@@ -180,6 +194,10 @@ def media_page(app: dict[str, Any]) -> str:
         f"- {md_link('Template Root README', relative_doc_link(app['readme_path']))}",
         f"- {md_link('Standalone Root Package', relative_doc_link(app['entry_path']))}",
     ]
+    if has_screenshot:
+        lines.insert(10, f"- runtime screenshot is published: {md_link(screenshot_relative_path(app_name), screenshot_relative_path(app_name))}")
+    else:
+        lines.insert(10, "- runtime screenshot is not yet published")
     if example_path:
         lines.append(f"- {md_link('Richer Example', relative_doc_link(example_path))}")
     lines.extend([
@@ -195,6 +213,7 @@ def template_root_page(app: dict[str, Any]) -> str:
     app_name = app["app"]
     lockfile_path = app.get("lockfile_path")
     example_path = app.get("example_path")
+    has_screenshot = screenshot_exists(app_name)
     lines: list[str] = [
         f"# {app_name}",
         "",
@@ -255,7 +274,6 @@ def template_root_page(app: dict[str, Any]) -> str:
         "",
         "## Missing Proof",
         "",
-        "- runtime screenshot",
         "- demo clip",
         "- stable green hosted standalone iOS baseline on current `master`",
         "",
@@ -490,6 +508,7 @@ def proof_router(catalog: list[dict[str, Any]]) -> str:
 
 
 def media_router(catalog: list[dict[str, Any]]) -> str:
+    screenshot_count = sum(1 for app in catalog if screenshot_exists(app["app"]))
     lines: list[str] = [
         "# App Media Surfaces",
         "",
@@ -501,7 +520,7 @@ def media_router(catalog: list[dict[str, Any]]) -> str:
         "",
         f"- `{len(catalog)}` standalone roots have published shareable gallery cards",
         f"- `{len(catalog)}` standalone roots have published preview boards",
-        "- canonical runtime screenshots are still missing",
+        f"- `{screenshot_count}` standalone roots already have published runtime screenshots",
         "- demo clips are still missing",
         "- this surface separates visual layers instead of hiding the screenshot and demo gap",
         "",
@@ -517,7 +536,8 @@ def media_router(catalog: list[dict[str, Any]]) -> str:
         "| --- | --- | --- | --- |",
     ]
     for app in catalog:
-        lines.append(f"| {app['app']} | {app['lane']} | `preview-published` | [{app['app']}.md](./{app['app']}.md) |")
+        media_status = "screenshot-published" if screenshot_exists(app["app"]) else "preview-published"
+        lines.append(f"| {app['app']} | {app['lane']} | `{media_status}` | [{app['app']}.md](./{app['app']}.md) |")
     lines.extend([
         "",
         "## Rule",
@@ -529,6 +549,13 @@ def media_router(catalog: list[dict[str, Any]]) -> str:
         "- a shareable gallery card exists",
         "- a preview board exists",
         "- a real screenshot may still be missing",
+        "- a demo clip may still be missing",
+        "",
+        "If an app is marked `screenshot-published`, it means:",
+        "",
+        "- a shareable gallery card exists",
+        "- a preview board exists",
+        "- at least one runtime screenshot is now published",
         "- a demo clip may still be missing",
         "",
         "## Related Surfaces",

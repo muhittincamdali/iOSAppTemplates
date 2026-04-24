@@ -4,32 +4,12 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 policy_file="${repo_root}/Documentation/app-media-policy.json"
+screenshots_dir="${repo_root}/Documentation/Assets/AppScreenshots"
 
 if [[ ! -f "${policy_file}" ]]; then
   echo "Missing media policy: Documentation/app-media-policy.json" >&2
   exit 1
 fi
-
-python3 - "${policy_file}" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-path = Path(sys.argv[1])
-with path.open("r", encoding="utf-8") as handle:
-    payload = json.load(handle)
-
-apps = payload.get("apps")
-if not isinstance(apps, list) or len(apps) != 20:
-    raise SystemExit("Media policy must define exactly 20 standalone apps.")
-
-for item in apps:
-    for key in ("id", "lane", "status", "required_readme"):
-        if key not in item:
-            raise SystemExit(f"Missing key '{key}' in media policy entry: {item}")
-    if item["status"] != "preview-published":
-        raise SystemExit(f"Unexpected media status for {item['id']}: {item['status']}")
-PY
 
 required_docs=(
   "Documentation/App-Media/README.md"
@@ -66,59 +46,61 @@ for relative_path in "${required_docs[@]}"; do
   fi
 done
 
-require_pattern() {
-  local pattern="$1"
-  local file_path="$2"
-  local error_message="$3"
+python3 - "${repo_root}" "${policy_file}" "${screenshots_dir}" <<'PY'
+import json
+import sys
+from pathlib import Path
 
-  if ! grep -Eq "${pattern}" "${file_path}"; then
-    echo "${error_message}" >&2
-    exit 1
-  fi
-}
+repo_root = Path(sys.argv[1])
+policy_path = Path(sys.argv[2])
+screenshot_dir = Path(sys.argv[3])
 
-require_pattern 'EcommerceApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention EcommerceApp status."
-require_pattern 'SocialMediaApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention SocialMediaApp status."
-require_pattern 'FitnessApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention FitnessApp status."
-require_pattern 'ProductivityApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention ProductivityApp status."
-require_pattern 'FinanceApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention FinanceApp status."
-require_pattern 'EducationApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention EducationApp status."
-require_pattern 'FoodDeliveryApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention FoodDeliveryApp status."
-require_pattern 'TravelPlannerApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention TravelPlannerApp status."
-require_pattern 'AIAssistantApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention AIAssistantApp status."
-require_pattern 'NewsBlogApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention NewsBlogApp status."
-require_pattern 'MusicPodcastApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention MusicPodcastApp status."
-require_pattern 'MarketplaceApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention MarketplaceApp status."
-require_pattern 'MessagingApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention MessagingApp status."
-require_pattern 'BookingReservationsApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention BookingReservationsApp status."
-require_pattern 'NotesKnowledgeApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention NotesKnowledgeApp status."
-require_pattern 'CreatorShortVideoApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention CreatorShortVideoApp status."
-require_pattern 'TeamCollaborationApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention TeamCollaborationApp status."
-require_pattern 'CRMAdminApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention CRMAdminApp status."
-require_pattern 'SubscriptionLifestyleApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention SubscriptionLifestyleApp status."
-require_pattern 'PrivacyVaultApp.*preview-published' "${repo_root}/Documentation/App-Media/README.md" "Media router must mention PrivacyVaultApp status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/EcommerceApp.md" "EcommerceApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/SocialMediaApp.md" "SocialMediaApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/FitnessApp.md" "FitnessApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/ProductivityApp.md" "ProductivityApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/FinanceApp.md" "FinanceApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/EducationApp.md" "EducationApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/FoodDeliveryApp.md" "FoodDeliveryApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/TravelPlannerApp.md" "TravelPlannerApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/AIAssistantApp.md" "AIAssistantApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/NewsBlogApp.md" "NewsBlogApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/MusicPodcastApp.md" "MusicPodcastApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/MarketplaceApp.md" "MarketplaceApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/MessagingApp.md" "MessagingApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/BookingReservationsApp.md" "BookingReservationsApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/NotesKnowledgeApp.md" "NotesKnowledgeApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/CreatorShortVideoApp.md" "CreatorShortVideoApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/TeamCollaborationApp.md" "TeamCollaborationApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/CRMAdminApp.md" "CRMAdminApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/SubscriptionLifestyleApp.md" "SubscriptionLifestyleApp media page must declare status."
-require_pattern 'Media status: `preview-published`' "${repo_root}/Documentation/App-Media/PrivacyVaultApp.md" "PrivacyVaultApp media page must declare status."
-require_pattern 'App-Gallery\.md' "${repo_root}/Documentation/App-Media/README.md" "Media router must link gallery surface."
-require_pattern 'App-Media/README\.md' "${repo_root}/Documentation/App-Proofs/README.md" "App proof router must link to media router."
-require_pattern 'canonical per-app media pages exist' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention canonical media router."
+policy = json.loads(policy_path.read_text())
+apps = policy.get("apps")
+if not isinstance(apps, list) or len(apps) != 20:
+    raise SystemExit("Media policy must define exactly 20 standalone apps.")
 
-echo "App media surfaces look good."
+router = (repo_root / "Documentation" / "App-Media" / "README.md").read_text()
+proof_router = (repo_root / "Documentation" / "App-Proofs" / "README.md").read_text()
+proof_matrix = (repo_root / "Documentation" / "Proof-Matrix.md").read_text()
+
+if "App-Gallery.md" not in router:
+    raise SystemExit("Media router must link gallery surface.")
+if "App-Media/README.md" not in proof_router:
+    raise SystemExit("App proof router must link to media router.")
+if "canonical per-app media pages exist" not in proof_matrix:
+    raise SystemExit("Proof matrix must mention canonical media router.")
+
+for item in apps:
+    for key in ("id", "lane", "status", "required_readme"):
+        if key not in item:
+            raise SystemExit(f"Missing key '{key}' in media policy entry: {item}")
+
+    app_id = item["id"]
+    lane = item["lane"]
+    media_page_path = repo_root / item["required_readme"]
+    media_page = media_page_path.read_text()
+    has_screenshot = (screenshot_dir / f"{app_id}.png").exists()
+    expected_status = "screenshot-published" if has_screenshot else "preview-published"
+
+    if item["status"] != expected_status:
+        raise SystemExit(f"Unexpected media status for {app_id}: {item['status']} (expected {expected_status})")
+
+    router_row = f"| {app_id} | {lane} | `{expected_status}` |"
+    if router_row not in router:
+        raise SystemExit(f"Media router must mention {app_id} status {expected_status}.")
+
+    page_status = f"Media status: `{expected_status}`"
+    if page_status not in media_page:
+        raise SystemExit(f"{app_id} media page must declare status {expected_status}.")
+
+    if has_screenshot:
+        screenshot_link = f"../Assets/AppScreenshots/{app_id}.png"
+        if screenshot_link not in media_page:
+            raise SystemExit(f"{app_id} media page must link the runtime screenshot.")
+    else:
+        if "runtime screenshot is not yet published" not in media_page:
+            raise SystemExit(f"{app_id} media page must state screenshot gap.")
+
+print("App media surfaces look good.")
+PY

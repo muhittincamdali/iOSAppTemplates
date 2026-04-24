@@ -1,5 +1,9 @@
 import SwiftUI
 
+private enum RuntimeCaptureMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_SCREENSHOT_MODE"] == "1"
+}
+
 // MARK: - E-commerce App
 @main
 struct EcommerceApp: App {
@@ -29,6 +33,7 @@ struct EcommerceApp: App {
     
     // MARK: - Setup Methods
     private func setupStripe() {
+        guard !RuntimeCaptureMode.isEnabled else { return }
         print("💳 Payment provider placeholder configured")
     }
     
@@ -56,6 +61,12 @@ struct EcommerceApp: App {
     }
     
     private func setupApp() {
+        if RuntimeCaptureMode.isEnabled {
+            authManager.currentUser = EcommerceUser(email: "preview@iosapptemplates.dev", displayName: "Preview User")
+            authManager.isAuthenticated = true
+            return
+        }
+
         Task {
             await authManager.checkAuthState()
             await productManager.loadProducts()
@@ -82,7 +93,8 @@ struct ContentView: View {
         .animation(.easeInOut(duration: 0.3), value: authManager.isAuthenticated)
         .animation(.easeInOut(duration: 0.3), value: isLoading)
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            let delay = RuntimeCaptureMode.isEnabled ? 0.1 : 2.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 withAnimation {
                     isLoading = false
                 }

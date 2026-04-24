@@ -8,9 +8,9 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Current Truth
 
+- runtime screenshot is not yet published
 - shareable gallery card is published: [../Assets/AppCards/MarketplaceApp.svg](../Assets/AppCards/MarketplaceApp.svg)
 - preview board is published: [../Assets/AppPreviews/MarketplaceApp.svg](../Assets/AppPreviews/MarketplaceApp.svg)
-- runtime screenshot is not yet published
 - demo clip is not yet published
 
 ## What Exists Instead
