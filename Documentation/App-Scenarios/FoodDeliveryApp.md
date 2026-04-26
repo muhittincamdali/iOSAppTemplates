@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![FoodDeliveryApp scenario board](../Assets/AppScenarioBoards/FoodDeliveryApp.svg)
+
 ### Launch Frame
 
 ![FoodDeliveryApp launch](../Assets/AppScenarioShots/FoodDeliveryApp-launch.png)

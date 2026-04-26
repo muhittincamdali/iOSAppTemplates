@@ -1,0 +1,44 @@
+<svg width="1800" height="1160" viewBox="0 0 1800 1160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="100" y1="70" x2="1680" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F953C6"/>
+      <stop offset="1" stop-color="#B91D73"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="118" y1="118" x2="1690" y2="1050" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#020617" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#111827" stop-opacity="0.88"/>
+    </linearGradient>
+  </defs>
+  <rect width="1800" height="1160" fill="#020617"/>
+  <rect x="32" y="32" width="1736" height="1096" rx="44" fill="url(#bg)"/>
+  <rect x="84" y="84" width="1632" height="992" rx="38" fill="url(#panel)"/>
+  <rect x="130" y="132" width="290" height="46" rx="23" fill="white" fill-opacity="0.12"/>
+  <text x="162" y="162" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">runtime scenario board</text>
+  <text x="130" y="278" fill="white" font-size="68" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="800">SubscriptionLifestyleApp</text>
+  <text x="130" y="330" fill="#D1D5DB" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="600">Subscription Lifestyle</text>
+  <text x="130" y="406" fill="#F8FAFC" font-size="26" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Published runtime progression: launch, ready, and first-screen proof.</text>
+  <text x="130" y="448" fill="#D1D5DB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">This is a canonical proof board, not a complete-app parity claim.</text>
+  <rect x="130" y="520" width="424" height="86" rx="24" fill="white" fill-opacity="0.10"/>
+  <text x="164" y="575" fill="white" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Launch-to-ready proof published</text>
+  <text x="130" y="672" fill="#E5E7EB" font-size="22" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Capture targets:</text>
+  <text x="130" y="716" fill="#F8FAFC" font-size="22" font-family="SF Pro Display, Helvetica, Arial, sans-serif">1. habit dashboard screenshot</text>
+  <text x="130" y="754" fill="#F8FAFC" font-size="22" font-family="SF Pro Display, Helvetica, Arial, sans-serif">2. streak or premium upsell screenshot</text>
+  <text x="130" y="792" fill="#F8FAFC" font-size="22" font-family="SF Pro Display, Helvetica, Arial, sans-serif">3. short routine-tracking demo clip</text>
+
+  <text x="700" y="160" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">launch</text>
+  <rect x="700" y="184" width="310" height="640" rx="34" fill="white" fill-opacity="0.08"/>
+  <image href="../AppScenarioShots/SubscriptionLifestyleApp-launch.png" x="724" y="208" width="262" height="592" preserveAspectRatio="xMidYMid slice"/>
+
+  <text x="1048" y="160" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">ready</text>
+  <rect x="1048" y="184" width="310" height="640" rx="34" fill="white" fill-opacity="0.08"/>
+  <image href="../AppScenarioShots/SubscriptionLifestyleApp-ready.png" x="1072" y="208" width="262" height="592" preserveAspectRatio="xMidYMid slice"/>
+
+  <text x="1396" y="160" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">first-screen</text>
+  <rect x="1396" y="184" width="310" height="640" rx="34" fill="white" fill-opacity="0.08"/>
+  <image href="../AppScreenshots/SubscriptionLifestyleApp.png" x="1420" y="208" width="262" height="592" preserveAspectRatio="xMidYMid slice"/>
+
+  <rect x="700" y="864" width="1006" height="132" rx="28" fill="white" fill-opacity="0.08"/>
+  <text x="736" y="920" fill="#F8FAFC" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Runtime proof board</text>
+  <text x="736" y="960" fill="#D1D5DB" font-size="22" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Use the scenario page, proof page, and media page together for the current truth.</text>
+ </svg>
+

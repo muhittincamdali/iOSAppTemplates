@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![NewsBlogApp scenario board](../Assets/AppScenarioBoards/NewsBlogApp.svg)
+
 ### Launch Frame
 
 ![NewsBlogApp launch](../Assets/AppScenarioShots/NewsBlogApp-launch.png)

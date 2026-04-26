@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![BookingReservationsApp scenario board](../Assets/AppScenarioBoards/BookingReservationsApp.svg)
+
 ### Launch Frame
 
 ![BookingReservationsApp launch](../Assets/AppScenarioShots/BookingReservationsApp-launch.png)

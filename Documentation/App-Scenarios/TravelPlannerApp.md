@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![TravelPlannerApp scenario board](../Assets/AppScenarioBoards/TravelPlannerApp.svg)
+
 ### Launch Frame
 
 ![TravelPlannerApp launch](../Assets/AppScenarioShots/TravelPlannerApp-launch.png)

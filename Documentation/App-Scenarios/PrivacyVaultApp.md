@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![PrivacyVaultApp scenario board](../Assets/AppScenarioBoards/PrivacyVaultApp.svg)
+
 ### Launch Frame
 
 ![PrivacyVaultApp launch](../Assets/AppScenarioShots/PrivacyVaultApp-launch.png)

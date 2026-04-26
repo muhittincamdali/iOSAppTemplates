@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![FinanceApp scenario board](../Assets/AppScenarioBoards/FinanceApp.svg)
+
 ### Launch Frame
 
 ![FinanceApp launch](../Assets/AppScenarioShots/FinanceApp-launch.png)

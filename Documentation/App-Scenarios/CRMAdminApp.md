@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![CRMAdminApp scenario board](../Assets/AppScenarioBoards/CRMAdminApp.svg)
+
 ### Launch Frame
 
 ![CRMAdminApp launch](../Assets/AppScenarioShots/CRMAdminApp-launch.png)

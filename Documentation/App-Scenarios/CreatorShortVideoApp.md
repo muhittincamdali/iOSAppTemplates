@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![CreatorShortVideoApp scenario board](../Assets/AppScenarioBoards/CreatorShortVideoApp.svg)
+
 ### Launch Frame
 
 ![CreatorShortVideoApp launch](../Assets/AppScenarioShots/CreatorShortVideoApp-launch.png)
