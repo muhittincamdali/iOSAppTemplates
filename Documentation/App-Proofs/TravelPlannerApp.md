@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting full booking network integrations today
-- readers who assume demo clips and stable hosted standalone iOS proof already exist
+- readers who expect deeper runtime scenario coverage than the current screenshot and demo proof
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
