@@ -8,6 +8,7 @@ cd "$repo_root"
 gallery_doc="Documentation/App-Gallery.md"
 assets_dir="Documentation/Assets/AppCards"
 screenshots_dir="Documentation/Assets/AppScreenshots"
+scenario_dir="Documentation/Assets/AppScenarioShots"
 
 apps=(
   "EcommerceApp"
@@ -39,6 +40,8 @@ for app in "${apps[@]}"; do
   asset="$assets_dir/${app}.svg"
   media_doc="Documentation/App-Media/${app}.md"
   screenshot_asset="$screenshots_dir/${app}.png"
+  launch_asset="$scenario_dir/${app}-launch.png"
+  ready_asset="$scenario_dir/${app}-ready.png"
 
   [[ -f "$asset" ]] || { echo "Missing gallery asset: $asset" >&2; exit 1; }
   [[ -f "$media_doc" ]] || { echo "Missing media doc: $media_doc" >&2; exit 1; }
@@ -48,13 +51,21 @@ for app in "${apps[@]}"; do
 
   if [[ -f "$screenshot_asset" ]]; then
     grep -Fq "${app}.png" "$gallery_doc" || { echo "$gallery_doc missing screenshot link for $app" >&2; exit 1; }
-    if grep -Fq 'Media status: `demo-published`' "$media_doc"; then
+    if grep -Fq 'Media status: `scenario-published`' "$media_doc"; then
+      :
+    elif grep -Fq 'Media status: `demo-published`' "$media_doc"; then
       :
     else
       grep -Fq 'Media status: `screenshot-published`' "$media_doc" || { echo "$media_doc missing screenshot-published or demo-published status" >&2; exit 1; }
     fi
   else
     grep -Fq 'Media status: `preview-published`' "$media_doc" || { echo "$media_doc missing preview-published status" >&2; exit 1; }
+  fi
+
+  if [[ -f "$launch_asset" && -f "$ready_asset" ]]; then
+    grep -Fq "${app}-launch.png" "$gallery_doc" || { echo "$gallery_doc missing launch scenario link for $app" >&2; exit 1; }
+    grep -Fq "${app}-ready.png" "$gallery_doc" || { echo "$gallery_doc missing ready scenario link for $app" >&2; exit 1; }
+    grep -Fq 'Media status: `scenario-published`' "$media_doc" || { echo "$media_doc missing scenario-published status" >&2; exit 1; }
   fi
 done
 

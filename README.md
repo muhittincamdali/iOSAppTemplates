@@ -12,9 +12,9 @@ Production-grade SwiftUI app starter system for Apple platforms.
 | --- | --- |
 | Root coverage | `20` standalone app roots under `Templates/` |
 | Build proof | local generic iOS `xcodebuild` tracked for `20` roots; hosted standalone iOS workflow is versioned |
-| Runtime proof | local simulator launch proof tracked for `20` roots via `Scripts/validate-runtime-app-launches.sh` |
+| Runtime proof | local simulator launch proof plus launch-to-ready scenario frames tracked for `20` roots |
 | Public proof | per-app proof and media pages exist for `20` roots |
-| Visual layer | gallery cards, preview boards, runtime screenshots, and demo clips published for `20` roots |
+| Visual layer | gallery cards, preview boards, runtime screenshots, demo clips, and scenario frames published for `20` roots |
 | Remaining gap | stable green hosted standalone iOS baseline, equal depth across all lanes |
 
 ## First Decision
@@ -30,7 +30,7 @@ This repository is not yet a full fit if you expect:
 
 - `20 complete apps` already shipping at equal maturity
 - the same proof depth for every lane today
-- published media and hosted standalone iOS proof for every standalone app
+- deeper interactive flows beyond the current launch-to-ready scenario set
 
 ![Portfolio Board](Documentation/Assets/Readme/iosapptemplates-portfolio-board.svg)
 
@@ -190,6 +190,9 @@ This proves today:
   - `Documentation/Assets/AppScreenshots/*.png`
 - published runtime demo clips for the same `20` standalone roots:
   - `Documentation/Assets/AppDemoClips/*.mp4`
+- published launch-to-ready scenario frames for the same `20` standalone roots:
+  - `Documentation/Assets/AppScenarioShots/*-launch.png`
+  - `Documentation/Assets/AppScenarioShots/*-ready.png`
 
 This does not yet prove today:
 
@@ -217,6 +220,7 @@ swift Scripts/TemplateGenerator.swift --list
 - the repo now has published gallery cards and preview boards for `20` standalone roots
 - the repo now has published runtime screenshots for `20` standalone roots
 - the repo now has published runtime demo clips for `20` standalone roots
+- the repo now has published launch-to-ready scenario frames for `20` standalone roots
 
 ## Canonical Docs
 

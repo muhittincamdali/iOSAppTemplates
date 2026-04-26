@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting production seller operations today
-- readers who expect deeper runtime scenario coverage than the current screenshot and demo proof
+- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
@@ -45,6 +45,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 - root repo `swift test` passes
 - runtime screenshot is published: [../Assets/AppScreenshots/MarketplaceApp.png](../Assets/AppScreenshots/MarketplaceApp.png)
 - demo clip is published: [../Assets/AppDemoClips/MarketplaceApp.mp4](../Assets/AppDemoClips/MarketplaceApp.mp4)
+- launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/MarketplaceApp-launch.png) / [ready](../Assets/AppScenarioShots/MarketplaceApp-ready.png)
 - `Examples/MarketplaceExample` inspection route exists
 
 ## Missing Proof

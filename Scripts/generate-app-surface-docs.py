@@ -15,6 +15,7 @@ MEDIA_DIR = REPO_ROOT / "Documentation" / "App-Media"
 EXAMPLES_HUB_PATH = REPO_ROOT / "Examples" / "README.md"
 SCREENSHOTS_DIR = REPO_ROOT / "Documentation" / "Assets" / "AppScreenshots"
 DEMO_CLIPS_DIR = REPO_ROOT / "Documentation" / "Assets" / "AppDemoClips"
+SCENARIO_SHOTS_DIR = REPO_ROOT / "Documentation" / "Assets" / "AppScenarioShots"
 APP_GALLERY_PATH = REPO_ROOT / "Documentation" / "App-Gallery.md"
 
 
@@ -54,6 +55,26 @@ def demo_clip_exists(app_name: str) -> bool:
     return (DEMO_CLIPS_DIR / f"{app_name}.mp4").exists()
 
 
+def scenario_launch_relative_path(app_name: str) -> str:
+    return f"../Assets/AppScenarioShots/{app_name}-launch.png"
+
+
+def scenario_ready_relative_path(app_name: str) -> str:
+    return f"../Assets/AppScenarioShots/{app_name}-ready.png"
+
+
+def scenario_launch_exists(app_name: str) -> bool:
+    return (SCENARIO_SHOTS_DIR / f"{app_name}-launch.png").exists()
+
+
+def scenario_ready_exists(app_name: str) -> bool:
+    return (SCENARIO_SHOTS_DIR / f"{app_name}-ready.png").exists()
+
+
+def scenario_pair_exists(app_name: str) -> bool:
+    return scenario_launch_exists(app_name) and scenario_ready_exists(app_name)
+
+
 def example_name(app: dict[str, Any]) -> str:
     example_path = app.get("example_path")
     if not example_path:
@@ -79,6 +100,7 @@ def proof_page(app: dict[str, Any]) -> str:
     lockfile_path = app.get("lockfile_path")
     has_screenshot = screenshot_exists(app_name)
     has_demo_clip = demo_clip_exists(app_name)
+    has_scenario_pair = scenario_pair_exists(app_name)
     lines: list[str] = [
         f"# {app_name} Proof Surface",
         "",
@@ -136,6 +158,12 @@ def proof_page(app: dict[str, Any]) -> str:
         lines.append(f"- runtime screenshot is published: {md_link(screenshot_relative_path(app_name), screenshot_relative_path(app_name))}")
     if has_demo_clip:
         lines.append(f"- demo clip is published: {md_link(demo_clip_relative_path(app_name), demo_clip_relative_path(app_name))}")
+    if has_scenario_pair:
+        lines.append(
+            "- launch-to-ready scenario frames are published: "
+            f"{md_link('launch', scenario_launch_relative_path(app_name))} / "
+            f"{md_link('ready', scenario_ready_relative_path(app_name))}"
+        )
     if example_path:
         lines.append(f"- {code_link(example_path.removesuffix('/README.md'))} inspection route exists")
     lines.extend([
@@ -190,7 +218,8 @@ def media_page(app: dict[str, Any]) -> str:
     example_path = app.get("example_path")
     has_screenshot = screenshot_exists(app_name)
     has_demo_clip = demo_clip_exists(app_name)
-    media_status = "demo-published" if has_demo_clip else "screenshot-published" if has_screenshot else "preview-published"
+    has_scenario_pair = scenario_pair_exists(app_name)
+    media_status = "scenario-published" if has_scenario_pair else "demo-published" if has_demo_clip else "screenshot-published" if has_screenshot else "preview-published"
     lines: list[str] = [
         f"# {app_name} Media Surface",
         "",
@@ -219,6 +248,15 @@ def media_page(app: dict[str, Any]) -> str:
         lines.insert(11, f"- demo clip is published: {md_link(demo_clip_relative_path(app_name), demo_clip_relative_path(app_name))}")
     else:
         lines.insert(11, "- demo clip is not yet published")
+    if has_scenario_pair:
+        lines.insert(
+            12,
+            "- launch-to-ready scenario frames are published: "
+            f"{md_link('launch', scenario_launch_relative_path(app_name))} / "
+            f"{md_link('ready', scenario_ready_relative_path(app_name))}",
+        )
+    else:
+        lines.insert(12, "- launch-to-ready scenario frames are not yet published")
     if example_path:
         lines.append(f"- {md_link('Richer Example', relative_doc_link(example_path))}")
     lines.extend([
@@ -374,7 +412,7 @@ def example_page(app: dict[str, Any]) -> str:
         "### Not for",
         "",
         "- teams expecting a separate runnable Xcode project",
-        "- readers who expect deeper multi-screen runtime scenario proof than the current published media set",
+        "- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario set",
         "",
         "## Current Truth",
         "",
@@ -538,6 +576,7 @@ def proof_router(catalog: list[dict[str, Any]]) -> str:
 def media_router(catalog: list[dict[str, Any]]) -> str:
     screenshot_count = sum(1 for app in catalog if screenshot_exists(app["app"]))
     demo_clip_count = sum(1 for app in catalog if demo_clip_exists(app["app"]))
+    scenario_count = sum(1 for app in catalog if scenario_pair_exists(app["app"]))
     lines: list[str] = [
         "# App Media Surfaces",
         "",
@@ -551,11 +590,12 @@ def media_router(catalog: list[dict[str, Any]]) -> str:
         f"- `{len(catalog)}` standalone roots have published preview boards",
         f"- `{screenshot_count}` standalone roots already have published runtime screenshots",
         f"- `{demo_clip_count}` standalone roots already have published demo clips",
-        "- this surface separates visual layers instead of hiding the screenshot and demo gap",
+        f"- `{scenario_count}` standalone roots already have published launch-to-ready scenario frame pairs",
+        "- this surface separates visual layers instead of hiding the runtime scenario gap",
         "",
         "This surface exists to:",
         "",
-        "- show screenshot and demo status truthfully",
+        "- show screenshot, demo, and scenario status truthfully",
         "- provide a single canonical route for future capture batches",
         "- keep proof pages and media pages separate",
         "",
@@ -565,7 +605,7 @@ def media_router(catalog: list[dict[str, Any]]) -> str:
         "| --- | --- | --- | --- |",
     ]
     for app in catalog:
-        media_status = "demo-published" if demo_clip_exists(app["app"]) else "screenshot-published" if screenshot_exists(app["app"]) else "preview-published"
+        media_status = "scenario-published" if scenario_pair_exists(app["app"]) else "demo-published" if demo_clip_exists(app["app"]) else "screenshot-published" if screenshot_exists(app["app"]) else "preview-published"
         lines.append(f"| {app['app']} | {app['lane']} | `{media_status}` | [{app['app']}.md](./{app['app']}.md) |")
     lines.extend([
         "",
@@ -593,6 +633,15 @@ def media_router(catalog: list[dict[str, Any]]) -> str:
         "- a preview board exists",
         "- at least one runtime screenshot is now published",
         "- at least one short runtime demo clip is now published",
+        "- launch-to-ready scenario frames may still be missing",
+        "",
+        "If an app is marked `scenario-published`, it means:",
+        "",
+        "- a shareable gallery card exists",
+        "- a preview board exists",
+        "- at least one runtime screenshot is now published",
+        "- at least one short runtime demo clip is now published",
+        "- launch and ready runtime scenario frames are now published",
         "",
         "## Related Surfaces",
         "",
@@ -608,6 +657,7 @@ def media_router(catalog: list[dict[str, Any]]) -> str:
 def app_gallery_page(catalog: list[dict[str, Any]]) -> str:
     screenshot_count = sum(1 for app in catalog if screenshot_exists(app["app"]))
     demo_clip_count = sum(1 for app in catalog if demo_clip_exists(app["app"]))
+    scenario_count = sum(1 for app in catalog if scenario_pair_exists(app["app"]))
     lines: list[str] = [
         "# App Gallery",
         "",
@@ -621,20 +671,26 @@ def app_gallery_page(catalog: list[dict[str, Any]]) -> str:
         f"- `{len(catalog)}` apps have published preview-board assets",
         f"- `{screenshot_count}` apps already have published runtime screenshots",
         f"- `{demo_clip_count}` apps already have published runtime demo clips",
+        f"- `{scenario_count}` apps already have published launch-to-ready scenario frame pairs",
         "- this surface provides visual routing; it does not make a complete-app parity claim",
         "",
         "## Current Visual Router",
         "",
-        "| App | Lane | Card | Preview | Screenshot | Clip | Proof | Media |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| App | Lane | Card | Preview | Screenshot | Clip | Scenario | Proof | Media |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for app in catalog:
         app_name = app["app"]
         screenshot_cell = f"[shot](./Assets/AppScreenshots/{app_name}.png)" if screenshot_exists(app_name) else "pending"
         clip_cell = f"[clip](./Assets/AppDemoClips/{app_name}.mp4)" if demo_clip_exists(app_name) else "pending"
+        scenario_cell = (
+            f"[launch](./Assets/AppScenarioShots/{app_name}-launch.png) / [ready](./Assets/AppScenarioShots/{app_name}-ready.png)"
+            if scenario_pair_exists(app_name)
+            else "pending"
+        )
         lines.append(
             f"| {app_name} | {app['lane']} | [card](./Assets/AppCards/{app_name}.svg) | "
-            f"[preview](./Assets/AppPreviews/{app_name}.svg) | {screenshot_cell} | {clip_cell} | "
+            f"[preview](./Assets/AppPreviews/{app_name}.svg) | {screenshot_cell} | {clip_cell} | {scenario_cell} | "
             f"[proof](./App-Proofs/{app_name}.md) | [media](./App-Media/{app_name}.md) |"
         )
     lines.extend([
@@ -647,7 +703,7 @@ def app_gallery_page(catalog: list[dict[str, Any]]) -> str:
         "",
         "- a shareable visual card is published",
         "- a preview board is published",
-        "- runtime screenshot and demo clip status are routed honestly",
+        "- runtime screenshot, demo clip, and scenario-frame status are routed honestly",
         "- the proof and media routers are canonical",
     ])
     return "\n".join(lines) + "\n"

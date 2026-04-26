@@ -4,12 +4,13 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `MessagingApp`
 - Lane: `Messaging / Community`
-- Media status: `demo-published`
+- Media status: `scenario-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/MessagingApp.png](../Assets/AppScreenshots/MessagingApp.png)
 - demo clip is published: [../Assets/AppDemoClips/MessagingApp.mp4](../Assets/AppDemoClips/MessagingApp.mp4)
+- launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/MessagingApp-launch.png) / [ready](../Assets/AppScenarioShots/MessagingApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/MessagingApp.svg](../Assets/AppCards/MessagingApp.svg)
 - preview board is published: [../Assets/AppPreviews/MessagingApp.svg](../Assets/AppPreviews/MessagingApp.svg)
 

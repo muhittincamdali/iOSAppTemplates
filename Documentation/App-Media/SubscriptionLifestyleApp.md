@@ -4,12 +4,13 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `SubscriptionLifestyleApp`
 - Lane: `Subscription Lifestyle`
-- Media status: `demo-published`
+- Media status: `scenario-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/SubscriptionLifestyleApp.png](../Assets/AppScreenshots/SubscriptionLifestyleApp.png)
 - demo clip is published: [../Assets/AppDemoClips/SubscriptionLifestyleApp.mp4](../Assets/AppDemoClips/SubscriptionLifestyleApp.mp4)
+- launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/SubscriptionLifestyleApp-launch.png) / [ready](../Assets/AppScenarioShots/SubscriptionLifestyleApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/SubscriptionLifestyleApp.svg](../Assets/AppCards/SubscriptionLifestyleApp.svg)
 - preview board is published: [../Assets/AppPreviews/SubscriptionLifestyleApp.svg](../Assets/AppPreviews/SubscriptionLifestyleApp.svg)
 

@@ -4,12 +4,13 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `NewsBlogApp`
 - Lane: `News`
-- Media status: `demo-published`
+- Media status: `scenario-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/NewsBlogApp.png](../Assets/AppScreenshots/NewsBlogApp.png)
 - demo clip is published: [../Assets/AppDemoClips/NewsBlogApp.mp4](../Assets/AppDemoClips/NewsBlogApp.mp4)
+- launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/NewsBlogApp-launch.png) / [ready](../Assets/AppScenarioShots/NewsBlogApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/NewsBlogApp.svg](../Assets/AppCards/NewsBlogApp.svg)
 - preview board is published: [../Assets/AppPreviews/NewsBlogApp.svg](../Assets/AppPreviews/NewsBlogApp.svg)
 
