@@ -9,7 +9,7 @@ Current proof envelope:
 - `20` standalone app roots have canonical proof pages
 - local generic iOS build proof exists for `20` standalone roots
 - the hosted standalone iOS proof workflow is active for the same `20` roots
-- `19` app packs currently also have a richer example route
+- `20` app packs currently also have a richer example route
 
 These pages exist to:
 
@@ -24,7 +24,7 @@ These pages exist to:
 | --- | --- | --- | --- |
 | EcommerceApp | Commerce | Standalone Root + richer example surface | [EcommerceApp.md](./EcommerceApp.md) |
 | SocialMediaApp | Social | Standalone Root + richer example surface | [SocialMediaApp.md](./SocialMediaApp.md) |
-| FitnessApp | Health / Fitness | Standalone Root | [FitnessApp.md](./FitnessApp.md) |
+| FitnessApp | Health / Fitness | Standalone Root + richer example surface | [FitnessApp.md](./FitnessApp.md) |
 | ProductivityApp | Productivity | Standalone Root + richer example surface | [ProductivityApp.md](./ProductivityApp.md) |
 | FinanceApp | Finance | Standalone Root + richer example surface | [FinanceApp.md](./FinanceApp.md) |
 | EducationApp | Education | Standalone Root + richer example surface | [EducationApp.md](./EducationApp.md) |

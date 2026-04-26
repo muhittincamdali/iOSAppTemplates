@@ -18,6 +18,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 - [App Proof Surface](../App-Proofs/FitnessApp.md)
 - [Template Root README](../../Templates/FitnessApp/README.md)
 - [Standalone Root Package](../../Templates/FitnessApp/Package.swift)
+- [Richer Example](../../Examples/FitnessExample/README.md)
 
 ## Next Required Capture
 
