@@ -455,7 +455,7 @@ struct MainTabView: View {
                 }
                 .tag(1)
             
-            ProgressView()
+            ProgressInsightsView()
                 .tabItem {
                     Image(systemName: "chart.line.uptrend.xyaxis")
                     Text("Progress")
@@ -808,6 +808,14 @@ struct Goal: Identifiable, Codable {
     let createdAt: Date
 }
 
+struct WeeklyHabit: Identifiable {
+    let id = UUID()
+    let title: String
+    let completionCount: Int
+    let targetCount: Int
+    let color: Color
+}
+
 // MARK: - View Models
 @MainActor
 class WorkoutManager: ObservableObject {
@@ -815,6 +823,7 @@ class WorkoutManager: ObservableObject {
 
     @Published var workouts: [Workout] = []
     @Published var recentWorkouts: [Workout] = []
+    @Published var weeklyPlan: [Workout] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
     
@@ -838,6 +847,22 @@ class WorkoutManager: ObservableObject {
     
     func refreshWorkouts() async {
         await loadWorkouts()
+    }
+    
+    var totalWeeklyMinutes: Int {
+        workouts.reduce(0) { $0 + workoutDurationMinutes(for: $1.duration) }
+    }
+    
+    var totalWeeklyCalories: Int {
+        workouts.reduce(0) { $0 + $1.caloriesBurned }
+    }
+    
+    var totalWeeklyDistance: Double {
+        workouts.compactMap(\.distance).reduce(0, +)
+    }
+    
+    private func workoutDurationMinutes(for value: String) -> Int {
+        Int(value.replacingOccurrences(of: "m", with: "")) ?? 0
     }
     
     private func loadMockData() {
@@ -874,10 +899,37 @@ class WorkoutManager: ObservableObject {
                 heartRate: 135,
                 date: Date().addingTimeInterval(-10800),
                 notes: "Relaxing evening ride"
+            ),
+            Workout(
+                id: "4",
+                name: "Mobility Flow",
+                type: "Yoga",
+                duration: "25m",
+                caloriesBurned: 140,
+                distance: nil,
+                heartRate: 92,
+                date: Date().addingTimeInterval(-172800),
+                notes: "Focused on hips and thoracic mobility"
+            ),
+            Workout(
+                id: "5",
+                name: "Tempo Run",
+                type: "Running",
+                duration: "35m",
+                caloriesBurned: 370,
+                distance: 4.4,
+                heartRate: 151,
+                date: Date().addingTimeInterval(-259200),
+                notes: "Strong pacing blocks"
             )
         ]
         
         recentWorkouts = Array(workouts.prefix(5))
+        weeklyPlan = [
+            Workout(id: "plan-1", name: "Intervals", type: "Running", duration: "40m", caloriesBurned: 420, distance: 5.0, heartRate: 148, date: Date().addingTimeInterval(86400), notes: "6 x 400m at threshold pace"),
+            Workout(id: "plan-2", name: "Lower Body Strength", type: "Strength", duration: "50m", caloriesBurned: 360, distance: nil, heartRate: 118, date: Date().addingTimeInterval(172800), notes: "Squat, hinge, lunge, carries"),
+            Workout(id: "plan-3", name: "Zone 2 Ride", type: "Cycling", duration: "60m", caloriesBurned: 430, distance: 18.0, heartRate: 132, date: Date().addingTimeInterval(259200), notes: "Aerobic endurance block")
+        ]
     }
 }
 
@@ -886,16 +938,57 @@ class ProgressManager: ObservableObject {
     static let shared = ProgressManager()
 
     @Published var progress: [ProgressData] = []
+    @Published var goals: [Goal] = []
+    @Published var weeklyHabits: [WeeklyHabit] = []
     @Published var isLoading = false
     
     init() {}
     
     func loadProgress() async {
-        // Load progress data
+        if progress.isEmpty {
+            seedProgress()
+        }
     }
     
     func refreshProgress() async {
         await loadProgress()
+    }
+    
+    var latestProgress: ProgressData? {
+        progress.sorted { $0.date > $1.date }.first
+    }
+    
+    var averageDailySteps: Int {
+        guard !progress.isEmpty else { return 0 }
+        return progress.map(\.steps).reduce(0, +) / progress.count
+    }
+    
+    var completedGoalsCount: Int {
+        goals.filter(\.isCompleted).count
+    }
+    
+    private func seedProgress() {
+        progress = [
+            ProgressData(date: Date().addingTimeInterval(-518400), calories: 1120, steps: 6800, activeMinutes: 34),
+            ProgressData(date: Date().addingTimeInterval(-432000), calories: 1280, steps: 7420, activeMinutes: 42),
+            ProgressData(date: Date().addingTimeInterval(-345600), calories: 1390, steps: 8050, activeMinutes: 48),
+            ProgressData(date: Date().addingTimeInterval(-259200), calories: 1210, steps: 7100, activeMinutes: 37),
+            ProgressData(date: Date().addingTimeInterval(-172800), calories: 1510, steps: 9320, activeMinutes: 58),
+            ProgressData(date: Date().addingTimeInterval(-86400), calories: 1440, steps: 8870, activeMinutes: 51),
+            ProgressData(date: Date(), calories: 1250, steps: 8432, activeMinutes: 45)
+        ]
+        
+        goals = [
+            Goal(id: "goal-1", title: "Weekly Running Volume", description: "Hit 15 km total distance this week.", targetValue: 15, currentValue: 9.6, unit: "km", deadline: Calendar.current.date(byAdding: .day, value: 3, to: Date()), isCompleted: false, createdAt: Date().addingTimeInterval(-1209600)),
+            Goal(id: "goal-2", title: "Strength Sessions", description: "Complete 3 lifting sessions this week.", targetValue: 3, currentValue: 2, unit: "sessions", deadline: Calendar.current.date(byAdding: .day, value: 2, to: Date()), isCompleted: false, createdAt: Date().addingTimeInterval(-604800)),
+            Goal(id: "goal-3", title: "Daily Mobility", description: "Finish a mobility flow 5 times this week.", targetValue: 5, currentValue: 5, unit: "flows", deadline: nil, isCompleted: true, createdAt: Date().addingTimeInterval(-604800))
+        ]
+        
+        weeklyHabits = [
+            WeeklyHabit(title: "Hydration", completionCount: 5, targetCount: 7, color: .blue),
+            WeeklyHabit(title: "Sleep 8h", completionCount: 4, targetCount: 7, color: .purple),
+            WeeklyHabit(title: "Protein Target", completionCount: 6, targetCount: 7, color: .orange)
+        ]
     }
 }
 
@@ -909,38 +1002,370 @@ struct ProgressData: Identifiable {
 
 // MARK: - Supporting Views
 struct WorkoutsView: View {
+    @StateObject private var workoutManager = WorkoutManager.shared
+    
     var body: some View {
         NavigationView {
-            Text("Workouts View")
-                .navigationTitle("Workouts")
+            List {
+                Section("This Week") {
+                    SummaryMetricRow(title: "Workouts logged", value: "\(workoutManager.workouts.count)")
+                    SummaryMetricRow(title: "Training time", value: "\(workoutManager.totalWeeklyMinutes)m")
+                    SummaryMetricRow(title: "Distance", value: String(format: "%.1f km", workoutManager.totalWeeklyDistance))
+                    SummaryMetricRow(title: "Calories", value: "\(workoutManager.totalWeeklyCalories)")
+                }
+                
+                Section("Upcoming Plan") {
+                    ForEach(workoutManager.weeklyPlan) { workout in
+                        WorkoutPlanRow(workout: workout)
+                    }
+                }
+                
+                Section("Recent Sessions") {
+                    ForEach(workoutManager.workouts) { workout in
+                        WorkoutLogRow(workout: workout)
+                    }
+                }
+            }
+            .navigationTitle("Workouts")
         }
     }
 }
 
-struct ProgressView: View {
+struct ProgressInsightsView: View {
+    @StateObject private var progressManager = ProgressManager.shared
+    
     var body: some View {
         NavigationView {
-            Text("Progress View")
-                .navigationTitle("Progress")
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    if let latest = progressManager.latestProgress {
+                        HStack(spacing: 12) {
+                            ProgressSummaryCard(title: "Steps", value: "\(latest.steps)", detail: "today")
+                            ProgressSummaryCard(title: "Active", value: "\(latest.activeMinutes)m", detail: "today")
+                            ProgressSummaryCard(title: "Calories", value: "\(latest.calories)", detail: "today")
+                        }
+                        .padding(.horizontal, 16)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("7-Day Trend")
+                            .font(.title3.weight(.bold))
+                            .padding(.horizontal, 16)
+                        Chart {
+                            ForEach(progressManager.progress) { entry in
+                                LineMark(
+                                    x: .value("Day", entry.date, unit: .day),
+                                    y: .value("Steps", entry.steps)
+                                )
+                                .foregroundStyle(Color.green)
+                                
+                                AreaMark(
+                                    x: .value("Day", entry.date, unit: .day),
+                                    y: .value("Steps", entry.steps)
+                                )
+                                .foregroundStyle(Color.green.opacity(0.15))
+                            }
+                        }
+                        .frame(height: 220)
+                        .padding()
+                        .background(Color(.systemBackground))
+                        .cornerRadius(16)
+                        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
+                        .padding(.horizontal, 16)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Habit Consistency")
+                            .font(.title3.weight(.bold))
+                            .padding(.horizontal, 16)
+                        ForEach(progressManager.weeklyHabits) { habit in
+                            HabitProgressRow(habit: habit)
+                                .padding(.horizontal, 16)
+                        }
+                    }
+                }
+                .padding(.vertical, 16)
+            }
+            .navigationTitle("Progress")
         }
     }
 }
 
 struct GoalsView: View {
+    @StateObject private var progressManager = ProgressManager.shared
+    
     var body: some View {
         NavigationView {
-            Text("Goals View")
-                .navigationTitle("Goals")
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    HStack(spacing: 12) {
+                        ProgressSummaryCard(title: "Open", value: "\(progressManager.goals.filter { !$0.isCompleted }.count)", detail: "goals")
+                        ProgressSummaryCard(title: "Completed", value: "\(progressManager.completedGoalsCount)", detail: "this cycle")
+                    }
+                    .padding(.horizontal, 16)
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Active Goals")
+                            .font(.title3.weight(.bold))
+                            .padding(.horizontal, 16)
+                        ForEach(progressManager.goals) { goal in
+                            GoalCard(goal: goal)
+                                .padding(.horizontal, 16)
+                        }
+                    }
+                }
+                .padding(.vertical, 16)
+            }
+            .navigationTitle("Goals")
         }
     }
 }
 
 struct ProfileView: View {
+    @StateObject private var authManager = AuthManager.shared
+    @StateObject private var progressManager = ProgressManager.shared
+    @StateObject private var workoutManager = WorkoutManager.shared
+    
     var body: some View {
         NavigationView {
-            Text("Profile View")
-                .navigationTitle("Profile")
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    if let user = authManager.currentUser {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(user.displayName)
+                                .font(.title2.weight(.bold))
+                            Text("@\(user.username)")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                            Text("Level: \(user.fitnessLevel ?? "Unknown")")
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundColor(.green)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(Color.green.opacity(0.08))
+                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                        .padding(.horizontal, 16)
+                        
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 12) {
+                            FitnessMetricCard(title: "Height", value: "\(Int(user.height ?? 0)) cm")
+                            FitnessMetricCard(title: "Weight", value: "\(Int(user.weight ?? 0)) kg")
+                            FitnessMetricCard(title: "Avg Steps", value: "\(progressManager.averageDailySteps)")
+                        }
+                        .padding(.horizontal, 16)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Training Summary")
+                            .font(.title3.weight(.bold))
+                            .padding(.horizontal, 16)
+                        FitnessDetailRow(title: "Sessions this week", detail: "\(workoutManager.workouts.count) logged workouts")
+                        FitnessDetailRow(title: "Focus split", detail: "Running, Strength, Mobility")
+                        FitnessDetailRow(title: "Recovery score", detail: "Strong - no missed sleep warning")
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Connected Sources")
+                            .font(.title3.weight(.bold))
+                            .padding(.horizontal, 16)
+                        FitnessDetailRow(title: "HealthKit", detail: "Steps, heart rate, workouts synced")
+                        FitnessDetailRow(title: "Coach notes", detail: "Last updated after Friday tempo run")
+                        FitnessDetailRow(title: "Plan cadence", detail: "3 performance days, 2 recovery days")
+                    }
+                }
+                .padding(.vertical, 16)
+            }
+            .navigationTitle("Profile")
         }
+    }
+}
+
+struct SummaryMetricRow: View {
+    let title: String
+    let value: String
+    
+    var body: some View {
+        HStack {
+            Text(title)
+            Spacer()
+            Text(value)
+                .fontWeight(.semibold)
+        }
+    }
+}
+
+struct WorkoutPlanRow: View {
+    let workout: Workout
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text(workout.name)
+                    .font(.headline)
+                Spacer()
+                Text(workout.duration)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundColor(.green)
+            }
+            Text(workout.notes ?? "No notes")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Text(workout.date.formatted(date: .abbreviated, time: .omitted))
+                .font(.caption2)
+                .foregroundColor(.secondary)
+        }
+        .padding(.vertical, 4)
+    }
+}
+
+struct WorkoutLogRow: View {
+    let workout: Workout
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text(workout.name)
+                    .font(.headline)
+                Spacer()
+                Text("\(workout.caloriesBurned) cal")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundColor(.orange)
+            }
+            HStack {
+                Label(workout.type, systemImage: "figure.run")
+                Label(workout.duration, systemImage: "clock")
+                if let distance = workout.distance {
+                    Label(String(format: "%.1f km", distance), systemImage: "location")
+                }
+            }
+            .font(.caption)
+            .foregroundColor(.secondary)
+            if let notes = workout.notes {
+                Text(notes)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding(.vertical, 4)
+    }
+}
+
+struct ProgressSummaryCard: View {
+    let title: String
+    let value: String
+    let detail: String
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(value)
+                .font(.title3.weight(.bold))
+            Text(title)
+                .font(.caption.weight(.semibold))
+            Text(detail)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
+    }
+}
+
+struct HabitProgressRow: View {
+    let habit: WeeklyHabit
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(habit.title)
+                    .font(.headline)
+                Spacer()
+                Text("\(habit.completionCount)/\(habit.targetCount)")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundColor(habit.color)
+            }
+            ProgressView(value: Double(habit.completionCount), total: Double(habit.targetCount))
+                .tint(habit.color)
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
+    }
+}
+
+struct GoalCard: View {
+    let goal: Goal
+    
+    var body: some View {
+        let progress = min(goal.currentValue / goal.targetValue, 1)
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text(goal.title)
+                    .font(.headline)
+                Spacer()
+                Text(goal.isCompleted ? "Done" : "\(Int(progress * 100))%")
+                    .font(.caption.weight(.bold))
+                    .foregroundColor(goal.isCompleted ? .green : .orange)
+            }
+            Text(goal.description)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+            ProgressView(value: progress)
+                .tint(goal.isCompleted ? .green : .orange)
+            HStack {
+                Text("\(goal.currentValue, specifier: "%.1f") / \(goal.targetValue, specifier: "%.1f") \(goal.unit)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Spacer()
+                if let deadline = goal.deadline {
+                    Text(deadline.formatted(date: .abbreviated, time: .omitted))
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
+    }
+}
+
+struct FitnessMetricCard: View {
+    let title: String
+    let value: String
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            Text(value)
+                .font(.title3.weight(.bold))
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(14)
+    }
+}
+
+struct FitnessDetailRow: View {
+    let title: String
+    let detail: String
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.headline)
+            Text(detail)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .padding(.horizontal, 16)
     }
 }
 
