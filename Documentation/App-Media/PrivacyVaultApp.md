@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. vault overview screenshot
 2. secure item detail screenshot
 3. short unlock-to-review demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/PrivacyVaultApp.md)

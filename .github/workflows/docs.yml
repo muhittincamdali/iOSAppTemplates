@@ -36,6 +36,8 @@ jobs:
         run: bash Scripts/validate-app-media-surfaces.sh
       - name: Validate app scenario shots
         run: bash Scripts/validate-app-scenario-shots.sh
+      - name: Validate app scenario pages
+        run: bash Scripts/validate-app-scenario-pages.sh
       - name: Validate app demo clips
         run: bash Scripts/validate-app-demo-clips.sh
       - name: Validate app gallery cards

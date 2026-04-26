@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. availability or schedule screenshot
 2. booking detail screenshot
 3. short selection-to-confirmation demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/BookingReservationsApp.md)

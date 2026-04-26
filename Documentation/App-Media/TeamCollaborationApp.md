@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. workspace board screenshot
 2. team activity screenshot
 3. short board-to-task demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/TeamCollaborationApp.md)

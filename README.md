@@ -45,6 +45,7 @@ This repository is not yet a full fit if you expect:
 | See lane-by-lane proof status | [Documentation/Proof-Matrix.md](Documentation/Proof-Matrix.md) |
 | See canonical app proof pages | [Documentation/App-Proofs/README.md](Documentation/App-Proofs/README.md) |
 | See canonical app media pages | [Documentation/App-Media/README.md](Documentation/App-Media/README.md) |
+| See canonical runtime scenario pages | [Documentation/App-Scenarios/README.md](Documentation/App-Scenarios/README.md) |
 | See published gallery cards and preview boards | [Documentation/App-Gallery.md](Documentation/App-Gallery.md) |
 | See hosted standalone iOS proof workflow | [.github/workflows/standalone-ios-proof.yml](.github/workflows/standalone-ios-proof.yml) |
 | Run local simulator launch proof | [Scripts/validate-runtime-app-launches.sh](Scripts/validate-runtime-app-launches.sh) |

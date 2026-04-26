@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. habit dashboard screenshot
 2. streak or premium upsell screenshot
 3. short routine-tracking demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/SubscriptionLifestyleApp.md)

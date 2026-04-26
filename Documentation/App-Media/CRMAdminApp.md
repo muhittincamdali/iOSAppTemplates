@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. admin dashboard screenshot
 2. pipeline or lead-detail screenshot
 3. short review-to-update demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/CRMAdminApp.md)

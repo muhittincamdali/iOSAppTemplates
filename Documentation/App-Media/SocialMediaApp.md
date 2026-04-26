@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. feed timeline screenshot
 2. profile or community screenshot
 3. short sign-in-to-feed demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/SocialMediaApp.md)

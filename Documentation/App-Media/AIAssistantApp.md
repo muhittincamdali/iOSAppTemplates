@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. assistant conversation screenshot
 2. tool or suggestion screenshot
 3. short ask-and-response demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/AIAssistantApp.md)

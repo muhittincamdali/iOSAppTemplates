@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. restaurant list screenshot
 2. cart or order-tracking screenshot
 3. short browse-to-order demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/FoodDeliveryApp.md)

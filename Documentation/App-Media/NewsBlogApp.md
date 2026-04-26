@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. headline list screenshot
 2. article detail screenshot
 3. short article-discovery demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/NewsBlogApp.md)

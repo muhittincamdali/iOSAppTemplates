@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. library screenshot
 2. player or episode detail screenshot
 3. short browse-to-play demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/MusicPodcastApp.md)

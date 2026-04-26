@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. notes list screenshot
 2. note detail screenshot
 3. short capture-to-review demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/NotesKnowledgeApp.md)

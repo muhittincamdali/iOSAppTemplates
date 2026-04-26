@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. catalog home screenshot
 2. cart or checkout screenshot
 3. short browse-to-cart demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/EcommerceApp.md)

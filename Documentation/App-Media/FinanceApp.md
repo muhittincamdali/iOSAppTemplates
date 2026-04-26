@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. finance dashboard screenshot
 2. budget or transaction screenshot
 3. short account-overview demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/FinanceApp.md)

@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. course overview screenshot
 2. lesson or quiz screenshot
 3. short lesson-to-progress demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/EducationApp.md)
