@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/TeamCollaborationApp.png](../Assets/AppScreenshots/TeamCollaborationApp.png)
 - demo clip is published: [../Assets/AppDemoClips/TeamCollaborationApp.mp4](../Assets/AppDemoClips/TeamCollaborationApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/TeamCollaborationApp.svg](../Assets/AppScenarioBoards/TeamCollaborationApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/TeamCollaborationApp-launch.png) / [ready](../Assets/AppScenarioShots/TeamCollaborationApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/TeamCollaborationApp.svg](../Assets/AppCards/TeamCollaborationApp.svg)
 - preview board is published: [../Assets/AppPreviews/TeamCollaborationApp.svg](../Assets/AppPreviews/TeamCollaborationApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/TeamCollaborationApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/TeamCollaborationApp.svg)

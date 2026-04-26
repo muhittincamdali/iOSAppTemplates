@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/EcommerceApp.png](../Assets/AppScreenshots/EcommerceApp.png)
 - demo clip is published: [../Assets/AppDemoClips/EcommerceApp.mp4](../Assets/AppDemoClips/EcommerceApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/EcommerceApp.svg](../Assets/AppScenarioBoards/EcommerceApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/EcommerceApp-launch.png) / [ready](../Assets/AppScenarioShots/EcommerceApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/EcommerceApp.svg](../Assets/AppCards/EcommerceApp.svg)
 - preview board is published: [../Assets/AppPreviews/EcommerceApp.svg](../Assets/AppPreviews/EcommerceApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/EcommerceApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/EcommerceApp.svg)

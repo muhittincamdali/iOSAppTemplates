@@ -32,8 +32,9 @@ for item in catalog:
     ready_link = f"../Assets/AppScenarioShots/{app}-ready.png"
     screenshot_link = f"../Assets/AppScreenshots/{app}.png"
     clip_link = f"../Assets/AppDemoClips/{app}.mp4"
+    board_link = f"../Assets/AppScenarioBoards/{app}.svg"
 
-    for expected in (launch_link, ready_link, screenshot_link, clip_link):
+    for expected in (launch_link, ready_link, screenshot_link, clip_link, board_link):
         if expected not in page:
             raise SystemExit(f"{app} scenario page missing {expected}")
 

@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/NewsBlogApp.png](../Assets/AppScreenshots/NewsBlogApp.png)
 - demo clip is published: [../Assets/AppDemoClips/NewsBlogApp.mp4](../Assets/AppDemoClips/NewsBlogApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/NewsBlogApp.svg](../Assets/AppScenarioBoards/NewsBlogApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/NewsBlogApp-launch.png) / [ready](../Assets/AppScenarioShots/NewsBlogApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/NewsBlogApp.svg](../Assets/AppCards/NewsBlogApp.svg)
 - preview board is published: [../Assets/AppPreviews/NewsBlogApp.svg](../Assets/AppPreviews/NewsBlogApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/NewsBlogApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/NewsBlogApp.svg)

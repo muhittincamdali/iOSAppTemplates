@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/MessagingApp.png](../Assets/AppScreenshots/MessagingApp.png)
 - demo clip is published: [../Assets/AppDemoClips/MessagingApp.mp4](../Assets/AppDemoClips/MessagingApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/MessagingApp.svg](../Assets/AppScenarioBoards/MessagingApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/MessagingApp-launch.png) / [ready](../Assets/AppScenarioShots/MessagingApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/MessagingApp.svg](../Assets/AppCards/MessagingApp.svg)
 - preview board is published: [../Assets/AppPreviews/MessagingApp.svg](../Assets/AppPreviews/MessagingApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/MessagingApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/MessagingApp.svg)

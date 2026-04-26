@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/EducationApp.png](../Assets/AppScreenshots/EducationApp.png)
 - demo clip is published: [../Assets/AppDemoClips/EducationApp.mp4](../Assets/AppDemoClips/EducationApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/EducationApp.svg](../Assets/AppScenarioBoards/EducationApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/EducationApp-launch.png) / [ready](../Assets/AppScenarioShots/EducationApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/EducationApp.svg](../Assets/AppCards/EducationApp.svg)
 - preview board is published: [../Assets/AppPreviews/EducationApp.svg](../Assets/AppPreviews/EducationApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/EducationApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/EducationApp.svg)

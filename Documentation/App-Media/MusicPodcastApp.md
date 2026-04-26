@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/MusicPodcastApp.png](../Assets/AppScreenshots/MusicPodcastApp.png)
 - demo clip is published: [../Assets/AppDemoClips/MusicPodcastApp.mp4](../Assets/AppDemoClips/MusicPodcastApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/MusicPodcastApp.svg](../Assets/AppScenarioBoards/MusicPodcastApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/MusicPodcastApp-launch.png) / [ready](../Assets/AppScenarioShots/MusicPodcastApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/MusicPodcastApp.svg](../Assets/AppCards/MusicPodcastApp.svg)
 - preview board is published: [../Assets/AppPreviews/MusicPodcastApp.svg](../Assets/AppPreviews/MusicPodcastApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/MusicPodcastApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/MusicPodcastApp.svg)

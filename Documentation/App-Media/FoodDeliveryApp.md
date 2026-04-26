@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/FoodDeliveryApp.png](../Assets/AppScreenshots/FoodDeliveryApp.png)
 - demo clip is published: [../Assets/AppDemoClips/FoodDeliveryApp.mp4](../Assets/AppDemoClips/FoodDeliveryApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/FoodDeliveryApp.svg](../Assets/AppScenarioBoards/FoodDeliveryApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/FoodDeliveryApp-launch.png) / [ready](../Assets/AppScenarioShots/FoodDeliveryApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/FoodDeliveryApp.svg](../Assets/AppCards/FoodDeliveryApp.svg)
 - preview board is published: [../Assets/AppPreviews/FoodDeliveryApp.svg](../Assets/AppPreviews/FoodDeliveryApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/FoodDeliveryApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/FoodDeliveryApp.svg)

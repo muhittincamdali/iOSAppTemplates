@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/BookingReservationsApp.png](../Assets/AppScreenshots/BookingReservationsApp.png)
 - demo clip is published: [../Assets/AppDemoClips/BookingReservationsApp.mp4](../Assets/AppDemoClips/BookingReservationsApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/BookingReservationsApp.svg](../Assets/AppScenarioBoards/BookingReservationsApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/BookingReservationsApp-launch.png) / [ready](../Assets/AppScenarioShots/BookingReservationsApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/BookingReservationsApp.svg](../Assets/AppCards/BookingReservationsApp.svg)
 - preview board is published: [../Assets/AppPreviews/BookingReservationsApp.svg](../Assets/AppPreviews/BookingReservationsApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/BookingReservationsApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/BookingReservationsApp.svg)

@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/SubscriptionLifestyleApp.png](../Assets/AppScreenshots/SubscriptionLifestyleApp.png)
 - demo clip is published: [../Assets/AppDemoClips/SubscriptionLifestyleApp.mp4](../Assets/AppDemoClips/SubscriptionLifestyleApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/SubscriptionLifestyleApp.svg](../Assets/AppScenarioBoards/SubscriptionLifestyleApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/SubscriptionLifestyleApp-launch.png) / [ready](../Assets/AppScenarioShots/SubscriptionLifestyleApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/SubscriptionLifestyleApp.svg](../Assets/AppCards/SubscriptionLifestyleApp.svg)
 - preview board is published: [../Assets/AppPreviews/SubscriptionLifestyleApp.svg](../Assets/AppPreviews/SubscriptionLifestyleApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/SubscriptionLifestyleApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/SubscriptionLifestyleApp.svg)
