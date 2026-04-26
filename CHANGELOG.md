@@ -7,22 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- release and GitHub distribution docs are now policy-driven instead of hardcoding an old numbered release
+
+## [2.1.0] - 2026-04-26
+
 ### Added
 - Package stabilization and truth-reset work
 - Current repo audit and complete-app standard docs
 - Root package search fix for empty queries
 - Truthful smoke coverage for the active package test graph
 - GitHub distribution, release-process, and project-status docs
+- `20` standalone app roots with per-app README, proof, and media surfaces
+- gallery cards, preview boards, runtime screenshots, and runtime demo clips for the tracked app roots
+- hosted standalone iOS proof workflow and local simulator launch-proof validation
+- generator-backed app-surface docs from a single catalog source
 
 ### Changed
 - Package graph and tests aligned with the current public surface
 - Public docs tightened to match current repo maturity
 - Template package baselines aligned with the current Swift/Xcode floor
 - Community, security, and contribution surfaces aligned with current repo truth
+- GitHub distribution and release docs aligned with live API-checked metadata
+- English canonical routing across README, docs hub, examples hub, proof pages, and media pages
 
 ### Fixed
 - Swift 6 build issues across active template families
 - Stale examples, broken public links, and fabricated doc claims
+- hosted standalone iOS proof portability and runtime-host embedding gaps
 
 ## [1.0.0] - 2024-08-02
 
@@ -179,45 +191,6 @@ For current repo truth, use:
 - [README.md](README.md)
 - [PROJECT_STATUS.md](PROJECT_STATUS.md)
 - [Documentation/Release-Process.md](Documentation/Release-Process.md)
-# iOSAppTemplates - Update 6
-# iOSAppTemplates - Update 7
-# iOSAppTemplates - Update 8
-# iOSAppTemplates - Update 9
-# iOSAppTemplates - Update 10
-# iOSAppTemplates - Update 11
-# iOSAppTemplates - Update 12
-# iOSAppTemplates - Update 13
-# iOSAppTemplates - Update 14
-# iOSAppTemplates - Update 15
-# iOSAppTemplates - Update 16
-# iOSAppTemplates - Update 17
-# iOSAppTemplates - Update 18
-# iOSAppTemplates - Update 19
-# iOSAppTemplates - Update 20
-# iOSAppTemplates - Update 21
-# iOSAppTemplates - Update 22
-# iOSAppTemplates - Update 23
-# iOSAppTemplates - Update 24
-# iOSAppTemplates - Update 25
-# iOSAppTemplates - Update 26
-# iOSAppTemplates - Update 27
-# iOSAppTemplates - Update 28
-# iOSAppTemplates - Update 29
-# iOSAppTemplates - Update 30
-# iOSAppTemplates - Update 31
-# iOSAppTemplates - Update 32
-# iOSAppTemplates - Update 33
-# iOSAppTemplates - Update 34
-# iOSAppTemplates - Update 35
-# iOSAppTemplates - Update 36
-# iOSAppTemplates - Update 37
-# iOSAppTemplates - Update 38
-# iOSAppTemplates - Update 39
-# iOSAppTemplates - Update 40
-# iOSAppTemplates - Update 41
-# iOSAppTemplates - Update 42
-# iOSAppTemplates - Update 43
-# iOSAppTemplates - Update 44
 # iOSAppTemplates - Update 45
 # iOSAppTemplates - Update 46
 # iOSAppTemplates - Update 47

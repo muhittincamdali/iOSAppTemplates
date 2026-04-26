@@ -7,7 +7,7 @@ import EventKit
 public struct ProductivityTemplates {
     
     // MARK: - Version
-    public static let version = "1.0.0"
+    public static let version = "2.1.0"
     
     // MARK: - Initialization
     public static func initialize() {

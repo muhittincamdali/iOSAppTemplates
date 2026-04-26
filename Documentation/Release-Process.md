@@ -43,11 +43,9 @@ Do not publish a release title or release body that claims:
 - hosted standalone iOS CI proof exists when it does not
 - compliance or enterprise posture that is not explicitly proven
 
-## Current Release Truth
+## Release Truth Source
 
-As of 2026-04-21, the latest published release title is stale and overclaims the repository story.
-
-Use these documents as the canonical truth surface until the next numbered release resets the release body:
+Use these documents as the canonical truth surface whenever a numbered release lags the current public proof surface:
 
 - [README.md](../README.md)
 - [PROJECT_STATUS.md](../PROJECT_STATUS.md)
@@ -56,6 +54,13 @@ Use these documents as the canonical truth surface until the next numbered relea
 - [Proof-Matrix.md](Proof-Matrix.md)
 - [App-Gallery.md](App-Gallery.md)
 - [../.github/workflows/standalone-ios-proof.yml](../.github/workflows/standalone-ios-proof.yml)
+
+Before publishing a new release, verify the live latest-release state:
+
+```bash
+gh repo view muhittincamdali/iOSAppTemplates --json latestRelease
+gh release view --repo muhittincamdali/iOSAppTemplates
+```
 
 ## Tagging
 

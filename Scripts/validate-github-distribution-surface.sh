@@ -8,18 +8,26 @@ cd "$repo_root"
 policy_file="Documentation/github-distribution-policy.json"
 python3 Scripts/validate-github-distribution-policy.py "$policy_file" >/dev/null
 
+description="$(python3 - <<'PY'
+import json
+from pathlib import Path
+payload = json.loads(Path("Documentation/github-distribution-policy.json").read_text())
+print(payload["description"])
+PY
+)"
+
 grep -Fq "github-distribution-policy.json" Documentation/GitHub-Distribution.md || {
   echo "GitHub distribution doc missing policy link" >&2
   exit 1
 }
 
-grep -Fq "SwiftUI starter portfolio with 20 tracked app templates, standalone roots, proof surfaces, and gallery assets." Documentation/GitHub-Distribution.md || {
+grep -Fq "$description" Documentation/GitHub-Distribution.md || {
   echo "GitHub distribution doc missing current description" >&2
   exit 1
 }
 
-grep -Fq "v2.0.0 - truth-first starter portfolio baseline" Documentation/GitHub-Distribution.md || {
-  echo "GitHub distribution doc missing current release title" >&2
+grep -Fq "gh repo view muhittincamdali/iOSAppTemplates --json latestRelease" Documentation/GitHub-Distribution.md || {
+  echo "GitHub distribution doc missing live release verification command" >&2
   exit 1
 }
 

@@ -9,7 +9,7 @@ final class ProductivityTemplatesTests: XCTestCase {
         let version = ProductivityTemplates.version
         
         // Then
-        XCTAssertEqual(version, "1.0.0")
+        XCTAssertEqual(version, "2.1.0")
     }
     
     func testTaskInitialization() {

@@ -250,7 +250,7 @@ final class iOSAppTemplatesTests: XCTestCase {
     
     func testiOSAppTemplatesVersion() {
         // Given & When & Then
-        XCTAssertEqual(iOSAppTemplates.version, "1.0.0")
+        XCTAssertEqual(iOSAppTemplates.version, "2.1.0")
     }
     
     func testiOSAppTemplatesInitialization() {

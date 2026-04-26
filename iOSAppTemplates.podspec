@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'iOSAppTemplates'
-  s.version          = '2.0.0'
+  s.version          = '2.1.0'
   s.summary          = 'Swift package template families and starter surfaces for Apple platform app ideas.'
   s.description      = <<-DESC
     iOSAppTemplates ships modular Swift package targets, template families, and starter

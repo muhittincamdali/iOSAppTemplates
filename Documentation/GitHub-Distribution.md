@@ -1,12 +1,12 @@
 # GitHub Distribution
 
-Last updated: 2026-04-21
+Last updated: 2026-04-26
 
 This page defines the public GitHub-facing metadata and presentation rules for `iOSAppTemplates`.
 
 ## Current About Box
 
-Source of truth checked against the GitHub repository API on 2026-04-21.
+Source of truth checked against the GitHub repository API on 2026-04-26.
 
 - description: `SwiftUI starter portfolio with 20 tracked app templates, standalone roots, proof surfaces, and gallery assets.`
 - homepage: `https://github.com/muhittincamdali/iOSAppTemplates#readme`
@@ -26,14 +26,23 @@ Source of truth checked against the GitHub repository API on 2026-04-21.
 - `swift-package-manager`
 - `swiftui`
 
-## Current Release Surface
+## Release Verification
 
-Latest published release checked on 2026-04-21:
+Do not freeze a numbered release tag in this page.
 
-- tag: `v2.0.0`
-- title: `v2.0.0 - truth-first starter portfolio baseline`
-- published at: `2025-08-17T14:30:22Z`
-- release body now points readers back to the maintained README, docs hub, portfolio matrix, proof matrix, and app gallery
+Verify the live latest-release surface before changing release-facing copy:
+
+```bash
+gh repo view muhittincamdali/iOSAppTemplates --json latestRelease
+gh release view --repo muhittincamdali/iOSAppTemplates
+```
+
+The release surface is healthy only when:
+
+- the latest published release matches the current truth-first repo story
+- the release body routes readers back to the maintained README, docs hub, portfolio matrix, proof matrix, and app gallery
+- the release title does not overclaim maturity, enterprise posture, or complete-app parity
+- the release date is not materially behind the current public proof surface
 
 ## Versioned Policy
 
