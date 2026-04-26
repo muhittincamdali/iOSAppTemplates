@@ -73,8 +73,8 @@ for card in cards {
       <rect x="1026" y="208" width="304" height="304" rx="34" fill="white" fill-opacity="0.10"/>
       <rect x="892" y="368" width="364" height="214" rx="30" fill="white" fill-opacity="0.08"/>
       <rect x="1120" y="420" width="208" height="208" rx="30" fill="white" fill-opacity="0.10"/>
-      <text x="1028" y="690" fill="#F9FAFB" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Card published</text>
-      <text x="1028" y="730" fill="#D1D5DB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Screenshots and demo clips pending</text>
+      <text x="1028" y="690" fill="#F9FAFB" font-size="28" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">Runtime media published</text>
+      <text x="1028" y="730" fill="#D1D5DB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">Screenshots and demo clips live</text>
     </svg>
     """
 

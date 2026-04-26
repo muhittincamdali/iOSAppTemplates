@@ -6,7 +6,7 @@ This folder is not a complete-app gallery. Its current role is:
 
 - source-level reference
 - lightweight onboarding example
-- richer lane examples for `19` tracked app packs
+- richer lane examples for `20` tracked app packs
 
 ## Canonical Example Router
 
@@ -17,6 +17,7 @@ This folder is not a complete-app gallery. Its current role is:
 | [QuickStartExample/QuickStartApp.swift](./QuickStartExample/QuickStartApp.swift) | onboarding entry | reach the fastest source-level start |
 | [EcommerceExample](./EcommerceExample/) | richer category example | inspect a more product-like e-commerce store flow |
 | [SocialMediaExample](./SocialMediaExample/) | richer category example | inspect a more product-like social media flow |
+| [FitnessExample](./FitnessExample/) | richer category example | inspect a more product-like health / fitness flow |
 | [ProductivityExample](./ProductivityExample/) | richer category example | inspect a more product-like productivity / tasks flow |
 | [FinanceExample](./FinanceExample/) | richer category example | inspect a more product-like finance / budgeting flow |
 | [EducationExample](./EducationExample/) | richer category example | inspect a more product-like education / learning flow |

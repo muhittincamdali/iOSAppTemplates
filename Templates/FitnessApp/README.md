@@ -6,10 +6,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Today
 
-- Label: `Standalone Root`
+- Label: `Standalone Root + richer example surface`
 - Lane: `Health / Fitness`
 - Entry: `Package.swift`
 - Product target: `Health / Fitness`
+- Richer example: `Examples/FitnessExample`
 
 ## Best For / Not For
 
@@ -17,12 +18,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - teams reviewing a fitness app-shell package entry
 - maintainers validating HealthKit-oriented starter surfaces
-- readers comparing standalone app packaging against family-level health templates
+- readers comparing standalone app packaging against family-level health templates and a richer example route
 
 ### Not for
 
-- teams expecting a richer example route today
-- readers who assume canonical screenshots and demo clips are already published
+- readers who expect deeper runtime scenario coverage than the current screenshot and demo proof
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
@@ -46,6 +46,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 - canonical app media page exists
 - runtime screenshot is published
 - demo clip is published
+- richer example route exists
 
 ## Missing Proof
 
@@ -56,6 +57,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ```bash
 open Package.swift
 open Package.resolved
+open ../../Examples/FitnessExample/README.md
 ```
 
 Repo-level proof:
@@ -78,3 +80,4 @@ xcodebuild -scheme FitnessApp -destination 'generic/platform=iOS' build
 - [Media Surface](../../Documentation/App-Media/FitnessApp.md)
 - [Template Showcase](../../Documentation/Template-Showcase.md)
 - [Proof Matrix](../../Documentation/Proof-Matrix.md)
+- [Richer Example](../../Examples/FitnessExample/README.md)

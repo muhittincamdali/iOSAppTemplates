@@ -5,8 +5,9 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Health / Fitness`
-- Label today: `Standalone Root`
+- Label today: `Standalone Root + richer example surface`
 - Entry path: `Templates/FitnessApp/Package.swift`
+- Extra route: `Examples/FitnessExample`
 - Product target: `Health / Fitness`
 
 ## Best For / Not For
@@ -15,12 +16,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - teams reviewing a fitness app-shell package entry
 - maintainers validating HealthKit-oriented starter surfaces
-- readers comparing standalone app packaging against family-level health templates
+- readers comparing standalone app packaging against family-level health templates and a richer example route
 
 ### Not for
 
-- teams expecting a richer example route today
-- readers who assume canonical screenshots and demo clips are already published
+- readers who expect deeper runtime scenario coverage than the current screenshot and demo proof
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
@@ -44,6 +44,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 - root repo `swift test` passes
 - runtime screenshot is published: [../Assets/AppScreenshots/FitnessApp.png](../Assets/AppScreenshots/FitnessApp.png)
 - demo clip is published: [../Assets/AppDemoClips/FitnessApp.mp4](../Assets/AppDemoClips/FitnessApp.mp4)
+- `Examples/FitnessExample` inspection route exists
 
 ## Missing Proof
 
@@ -54,6 +55,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ```bash
 open Templates/FitnessApp/Package.swift
 open Templates/FitnessApp/Package.resolved
+open Examples/FitnessExample/README.md
 xcodebuild -scheme FitnessApp -destination 'generic/platform=iOS' build
 ```
 
@@ -67,6 +69,7 @@ swift test
 ## Canonical References
 
 - [Template Root README](../../Templates/FitnessApp/README.md)
+- [Richer Example](../../Examples/FitnessExample/README.md)
 - [App Media Surface](../App-Media/FitnessApp.md)
 - [Template Showcase](../Template-Showcase.md)
 - [Proof Matrix](../Proof-Matrix.md)

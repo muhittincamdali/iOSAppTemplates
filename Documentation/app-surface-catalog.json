@@ -15,7 +15,7 @@
     ],
     "not_for": [
       "teams that expect release-grade commerce integrations today",
-      "readers who assume demo clips and stable hosted standalone iOS proof already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -47,7 +47,7 @@
     ],
     "not_for": [
       "teams expecting full production social parity today",
-      "readers who assume published screenshots and clips already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -67,19 +67,18 @@
     "app": "FitnessApp",
     "lane": "Health / Fitness",
     "product_target": "Health / Fitness",
-    "label_today": "Standalone Root",
+    "label_today": "Standalone Root + richer example surface",
     "entry_path": "Templates/FitnessApp/Package.swift",
     "readme_path": "Templates/FitnessApp/README.md",
-    "example_path": null,
+    "example_path": "Examples/FitnessExample/README.md",
     "lockfile_path": "Templates/FitnessApp/Package.resolved",
     "best_for": [
       "teams reviewing a fitness app-shell package entry",
       "maintainers validating HealthKit-oriented starter surfaces",
-      "readers comparing standalone app packaging against family-level health templates"
+      "readers comparing standalone app packaging against family-level health templates and a richer example route"
     ],
     "not_for": [
-      "teams expecting a richer example route today",
-      "readers who assume canonical screenshots and demo clips are already published",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -111,7 +110,7 @@
     ],
     "not_for": [
       "teams expecting a fully integrated collaboration suite today",
-      "readers who assume demo clips and stable hosted standalone iOS proof already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -143,7 +142,7 @@
     ],
     "not_for": [
       "teams expecting bank-grade integrations today",
-      "readers who assume demo clips and stable hosted standalone iOS proof already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -175,7 +174,7 @@
     ],
     "not_for": [
       "teams expecting a fully instrumented LMS today",
-      "readers who assume runtime screenshots and clips are already published",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -207,7 +206,7 @@
     ],
     "not_for": [
       "teams expecting production delivery logistics today",
-      "readers who assume demo clips and stable hosted standalone iOS proof already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -239,7 +238,7 @@
     ],
     "not_for": [
       "teams expecting full booking network integrations today",
-      "readers who assume demo clips and stable hosted standalone iOS proof already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -271,7 +270,7 @@
     ],
     "not_for": [
       "teams expecting a production AI stack today",
-      "readers who assume demo clips and stable hosted standalone iOS proof already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -303,7 +302,7 @@
     ],
     "not_for": [
       "teams expecting a production newsroom platform today",
-      "readers who assume runtime screenshots and clips are already published",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -335,7 +334,7 @@
     ],
     "not_for": [
       "teams expecting production streaming infrastructure today",
-      "readers who assume demo clips and stable hosted standalone iOS proof already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -367,7 +366,7 @@
     ],
     "not_for": [
       "teams expecting production seller operations today",
-      "readers who assume runtime screenshots and clips are already published",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -399,7 +398,7 @@
     ],
     "not_for": [
       "teams expecting production realtime messaging today",
-      "readers who assume demo clips and stable hosted standalone iOS proof already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -431,7 +430,7 @@
     ],
     "not_for": [
       "teams expecting production reservation backends today",
-      "readers who assume runtime screenshots and clips are already published",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -463,7 +462,7 @@
     ],
     "not_for": [
       "teams expecting a full PKM platform today",
-      "readers who assume demo clips and stable hosted standalone iOS proof already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -495,7 +494,7 @@
     ],
     "not_for": [
       "teams expecting production video pipelines today",
-      "readers who assume demo clips and stable hosted standalone iOS proof already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -527,7 +526,7 @@
     ],
     "not_for": [
       "teams expecting a full collaborative backend today",
-      "readers who assume demo clips and stable hosted standalone iOS proof already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -559,7 +558,7 @@
     ],
     "not_for": [
       "teams expecting backend-integrated CRM operations today",
-      "readers who assume demo clips and stable hosted standalone iOS proof already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -591,7 +590,7 @@
     ],
     "not_for": [
       "teams expecting production billing and entitlement flows today",
-      "readers who assume demo clips and stable hosted standalone iOS proof already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
@@ -623,7 +622,7 @@
     ],
     "not_for": [
       "teams expecting production audited secure storage today",
-      "readers who assume demo clips and stable hosted standalone iOS proof already exist",
+      "readers who expect deeper runtime scenario coverage than the current screenshot and demo proof",
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
