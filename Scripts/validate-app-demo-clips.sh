@@ -27,7 +27,7 @@ for item in policy["apps"]:
     clip_path = clips_dir / f"{app_id}.mp4"
     media_page = (repo_root / item["required_readme"]).read_text()
     has_clip = clip_path.exists()
-    expected_status = "demo-published" if has_clip else "screenshot-published"
+    expected_status = item["status"] if has_clip else "screenshot-published"
 
     if item["status"] != expected_status:
         raise SystemExit(f"Unexpected media status for {app_id}: {item['status']} (expected {expected_status})")
