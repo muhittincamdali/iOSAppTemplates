@@ -89,6 +89,8 @@ struct SocialMediaApp: App {
                 lastActiveAt: Date()
             )
             authManager.isAuthenticated = true
+            dataManager.seedPreviewState(currentUser: authManager.currentUser)
+            notificationManager.seedPreviewState()
             return
         }
 
@@ -473,14 +475,14 @@ struct MainTabView: View {
 
 // MARK: - Feed View
 struct FeedView: View {
-    @StateObject private var feedViewModel = FeedViewModel()
+    @StateObject private var dataManager = DataManager.shared
     @State private var showCreatePost = false
     
     var body: some View {
         NavigationView {
             ScrollView {
                 LazyVStack(spacing: 16) {
-                    ForEach(feedViewModel.posts) { post in
+                    ForEach(dataManager.posts) { post in
                         PostCard(post: post)
                     }
                 }
@@ -498,7 +500,7 @@ struct FeedView: View {
                 }
             }
             .refreshable {
-                await feedViewModel.refreshFeed()
+                await dataManager.refreshFeed()
             }
             .sheet(isPresented: $showCreatePost) {
                 CreatePostView()
@@ -657,6 +659,34 @@ struct Post: Identifiable, Codable {
     let updatedAt: Date
 }
 
+struct SuggestedProfile: Identifiable {
+    let id: String
+    let username: String
+    let displayName: String
+    let bio: String
+    let avatarURL: String?
+    let isVerified: Bool
+    let followersCount: Int
+}
+
+struct PostComment: Identifiable {
+    let id: String
+    let authorName: String
+    let authorUsername: String
+    let body: String
+    let likesCount: Int
+    let createdAt: Date
+}
+
+struct SocialNotificationItem: Identifiable {
+    let id: String
+    let actorName: String
+    let message: String
+    let systemImage: String
+    let isUnread: Bool
+    let createdAt: Date
+}
+
 // MARK: - View Models
 @MainActor
 class FeedViewModel: ObservableObject {
@@ -738,48 +768,466 @@ class FeedViewModel: ObservableObject {
 
 // MARK: - Supporting Views
 struct ExploreView: View {
+    @StateObject private var dataManager = DataManager.shared
+    @State private var searchText = ""
+    
     var body: some View {
         NavigationView {
-            Text("Explore View")
-                .navigationTitle("Explore")
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    SearchBar(text: $searchText, placeholder: "Search creators, topics, or posts")
+                        .padding(.horizontal, 16)
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Trending Topics")
+                            .font(.title3.weight(.bold))
+                            .padding(.horizontal, 16)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 10) {
+                                ForEach(filteredTopics, id: \.self) { topic in
+                                    Text("#\(topic)")
+                                        .font(.subheadline.weight(.semibold))
+                                        .padding(.horizontal, 14)
+                                        .padding(.vertical, 10)
+                                        .background(Color.blue.opacity(0.12))
+                                        .clipShape(Capsule())
+                                }
+                            }
+                            .padding(.horizontal, 16)
+                        }
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Suggested Creators")
+                            .font(.title3.weight(.bold))
+                            .padding(.horizontal, 16)
+                        
+                        ForEach(filteredProfiles) { profile in
+                            SuggestedProfileRow(profile: profile)
+                                .padding(.horizontal, 16)
+                        }
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Discover Posts")
+                            .font(.title3.weight(.bold))
+                            .padding(.horizontal, 16)
+                        
+                        ForEach(filteredPosts) { post in
+                            PostCard(post: post)
+                        }
+                    }
+                }
+                .padding(.vertical, 16)
+            }
+            .navigationTitle("Explore")
         }
+    }
+    
+    private var filteredTopics: [String] {
+        if searchText.isEmpty {
+            return dataManager.trendingTopics
+        }
+        return dataManager.trendingTopics.filter { $0.localizedCaseInsensitiveContains(searchText) }
+    }
+    
+    private var filteredProfiles: [SuggestedProfile] {
+        if searchText.isEmpty {
+            return dataManager.suggestedProfiles
+        }
+        return dataManager.suggestedProfiles.filter {
+            $0.displayName.localizedCaseInsensitiveContains(searchText) ||
+            $0.username.localizedCaseInsensitiveContains(searchText) ||
+            $0.bio.localizedCaseInsensitiveContains(searchText)
+        }
+    }
+    
+    private var filteredPosts: [Post] {
+        if searchText.isEmpty {
+            return dataManager.posts
+        }
+        return dataManager.posts.filter {
+            $0.content.localizedCaseInsensitiveContains(searchText) ||
+            $0.authorDisplayName.localizedCaseInsensitiveContains(searchText) ||
+            $0.authorUsername.localizedCaseInsensitiveContains(searchText)
+        }
+        .prefix(3)
+        .map { $0 }
+    }
+}
+
+struct SuggestedProfileRow: View {
+    let profile: SuggestedProfile
+    
+    var body: some View {
+        HStack(spacing: 12) {
+            AsyncImage(url: URL(string: profile.avatarURL ?? "")) { image in
+                image.resizable().aspectRatio(contentMode: .fill)
+            } placeholder: {
+                Image(systemName: "person.crop.circle.fill")
+                    .resizable()
+                    .foregroundColor(.gray)
+            }
+            .frame(width: 52, height: 52)
+            .clipShape(Circle())
+            
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 4) {
+                    Text(profile.displayName)
+                        .font(.headline)
+                    if profile.isVerified {
+                        Image(systemName: "checkmark.seal.fill")
+                            .foregroundColor(.blue)
+                            .font(.caption)
+                    }
+                }
+                Text("@\(profile.username)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Text(profile.bio)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .lineLimit(2)
+            }
+            
+            Spacer()
+            
+            Button("Follow") {}
+                .font(.subheadline.weight(.semibold))
+                .foregroundColor(.white)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background(Color.blue)
+                .clipShape(Capsule())
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.06), radius: 4, x: 0, y: 2)
     }
 }
 
 struct CreatePostView: View {
+    @Environment(\.dismiss) private var dismiss
+    @StateObject private var dataManager = DataManager.shared
+    @State private var caption = ""
+    @State private var selectedAudience = "Public"
+    @State private var attachedMedia = ["launch-plan.png", "workspace-shot.mov"]
+    @State private var isPublishing = false
+    @State private var publishMessage: String?
+    
+    private let audienceOptions = ["Public", "Close Friends", "Team"]
+    
     var body: some View {
         NavigationView {
-            Text("Create Post View")
-                .navigationTitle("Create Post")
+            Form {
+                Section("Caption") {
+                    TextEditor(text: $caption)
+                        .frame(minHeight: 140)
+                    Text("\(caption.count)/280")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                
+                Section("Audience") {
+                    Picker("Audience", selection: $selectedAudience) {
+                        ForEach(audienceOptions, id: \.self) { option in
+                            Text(option).tag(option)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+                
+                Section("Attached Media") {
+                    ForEach(attachedMedia, id: \.self) { asset in
+                        Label(asset, systemImage: asset.hasSuffix(".mov") ? "video" : "photo")
+                    }
+                    Button("Add another attachment") {
+                        attachedMedia.append("idea-board-\(attachedMedia.count + 1).png")
+                    }
+                }
+                
+                Section("Publishing Checklist") {
+                    ChecklistRow(title: "Hook in first line", isDone: !caption.isEmpty)
+                    ChecklistRow(title: "At least one attachment", isDone: !attachedMedia.isEmpty)
+                    ChecklistRow(title: "Clear audience selected", isDone: !selectedAudience.isEmpty)
+                }
+                
+                if let publishMessage {
+                    Section {
+                        Text(publishMessage)
+                            .font(.subheadline)
+                            .foregroundColor(.green)
+                    }
+                }
+            }
+            .navigationTitle("Create Post")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Close") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(isPublishing ? "Publishing..." : "Publish") {
+                        publishPost()
+                    }
+                    .disabled(caption.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isPublishing)
+                }
+            }
+            .onAppear {
+                if caption.isEmpty {
+                    caption = "Shipping a sharper runtime proof system today. The goal is simple: less template theater, more product truth."
+                }
+            }
+        }
+    }
+    
+    private func publishPost() {
+        isPublishing = true
+        let trimmedCaption = caption.trimmingCharacters(in: .whitespacesAndNewlines)
+        Task {
+            try? await Task.sleep(for: .milliseconds(250))
+            await MainActor.run {
+                dataManager.addPost(
+                    content: trimmedCaption,
+                    authorName: "Preview User",
+                    username: "preview",
+                    isVerified: true
+                )
+                publishMessage = "Post published to the feed."
+                isPublishing = false
+            }
         }
     }
 }
 
 struct NotificationsView: View {
+    @StateObject private var notificationManager = NotificationManager.shared
+    
     var body: some View {
         NavigationView {
-            Text("Notifications View")
-                .navigationTitle("Notifications")
+            List {
+                Section("Unread") {
+                    ForEach(notificationManager.notifications.filter(\.isUnread)) { notification in
+                        NotificationRow(notification: notification)
+                    }
+                }
+                
+                Section("Earlier") {
+                    ForEach(notificationManager.notifications.filter { !$0.isUnread }) { notification in
+                        NotificationRow(notification: notification)
+                    }
+                }
+            }
+            .navigationTitle("Notifications")
         }
     }
 }
 
 struct ProfileView: View {
+    @StateObject private var authManager = AuthManager.shared
+    @StateObject private var dataManager = DataManager.shared
+    
     var body: some View {
         NavigationView {
-            Text("Profile View")
-                .navigationTitle("Profile")
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    if let user = authManager.currentUser {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack {
+                                Text(user.displayName)
+                                    .font(.title2.weight(.bold))
+                                if user.isVerified {
+                                    Image(systemName: "checkmark.seal.fill")
+                                        .foregroundColor(.blue)
+                                }
+                            }
+                            Text("@\(user.username)")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                            Text(user.bio ?? "No bio yet.")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(Color.blue.opacity(0.08))
+                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                        
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 12) {
+                            SocialMetricCard(title: "Followers", value: "\(user.followersCount)")
+                            SocialMetricCard(title: "Following", value: "\(user.followingCount)")
+                            SocialMetricCard(title: "Posts", value: "\(dataManager.profilePosts(for: user.username).count)")
+                        }
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Recent Posts")
+                            .font(.headline)
+                        ForEach(dataManager.profilePosts(for: authManager.currentUser?.username ?? "preview").prefix(3)) { post in
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text(post.content)
+                                    .font(.subheadline)
+                                    .lineLimit(3)
+                                HStack {
+                                    Label("\(post.likesCount)", systemImage: "heart")
+                                    Label("\(post.commentsCount)", systemImage: "bubble.left")
+                                    Spacer()
+                                    Text(post.createdAt, style: .relative)
+                                }
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            }
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .clipShape(RoundedRectangle(cornerRadius: 14))
+                        }
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Creator Tools")
+                            .font(.headline)
+                        ProfileActionRow(title: "Draft queue", subtitle: "2 posts waiting for publish review", icon: "square.and.pencil")
+                        ProfileActionRow(title: "Audience insights", subtitle: "Best posting time: 7:30 PM", icon: "chart.bar")
+                        ProfileActionRow(title: "Monetization", subtitle: "Brand kit linked and ready", icon: "dollarsign.circle")
+                    }
+                }
+                .padding(16)
+            }
+            .navigationTitle("Profile")
         }
     }
 }
 
 struct CommentsView: View {
     let post: Post
+    @StateObject private var dataManager = DataManager.shared
+    @State private var commentDraft = ""
     
     var body: some View {
         NavigationView {
-            Text("Comments for post: \(post.id)")
-                .navigationTitle("Comments")
+            VStack(spacing: 0) {
+                List {
+                    Section("Thread") {
+                        ForEach(dataManager.comments(for: post.id)) { comment in
+                            VStack(alignment: .leading, spacing: 6) {
+                                HStack {
+                                    Text(comment.authorName)
+                                        .font(.headline)
+                                    Text("@\(comment.authorUsername)")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Spacer()
+                                    Text(comment.createdAt, style: .relative)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                Text(comment.body)
+                                    .font(.subheadline)
+                                Label("\(comment.likesCount)", systemImage: "heart")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.vertical, 4)
+                        }
+                    }
+                }
+                
+                HStack(spacing: 12) {
+                    TextField("Add a comment", text: $commentDraft)
+                        .textFieldStyle(.roundedBorder)
+                    Button("Send") {
+                        dataManager.addComment(body: commentDraft, to: post.id)
+                        commentDraft = ""
+                    }
+                    .disabled(commentDraft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                }
+                .padding()
+                .background(Color(.systemBackground))
+            }
+            .navigationTitle("Comments")
+        }
+    }
+}
+
+struct NotificationRow: View {
+    let notification: SocialNotificationItem
+    
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: notification.systemImage)
+                .foregroundColor(notification.isUnread ? .blue : .secondary)
+                .frame(width: 24)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(notification.actorName)
+                    .font(.subheadline.weight(.semibold))
+                Text(notification.message)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                Text(notification.createdAt, style: .relative)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            if notification.isUnread {
+                Circle()
+                    .fill(Color.blue)
+                    .frame(width: 8, height: 8)
+                    .padding(.top, 8)
+            }
+        }
+        .padding(.vertical, 6)
+    }
+}
+
+struct SocialMetricCard: View {
+    let title: String
+    let value: String
+    
+    var body: some View {
+        VStack(spacing: 6) {
+            Text(value)
+                .font(.title3.weight(.bold))
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color(.systemGray6))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+    }
+}
+
+struct ChecklistRow: View {
+    let title: String
+    let isDone: Bool
+    
+    var body: some View {
+        Label(title, systemImage: isDone ? "checkmark.circle.fill" : "circle")
+            .foregroundColor(isDone ? .green : .secondary)
+    }
+}
+
+struct ProfileActionRow: View {
+    let title: String
+    let subtitle: String
+    let icon: String
+    
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: icon)
+                .foregroundColor(.blue)
+                .frame(width: 20)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.subheadline.weight(.semibold))
+                Text(subtitle)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
         }
     }
 }
@@ -863,6 +1311,32 @@ struct PrimaryButton: View {
     }
 }
 
+struct SearchBar: View {
+    @Binding var text: String
+    let placeholder: String
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.secondary)
+            TextField(placeholder, text: $text)
+                .textFieldStyle(.plain)
+            if !text.isEmpty {
+                Button {
+                    text = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(Color(.systemGray6))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+}
+
 // MARK: - Managers
 @MainActor
 class AuthManager: ObservableObject {
@@ -910,10 +1384,192 @@ class AuthManager: ObservableObject {
 class DataManager: ObservableObject {
     static let shared = DataManager()
     
+    @Published var posts: [Post] = []
+    @Published var trendingTopics: [String] = []
+    @Published var suggestedProfiles: [SuggestedProfile] = []
+    @Published var commentsByPostId: [String: [PostComment]] = [:]
+    
     private init() {}
     
     func initialize() async {
-        // Initialize data manager
+        if posts.isEmpty {
+            seedPreviewState(currentUser: nil)
+        }
+    }
+    
+    func refreshFeed() async {
+        try? await Task.sleep(for: .milliseconds(250))
+        if posts.isEmpty {
+            seedPreviewState(currentUser: nil)
+        }
+    }
+    
+    func addPost(content: String, authorName: String, username: String, isVerified: Bool) {
+        let post = Post(
+            id: UUID().uuidString,
+            authorId: "current-user",
+            authorUsername: username,
+            authorDisplayName: authorName,
+            authorAvatarURL: "https://picsum.photos/210",
+            authorIsVerified: isVerified,
+            content: content,
+            images: ["https://picsum.photos/410/310"],
+            videoURL: nil,
+            likesCount: 0,
+            commentsCount: 0,
+            sharesCount: 0,
+            createdAt: Date(),
+            updatedAt: Date()
+        )
+        posts.insert(post, at: 0)
+        commentsByPostId[post.id] = []
+    }
+    
+    func profilePosts(for username: String) -> [Post] {
+        posts.filter { $0.authorUsername == username }
+    }
+    
+    func comments(for postId: String) -> [PostComment] {
+        commentsByPostId[postId] ?? []
+    }
+    
+    func addComment(body: String, to postId: String) {
+        let trimmed = body.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        let comment = PostComment(
+            id: UUID().uuidString,
+            authorName: "Preview User",
+            authorUsername: "preview",
+            body: trimmed,
+            likesCount: 0,
+            createdAt: Date()
+        )
+        commentsByPostId[postId, default: []].append(comment)
+    }
+    
+    func seedPreviewState(currentUser: User?) {
+        posts = [
+            Post(
+                id: "1",
+                authorId: "user1",
+                authorUsername: "johndoe",
+                authorDisplayName: "John Doe",
+                authorAvatarURL: "https://picsum.photos/200",
+                authorIsVerified: true,
+                content: "Just launched my new app! 🚀 It's been an amazing journey building this. Can't wait to see how it helps people connect and share their stories.",
+                images: ["https://picsum.photos/400/300"],
+                videoURL: nil,
+                likesCount: 42,
+                commentsCount: 8,
+                sharesCount: 3,
+                createdAt: Date().addingTimeInterval(-3600),
+                updatedAt: Date().addingTimeInterval(-3600)
+            ),
+            Post(
+                id: "2",
+                authorId: "user2",
+                authorUsername: "sarahsmith",
+                authorDisplayName: "Sarah Smith",
+                authorAvatarURL: "https://picsum.photos/201",
+                authorIsVerified: false,
+                content: "Beautiful sunset today! 🌅 Nature always finds a way to amaze us. What's your favorite time of day?",
+                images: ["https://picsum.photos/400/301", "https://picsum.photos/400/302"],
+                videoURL: nil,
+                likesCount: 128,
+                commentsCount: 15,
+                sharesCount: 7,
+                createdAt: Date().addingTimeInterval(-7200),
+                updatedAt: Date().addingTimeInterval(-7200)
+            ),
+            Post(
+                id: "3",
+                authorId: "user3",
+                authorUsername: "mikejohnson",
+                authorDisplayName: "Mike Johnson",
+                authorAvatarURL: "https://picsum.photos/202",
+                authorIsVerified: true,
+                content: "Just finished reading an incredible book about AI and the future of technology. The insights are mind-blowing! 📚🤖",
+                images: nil,
+                videoURL: nil,
+                likesCount: 89,
+                commentsCount: 12,
+                sharesCount: 5,
+                createdAt: Date().addingTimeInterval(-10800),
+                updatedAt: Date().addingTimeInterval(-10800)
+            )
+        ]
+        
+        if let currentUser {
+            posts.insert(
+                Post(
+                    id: "preview-post",
+                    authorId: currentUser.id,
+                    authorUsername: currentUser.username,
+                    authorDisplayName: currentUser.displayName,
+                    authorAvatarURL: currentUser.avatarURL,
+                    authorIsVerified: currentUser.isVerified,
+                    content: "Proof should reflect product reality. Shipping deeper runtime flows next.",
+                    images: ["https://picsum.photos/411/311"],
+                    videoURL: nil,
+                    likesCount: 64,
+                    commentsCount: 9,
+                    sharesCount: 4,
+                    createdAt: Date().addingTimeInterval(-1800),
+                    updatedAt: Date().addingTimeInterval(-1800)
+                ),
+                at: 0
+            )
+        }
+        
+        trendingTopics = [
+            "BuildInPublic", "SwiftUI", "iOSDesign", "ProductStrategy", "AIWorkflows", "CreatorTools"
+        ]
+        
+        suggestedProfiles = [
+            SuggestedProfile(
+                id: "p1",
+                username: "amberdesign",
+                displayName: "Amber Design",
+                bio: "Mobile product designer sharing systems, motion, and interface teardown threads.",
+                avatarURL: "https://picsum.photos/220",
+                isVerified: true,
+                followersCount: 12800
+            ),
+            SuggestedProfile(
+                id: "p2",
+                username: "swiftfoundry",
+                displayName: "Swift Foundry",
+                bio: "Weekly SwiftUI experiments, architecture notes, and native product case studies.",
+                avatarURL: "https://picsum.photos/221",
+                isVerified: false,
+                followersCount: 7400
+            ),
+            SuggestedProfile(
+                id: "p3",
+                username: "opsforapps",
+                displayName: "Ops For Apps",
+                bio: "Shipping notes on release hygiene, runtime proof, and product operations.",
+                avatarURL: "https://picsum.photos/222",
+                isVerified: true,
+                followersCount: 18300
+            )
+        ]
+        
+        commentsByPostId = [
+            "1": [
+                PostComment(id: "c1", authorName: "Nina", authorUsername: "ninabuilds", body: "The onboarding flow looks much sharper now.", likesCount: 12, createdAt: Date().addingTimeInterval(-2500)),
+                PostComment(id: "c2", authorName: "Leo", authorUsername: "leoproduct", body: "Would love to see the second screen interaction too.", likesCount: 6, createdAt: Date().addingTimeInterval(-1800))
+            ],
+            "2": [
+                PostComment(id: "c3", authorName: "Maya", authorUsername: "mayastudio", body: "That color palette is unreal.", likesCount: 18, createdAt: Date().addingTimeInterval(-6000))
+            ],
+            "3": [
+                PostComment(id: "c4", authorName: "Aria", authorUsername: "ariareads", body: "Drop the reading list when you can.", likesCount: 4, createdAt: Date().addingTimeInterval(-9000))
+            ],
+            "preview-post": [
+                PostComment(id: "c5", authorName: "Sam", authorUsername: "samship", body: "Good. Proof without flows is still theater.", likesCount: 10, createdAt: Date().addingTimeInterval(-1200))
+            ]
+        ]
     }
 }
 
@@ -921,10 +1577,23 @@ class DataManager: ObservableObject {
 class NotificationManager: ObservableObject {
     static let shared = NotificationManager()
     
+    @Published var notifications: [SocialNotificationItem] = []
+    
     private init() {}
     
     func requestPermission() async {
-        // Request notification permission
+        if notifications.isEmpty {
+            seedPreviewState()
+        }
+    }
+    
+    func seedPreviewState() {
+        notifications = [
+            SocialNotificationItem(id: "n1", actorName: "Amber Design", message: "liked your runtime proof update.", systemImage: "heart.fill", isUnread: true, createdAt: Date().addingTimeInterval(-900)),
+            SocialNotificationItem(id: "n2", actorName: "Swift Foundry", message: "mentioned you in a thread about app templates.", systemImage: "at", isUnread: true, createdAt: Date().addingTimeInterval(-2400)),
+            SocialNotificationItem(id: "n3", actorName: "Ops For Apps", message: "shared your post with their release engineering circle.", systemImage: "arrowshape.turn.up.right.fill", isUnread: false, createdAt: Date().addingTimeInterval(-7200)),
+            SocialNotificationItem(id: "n4", actorName: "Maya Studio", message: "started following you.", systemImage: "person.badge.plus", isUnread: false, createdAt: Date().addingTimeInterval(-14400))
+        ]
     }
 }
 
