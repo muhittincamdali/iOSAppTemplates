@@ -4,14 +4,14 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `MarketplaceApp`
 - Lane: `Marketplace`
-- Media status: `screenshot-published`
+- Media status: `demo-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/MarketplaceApp.png](../Assets/AppScreenshots/MarketplaceApp.png)
+- demo clip is published: [../Assets/AppDemoClips/MarketplaceApp.mp4](../Assets/AppDemoClips/MarketplaceApp.mp4)
 - shareable gallery card is published: [../Assets/AppCards/MarketplaceApp.svg](../Assets/AppCards/MarketplaceApp.svg)
 - preview board is published: [../Assets/AppPreviews/MarketplaceApp.svg](../Assets/AppPreviews/MarketplaceApp.svg)
-- demo clip is not yet published
 
 ## What Exists Instead
 

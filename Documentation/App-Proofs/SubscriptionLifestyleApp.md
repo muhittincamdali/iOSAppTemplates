@@ -44,11 +44,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 - root repo `swift build -c release` passes
 - root repo `swift test` passes
 - runtime screenshot is published: [../Assets/AppScreenshots/SubscriptionLifestyleApp.png](../Assets/AppScreenshots/SubscriptionLifestyleApp.png)
+- demo clip is published: [../Assets/AppDemoClips/SubscriptionLifestyleApp.mp4](../Assets/AppDemoClips/SubscriptionLifestyleApp.mp4)
 - `Examples/SubscriptionLifestyleExample` inspection route exists
 
 ## Missing Proof
 
-- demo clip not yet published
 - stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path

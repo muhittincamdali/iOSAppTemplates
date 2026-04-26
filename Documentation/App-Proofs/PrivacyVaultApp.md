@@ -44,11 +44,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 - root repo `swift build -c release` passes
 - root repo `swift test` passes
 - runtime screenshot is published: [../Assets/AppScreenshots/PrivacyVaultApp.png](../Assets/AppScreenshots/PrivacyVaultApp.png)
+- demo clip is published: [../Assets/AppDemoClips/PrivacyVaultApp.mp4](../Assets/AppDemoClips/PrivacyVaultApp.mp4)
 - `Examples/PrivacyVaultExample` inspection route exists
 
 ## Missing Proof
 
-- demo clip not yet published
 - stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path

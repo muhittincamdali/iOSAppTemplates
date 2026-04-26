@@ -4,14 +4,14 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `ProductivityApp`
 - Lane: `Productivity`
-- Media status: `screenshot-published`
+- Media status: `demo-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/ProductivityApp.png](../Assets/AppScreenshots/ProductivityApp.png)
+- demo clip is published: [../Assets/AppDemoClips/ProductivityApp.mp4](../Assets/AppDemoClips/ProductivityApp.mp4)
 - shareable gallery card is published: [../Assets/AppCards/ProductivityApp.svg](../Assets/AppCards/ProductivityApp.svg)
 - preview board is published: [../Assets/AppPreviews/ProductivityApp.svg](../Assets/AppPreviews/ProductivityApp.svg)
-- demo clip is not yet published
 
 ## What Exists Instead
 

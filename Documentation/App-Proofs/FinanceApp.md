@@ -44,11 +44,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 - root repo `swift build -c release` passes
 - root repo `swift test` passes
 - runtime screenshot is published: [../Assets/AppScreenshots/FinanceApp.png](../Assets/AppScreenshots/FinanceApp.png)
+- demo clip is published: [../Assets/AppDemoClips/FinanceApp.mp4](../Assets/AppDemoClips/FinanceApp.mp4)
 - `Examples/FinanceExample` inspection route exists
 
 ## Missing Proof
 
-- demo clip not yet published
 - stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path

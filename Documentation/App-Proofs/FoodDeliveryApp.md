@@ -44,11 +44,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 - root repo `swift build -c release` passes
 - root repo `swift test` passes
 - runtime screenshot is published: [../Assets/AppScreenshots/FoodDeliveryApp.png](../Assets/AppScreenshots/FoodDeliveryApp.png)
+- demo clip is published: [../Assets/AppDemoClips/FoodDeliveryApp.mp4](../Assets/AppDemoClips/FoodDeliveryApp.mp4)
 - `Examples/FoodDeliveryExample` inspection route exists
 
 ## Missing Proof
 
-- demo clip not yet published
 - stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path

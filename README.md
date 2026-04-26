@@ -14,8 +14,8 @@ Production-grade SwiftUI app starter system for Apple platforms.
 | Build proof | local generic iOS `xcodebuild` tracked for `20` roots; hosted standalone iOS workflow is versioned |
 | Runtime proof | local simulator launch proof tracked for `20` roots via `Scripts/validate-runtime-app-launches.sh` |
 | Public proof | per-app proof and media pages exist for `20` roots |
-| Visual layer | gallery cards, preview boards, and runtime screenshots published for `20` roots |
-| Remaining gap | demo clips, stable green hosted standalone iOS baseline, equal depth across all lanes |
+| Visual layer | gallery cards, preview boards, runtime screenshots, and demo clips published for `20` roots |
+| Remaining gap | stable green hosted standalone iOS baseline, equal depth across all lanes |
 
 ## First Decision
 
@@ -188,12 +188,13 @@ This proves today:
   - `bash Scripts/validate-runtime-app-launches.sh`
 - published runtime screenshots for the same `20` standalone roots:
   - `Documentation/Assets/AppScreenshots/*.png`
+- published runtime demo clips for the same `20` standalone roots:
+  - `Documentation/Assets/AppDemoClips/*.mp4`
 
 This does not yet prove today:
 
 - stable green hosted standalone iOS proof baseline for the tracked roots
 - full complete-app parity for all lanes
-- demo clip coverage for the tracked roots
 
 ### 3. Use the generator
 
@@ -215,6 +216,7 @@ swift Scripts/TemplateGenerator.swift --list
 - the repo now has explicit app proof, media, lockfile, and portfolio routers
 - the repo now has published gallery cards and preview boards for `20` standalone roots
 - the repo now has published runtime screenshots for `20` standalone roots
+- the repo now has published runtime demo clips for `20` standalone roots
 
 ## Canonical Docs
 

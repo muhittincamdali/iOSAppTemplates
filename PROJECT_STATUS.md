@@ -17,6 +17,7 @@ Last updated: 2026-04-24
   - a gallery card
   - a preview board
 - a published runtime screenshot
+- a published runtime demo clip
 - local generic iOS `xcodebuild` proof is tracked for the standalone roots
 - local simulator runtime launch proof is tracked for the standalone roots
 - the hosted standalone iOS proof workflow is active for the same `20` roots
@@ -25,27 +26,26 @@ Last updated: 2026-04-24
 
 ## What Is Not Yet True
 
-- demo clips are not published for all app packs
 - a stable green hosted standalone iOS baseline is not yet established for every app pack
 - every lane is not yet at equal production depth
 - the latest public release is still an older numbered baseline, not proof of equal app-pack maturity
 
 ## Current Public Gaps
 
-1. publish short demo clips
-2. keep the hosted standalone iOS proof route green and visible
-3. keep GitHub metadata and release surfaces aligned with the versioned policy
-4. continue converting older docs to the same English canonical quality bar
-5. keep launch-proof and screenshot-proof surfaces in sync with real runtime behavior
+1. keep the hosted standalone iOS proof route green and visible
+2. keep GitHub metadata and release surfaces aligned with the versioned policy
+3. continue converting older docs to the same English canonical quality bar
+4. keep launch-proof, screenshot-proof, and demo-proof surfaces in sync with real runtime behavior
+5. deepen runtime scenario coverage beyond first-screen proof
 
 ## Active Priorities
 
 1. keep the root package and standalone app roots buildable and honest
-2. publish stronger demo proof without overclaiming runtime maturity
+2. keep published demo proof aligned with real runtime maturity
 3. tighten GitHub distribution, release, and support surfaces
 4. keep README, docs, examples, proof, and gallery routing aligned
 5. keep the repo moving toward `20 provable complete apps`, not `20 marketing names`
 
 ## Status Summary
 
-The repo has crossed from starter collection into a tracked portfolio system. The next quality jump is not more naming or more promises; it is stable hosted standalone iOS proof, demo coverage, and tighter public distribution discipline.
+The repo has crossed from starter collection into a tracked portfolio system. The next quality jump is not more naming or more promises; it is stable hosted standalone iOS proof, deeper runtime scenarios, and tighter public distribution discipline.
