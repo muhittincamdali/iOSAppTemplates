@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/TravelPlannerApp.png](../Assets/AppScreenshots/TravelPlannerApp.png)
 - demo clip is published: [../Assets/AppDemoClips/TravelPlannerApp.mp4](../Assets/AppDemoClips/TravelPlannerApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/TravelPlannerApp.svg](../Assets/AppScenarioBoards/TravelPlannerApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/TravelPlannerApp-launch.png) / [ready](../Assets/AppScenarioShots/TravelPlannerApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/TravelPlannerApp.svg](../Assets/AppCards/TravelPlannerApp.svg)
 - preview board is published: [../Assets/AppPreviews/TravelPlannerApp.svg](../Assets/AppPreviews/TravelPlannerApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/TravelPlannerApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/TravelPlannerApp.svg)

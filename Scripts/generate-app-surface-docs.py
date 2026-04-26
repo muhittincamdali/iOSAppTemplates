@@ -321,15 +321,19 @@ def media_page(app: dict[str, Any]) -> str:
         lines.insert(11, f"- demo clip is published: {md_link(demo_clip_relative_path(app_name), demo_clip_relative_path(app_name))}")
     else:
         lines.insert(11, "- demo clip is not yet published")
+    if scenario_board_exists(app_name):
+        lines.insert(12, f"- runtime scenario board is published: {md_link(scenario_board_relative_path(app_name), scenario_board_relative_path(app_name))}")
+    else:
+        lines.insert(12, "- runtime scenario board is not yet published")
     if has_scenario_pair:
         lines.insert(
-            12,
+            13,
             "- launch-to-ready scenario frames are published: "
             f"{md_link('launch', scenario_launch_relative_path(app_name))} / "
             f"{md_link('ready', scenario_ready_relative_path(app_name))}",
         )
     else:
-        lines.insert(12, "- launch-to-ready scenario frames are not yet published")
+        lines.insert(13, "- launch-to-ready scenario frames are not yet published")
     if example_path:
         lines.append(f"- {md_link('Richer Example', relative_doc_link(example_path))}")
     lines.extend([
@@ -343,6 +347,7 @@ def media_page(app: dict[str, Any]) -> str:
         "## Runtime Scenario Route",
         "",
         f"- {md_link('Runtime Scenario Page', f'../App-Scenarios/{app_name}.md')}",
+        f"- {md_link('Runtime Scenario Board', scenario_board_relative_path(app_name))}",
     ])
     return "\n".join(lines) + "\n"
 
@@ -655,6 +660,7 @@ def proof_router(catalog: list[dict[str, Any]]) -> str:
 
 def scenario_router(catalog: list[dict[str, Any]]) -> str:
     scenario_count = sum(1 for app in catalog if scenario_pair_exists(app["app"]))
+    board_count = sum(1 for app in catalog if scenario_board_exists(app["app"]))
     lines: list[str] = [
         "# Runtime Scenario Router",
         "",
@@ -665,7 +671,7 @@ def scenario_router(catalog: list[dict[str, Any]]) -> str:
         "Current truth:",
         "",
         f"- `{scenario_count}` standalone roots have published launch-to-ready scenario frame pairs",
-        f"- `{sum(1 for app in catalog if scenario_board_exists(app['app']))}` standalone roots have published shareable scenario boards",
+        f"- `{board_count}` standalone roots have published shareable scenario boards",
         f"- `{sum(1 for app in catalog if screenshot_exists(app['app']))}` standalone roots have published runtime screenshots",
         f"- `{sum(1 for app in catalog if demo_clip_exists(app['app']))}` standalone roots have published demo clips",
         "- this surface tracks runtime progression, not deep interaction parity",
@@ -687,6 +693,7 @@ def scenario_router(catalog: list[dict[str, Any]]) -> str:
         "",
         "It currently proves only:",
         "",
+        "- a shareable runtime scenario board",
         "- launch frame",
         "- ready frame",
         "- first-screen screenshot",
@@ -706,6 +713,7 @@ def media_router(catalog: list[dict[str, Any]]) -> str:
     screenshot_count = sum(1 for app in catalog if screenshot_exists(app["app"]))
     demo_clip_count = sum(1 for app in catalog if demo_clip_exists(app["app"]))
     scenario_count = sum(1 for app in catalog if scenario_pair_exists(app["app"]))
+    scenario_board_count = sum(1 for app in catalog if scenario_board_exists(app["app"]))
     lines: list[str] = [
         "# App Media Surfaces",
         "",
@@ -720,11 +728,12 @@ def media_router(catalog: list[dict[str, Any]]) -> str:
         f"- `{screenshot_count}` standalone roots already have published runtime screenshots",
         f"- `{demo_clip_count}` standalone roots already have published demo clips",
         f"- `{scenario_count}` standalone roots already have published launch-to-ready scenario frame pairs",
+        f"- `{scenario_board_count}` standalone roots already have published runtime scenario boards",
         "- this surface separates visual layers instead of hiding the runtime scenario gap",
         "",
         "This surface exists to:",
         "",
-        "- show screenshot, demo, and scenario status truthfully",
+        "- show screenshot, demo, scenario-frame, and scenario-board status truthfully",
         "- provide a single canonical route for future capture batches",
         "- keep proof pages and media pages separate",
         "",
@@ -771,11 +780,13 @@ def media_router(catalog: list[dict[str, Any]]) -> str:
         "- at least one runtime screenshot is now published",
         "- at least one short runtime demo clip is now published",
         "- launch and ready runtime scenario frames are now published",
+        "- a shareable runtime scenario board is now published",
         "",
         "## Related Surfaces",
         "",
         f"- {md_link('../App-Gallery.md', '../App-Gallery.md')}",
         f"- {md_link('../App-Proofs/README.md', '../App-Proofs/README.md')}",
+        f"- {md_link('../App-Scenarios/README.md', '../App-Scenarios/README.md')}",
         f"- {md_link('../Proof-Matrix.md', '../Proof-Matrix.md')}",
         f"- {md_link('../Template-Showcase.md', '../Template-Showcase.md')}",
         f"- {md_link('../Complete-App-Standard.md', '../Complete-App-Standard.md')}",
@@ -787,6 +798,7 @@ def app_gallery_page(catalog: list[dict[str, Any]]) -> str:
     screenshot_count = sum(1 for app in catalog if screenshot_exists(app["app"]))
     demo_clip_count = sum(1 for app in catalog if demo_clip_exists(app["app"]))
     scenario_count = sum(1 for app in catalog if scenario_pair_exists(app["app"]))
+    scenario_board_count = sum(1 for app in catalog if scenario_board_exists(app["app"]))
     lines: list[str] = [
         "# App Gallery",
         "",
@@ -801,12 +813,13 @@ def app_gallery_page(catalog: list[dict[str, Any]]) -> str:
         f"- `{screenshot_count}` apps already have published runtime screenshots",
         f"- `{demo_clip_count}` apps already have published runtime demo clips",
         f"- `{scenario_count}` apps already have published launch-to-ready scenario frame pairs",
+        f"- `{scenario_board_count}` apps already have published shareable runtime scenario boards",
         "- this surface provides visual routing; it does not make a complete-app parity claim",
         "",
         "## Current Visual Router",
         "",
-        "| App | Lane | Card | Preview | Screenshot | Clip | Scenario | Proof | Media |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| App | Lane | Card | Preview | Screenshot | Clip | Scenario | Board | Proof | Media |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for app in catalog:
         app_name = app["app"]
@@ -817,9 +830,10 @@ def app_gallery_page(catalog: list[dict[str, Any]]) -> str:
             if scenario_pair_exists(app_name)
             else "pending"
         )
+        board_cell = f"[board](./Assets/AppScenarioBoards/{app_name}.svg)" if scenario_board_exists(app_name) else "pending"
         lines.append(
             f"| {app_name} | {app['lane']} | [card](./Assets/AppCards/{app_name}.svg) | "
-            f"[preview](./Assets/AppPreviews/{app_name}.svg) | {screenshot_cell} | {clip_cell} | {scenario_cell} | "
+            f"[preview](./Assets/AppPreviews/{app_name}.svg) | {screenshot_cell} | {clip_cell} | {scenario_cell} | {board_cell} | "
             f"[proof](./App-Proofs/{app_name}.md) | [media](./App-Media/{app_name}.md) |"
         )
     lines.extend([
@@ -832,7 +846,7 @@ def app_gallery_page(catalog: list[dict[str, Any]]) -> str:
         "",
         "- a shareable visual card is published",
         "- a preview board is published",
-        "- runtime screenshot, demo clip, and scenario-frame status are routed honestly",
+        "- runtime screenshot, demo clip, scenario-frame, and scenario-board status are routed honestly",
         "- the proof and media routers are canonical",
     ])
     return "\n".join(lines) + "\n"

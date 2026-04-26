@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/PrivacyVaultApp.png](../Assets/AppScreenshots/PrivacyVaultApp.png)
 - demo clip is published: [../Assets/AppDemoClips/PrivacyVaultApp.mp4](../Assets/AppDemoClips/PrivacyVaultApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/PrivacyVaultApp.svg](../Assets/AppScenarioBoards/PrivacyVaultApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/PrivacyVaultApp-launch.png) / [ready](../Assets/AppScenarioShots/PrivacyVaultApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/PrivacyVaultApp.svg](../Assets/AppCards/PrivacyVaultApp.svg)
 - preview board is published: [../Assets/AppPreviews/PrivacyVaultApp.svg](../Assets/AppPreviews/PrivacyVaultApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/PrivacyVaultApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/PrivacyVaultApp.svg)

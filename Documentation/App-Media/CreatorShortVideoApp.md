@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/CreatorShortVideoApp.png](../Assets/AppScreenshots/CreatorShortVideoApp.png)
 - demo clip is published: [../Assets/AppDemoClips/CreatorShortVideoApp.mp4](../Assets/AppDemoClips/CreatorShortVideoApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/CreatorShortVideoApp.svg](../Assets/AppScenarioBoards/CreatorShortVideoApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/CreatorShortVideoApp-launch.png) / [ready](../Assets/AppScenarioShots/CreatorShortVideoApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/CreatorShortVideoApp.svg](../Assets/AppCards/CreatorShortVideoApp.svg)
 - preview board is published: [../Assets/AppPreviews/CreatorShortVideoApp.svg](../Assets/AppPreviews/CreatorShortVideoApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/CreatorShortVideoApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/CreatorShortVideoApp.svg)

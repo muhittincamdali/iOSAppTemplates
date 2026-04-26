@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/SocialMediaApp.png](../Assets/AppScreenshots/SocialMediaApp.png)
 - demo clip is published: [../Assets/AppDemoClips/SocialMediaApp.mp4](../Assets/AppDemoClips/SocialMediaApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/SocialMediaApp.svg](../Assets/AppScenarioBoards/SocialMediaApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/SocialMediaApp-launch.png) / [ready](../Assets/AppScenarioShots/SocialMediaApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/SocialMediaApp.svg](../Assets/AppCards/SocialMediaApp.svg)
 - preview board is published: [../Assets/AppPreviews/SocialMediaApp.svg](../Assets/AppPreviews/SocialMediaApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/SocialMediaApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/SocialMediaApp.svg)

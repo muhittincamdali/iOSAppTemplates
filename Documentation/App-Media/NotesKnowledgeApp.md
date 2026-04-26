@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/NotesKnowledgeApp.png](../Assets/AppScreenshots/NotesKnowledgeApp.png)
 - demo clip is published: [../Assets/AppDemoClips/NotesKnowledgeApp.mp4](../Assets/AppDemoClips/NotesKnowledgeApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/NotesKnowledgeApp.svg](../Assets/AppScenarioBoards/NotesKnowledgeApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/NotesKnowledgeApp-launch.png) / [ready](../Assets/AppScenarioShots/NotesKnowledgeApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/NotesKnowledgeApp.svg](../Assets/AppCards/NotesKnowledgeApp.svg)
 - preview board is published: [../Assets/AppPreviews/NotesKnowledgeApp.svg](../Assets/AppPreviews/NotesKnowledgeApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/NotesKnowledgeApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/NotesKnowledgeApp.svg)

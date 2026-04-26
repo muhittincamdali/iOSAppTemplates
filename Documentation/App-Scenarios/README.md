@@ -43,6 +43,7 @@ A runtime scenario page does not prove complete interaction depth.
 
 It currently proves only:
 
+- a shareable runtime scenario board
 - launch frame
 - ready frame
 - first-screen screenshot

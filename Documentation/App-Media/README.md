@@ -11,11 +11,12 @@ Current truth:
 - `20` standalone roots already have published runtime screenshots
 - `20` standalone roots already have published demo clips
 - `20` standalone roots already have published launch-to-ready scenario frame pairs
+- `20` standalone roots already have published runtime scenario boards
 - this surface separates visual layers instead of hiding the runtime scenario gap
 
 This surface exists to:
 
-- show screenshot, demo, and scenario status truthfully
+- show screenshot, demo, scenario-frame, and scenario-board status truthfully
 - provide a single canonical route for future capture batches
 - keep proof pages and media pages separate
 
@@ -77,11 +78,13 @@ If an app is marked `scenario-published`, it means:
 - at least one runtime screenshot is now published
 - at least one short runtime demo clip is now published
 - launch and ready runtime scenario frames are now published
+- a shareable runtime scenario board is now published
 
 ## Related Surfaces
 
 - [../App-Gallery.md](../App-Gallery.md)
 - [../App-Proofs/README.md](../App-Proofs/README.md)
+- [../App-Scenarios/README.md](../App-Scenarios/README.md)
 - [../Proof-Matrix.md](../Proof-Matrix.md)
 - [../Template-Showcase.md](../Template-Showcase.md)
 - [../Complete-App-Standard.md](../Complete-App-Standard.md)

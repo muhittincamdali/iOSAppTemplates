@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/MarketplaceApp.png](../Assets/AppScreenshots/MarketplaceApp.png)
 - demo clip is published: [../Assets/AppDemoClips/MarketplaceApp.mp4](../Assets/AppDemoClips/MarketplaceApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/MarketplaceApp.svg](../Assets/AppScenarioBoards/MarketplaceApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/MarketplaceApp-launch.png) / [ready](../Assets/AppScenarioShots/MarketplaceApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/MarketplaceApp.svg](../Assets/AppCards/MarketplaceApp.svg)
 - preview board is published: [../Assets/AppPreviews/MarketplaceApp.svg](../Assets/AppPreviews/MarketplaceApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/MarketplaceApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/MarketplaceApp.svg)

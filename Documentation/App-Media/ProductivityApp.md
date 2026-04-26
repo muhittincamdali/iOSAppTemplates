@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/ProductivityApp.png](../Assets/AppScreenshots/ProductivityApp.png)
 - demo clip is published: [../Assets/AppDemoClips/ProductivityApp.mp4](../Assets/AppDemoClips/ProductivityApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/ProductivityApp.svg](../Assets/AppScenarioBoards/ProductivityApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/ProductivityApp-launch.png) / [ready](../Assets/AppScenarioShots/ProductivityApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/ProductivityApp.svg](../Assets/AppCards/ProductivityApp.svg)
 - preview board is published: [../Assets/AppPreviews/ProductivityApp.svg](../Assets/AppPreviews/ProductivityApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/ProductivityApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/ProductivityApp.svg)

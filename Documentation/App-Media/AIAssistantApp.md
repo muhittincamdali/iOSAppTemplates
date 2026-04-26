@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/AIAssistantApp.png](../Assets/AppScreenshots/AIAssistantApp.png)
 - demo clip is published: [../Assets/AppDemoClips/AIAssistantApp.mp4](../Assets/AppDemoClips/AIAssistantApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/AIAssistantApp.svg](../Assets/AppScenarioBoards/AIAssistantApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/AIAssistantApp-launch.png) / [ready](../Assets/AppScenarioShots/AIAssistantApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/AIAssistantApp.svg](../Assets/AppCards/AIAssistantApp.svg)
 - preview board is published: [../Assets/AppPreviews/AIAssistantApp.svg](../Assets/AppPreviews/AIAssistantApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/AIAssistantApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/AIAssistantApp.svg)

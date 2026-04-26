@@ -10,6 +10,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - runtime screenshot is published: [../Assets/AppScreenshots/FitnessApp.png](../Assets/AppScreenshots/FitnessApp.png)
 - demo clip is published: [../Assets/AppDemoClips/FitnessApp.mp4](../Assets/AppDemoClips/FitnessApp.mp4)
+- runtime scenario board is published: [../Assets/AppScenarioBoards/FitnessApp.svg](../Assets/AppScenarioBoards/FitnessApp.svg)
 - launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/FitnessApp-launch.png) / [ready](../Assets/AppScenarioShots/FitnessApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/FitnessApp.svg](../Assets/AppCards/FitnessApp.svg)
 - preview board is published: [../Assets/AppPreviews/FitnessApp.svg](../Assets/AppPreviews/FitnessApp.svg)
@@ -30,3 +31,4 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Runtime Scenario Route
 
 - [Runtime Scenario Page](../App-Scenarios/FitnessApp.md)
+- [Runtime Scenario Board](../Assets/AppScenarioBoards/FitnessApp.svg)
