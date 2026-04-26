@@ -19,6 +19,7 @@ Last updated: 2026-04-26
 - a published runtime screenshot
 - a published runtime demo clip
 - published launch-to-ready scenario frames
+- canonical runtime scenario pages
 - local generic iOS `xcodebuild` proof is tracked for the standalone roots
 - local simulator runtime launch proof is tracked for the standalone roots
 - the hosted standalone iOS proof workflow is active for the same `20` roots
@@ -37,7 +38,7 @@ Last updated: 2026-04-26
 2. keep GitHub metadata and release surfaces aligned with the versioned policy
 3. continue converting older docs to the same English canonical quality bar
 4. keep launch-proof, screenshot-proof, and demo-proof surfaces in sync with real runtime behavior
-5. deepen interactive runtime flows beyond the current launch-to-ready scenario proof
+5. deepen interaction proof beyond the current launch / ready / first-screen scenario set
 
 ## Active Priorities
 
@@ -49,4 +50,4 @@ Last updated: 2026-04-26
 
 ## Status Summary
 
-The repo has crossed from starter collection into a tracked portfolio system. The next quality jump is not more naming or more promises; it is stable hosted standalone iOS proof, deeper interactive runtime flows, and tighter public distribution discipline.
+The repo has crossed from starter collection into a tracked portfolio system. The next quality jump is not more naming or more promises; it is stable hosted standalone iOS proof, deeper multi-step interaction proof, and tighter public distribution discipline.

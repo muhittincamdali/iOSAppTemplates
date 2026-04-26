@@ -12,6 +12,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 CATALOG_PATH = REPO_ROOT / "Documentation" / "app-surface-catalog.json"
 PROOFS_DIR = REPO_ROOT / "Documentation" / "App-Proofs"
 MEDIA_DIR = REPO_ROOT / "Documentation" / "App-Media"
+SCENARIOS_DIR = REPO_ROOT / "Documentation" / "App-Scenarios"
 EXAMPLES_HUB_PATH = REPO_ROOT / "Examples" / "README.md"
 SCREENSHOTS_DIR = REPO_ROOT / "Documentation" / "Assets" / "AppScreenshots"
 DEMO_CLIPS_DIR = REPO_ROOT / "Documentation" / "Assets" / "AppDemoClips"
@@ -73,6 +74,65 @@ def scenario_ready_exists(app_name: str) -> bool:
 
 def scenario_pair_exists(app_name: str) -> bool:
     return scenario_launch_exists(app_name) and scenario_ready_exists(app_name)
+
+
+def scenario_page(app: dict[str, Any]) -> str:
+    app_name = app["app"]
+    has_screenshot = screenshot_exists(app_name)
+    has_demo_clip = demo_clip_exists(app_name)
+    has_scenario_pair = scenario_pair_exists(app_name)
+    lines: list[str] = [
+        f"# {app_name} Runtime Scenario",
+        "",
+        "Generated from `Documentation/app-surface-catalog.json`.",
+        "",
+        f"- App: `{app_name}`",
+        f"- Lane: `{app['lane']}`",
+        f"- Product target: `{app['product_target']}`",
+        "",
+        "## Scenario Truth",
+        "",
+        "- this is a runtime progression page, not a complete-app claim",
+        "- the sequence below only proves launch, ready, and first-screen runtime states",
+        "- deeper interaction flows still require separate automation work",
+        "",
+        "## Published Runtime Progression",
+        "",
+    ]
+    if has_scenario_pair:
+        lines.extend([
+            "### Launch Frame",
+            "",
+            f"![{app_name} launch]({scenario_launch_relative_path(app_name)})",
+            "",
+            "### Ready Frame",
+            "",
+            f"![{app_name} ready]({scenario_ready_relative_path(app_name)})",
+            "",
+        ])
+    if has_screenshot:
+        lines.extend([
+            "### Runtime Screenshot",
+            "",
+            f"![{app_name} screenshot]({screenshot_relative_path(app_name)})",
+            "",
+        ])
+    if has_demo_clip:
+        lines.extend([
+            "### Demo Clip",
+            "",
+            f"- {md_link(demo_clip_relative_path(app_name), demo_clip_relative_path(app_name))}",
+            "",
+        ])
+    lines.extend([
+        "## Canonical References",
+        "",
+        f"- {md_link('App Proof Surface', f'../App-Proofs/{app_name}.md')}",
+        f"- {md_link('App Media Surface', f'../App-Media/{app_name}.md')}",
+        f"- {md_link('App Gallery', '../App-Gallery.md')}",
+        f"- {md_link('Scenario Router', '../App-Scenarios/README.md')}",
+    ])
+    return "\n".join(lines) + "\n"
 
 
 def example_name(app: dict[str, Any]) -> str:
@@ -265,6 +325,12 @@ def media_page(app: dict[str, Any]) -> str:
         "",
     ])
     lines.extend([f"1. {app['capture_targets'][0]}", f"2. {app['capture_targets'][1]}", f"3. {app['capture_targets'][2]}"])
+    lines.extend([
+        "",
+        "## Runtime Scenario Route",
+        "",
+        f"- {md_link('Runtime Scenario Page', f'../App-Scenarios/{app_name}.md')}",
+    ])
     return "\n".join(lines) + "\n"
 
 
@@ -565,10 +631,58 @@ def proof_router(catalog: list[dict[str, Any]]) -> str:
         "## Related Surfaces",
         "",
         f"- {md_link('../App-Media/README.md', '../App-Media/README.md')}",
+        f"- {md_link('../App-Scenarios/README.md', '../App-Scenarios/README.md')}",
         f"- {md_link('../Template-Showcase.md', '../Template-Showcase.md')}",
         f"- {md_link('../Proof-Matrix.md', '../Proof-Matrix.md')}",
         f"- {md_link('../Portfolio-Matrix.md', '../Portfolio-Matrix.md')}",
         f"- {md_link('../../.github/workflows/standalone-ios-proof.yml', '../../.github/workflows/standalone-ios-proof.yml')}",
+    ])
+    return "\n".join(lines) + "\n"
+
+
+def scenario_router(catalog: list[dict[str, Any]]) -> str:
+    scenario_count = sum(1 for app in catalog if scenario_pair_exists(app["app"]))
+    lines: list[str] = [
+        "# Runtime Scenario Router",
+        "",
+        "Generated from `Documentation/app-surface-catalog.json`.",
+        "",
+        "This directory is the canonical runtime progression router for the standalone app roots inside `iOSAppTemplates`.",
+        "",
+        "Current truth:",
+        "",
+        f"- `{scenario_count}` standalone roots have published launch-to-ready scenario frame pairs",
+        f"- `{sum(1 for app in catalog if screenshot_exists(app['app']))}` standalone roots have published runtime screenshots",
+        f"- `{sum(1 for app in catalog if demo_clip_exists(app['app']))}` standalone roots have published demo clips",
+        "- this surface tracks runtime progression, not deep interaction parity",
+        "",
+        "## Current Router",
+        "",
+        "| App | Lane | Scenario | Surface |",
+        "| --- | --- | --- | --- |",
+    ]
+    for app in catalog:
+        status = "published" if scenario_pair_exists(app["app"]) else "missing"
+        lines.append(f"| {app['app']} | {app['lane']} | `{status}` | [{app['app']}.md](./{app['app']}.md) |")
+    lines.extend([
+        "",
+        "## Rule",
+        "",
+        "A runtime scenario page does not prove complete interaction depth.",
+        "",
+        "It currently proves only:",
+        "",
+        "- launch frame",
+        "- ready frame",
+        "- first-screen screenshot",
+        "- short runtime clip",
+        "",
+        "## Related Surfaces",
+        "",
+        f"- {md_link('../App-Media/README.md', '../App-Media/README.md')}",
+        f"- {md_link('../App-Proofs/README.md', '../App-Proofs/README.md')}",
+        f"- {md_link('../App-Gallery.md', '../App-Gallery.md')}",
+        f"- {md_link('../Proof-Matrix.md', '../Proof-Matrix.md')}",
     ])
     return "\n".join(lines) + "\n"
 
@@ -725,17 +839,20 @@ def main() -> int:
     args = parser.parse_args()
 
     catalog = load_catalog()
+    SCENARIOS_DIR.mkdir(parents=True, exist_ok=True)
     ok = True
 
     for app in catalog:
         ok &= write_if_changed(PROOFS_DIR / f"{app['app']}.md", proof_page(app), args.check)
         ok &= write_if_changed(MEDIA_DIR / f"{app['app']}.md", media_page(app), args.check)
+        ok &= write_if_changed(SCENARIOS_DIR / f"{app['app']}.md", scenario_page(app), args.check)
         ok &= write_if_changed(path_from_root(app["readme_path"]), template_root_page(app), args.check)
         if app.get("example_path"):
             ok &= write_if_changed(path_from_root(app["example_path"]), example_page(app), args.check)
 
     ok &= write_if_changed(PROOFS_DIR / "README.md", proof_router(catalog), args.check)
     ok &= write_if_changed(MEDIA_DIR / "README.md", media_router(catalog), args.check)
+    ok &= write_if_changed(SCENARIOS_DIR / "README.md", scenario_router(catalog), args.check)
     ok &= write_if_changed(EXAMPLES_HUB_PATH, examples_hub(catalog), args.check)
     ok &= write_if_changed(APP_GALLERY_PATH, app_gallery_page(catalog), args.check)
 

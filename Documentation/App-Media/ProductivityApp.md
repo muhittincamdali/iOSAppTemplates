@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. workspace dashboard screenshot
 2. task list or project board screenshot
 3. short focus-session workflow clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/ProductivityApp.md)

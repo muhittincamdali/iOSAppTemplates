@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. fitness dashboard screenshot
 2. goal or activity detail screenshot
 3. short progress-overview demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/FitnessApp.md)

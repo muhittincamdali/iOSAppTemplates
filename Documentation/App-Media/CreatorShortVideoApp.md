@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. creator feed screenshot
 2. clip detail or upload screenshot
 3. short browse-to-publish demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/CreatorShortVideoApp.md)

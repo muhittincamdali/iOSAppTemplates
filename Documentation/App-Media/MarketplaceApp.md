@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. marketplace feed screenshot
 2. listing detail screenshot
 3. short browse-to-listing demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/MarketplaceApp.md)

@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. trip overview screenshot
 2. itinerary detail screenshot
 3. short itinerary-planning demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/TravelPlannerApp.md)

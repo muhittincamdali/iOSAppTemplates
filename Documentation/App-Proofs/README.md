@@ -58,6 +58,7 @@ Canonical complete-app standard:
 ## Related Surfaces
 
 - [../App-Media/README.md](../App-Media/README.md)
+- [../App-Scenarios/README.md](../App-Scenarios/README.md)
 - [../Template-Showcase.md](../Template-Showcase.md)
 - [../Proof-Matrix.md](../Proof-Matrix.md)
 - [../Portfolio-Matrix.md](../Portfolio-Matrix.md)

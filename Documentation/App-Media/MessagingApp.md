@@ -26,3 +26,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 1. conversation list screenshot
 2. chat thread screenshot
 3. short open-chat demo clip
+
+## Runtime Scenario Route
+
+- [Runtime Scenario Page](../App-Scenarios/MessagingApp.md)
