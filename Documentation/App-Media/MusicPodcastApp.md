@@ -4,12 +4,13 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `MusicPodcastApp`
 - Lane: `Music / Podcast`
-- Media status: `demo-published`
+- Media status: `scenario-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/MusicPodcastApp.png](../Assets/AppScreenshots/MusicPodcastApp.png)
 - demo clip is published: [../Assets/AppDemoClips/MusicPodcastApp.mp4](../Assets/AppDemoClips/MusicPodcastApp.mp4)
+- launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/MusicPodcastApp-launch.png) / [ready](../Assets/AppScenarioShots/MusicPodcastApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/MusicPodcastApp.svg](../Assets/AppCards/MusicPodcastApp.svg)
 - preview board is published: [../Assets/AppPreviews/MusicPodcastApp.svg](../Assets/AppPreviews/MusicPodcastApp.svg)
 

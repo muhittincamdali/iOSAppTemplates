@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting full production social parity today
-- readers who expect deeper runtime scenario coverage than the current screenshot and demo proof
+- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
@@ -45,6 +45,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 - root repo `swift test` passes
 - runtime screenshot is published: [../Assets/AppScreenshots/SocialMediaApp.png](../Assets/AppScreenshots/SocialMediaApp.png)
 - demo clip is published: [../Assets/AppDemoClips/SocialMediaApp.mp4](../Assets/AppDemoClips/SocialMediaApp.mp4)
+- launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/SocialMediaApp-launch.png) / [ready](../Assets/AppScenarioShots/SocialMediaApp-ready.png)
 - `Examples/SocialMediaExample` inspection route exists
 
 ## Missing Proof

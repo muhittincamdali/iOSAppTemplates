@@ -4,12 +4,13 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `AIAssistantApp`
 - Lane: `AI`
-- Media status: `demo-published`
+- Media status: `scenario-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/AIAssistantApp.png](../Assets/AppScreenshots/AIAssistantApp.png)
 - demo clip is published: [../Assets/AppDemoClips/AIAssistantApp.mp4](../Assets/AppDemoClips/AIAssistantApp.mp4)
+- launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/AIAssistantApp-launch.png) / [ready](../Assets/AppScenarioShots/AIAssistantApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/AIAssistantApp.svg](../Assets/AppCards/AIAssistantApp.svg)
 - preview board is published: [../Assets/AppPreviews/AIAssistantApp.svg](../Assets/AppPreviews/AIAssistantApp.svg)
 

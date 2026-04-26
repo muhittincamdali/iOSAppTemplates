@@ -4,12 +4,13 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `EcommerceApp`
 - Lane: `Commerce`
-- Media status: `demo-published`
+- Media status: `scenario-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/EcommerceApp.png](../Assets/AppScreenshots/EcommerceApp.png)
 - demo clip is published: [../Assets/AppDemoClips/EcommerceApp.mp4](../Assets/AppDemoClips/EcommerceApp.mp4)
+- launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/EcommerceApp-launch.png) / [ready](../Assets/AppScenarioShots/EcommerceApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/EcommerceApp.svg](../Assets/AppCards/EcommerceApp.svg)
 - preview board is published: [../Assets/AppPreviews/EcommerceApp.svg](../Assets/AppPreviews/EcommerceApp.svg)
 

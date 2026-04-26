@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting production audited secure storage today
-- readers who expect deeper runtime scenario coverage than the current screenshot and demo proof
+- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
@@ -45,6 +45,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 - root repo `swift test` passes
 - runtime screenshot is published: [../Assets/AppScreenshots/PrivacyVaultApp.png](../Assets/AppScreenshots/PrivacyVaultApp.png)
 - demo clip is published: [../Assets/AppDemoClips/PrivacyVaultApp.mp4](../Assets/AppDemoClips/PrivacyVaultApp.mp4)
+- launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/PrivacyVaultApp-launch.png) / [ready](../Assets/AppScenarioShots/PrivacyVaultApp-ready.png)
 - `Examples/PrivacyVaultExample` inspection route exists
 
 ## Missing Proof

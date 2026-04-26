@@ -4,12 +4,13 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `FinanceApp`
 - Lane: `Finance`
-- Media status: `demo-published`
+- Media status: `scenario-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/FinanceApp.png](../Assets/AppScreenshots/FinanceApp.png)
 - demo clip is published: [../Assets/AppDemoClips/FinanceApp.mp4](../Assets/AppDemoClips/FinanceApp.mp4)
+- launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/FinanceApp-launch.png) / [ready](../Assets/AppScenarioShots/FinanceApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/FinanceApp.svg](../Assets/AppCards/FinanceApp.svg)
 - preview board is published: [../Assets/AppPreviews/FinanceApp.svg](../Assets/AppPreviews/FinanceApp.svg)
 

@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting a separate runnable Xcode project
-- readers who expect deeper multi-screen runtime scenario proof than the current published media set
+- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario set
 
 ## Current Truth
 

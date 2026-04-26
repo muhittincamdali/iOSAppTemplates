@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting production billing and entitlement flows today
-- readers who expect deeper runtime scenario coverage than the current screenshot and demo proof
+- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
@@ -45,6 +45,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 - root repo `swift test` passes
 - runtime screenshot is published: [../Assets/AppScreenshots/SubscriptionLifestyleApp.png](../Assets/AppScreenshots/SubscriptionLifestyleApp.png)
 - demo clip is published: [../Assets/AppDemoClips/SubscriptionLifestyleApp.mp4](../Assets/AppDemoClips/SubscriptionLifestyleApp.mp4)
+- launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/SubscriptionLifestyleApp-launch.png) / [ready](../Assets/AppScenarioShots/SubscriptionLifestyleApp-ready.png)
 - `Examples/SubscriptionLifestyleExample` inspection route exists
 
 ## Missing Proof

@@ -6,6 +6,7 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 policy_file="${repo_root}/Documentation/app-media-policy.json"
 screenshots_dir="${repo_root}/Documentation/Assets/AppScreenshots"
 demo_clips_dir="${repo_root}/Documentation/Assets/AppDemoClips"
+scenario_shots_dir="${repo_root}/Documentation/Assets/AppScenarioShots"
 
 if [[ ! -f "${policy_file}" ]]; then
   echo "Missing media policy: Documentation/app-media-policy.json" >&2
@@ -47,7 +48,7 @@ for relative_path in "${required_docs[@]}"; do
   fi
 done
 
-python3 - "${repo_root}" "${policy_file}" "${screenshots_dir}" "${demo_clips_dir}" <<'PY'
+python3 - "${repo_root}" "${policy_file}" "${screenshots_dir}" "${demo_clips_dir}" "${scenario_shots_dir}" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -56,6 +57,7 @@ repo_root = Path(sys.argv[1])
 policy_path = Path(sys.argv[2])
 screenshot_dir = Path(sys.argv[3])
 demo_clips_dir = Path(sys.argv[4])
+scenario_shots_dir = Path(sys.argv[5])
 
 policy = json.loads(policy_path.read_text())
 apps = policy.get("apps")
@@ -84,7 +86,10 @@ for item in apps:
     media_page = media_page_path.read_text()
     has_screenshot = (screenshot_dir / f"{app_id}.png").exists()
     has_demo_clip = (demo_clips_dir / f"{app_id}.mp4").exists()
-    expected_status = "demo-published" if has_demo_clip else "screenshot-published" if has_screenshot else "preview-published"
+    has_launch = (scenario_shots_dir / f"{app_id}-launch.png").exists()
+    has_ready = (scenario_shots_dir / f"{app_id}-ready.png").exists()
+    has_scenario_pair = has_launch and has_ready
+    expected_status = "scenario-published" if has_scenario_pair else "demo-published" if has_demo_clip else "screenshot-published" if has_screenshot else "preview-published"
 
     if item["status"] != expected_status:
         raise SystemExit(f"Unexpected media status for {app_id}: {item['status']} (expected {expected_status})")
@@ -112,6 +117,15 @@ for item in apps:
     else:
         if "demo clip is not yet published" not in media_page:
             raise SystemExit(f"{app_id} media page must state demo clip gap.")
+
+    if has_scenario_pair:
+        launch_link = f"../Assets/AppScenarioShots/{app_id}-launch.png"
+        ready_link = f"../Assets/AppScenarioShots/{app_id}-ready.png"
+        if launch_link not in media_page or ready_link not in media_page:
+            raise SystemExit(f"{app_id} media page must link both scenario frames.")
+    else:
+        if "launch-to-ready scenario frames are not yet published" not in media_page:
+            raise SystemExit(f"{app_id} media page must state scenario gap.")
 
 print("App media surfaces look good.")
 PY

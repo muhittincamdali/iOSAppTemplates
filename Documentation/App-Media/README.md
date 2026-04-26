@@ -10,11 +10,12 @@ Current truth:
 - `20` standalone roots have published preview boards
 - `20` standalone roots already have published runtime screenshots
 - `20` standalone roots already have published demo clips
-- this surface separates visual layers instead of hiding the screenshot and demo gap
+- `20` standalone roots already have published launch-to-ready scenario frame pairs
+- this surface separates visual layers instead of hiding the runtime scenario gap
 
 This surface exists to:
 
-- show screenshot and demo status truthfully
+- show screenshot, demo, and scenario status truthfully
 - provide a single canonical route for future capture batches
 - keep proof pages and media pages separate
 
@@ -22,26 +23,26 @@ This surface exists to:
 
 | App | Lane | Media Status | Surface |
 | --- | --- | --- | --- |
-| EcommerceApp | Commerce | `demo-published` | [EcommerceApp.md](./EcommerceApp.md) |
-| SocialMediaApp | Social | `demo-published` | [SocialMediaApp.md](./SocialMediaApp.md) |
-| FitnessApp | Health / Fitness | `demo-published` | [FitnessApp.md](./FitnessApp.md) |
-| ProductivityApp | Productivity | `demo-published` | [ProductivityApp.md](./ProductivityApp.md) |
-| FinanceApp | Finance | `demo-published` | [FinanceApp.md](./FinanceApp.md) |
-| EducationApp | Education | `demo-published` | [EducationApp.md](./EducationApp.md) |
-| FoodDeliveryApp | Food Delivery | `demo-published` | [FoodDeliveryApp.md](./FoodDeliveryApp.md) |
-| TravelPlannerApp | Travel | `demo-published` | [TravelPlannerApp.md](./TravelPlannerApp.md) |
-| AIAssistantApp | AI | `demo-published` | [AIAssistantApp.md](./AIAssistantApp.md) |
-| NewsBlogApp | News | `demo-published` | [NewsBlogApp.md](./NewsBlogApp.md) |
-| MusicPodcastApp | Music / Podcast | `demo-published` | [MusicPodcastApp.md](./MusicPodcastApp.md) |
-| MarketplaceApp | Marketplace | `demo-published` | [MarketplaceApp.md](./MarketplaceApp.md) |
-| MessagingApp | Messaging / Community | `demo-published` | [MessagingApp.md](./MessagingApp.md) |
-| BookingReservationsApp | Booking / Reservations | `demo-published` | [BookingReservationsApp.md](./BookingReservationsApp.md) |
-| NotesKnowledgeApp | Notes / Knowledge | `demo-published` | [NotesKnowledgeApp.md](./NotesKnowledgeApp.md) |
-| CreatorShortVideoApp | Creator / Short Video | `demo-published` | [CreatorShortVideoApp.md](./CreatorShortVideoApp.md) |
-| TeamCollaborationApp | Team Collaboration | `demo-published` | [TeamCollaborationApp.md](./TeamCollaborationApp.md) |
-| CRMAdminApp | CRM / Admin | `demo-published` | [CRMAdminApp.md](./CRMAdminApp.md) |
-| SubscriptionLifestyleApp | Subscription Lifestyle | `demo-published` | [SubscriptionLifestyleApp.md](./SubscriptionLifestyleApp.md) |
-| PrivacyVaultApp | Privacy / Secure Vault | `demo-published` | [PrivacyVaultApp.md](./PrivacyVaultApp.md) |
+| EcommerceApp | Commerce | `scenario-published` | [EcommerceApp.md](./EcommerceApp.md) |
+| SocialMediaApp | Social | `scenario-published` | [SocialMediaApp.md](./SocialMediaApp.md) |
+| FitnessApp | Health / Fitness | `scenario-published` | [FitnessApp.md](./FitnessApp.md) |
+| ProductivityApp | Productivity | `scenario-published` | [ProductivityApp.md](./ProductivityApp.md) |
+| FinanceApp | Finance | `scenario-published` | [FinanceApp.md](./FinanceApp.md) |
+| EducationApp | Education | `scenario-published` | [EducationApp.md](./EducationApp.md) |
+| FoodDeliveryApp | Food Delivery | `scenario-published` | [FoodDeliveryApp.md](./FoodDeliveryApp.md) |
+| TravelPlannerApp | Travel | `scenario-published` | [TravelPlannerApp.md](./TravelPlannerApp.md) |
+| AIAssistantApp | AI | `scenario-published` | [AIAssistantApp.md](./AIAssistantApp.md) |
+| NewsBlogApp | News | `scenario-published` | [NewsBlogApp.md](./NewsBlogApp.md) |
+| MusicPodcastApp | Music / Podcast | `scenario-published` | [MusicPodcastApp.md](./MusicPodcastApp.md) |
+| MarketplaceApp | Marketplace | `scenario-published` | [MarketplaceApp.md](./MarketplaceApp.md) |
+| MessagingApp | Messaging / Community | `scenario-published` | [MessagingApp.md](./MessagingApp.md) |
+| BookingReservationsApp | Booking / Reservations | `scenario-published` | [BookingReservationsApp.md](./BookingReservationsApp.md) |
+| NotesKnowledgeApp | Notes / Knowledge | `scenario-published` | [NotesKnowledgeApp.md](./NotesKnowledgeApp.md) |
+| CreatorShortVideoApp | Creator / Short Video | `scenario-published` | [CreatorShortVideoApp.md](./CreatorShortVideoApp.md) |
+| TeamCollaborationApp | Team Collaboration | `scenario-published` | [TeamCollaborationApp.md](./TeamCollaborationApp.md) |
+| CRMAdminApp | CRM / Admin | `scenario-published` | [CRMAdminApp.md](./CRMAdminApp.md) |
+| SubscriptionLifestyleApp | Subscription Lifestyle | `scenario-published` | [SubscriptionLifestyleApp.md](./SubscriptionLifestyleApp.md) |
+| PrivacyVaultApp | Privacy / Secure Vault | `scenario-published` | [PrivacyVaultApp.md](./PrivacyVaultApp.md) |
 
 ## Rule
 
@@ -67,6 +68,15 @@ If an app is marked `demo-published`, it means:
 - a preview board exists
 - at least one runtime screenshot is now published
 - at least one short runtime demo clip is now published
+- launch-to-ready scenario frames may still be missing
+
+If an app is marked `scenario-published`, it means:
+
+- a shareable gallery card exists
+- a preview board exists
+- at least one runtime screenshot is now published
+- at least one short runtime demo clip is now published
+- launch and ready runtime scenario frames are now published
 
 ## Related Surfaces
 

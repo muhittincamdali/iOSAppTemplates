@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting a full collaborative backend today
-- readers who expect deeper runtime scenario coverage than the current screenshot and demo proof
+- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
@@ -45,6 +45,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 - root repo `swift test` passes
 - runtime screenshot is published: [../Assets/AppScreenshots/TeamCollaborationApp.png](../Assets/AppScreenshots/TeamCollaborationApp.png)
 - demo clip is published: [../Assets/AppDemoClips/TeamCollaborationApp.mp4](../Assets/AppDemoClips/TeamCollaborationApp.mp4)
+- launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/TeamCollaborationApp-launch.png) / [ready](../Assets/AppScenarioShots/TeamCollaborationApp-ready.png)
 - `Examples/TeamCollaborationExample` inspection route exists
 
 ## Missing Proof

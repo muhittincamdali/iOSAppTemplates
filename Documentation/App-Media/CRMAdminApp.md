@@ -4,12 +4,13 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `CRMAdminApp`
 - Lane: `CRM / Admin`
-- Media status: `demo-published`
+- Media status: `scenario-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/CRMAdminApp.png](../Assets/AppScreenshots/CRMAdminApp.png)
 - demo clip is published: [../Assets/AppDemoClips/CRMAdminApp.mp4](../Assets/AppDemoClips/CRMAdminApp.mp4)
+- launch-to-ready scenario frames are published: [launch](../Assets/AppScenarioShots/CRMAdminApp-launch.png) / [ready](../Assets/AppScenarioShots/CRMAdminApp-ready.png)
 - shareable gallery card is published: [../Assets/AppCards/CRMAdminApp.svg](../Assets/AppCards/CRMAdminApp.svg)
 - preview board is published: [../Assets/AppPreviews/CRMAdminApp.svg](../Assets/AppPreviews/CRMAdminApp.svg)
 
