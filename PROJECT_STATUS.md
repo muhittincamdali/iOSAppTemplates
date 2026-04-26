@@ -1,6 +1,6 @@
 # iOSAppTemplates Project Status
 
-Last updated: 2026-04-24
+Last updated: 2026-04-26
 
 ## Repository Status
 
@@ -28,7 +28,7 @@ Last updated: 2026-04-24
 
 - a stable green hosted standalone iOS baseline is not yet established for every app pack
 - every lane is not yet at equal production depth
-- the latest public release is still an older numbered baseline, not proof of equal app-pack maturity
+- the latest numbered release must stay aligned with the current proof surface and GitHub distribution policy
 
 ## Current Public Gaps
 

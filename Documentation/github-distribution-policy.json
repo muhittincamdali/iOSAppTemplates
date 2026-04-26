@@ -12,6 +12,5 @@
     "swift",
     "swift-package-manager",
     "swiftui"
-  ],
-  "release_title_prefix": "truth-first starter portfolio baseline"
+  ]
 }

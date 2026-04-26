@@ -355,7 +355,7 @@ public struct MLModelMetadata {
     
     public init(
         name: String,
-        version: String = "1.0.0",
+        version: String = "2.1.0",
         description: String = "",
         author: String = "",
         license: String = "MIT",

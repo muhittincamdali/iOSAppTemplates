@@ -4,7 +4,7 @@ import XCTest
 @MainActor
 final class FinanceTemplatesTests: XCTestCase {
     func testFinanceTemplatesInitialization() {
-        XCTAssertEqual(FinanceTemplates.version, "1.0.0")
+        XCTAssertEqual(FinanceTemplates.version, "2.1.0")
     }
 
     func testTransactionInitialization() {

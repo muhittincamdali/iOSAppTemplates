@@ -15,7 +15,7 @@ def main() -> int:
     path = Path(sys.argv[1])
     payload = json.loads(path.read_text())
 
-    required_keys = {"description", "homepage", "topics", "release_title_prefix"}
+    required_keys = {"description", "homepage", "topics"}
     missing = required_keys.difference(payload)
     if missing:
         print(f"Missing policy keys: {sorted(missing)}", file=sys.stderr)

@@ -9,7 +9,7 @@ final class HealthTemplatesTests: XCTestCase {
         let version = HealthTemplates.version
         
         // Then
-        XCTAssertEqual(version, "1.0.0")
+        XCTAssertEqual(version, "2.1.0")
     }
     
     func testWorkoutInitialization() {
