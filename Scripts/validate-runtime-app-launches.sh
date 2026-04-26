@@ -9,7 +9,10 @@ derived_data_dir="$repo_root/.build/runtime-launch-derived-data"
 runtime_flag="IOSAPPTEMPLATES_SCREENSHOT_MODE"
 crash_reports_dir="${HOME}/Library/Logs/DiagnosticReports"
 
-mapfile -t catalog_apps < <(
+catalog_apps=()
+while IFS= read -r app_name; do
+  catalog_apps+=("$app_name")
+done < <(
   python3 - "$repo_root/Documentation/app-surface-catalog.json" <<'PY'
 import json
 import sys
