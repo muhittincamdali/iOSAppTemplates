@@ -62,8 +62,11 @@ struct EcommerceApp: App {
     
     private func setupApp() {
         if RuntimeCaptureMode.isEnabled {
-            authManager.currentUser = EcommerceUser(email: "preview@iosapptemplates.dev", displayName: "Preview User")
+            authManager.currentUser = .preview
             authManager.isAuthenticated = true
+            productManager.seedPreviewState()
+            cartManager.seedPreviewState(products: productManager.products)
+            orderManager.seedPreviewState(products: productManager.products)
             return
         }
 
@@ -71,6 +74,7 @@ struct EcommerceApp: App {
             await authManager.checkAuthState()
             await productManager.loadProducts()
             await cartManager.loadCart()
+            await orderManager.loadOrders(products: productManager.products)
         }
     }
 }
@@ -456,11 +460,11 @@ struct HomeView: View {
         NavigationView {
             ScrollView {
                 LazyVStack(spacing: 20) {
-                    // Search bar
                     SearchBar(text: $searchText, placeholder: "Search products...")
                         .padding(.horizontal, 16)
                     
-                    // Featured products
+                    categoryFilterBar
+                    
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Featured Products")
                             .font(.title2)
@@ -477,7 +481,6 @@ struct HomeView: View {
                         }
                     }
                     
-                    // Categories
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Categories")
                             .font(.title2)
@@ -492,19 +495,58 @@ struct HomeView: View {
                         .padding(.horizontal, 16)
                     }
                     
-                    // Recent products
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Recent Products")
+                        HStack {
+                            Text(selectedCategory == nil ? "Catalog" : "\(selectedCategory!) Picks")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                            Spacer()
+                            Text("\(filteredProducts.count) items")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.horizontal, 16)
+                        
+                        if filteredProducts.isEmpty {
+                            EmptyCatalogStateView(searchText: searchText, clearFilters: resetFilters)
+                                .padding(.horizontal, 16)
+                        } else {
+                            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
+                                ForEach(filteredProducts) { product in
+                                    NavigationLink(destination: ProductDetailView(product: product)) {
+                                        ProductCard(product: product)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                            .padding(.horizontal, 16)
+                        }
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Popular Brands")
                             .font(.title2)
                             .fontWeight(.bold)
                             .padding(.horizontal, 16)
                         
-                        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
-                            ForEach(productManager.recentProducts) { product in
-                                ProductCard(product: product)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+                                ForEach(productManager.topBrands, id: \.self) { brand in
+                                    VStack(alignment: .leading, spacing: 6) {
+                                        Text(brand)
+                                            .font(.headline)
+                                        Text("\(productManager.products.filter { $0.brand == brand }.count) products")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    .padding()
+                                    .frame(width: 150, alignment: .leading)
+                                    .background(Color.orange.opacity(0.08))
+                                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                                }
                             }
+                            .padding(.horizontal, 16)
                         }
-                        .padding(.horizontal, 16)
                     }
                 }
                 .padding(.vertical, 16)
@@ -515,6 +557,32 @@ struct HomeView: View {
                 await productManager.refreshProducts()
             }
         }
+    }
+    
+    private var filteredProducts: [Product] {
+        productManager.filteredProducts(matching: searchText, category: selectedCategory)
+    }
+    
+    private var categoryFilterBar: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                CategoryFilterChip(title: "All", isSelected: selectedCategory == nil) {
+                    selectedCategory = nil
+                }
+                
+                ForEach(productManager.categories, id: \.self) { category in
+                    CategoryFilterChip(title: category, isSelected: selectedCategory == category) {
+                        selectedCategory = category
+                    }
+                }
+            }
+            .padding(.horizontal, 16)
+        }
+    }
+    
+    private func resetFilters() {
+        searchText = ""
+        selectedCategory = nil
     }
 }
 
@@ -592,40 +660,46 @@ struct ProductCard: View {
 // MARK: - Featured Product Card
 struct FeaturedProductCard: View {
     let product: Product
-    @StateObject private var cartManager = CartManager.shared
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            // Product image
-            AsyncImage(url: URL(string: product.imageURL)) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } placeholder: {
-                Rectangle()
-                    .fill(Color.gray.opacity(0.3))
-            }
-            .frame(width: 200, height: 200)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            
-            // Product info
-            VStack(alignment: .leading, spacing: 4) {
-                Text(product.name)
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .lineLimit(2)
+        NavigationLink(destination: ProductDetailView(product: product)) {
+            VStack(alignment: .leading, spacing: 8) {
+                AsyncImage(url: URL(string: product.imageURL)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.3))
+                }
+                .frame(width: 200, height: 200)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
                 
-                Text("$\(String(format: "%.2f", product.price))")
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    .foregroundColor(.orange)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(product.name)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .lineLimit(2)
+                    
+                    HStack {
+                        Text("$\(String(format: "%.2f", product.price))")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                            .foregroundColor(.orange)
+                        Spacer()
+                        Text("\(String(format: "%.1f", product.rating)) ★")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
             }
+            .frame(width: 200)
+            .padding(12)
+            .background(Color(.systemBackground))
+            .cornerRadius(12)
+            .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
         }
-        .frame(width: 200)
-        .padding(12)
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+        .buttonStyle(.plain)
     }
 }
 
@@ -660,6 +734,136 @@ struct CategoryCard: View {
         case "beauty": return "sparkles"
         default: return "cube"
         }
+    }
+}
+
+struct CategoryFilterChip: View {
+    let title: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+                .foregroundColor(isSelected ? .white : .primary)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
+                .background(isSelected ? Color.orange : Color(.systemGray6))
+                .clipShape(Capsule())
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+struct EmptyCatalogStateView: View {
+    let searchText: String
+    let clearFilters: () -> Void
+    
+    var body: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "magnifyingglass.circle")
+                .font(.system(size: 42))
+                .foregroundColor(.orange)
+            Text("No results for \"\(searchText)\"")
+                .font(.headline)
+            Text("Try a broader query or reset category filters.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+            Button("Clear filters", action: clearFilters)
+                .font(.subheadline.weight(.semibold))
+                .foregroundColor(.orange)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(24)
+        .background(Color(.systemGray6))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+}
+
+struct ProductDetailView: View {
+    let product: Product
+    @StateObject private var cartManager = CartManager.shared
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                AsyncImage(url: URL(string: product.imageURL)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.2))
+                }
+                .frame(height: 280)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+                
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(product.brand.uppercased())
+                                .font(.caption.weight(.bold))
+                                .foregroundColor(.orange)
+                            Text(product.name)
+                                .font(.title2.weight(.bold))
+                            Text(product.category)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        VStack(alignment: .trailing, spacing: 6) {
+                            Text("$\(String(format: "%.2f", product.price))")
+                                .font(.title3.weight(.bold))
+                            if let originalPrice = product.originalPrice {
+                                Text("$\(String(format: "%.2f", originalPrice))")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .strikethrough()
+                            }
+                        }
+                    }
+                    
+                    HStack(spacing: 14) {
+                        Label("\(String(format: "%.1f", product.rating))", systemImage: "star.fill")
+                        Label("\(product.reviewCount) reviews", systemImage: "text.bubble")
+                        Label("\(product.stockQuantity) in stock", systemImage: "shippingbox")
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    
+                    Text(product.description)
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Why customers buy this")
+                            .font(.headline)
+                        ForEach(product.tags, id: \.self) { tag in
+                            Label(tag.replacingOccurrences(of: "-", with: " ").capitalized, systemImage: "checkmark.seal")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    
+                    Button {
+                        cartManager.addToCart(product: product)
+                    } label: {
+                        Text("Add to Cart")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 52)
+                            .background(Color.orange)
+                            .clipShape(RoundedRectangle(cornerRadius: 14))
+                    }
+                }
+            }
+            .padding(16)
+        }
+        .navigationTitle("Product Details")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -716,6 +920,30 @@ class ProductManager: ObservableObject {
     
     func refreshProducts() async {
         await loadProducts()
+    }
+    
+    func filteredProducts(matching query: String, category: String?) -> [Product] {
+        products.filter { product in
+            let categoryMatches = category == nil || product.category == category
+            let normalizedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+            
+            guard !normalizedQuery.isEmpty else { return categoryMatches }
+            
+            let textMatches =
+                product.name.lowercased().contains(normalizedQuery) ||
+                product.description.lowercased().contains(normalizedQuery) ||
+                product.brand.lowercased().contains(normalizedQuery) ||
+                product.tags.joined(separator: " ").lowercased().contains(normalizedQuery)
+            return categoryMatches && textMatches
+        }
+    }
+    
+    var topBrands: [String] {
+        Array(Set(products.map(\.brand))).sorted()
+    }
+    
+    func seedPreviewState() {
+        loadMockData()
     }
     
     private func loadMockData() {
@@ -776,48 +1004,442 @@ class ProductManager: ObservableObject {
                 tags: ["fitness", "smartwatch", "heart-rate"],
                 createdAt: Date(),
                 updatedAt: Date()
+            ),
+            Product(
+                id: "4",
+                name: "Standing Desk Lamp",
+                description: "Minimalist lamp with adjustable brightness for home offices and study corners.",
+                price: 64.99,
+                originalPrice: 79.99,
+                imageURL: "https://picsum.photos/303/303",
+                category: "Home",
+                brand: "NordicHome",
+                rating: 4.4,
+                reviewCount: 73,
+                stockQuantity: 40,
+                isFeatured: false,
+                isOnSale: true,
+                salePercentage: 18,
+                tags: ["desk", "lighting", "workspace"],
+                createdAt: Date(),
+                updatedAt: Date()
+            ),
+            Product(
+                id: "5",
+                name: "Trail Running Shoes",
+                description: "Durable trail shoes with responsive cushioning and all-weather grip.",
+                price: 149.00,
+                originalPrice: nil,
+                imageURL: "https://picsum.photos/304/304",
+                category: "Sports",
+                brand: "PeakMotion",
+                rating: 4.8,
+                reviewCount: 311,
+                stockQuantity: 64,
+                isFeatured: true,
+                isOnSale: false,
+                salePercentage: nil,
+                tags: ["trail", "running", "grip"],
+                createdAt: Date(),
+                updatedAt: Date()
+            ),
+            Product(
+                id: "6",
+                name: "Daily Planning Notebook",
+                description: "Guided planner with weekly goals, reflection prompts, and habit trackers.",
+                price: 18.50,
+                originalPrice: 24.00,
+                imageURL: "https://picsum.photos/305/305",
+                category: "Books",
+                brand: "PaperForm",
+                rating: 4.6,
+                reviewCount: 142,
+                stockQuantity: 90,
+                isFeatured: false,
+                isOnSale: true,
+                salePercentage: 23,
+                tags: ["planner", "habits", "goals"],
+                createdAt: Date(),
+                updatedAt: Date()
+            ),
+            Product(
+                id: "7",
+                name: "Vitamin C Skin Serum",
+                description: "Brightening serum with niacinamide and hydration support for daily routines.",
+                price: 32.75,
+                originalPrice: 39.99,
+                imageURL: "https://picsum.photos/306/306",
+                category: "Beauty",
+                brand: "GlowLab",
+                rating: 4.3,
+                reviewCount: 88,
+                stockQuantity: 120,
+                isFeatured: false,
+                isOnSale: true,
+                salePercentage: 18,
+                tags: ["serum", "brightening", "skincare"],
+                createdAt: Date(),
+                updatedAt: Date()
+            ),
+            Product(
+                id: "8",
+                name: "Noise Isolating Bookshelf Speakers",
+                description: "Compact speakers with warm sound tuning for studio desks and living rooms.",
+                price: 219.00,
+                originalPrice: 259.00,
+                imageURL: "https://picsum.photos/307/307",
+                category: "Electronics",
+                brand: "SoundForge",
+                rating: 4.7,
+                reviewCount: 203,
+                stockQuantity: 18,
+                isFeatured: true,
+                isOnSale: true,
+                salePercentage: 15,
+                tags: ["speaker", "audio", "home-office"],
+                createdAt: Date(),
+                updatedAt: Date()
             )
         ]
         
         featuredProducts = products.filter { $0.isFeatured }
-        recentProducts = Array(products.prefix(6))
+        recentProducts = Array(products.sorted { $0.rating > $1.rating }.prefix(6))
         categories = ["Electronics", "Clothing", "Books", "Sports", "Home", "Beauty"]
     }
 }
 
 // MARK: - Supporting Views
 struct CategoriesView: View {
+    @StateObject private var productManager = ProductManager.shared
+    @State private var selectedCategory = "Electronics"
+    
     var body: some View {
         NavigationView {
-            Text("Categories View")
-                .navigationTitle("Categories")
+            List {
+                Section("Browse Categories") {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(productManager.categories, id: \.self) { category in
+                                CategoryFilterChip(title: category, isSelected: selectedCategory == category) {
+                                    selectedCategory = category
+                                }
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    }
+                    .listRowInsets(EdgeInsets())
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                }
+                
+                Section("\(selectedCategory) Best Sellers") {
+                    ForEach(productManager.filteredProducts(matching: "", category: selectedCategory)) { product in
+                        NavigationLink(destination: ProductDetailView(product: product)) {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text(product.name)
+                                    .font(.headline)
+                                Text(product.description)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .lineLimit(2)
+                                HStack {
+                                    Text("$\(String(format: "%.2f", product.price))")
+                                        .font(.subheadline.weight(.bold))
+                                        .foregroundColor(.orange)
+                                    Spacer()
+                                    Text(product.brand)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            .padding(.vertical, 4)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Categories")
         }
     }
 }
 
 struct CartView: View {
+    @StateObject private var cartManager = CartManager.shared
+    @StateObject private var productManager = ProductManager.shared
+    
     var body: some View {
         NavigationView {
-            Text("Cart View")
-                .navigationTitle("Cart")
+            List {
+                if cartManager.cartItems.isEmpty {
+                    Section {
+                        VStack(spacing: 12) {
+                            Image(systemName: "cart.badge.questionmark")
+                                .font(.system(size: 36))
+                                .foregroundColor(.orange)
+                            Text("Your cart is empty")
+                                .font(.headline)
+                            Text("Save products you want to compare, then come back to checkout.")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 24)
+                    }
+                } else {
+                    Section("Cart Items") {
+                        ForEach(cartManager.cartItems) { item in
+                            VStack(alignment: .leading, spacing: 10) {
+                                HStack(alignment: .top) {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(item.product.name)
+                                            .font(.headline)
+                                        Text(item.product.brand)
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    Spacer()
+                                    Text("$\(String(format: "%.2f", item.product.price * Double(item.quantity)))")
+                                        .font(.headline)
+                                }
+                                
+                                HStack {
+                                    Stepper(
+                                        "Qty \(item.quantity)",
+                                        value: Binding(
+                                            get: { item.quantity },
+                                            set: { cartManager.updateQuantity(productId: item.product.id, quantity: $0) }
+                                        ),
+                                        in: 1...10
+                                    )
+                                    Spacer()
+                                    Button("Remove") {
+                                        cartManager.removeFromCart(productId: item.product.id)
+                                    }
+                                    .foregroundColor(.red)
+                                }
+                            }
+                            .padding(.vertical, 4)
+                        }
+                    }
+                    
+                    Section("Order Summary") {
+                        SummaryRow(title: "Subtotal", value: cartManager.totalAmount)
+                        SummaryRow(title: "Shipping", value: cartManager.shippingCost)
+                        SummaryRow(title: "Tax", value: cartManager.taxAmount)
+                        SummaryRow(title: "Total", value: cartManager.grandTotal, isEmphasized: true)
+                    }
+                    
+                    Section("Recommended Add-ons") {
+                        ForEach(Array(productManager.products.filter { product in
+                            !cartManager.cartItems.contains(where: { $0.product.id == product.id })
+                        }.prefix(3))) { product in
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(product.name)
+                                        .font(.subheadline.weight(.semibold))
+                                    Text("$\(String(format: "%.2f", product.price))")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                Spacer()
+                                Button("Add") {
+                                    cartManager.addToCart(product: product)
+                                }
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundColor(.orange)
+                            }
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Cart")
         }
     }
 }
 
 struct OrdersView: View {
+    @StateObject private var orderManager = OrderManager.shared
+    
     var body: some View {
         NavigationView {
-            Text("Orders View")
-                .navigationTitle("Orders")
+            List {
+                Section("Active Orders") {
+                    ForEach(orderManager.orders.filter { $0.status != .delivered }) { order in
+                        OrderRow(order: order)
+                    }
+                }
+                
+                Section("Delivered") {
+                    ForEach(orderManager.orders.filter { $0.status == .delivered }) { order in
+                        OrderRow(order: order)
+                    }
+                }
+            }
+            .navigationTitle("Orders")
         }
     }
 }
 
 struct ProfileView: View {
+    @StateObject private var authManager = AuthManager.shared
+    @StateObject private var cartManager = CartManager.shared
+    @StateObject private var orderManager = OrderManager.shared
+    
     var body: some View {
         NavigationView {
-            Text("Profile View")
-                .navigationTitle("Profile")
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    if let user = authManager.currentUser {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(user.displayName ?? "Guest Shopper")
+                                .font(.title2.weight(.bold))
+                            Text(user.email)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                            if let tier = user.membershipTier {
+                                Label("\(tier) member", systemImage: "star.circle.fill")
+                                    .font(.subheadline)
+                                    .foregroundColor(.orange)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(Color.orange.opacity(0.08))
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                    }
+                    
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 12) {
+                        ProfileMetricCard(title: "Open Orders", value: "\(orderManager.orders.filter { $0.status != .delivered }.count)")
+                        ProfileMetricCard(title: "Cart Value", value: "$\(String(format: "%.0f", cartManager.grandTotal))")
+                        ProfileMetricCard(title: "Saved Address", value: authManager.currentUser?.primaryAddress?.city ?? "None")
+                        ProfileMetricCard(title: "Support SLA", value: "2h")
+                    }
+                    
+                    if let address = authManager.currentUser?.primaryAddress {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Primary Delivery Address")
+                                .font(.headline)
+                            Text(address.street)
+                            Text("\(address.city), \(address.state) \(address.zipCode)")
+                                .foregroundColor(.secondary)
+                            Text(address.country)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Account Actions")
+                            .font(.headline)
+                        ProfileActionRow(title: "Payment methods", subtitle: "Visa ending in 2048", icon: "creditcard")
+                        ProfileActionRow(title: "Order notifications", subtitle: "Push and email enabled", icon: "bell.badge")
+                        ProfileActionRow(title: "Returns and refunds", subtitle: "Average resolution 1.2 days", icon: "arrow.uturn.backward")
+                        Button("Sign Out") {
+                            authManager.signOut()
+                        }
+                        .foregroundColor(.red)
+                        .padding(.top, 4)
+                    }
+                }
+                .padding(16)
+            }
+            .navigationTitle("Profile")
+        }
+    }
+}
+
+struct SummaryRow: View {
+    let title: String
+    let value: Double
+    var isEmphasized = false
+    
+    var body: some View {
+        HStack {
+            Text(title)
+                .font(isEmphasized ? .headline : .body)
+            Spacer()
+            Text("$\(String(format: "%.2f", value))")
+                .font(isEmphasized ? .headline : .body)
+                .foregroundColor(isEmphasized ? .orange : .primary)
+        }
+    }
+}
+
+struct OrderRow: View {
+    let order: Order
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text("Order #\(order.id)")
+                    .font(.headline)
+                Spacer()
+                Text(order.status.rawValue.capitalized)
+                    .font(.caption.weight(.bold))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(statusColor.opacity(0.12))
+                    .foregroundColor(statusColor)
+                    .clipShape(Capsule())
+            }
+            
+            Text("\(order.items.count) items • $\(String(format: "%.2f", order.totalAmount))")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+            Text(order.updatedAt.formatted(date: .abbreviated, time: .omitted))
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding(.vertical, 4)
+    }
+    
+    private var statusColor: Color {
+        switch order.status {
+        case .pending: return .orange
+        case .confirmed: return .blue
+        case .shipped: return .purple
+        case .delivered: return .green
+        case .cancelled: return .red
+        }
+    }
+}
+
+struct ProfileMetricCard: View {
+    let title: String
+    let value: String
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(value)
+                .font(.title3.weight(.bold))
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(Color(.systemGray6))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+    }
+}
+
+struct ProfileActionRow: View {
+    let title: String
+    let subtitle: String
+    let icon: String
+    
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: icon)
+                .foregroundColor(.orange)
+                .frame(width: 20)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.subheadline.weight(.semibold))
+                Text(subtitle)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
         }
     }
 }
@@ -970,11 +1592,33 @@ class AuthManager: ObservableObject {
 struct EcommerceUser: Equatable {
     let email: String
     let displayName: String?
+    let membershipTier: String?
+    let primaryAddress: Address?
 
-    init(email: String, displayName: String? = nil) {
+    init(
+        email: String,
+        displayName: String? = nil,
+        membershipTier: String? = nil,
+        primaryAddress: Address? = nil
+    ) {
         self.email = email
         self.displayName = displayName
+        self.membershipTier = membershipTier
+        self.primaryAddress = primaryAddress
     }
+    
+    static let preview = EcommerceUser(
+        email: "preview@iosapptemplates.dev",
+        displayName: "Preview User",
+        membershipTier: "Gold",
+        primaryAddress: Address(
+            street: "12 Market Street",
+            city: "San Francisco",
+            state: "CA",
+            zipCode: "94105",
+            country: "USA"
+        )
+    )
 }
 
 @MainActor
@@ -987,7 +1631,9 @@ class CartManager: ObservableObject {
     private init() {}
     
     func loadCart() async {
-        // Load cart from local storage or API
+        if cartItems.isEmpty {
+            seedPreviewState(products: ProductManager.shared.products)
+        }
     }
     
     func addToCart(product: Product) {
@@ -1017,6 +1663,26 @@ class CartManager: ObservableObject {
     private func calculateTotal() {
         totalAmount = cartItems.reduce(0) { $0 + ($1.product.price * Double($1.quantity)) }
     }
+    
+    var shippingCost: Double {
+        cartItems.isEmpty ? 0 : (totalAmount >= 150 ? 0 : 9.99)
+    }
+    
+    var taxAmount: Double {
+        totalAmount * 0.08
+    }
+    
+    var grandTotal: Double {
+        totalAmount + shippingCost + taxAmount
+    }
+    
+    func seedPreviewState(products: [Product]) {
+        guard !products.isEmpty else { return }
+        cartItems = Array(products.prefix(2)).enumerated().map { index, product in
+            CartItem(product: product, quantity: index + 1)
+        }
+        calculateTotal()
+    }
 }
 
 @MainActor
@@ -1026,6 +1692,58 @@ class OrderManager: ObservableObject {
     @Published var orders: [Order] = []
     
     private init() {}
+    
+    func loadOrders(products: [Product]) async {
+        if orders.isEmpty {
+            orders = sampleOrders(from: products)
+        }
+    }
+    
+    func seedPreviewState(products: [Product]) {
+        orders = sampleOrders(from: products)
+    }
+    
+    private func sampleOrders(from products: [Product]) -> [Order] {
+        let primary = products.prefix(2).map {
+            OrderItem(
+                id: UUID().uuidString,
+                productId: $0.id,
+                productName: $0.name,
+                quantity: 1,
+                price: $0.price
+            )
+        }
+        let delivered = products.dropFirst(2).prefix(1).map {
+            OrderItem(
+                id: UUID().uuidString,
+                productId: $0.id,
+                productName: $0.name,
+                quantity: 1,
+                price: $0.price
+            )
+        }
+        
+        return [
+            Order(
+                id: "SC-1042",
+                userId: "preview-user",
+                items: primary,
+                totalAmount: primary.reduce(0) { $0 + $1.price * Double($1.quantity) },
+                status: .shipped,
+                createdAt: Date().addingTimeInterval(-86_400),
+                updatedAt: Date().addingTimeInterval(-3_600)
+            ),
+            Order(
+                id: "SC-1014",
+                userId: "preview-user",
+                items: delivered,
+                totalAmount: delivered.reduce(0) { $0 + $1.price * Double($1.quantity) },
+                status: .delivered,
+                createdAt: Date().addingTimeInterval(-604_800),
+                updatedAt: Date().addingTimeInterval(-345_600)
+            )
+        ]
+    }
 }
 
 struct CartItem: Identifiable {
@@ -1072,7 +1790,7 @@ struct User: Identifiable, Codable {
     let updatedAt: Date
 }
 
-struct Address: Codable {
+struct Address: Codable, Equatable {
     let street: String
     let city: String
     let state: String
