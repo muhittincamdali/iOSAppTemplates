@@ -4,14 +4,14 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `FoodDeliveryApp`
 - Lane: `Food Delivery`
-- Media status: `screenshot-published`
+- Media status: `demo-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/FoodDeliveryApp.png](../Assets/AppScreenshots/FoodDeliveryApp.png)
+- demo clip is published: [../Assets/AppDemoClips/FoodDeliveryApp.mp4](../Assets/AppDemoClips/FoodDeliveryApp.mp4)
 - shareable gallery card is published: [../Assets/AppCards/FoodDeliveryApp.svg](../Assets/AppCards/FoodDeliveryApp.svg)
 - preview board is published: [../Assets/AppPreviews/FoodDeliveryApp.svg](../Assets/AppPreviews/FoodDeliveryApp.svg)
-- demo clip is not yet published
 
 ## What Exists Instead
 

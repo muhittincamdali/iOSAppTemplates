@@ -4,14 +4,14 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `CreatorShortVideoApp`
 - Lane: `Creator / Short Video`
-- Media status: `screenshot-published`
+- Media status: `demo-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/CreatorShortVideoApp.png](../Assets/AppScreenshots/CreatorShortVideoApp.png)
+- demo clip is published: [../Assets/AppDemoClips/CreatorShortVideoApp.mp4](../Assets/AppDemoClips/CreatorShortVideoApp.mp4)
 - shareable gallery card is published: [../Assets/AppCards/CreatorShortVideoApp.svg](../Assets/AppCards/CreatorShortVideoApp.svg)
 - preview board is published: [../Assets/AppPreviews/CreatorShortVideoApp.svg](../Assets/AppPreviews/CreatorShortVideoApp.svg)
-- demo clip is not yet published
 
 ## What Exists Instead
 

@@ -4,14 +4,14 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `TravelPlannerApp`
 - Lane: `Travel`
-- Media status: `screenshot-published`
+- Media status: `demo-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/TravelPlannerApp.png](../Assets/AppScreenshots/TravelPlannerApp.png)
+- demo clip is published: [../Assets/AppDemoClips/TravelPlannerApp.mp4](../Assets/AppDemoClips/TravelPlannerApp.mp4)
 - shareable gallery card is published: [../Assets/AppCards/TravelPlannerApp.svg](../Assets/AppCards/TravelPlannerApp.svg)
 - preview board is published: [../Assets/AppPreviews/TravelPlannerApp.svg](../Assets/AppPreviews/TravelPlannerApp.svg)
-- demo clip is not yet published
 
 ## What Exists Instead
 

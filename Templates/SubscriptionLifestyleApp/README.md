@@ -46,11 +46,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 - canonical app proof page exists
 - canonical app media page exists
 - runtime screenshot is published
+- demo clip is published
 - richer example route exists
 
 ## Missing Proof
 
-- demo clip
 - stable green hosted standalone iOS baseline on current `master`
 
 ## Start Here

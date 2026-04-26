@@ -44,11 +44,11 @@ Generated from `Documentation/app-surface-catalog.json`.
 - root repo `swift build -c release` passes
 - root repo `swift test` passes
 - runtime screenshot is published: [../Assets/AppScreenshots/CRMAdminApp.png](../Assets/AppScreenshots/CRMAdminApp.png)
+- demo clip is published: [../Assets/AppDemoClips/CRMAdminApp.mp4](../Assets/AppDemoClips/CRMAdminApp.mp4)
 - `Examples/CRMAdminExample` inspection route exists
 
 ## Missing Proof
 
-- demo clip not yet published
 - stable green hosted standalone iOS baseline should be checked on current `master`
 
 ## Start Path

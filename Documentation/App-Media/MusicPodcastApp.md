@@ -4,14 +4,14 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `MusicPodcastApp`
 - Lane: `Music / Podcast`
-- Media status: `screenshot-published`
+- Media status: `demo-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/MusicPodcastApp.png](../Assets/AppScreenshots/MusicPodcastApp.png)
+- demo clip is published: [../Assets/AppDemoClips/MusicPodcastApp.mp4](../Assets/AppDemoClips/MusicPodcastApp.mp4)
 - shareable gallery card is published: [../Assets/AppCards/MusicPodcastApp.svg](../Assets/AppCards/MusicPodcastApp.svg)
 - preview board is published: [../Assets/AppPreviews/MusicPodcastApp.svg](../Assets/AppPreviews/MusicPodcastApp.svg)
-- demo clip is not yet published
 
 ## What Exists Instead
 

@@ -4,14 +4,14 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `CRMAdminApp`
 - Lane: `CRM / Admin`
-- Media status: `screenshot-published`
+- Media status: `demo-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/CRMAdminApp.png](../Assets/AppScreenshots/CRMAdminApp.png)
+- demo clip is published: [../Assets/AppDemoClips/CRMAdminApp.mp4](../Assets/AppDemoClips/CRMAdminApp.mp4)
 - shareable gallery card is published: [../Assets/AppCards/CRMAdminApp.svg](../Assets/AppCards/CRMAdminApp.svg)
 - preview board is published: [../Assets/AppPreviews/CRMAdminApp.svg](../Assets/AppPreviews/CRMAdminApp.svg)
-- demo clip is not yet published
 
 ## What Exists Instead
 

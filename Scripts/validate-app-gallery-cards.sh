@@ -48,7 +48,11 @@ for app in "${apps[@]}"; do
 
   if [[ -f "$screenshot_asset" ]]; then
     grep -Fq "${app}.png" "$gallery_doc" || { echo "$gallery_doc missing screenshot link for $app" >&2; exit 1; }
-    grep -Fq 'Media status: `screenshot-published`' "$media_doc" || { echo "$media_doc missing screenshot-published status" >&2; exit 1; }
+    if grep -Fq 'Media status: `demo-published`' "$media_doc"; then
+      :
+    else
+      grep -Fq 'Media status: `screenshot-published`' "$media_doc" || { echo "$media_doc missing screenshot-published or demo-published status" >&2; exit 1; }
+    fi
   else
     grep -Fq 'Media status: `preview-published`' "$media_doc" || { echo "$media_doc missing preview-published status" >&2; exit 1; }
   fi

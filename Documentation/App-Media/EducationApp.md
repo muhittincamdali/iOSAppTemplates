@@ -4,14 +4,14 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - App: `EducationApp`
 - Lane: `Education`
-- Media status: `screenshot-published`
+- Media status: `demo-published`
 
 ## Current Truth
 
 - runtime screenshot is published: [../Assets/AppScreenshots/EducationApp.png](../Assets/AppScreenshots/EducationApp.png)
+- demo clip is published: [../Assets/AppDemoClips/EducationApp.mp4](../Assets/AppDemoClips/EducationApp.mp4)
 - shareable gallery card is published: [../Assets/AppCards/EducationApp.svg](../Assets/AppCards/EducationApp.svg)
 - preview board is published: [../Assets/AppPreviews/EducationApp.svg](../Assets/AppPreviews/EducationApp.svg)
-- demo clip is not yet published
 
 ## What Exists Instead
 
