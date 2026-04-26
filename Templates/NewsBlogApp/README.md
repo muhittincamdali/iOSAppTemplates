@@ -23,7 +23,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting a production newsroom platform today
-- readers who assume runtime screenshots and clips are already published
+- readers who expect deeper runtime scenario coverage than the current screenshot and demo proof
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape

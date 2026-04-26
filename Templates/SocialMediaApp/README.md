@@ -23,7 +23,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting full production social parity today
-- readers who assume published screenshots and clips already exist
+- readers who expect deeper runtime scenario coverage than the current screenshot and demo proof
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
