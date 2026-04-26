@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![TeamCollaborationApp scenario board](../Assets/AppScenarioBoards/TeamCollaborationApp.svg)
+
 ### Launch Frame
 
 ![TeamCollaborationApp launch](../Assets/AppScenarioShots/TeamCollaborationApp-launch.png)

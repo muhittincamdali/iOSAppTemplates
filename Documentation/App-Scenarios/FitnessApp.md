@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![FitnessApp scenario board](../Assets/AppScenarioBoards/FitnessApp.svg)
+
 ### Launch Frame
 
 ![FitnessApp launch](../Assets/AppScenarioShots/FitnessApp-launch.png)

@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![MarketplaceApp scenario board](../Assets/AppScenarioBoards/MarketplaceApp.svg)
+
 ### Launch Frame
 
 ![MarketplaceApp launch](../Assets/AppScenarioShots/MarketplaceApp-launch.png)

@@ -17,6 +17,7 @@ EXAMPLES_HUB_PATH = REPO_ROOT / "Examples" / "README.md"
 SCREENSHOTS_DIR = REPO_ROOT / "Documentation" / "Assets" / "AppScreenshots"
 DEMO_CLIPS_DIR = REPO_ROOT / "Documentation" / "Assets" / "AppDemoClips"
 SCENARIO_SHOTS_DIR = REPO_ROOT / "Documentation" / "Assets" / "AppScenarioShots"
+SCENARIO_BOARDS_DIR = REPO_ROOT / "Documentation" / "Assets" / "AppScenarioBoards"
 APP_GALLERY_PATH = REPO_ROOT / "Documentation" / "App-Gallery.md"
 
 
@@ -76,6 +77,14 @@ def scenario_pair_exists(app_name: str) -> bool:
     return scenario_launch_exists(app_name) and scenario_ready_exists(app_name)
 
 
+def scenario_board_relative_path(app_name: str) -> str:
+    return f"../Assets/AppScenarioBoards/{app_name}.svg"
+
+
+def scenario_board_exists(app_name: str) -> bool:
+    return (SCENARIO_BOARDS_DIR / f"{app_name}.svg").exists()
+
+
 def scenario_page(app: dict[str, Any]) -> str:
     app_name = app["app"]
     has_screenshot = screenshot_exists(app_name)
@@ -101,6 +110,10 @@ def scenario_page(app: dict[str, Any]) -> str:
     ]
     if has_scenario_pair:
         lines.extend([
+            "### Scenario Board",
+            "",
+            f"![{app_name} scenario board]({scenario_board_relative_path(app_name)})",
+            "",
             "### Launch Frame",
             "",
             f"![{app_name} launch]({scenario_launch_relative_path(app_name)})",
@@ -652,18 +665,20 @@ def scenario_router(catalog: list[dict[str, Any]]) -> str:
         "Current truth:",
         "",
         f"- `{scenario_count}` standalone roots have published launch-to-ready scenario frame pairs",
+        f"- `{sum(1 for app in catalog if scenario_board_exists(app['app']))}` standalone roots have published shareable scenario boards",
         f"- `{sum(1 for app in catalog if screenshot_exists(app['app']))}` standalone roots have published runtime screenshots",
         f"- `{sum(1 for app in catalog if demo_clip_exists(app['app']))}` standalone roots have published demo clips",
         "- this surface tracks runtime progression, not deep interaction parity",
         "",
         "## Current Router",
         "",
-        "| App | Lane | Scenario | Surface |",
-        "| --- | --- | --- | --- |",
+        "| App | Lane | Scenario | Board | Surface |",
+        "| --- | --- | --- | --- | --- |",
     ]
     for app in catalog:
         status = "published" if scenario_pair_exists(app["app"]) else "missing"
-        lines.append(f"| {app['app']} | {app['lane']} | `{status}` | [{app['app']}.md](./{app['app']}.md) |")
+        board_cell = f"[board]({scenario_board_relative_path(app['app'])})" if scenario_board_exists(app["app"]) else "missing"
+        lines.append(f"| {app['app']} | {app['lane']} | `{status}` | {board_cell} | [{app['app']}.md](./{app['app']}.md) |")
     lines.extend([
         "",
         "## Rule",

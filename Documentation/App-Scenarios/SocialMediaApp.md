@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![SocialMediaApp scenario board](../Assets/AppScenarioBoards/SocialMediaApp.svg)
+
 ### Launch Frame
 
 ![SocialMediaApp launch](../Assets/AppScenarioShots/SocialMediaApp-launch.png)

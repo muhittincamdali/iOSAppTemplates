@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![NotesKnowledgeApp scenario board](../Assets/AppScenarioBoards/NotesKnowledgeApp.svg)
+
 ### Launch Frame
 
 ![NotesKnowledgeApp launch](../Assets/AppScenarioShots/NotesKnowledgeApp-launch.png)

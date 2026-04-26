@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![SubscriptionLifestyleApp scenario board](../Assets/AppScenarioBoards/SubscriptionLifestyleApp.svg)
+
 ### Launch Frame
 
 ![SubscriptionLifestyleApp launch](../Assets/AppScenarioShots/SubscriptionLifestyleApp-launch.png)

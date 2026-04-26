@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![MessagingApp scenario board](../Assets/AppScenarioBoards/MessagingApp.svg)
+
 ### Launch Frame
 
 ![MessagingApp launch](../Assets/AppScenarioShots/MessagingApp-launch.png)

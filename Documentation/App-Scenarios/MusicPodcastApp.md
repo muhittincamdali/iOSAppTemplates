@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![MusicPodcastApp scenario board](../Assets/AppScenarioBoards/MusicPodcastApp.svg)
+
 ### Launch Frame
 
 ![MusicPodcastApp launch](../Assets/AppScenarioShots/MusicPodcastApp-launch.png)

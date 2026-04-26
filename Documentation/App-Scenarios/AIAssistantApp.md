@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![AIAssistantApp scenario board](../Assets/AppScenarioBoards/AIAssistantApp.svg)
+
 ### Launch Frame
 
 ![AIAssistantApp launch](../Assets/AppScenarioShots/AIAssistantApp-launch.png)

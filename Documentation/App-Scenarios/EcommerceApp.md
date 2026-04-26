@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![EcommerceApp scenario board](../Assets/AppScenarioBoards/EcommerceApp.svg)
+
 ### Launch Frame
 
 ![EcommerceApp launch](../Assets/AppScenarioShots/EcommerceApp-launch.png)

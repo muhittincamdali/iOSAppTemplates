@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![ProductivityApp scenario board](../Assets/AppScenarioBoards/ProductivityApp.svg)
+
 ### Launch Frame
 
 ![ProductivityApp launch](../Assets/AppScenarioShots/ProductivityApp-launch.png)

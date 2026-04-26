@@ -14,6 +14,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Published Runtime Progression
 
+### Scenario Board
+
+![EducationApp scenario board](../Assets/AppScenarioBoards/EducationApp.svg)
+
 ### Launch Frame
 
 ![EducationApp launch](../Assets/AppScenarioShots/EducationApp-launch.png)
