@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Travel`
-- Label today: `Standalone Root + richer example surface`
+- Label today: `Standalone Root + richer example + rebuilt runtime flow`
 - Entry path: `Templates/TravelPlannerApp/Package.swift`
 - Extra route: `Examples/TravelPlannerExample`
 - Product target: `Travel Planner`
@@ -14,19 +14,19 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ### Best for
 
-- teams evaluating trip and itinerary planning shells
+- teams evaluating trip and itinerary planning flows
 - readers comparing travel lane packaging and richer example routing
 - maintainers reviewing booking-adjacent trip surfaces
 
 ### Not for
 
 - teams expecting full booking network integrations today
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- trip overview shell
+- trip overview flow
 - itinerary cards
 - destination highlights
 - booking-adjacent planning surface

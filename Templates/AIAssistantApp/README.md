@@ -6,7 +6,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Today
 
-- Label: `Standalone Root + richer example surface`
+- Label: `Standalone Root + richer example + rebuilt runtime flow`
 - Lane: `AI`
 - Entry: `Package.swift`
 - Product target: `AI Assistant`
@@ -16,19 +16,19 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ### Best for
 
-- teams reviewing an assistant-style conversation shell
+- teams reviewing an assistant-style conversation flow
 - readers comparing AI lane packaging with a richer example route
 - maintainers validating a privacy-aware assistant starter surface
 
 ### Not for
 
 - teams expecting a production AI stack today
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- conversation shell
+- conversation flow
 - prompt and response surface
 - assistant suggestion cards
 - starter tool action surface

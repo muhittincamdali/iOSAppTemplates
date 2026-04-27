@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Productivity`
-- Label today: `Standalone Root + richer example surface`
+- Label today: `Standalone Root + richer example + rebuilt runtime flow`
 - Entry path: `Templates/ProductivityApp/Package.swift`
 - Extra route: `Examples/ProductivityExample`
 - Product target: `Productivity / Tasks`
@@ -15,13 +15,13 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Best for
 
 - teams evaluating a dashboard-first productivity starter
-- readers comparing root package and standalone shell packaging
+- readers comparing root package and standalone app packaging
 - maintainers reviewing a reusable task and focus workspace surface
 
 ### Not for
 
 - teams expecting a fully integrated collaboration suite today
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today

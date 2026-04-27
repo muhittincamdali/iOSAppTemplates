@@ -1,10 +1,10 @@
 # iOSAppTemplates Project Status
 
-Last updated: 2026-04-26
+Last updated: 2026-04-27
 
 ## Repository Status
 
-`iOSAppTemplates` is in active expansion and productization. It is stronger than a generic template repo, but it is not yet a finished `20`-app portfolio with equal maturity across every lane.
+`iOSAppTemplates` now carries `20` rebuilt standalone app roots with real runtime proof. The repo is no longer just a generic template collection, but it is still short of full multi-step interaction proof parity across every lane.
 
 ## What Is True Right Now
 
@@ -19,6 +19,7 @@ Last updated: 2026-04-26
 - a published runtime screenshot
 - a published runtime demo clip
 - published launch-to-ready scenario frames
+- rebuilt runtime flows for the tracked `20` standalone roots
 - canonical runtime scenario pages
 - local generic iOS `xcodebuild` proof is tracked for the standalone roots
 - local simulator runtime launch proof is tracked for the standalone roots
@@ -29,14 +30,14 @@ Last updated: 2026-04-26
 ## What Is Not Yet True
 
 - a stable green hosted standalone iOS baseline is not yet established for every app pack
-- every lane is not yet at equal production depth
+- automated multi-step interaction proof is not yet established for every app pack
 - the latest numbered release must stay aligned with the current proof surface and GitHub distribution policy
 
 ## Current Public Gaps
 
 1. keep the hosted standalone iOS proof route green and visible
 2. keep GitHub metadata and release surfaces aligned with the versioned policy
-3. continue converting older docs to the same English canonical quality bar
+3. keep generated docs aligned with rebuilt runtime flows
 4. keep launch-proof, screenshot-proof, and demo-proof surfaces in sync with real runtime behavior
 5. deepen interaction proof beyond the current launch / ready / first-screen scenario set
 
@@ -50,4 +51,4 @@ Last updated: 2026-04-26
 
 ## Status Summary
 
-The repo has crossed from starter collection into a tracked portfolio system. The next quality jump is not more naming or more promises; it is stable hosted standalone iOS proof, deeper multi-step interaction proof, and tighter public distribution discipline.
+The repo has crossed from starter collection into a tracked runtime-tested portfolio system. The next quality jump is not more naming or more promises; it is stable hosted standalone iOS proof, deeper multi-step interaction proof, and tighter public distribution discipline.

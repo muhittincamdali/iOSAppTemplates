@@ -6,10 +6,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Product Shape
 
-- dashboard shell
+- dashboard flow
 - goal and workout surface
 - health metric cards
-- progress summary shell
+- progress summary flow
 
 ## Best For / Not For
 
@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting a separate runnable Xcode project
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario set
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 
 ## Current Truth
 

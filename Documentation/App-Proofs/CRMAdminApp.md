@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `CRM / Admin`
-- Label today: `Standalone Root + richer example surface`
+- Label today: `Standalone Root + richer example + rebuilt runtime flow`
 - Entry path: `Templates/CRMAdminApp/Package.swift`
 - Extra route: `Examples/CRMAdminExample`
 - Product target: `CRM / Admin Companion`
@@ -21,12 +21,12 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting backend-integrated CRM operations today
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- admin dashboard shell
+- admin dashboard flow
 - lead or client list surface
 - pipeline starter cards
 - operations summary

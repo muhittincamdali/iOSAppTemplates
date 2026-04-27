@@ -6,7 +6,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Product Shape
 
-- habit dashboard shell
+- habit dashboard flow
 - streak and progress surface
 - premium plan starter cards
 - routine detail routing
@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting a separate runnable Xcode project
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario set
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 
 ## Current Truth
 

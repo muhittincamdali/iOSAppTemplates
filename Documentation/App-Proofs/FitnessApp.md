@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Health / Fitness`
-- Label today: `Standalone Root + richer example surface`
+- Label today: `Standalone Root + richer example + rebuilt runtime flow`
 - Entry path: `Templates/FitnessApp/Package.swift`
 - Extra route: `Examples/FitnessExample`
 - Product target: `Health / Fitness`
@@ -14,21 +14,21 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ### Best for
 
-- teams reviewing a fitness app-shell package entry
+- teams reviewing a fitness app flow package entry
 - maintainers validating HealthKit-oriented starter surfaces
 - readers comparing standalone app packaging against family-level health templates and a richer example route
 
 ### Not for
 
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- dashboard shell
+- dashboard flow
 - goal and workout surface
 - health metric cards
-- progress summary shell
+- progress summary flow
 - starter health domain model
 
 ## Current Proof

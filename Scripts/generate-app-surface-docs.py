@@ -25,6 +25,42 @@ def load_catalog() -> list[dict[str, Any]]:
     return json.loads(CATALOG_PATH.read_text())
 
 
+def normalize_copy(text: str) -> str:
+    replacements = [
+        (
+            "readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof",
+            "readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set",
+        ),
+        (
+            "readers who expect deeper interactive runtime flows than the current launch-to-ready scenario set",
+            "readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set",
+        ),
+        ("starter shells", "starter flows"),
+        ("starter shell", "starter flow"),
+        ("shells", "flows"),
+        ("app-shell", "app flow"),
+        ("launch-to-ready scenario proof", "current first-screen runtime proof set"),
+        ("launch-to-ready scenario set", "current first-screen runtime proof set"),
+        ("standalone shell packaging", "standalone app packaging"),
+        ("shell packaging", "app packaging"),
+        (" shell", " flow"),
+    ]
+    normalized = text
+    for old, new in replacements:
+        normalized = normalized.replace(old, new)
+    return normalized
+
+
+def normalize_label(label: str) -> str:
+    if label == "Standalone Root + richer example surface":
+        return "Standalone Root + richer example + rebuilt runtime flow"
+    return normalize_copy(label)
+
+
+def normalized_items(items: list[str]) -> list[str]:
+    return [normalize_copy(item) for item in items]
+
+
 def code_link(path: str) -> str:
     return f"`{path}`"
 
@@ -182,7 +218,7 @@ def proof_page(app: dict[str, Any]) -> str:
         "## Product Summary",
         "",
         f"- Lane: `{app['lane']}`",
-        f"- Label today: `{app['label_today']}`",
+        f"- Label today: `{normalize_label(app['label_today'])}`",
         f"- Entry path: `{app['entry_path']}`",
     ]
     if example_path:
@@ -195,19 +231,19 @@ def proof_page(app: dict[str, Any]) -> str:
         "### Best for",
         "",
     ])
-    lines.extend([f"- {item}" for item in app["best_for"]])
+    lines.extend([f"- {item}" for item in normalized_items(app["best_for"])])
     lines.extend([
         "",
         "### Not for",
         "",
     ])
-    lines.extend([f"- {item}" for item in app["not_for"]])
+    lines.extend([f"- {item}" for item in normalized_items(app["not_for"])])
     lines.extend([
         "",
         "## Product Shape Today",
         "",
     ])
-    lines.extend([f"- {item}" for item in app["product_shape"]])
+    lines.extend([f"- {item}" for item in normalized_items(app["product_shape"])])
     lines.extend([
         "",
         "## Current Proof",
@@ -367,7 +403,7 @@ def template_root_page(app: dict[str, Any]) -> str:
         "",
         "## Today",
         "",
-        f"- Label: `{app['label_today']}`",
+        f"- Label: `{normalize_label(app['label_today'])}`",
         f"- Lane: `{app['lane']}`",
         f"- Entry: `{Path(app['entry_path']).name}`",
         f"- Product target: `{app['product_target']}`",
@@ -381,19 +417,19 @@ def template_root_page(app: dict[str, Any]) -> str:
         "### Best for",
         "",
     ])
-    lines.extend([f"- {item}" for item in app["best_for"]])
+    lines.extend([f"- {item}" for item in normalized_items(app["best_for"])])
     lines.extend([
         "",
         "### Not for",
         "",
     ])
-    lines.extend([f"- {item}" for item in app["not_for"]])
+    lines.extend([f"- {item}" for item in normalized_items(app["not_for"])])
     lines.extend([
         "",
         "## Product Shape",
         "",
     ])
-    lines.extend([f"- {item}" for item in app["product_shape"]])
+    lines.extend([f"- {item}" for item in normalized_items(app["product_shape"])])
     lines.extend([
         "",
         "## Current Proof",
@@ -483,7 +519,7 @@ def example_page(app: dict[str, Any]) -> str:
         "## Product Shape",
         "",
     ]
-    lines.extend([f"- {item}" for item in app["product_shape"][:4]])
+    lines.extend([f"- {item}" for item in normalized_items(app["product_shape"][:4])])
     lines.extend([
         "",
         "## Best For / Not For",
@@ -496,7 +532,7 @@ def example_page(app: dict[str, Any]) -> str:
         "### Not for",
         "",
         "- teams expecting a separate runnable Xcode project",
-        "- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario set",
+        "- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set",
         "",
         "## Current Truth",
         "",
@@ -548,7 +584,7 @@ def examples_hub(catalog: list[dict[str, Any]]) -> str:
         "| Surface | Type | Use it for |",
         "| --- | --- | --- |",
         "| [BasicExample.swift](./BasicExample.swift) | single-file reference | inspect the package API quickly |",
-        "| [BasicExample/BasicExample.swift](./BasicExample/BasicExample.swift) | small example shell | inspect minimal structure |",
+        "| [BasicExample/BasicExample.swift](./BasicExample/BasicExample.swift) | small example flow | inspect minimal structure |",
         "| [QuickStartExample/QuickStartApp.swift](./QuickStartExample/QuickStartApp.swift) | onboarding entry | reach the fastest source-level start |",
     ]
     for app in richer_examples:
@@ -631,7 +667,7 @@ def proof_router(catalog: list[dict[str, Any]]) -> str:
         "| --- | --- | --- | --- |",
     ]
     for app in catalog:
-        lines.append(f"| {app['app']} | {app['lane']} | {app['label_today']} | [{app['app']}.md](./{app['app']}.md) |")
+        lines.append(f"| {app['app']} | {app['lane']} | {normalize_label(app['label_today'])} | [{app['app']}.md](./{app['app']}.md) |")
     lines.extend([
         "",
         "## Rule",
@@ -641,7 +677,7 @@ def proof_router(catalog: list[dict[str, Any]]) -> str:
         "Correct labels for these apps today:",
         "",
         "- `Standalone Root`",
-        "- `App-shell proof surface`",
+        "- `App proof surface`",
         "",
         "Canonical complete-app standard:",
         f"- {md_link('../Complete-App-Standard.md', '../Complete-App-Standard.md')}",

@@ -6,7 +6,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Today
 
-- Label: `Standalone Root + richer example surface`
+- Label: `Standalone Root + richer example + rebuilt runtime flow`
 - Lane: `Food Delivery`
 - Entry: `Package.swift`
 - Product target: `Food Delivery`
@@ -23,15 +23,15 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting production delivery logistics today
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- restaurant discovery shell
+- restaurant discovery flow
 - menu and item cards
 - cart flow
-- order tracking shell
+- order tracking flow
 - starter delivery domain model
 
 ## Current Proof
