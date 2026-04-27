@@ -1,64 +1,45 @@
 import SwiftUI
 import FinanceAppCore
 
-@available(iOS 18.0, macOS 15.0, *)
-public struct FinanceAppShell: App {
-    public init() {}
-
-    public var body: some Scene {
+@main
+struct FinanceApp: App {
+    var body: some Scene {
         WindowGroup {
-            FinanceWorkspaceRootView(
-                snapshot: .sample,
-                actions: FinanceQuickAction.defaultActions,
-                state: .sample
-            )
+            FinanceRuntimeRootView()
         }
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceWorkspaceRootView: View {
-    let snapshot: FinanceDashboardSnapshot
-    let actions: [FinanceQuickAction]
-    let state: FinanceWorkspaceState
+struct FinanceRuntimeRootView: View {
+    @StateObject private var store = FinanceOperatingStore()
 
-    init(
-        snapshot: FinanceDashboardSnapshot,
-        actions: [FinanceQuickAction],
-        state: FinanceWorkspaceState
-    ) {
-        self.snapshot = snapshot
-        self.actions = actions
-        self.state = state
-    }
-
-    public var body: some View {
+    var body: some View {
         TabView {
-            FinanceDashboardView(snapshot: snapshot, actions: actions, state: state)
+            FinanceOverviewWorkspaceView(store: store)
                 .tabItem {
                     Image(systemName: "chart.line.uptrend.xyaxis")
                     Text("Overview")
                 }
 
-            FinanceAccountsView(state: state)
+            FinanceAccountsWorkspaceView(store: store)
                 .tabItem {
-                    Image(systemName: "creditcard")
+                    Image(systemName: "creditcard.fill")
                     Text("Accounts")
                 }
 
-            FinanceBudgetsView(state: state)
+            FinanceBudgetsWorkspaceView(store: store)
                 .tabItem {
-                    Image(systemName: "chart.pie")
+                    Image(systemName: "chart.pie.fill")
                     Text("Budgets")
                 }
 
-            FinanceActivityView(state: state)
+            FinanceActivityWorkspaceView(store: store)
                 .tabItem {
-                    Image(systemName: "list.bullet.rectangle")
+                    Image(systemName: "list.bullet.rectangle.portrait.fill")
                     Text("Activity")
                 }
 
-            FinanceInsightsView(state: state)
+            FinanceInsightsWorkspaceView(store: store)
                 .tabItem {
                     Image(systemName: "waveform.path.ecg")
                     Text("Insights")
@@ -68,31 +49,185 @@ struct FinanceWorkspaceRootView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceDashboardView: View {
-    let snapshot: FinanceDashboardSnapshot
-    let actions: [FinanceQuickAction]
-    let state: FinanceWorkspaceState
+@MainActor
+final class FinanceOperatingStore: ObservableObject {
+    @Published var accounts: [FinanceAccountRecord] = FinanceAccountRecord.sampleAccounts
+    @Published var budgets: [FinanceBudgetRecord] = FinanceBudgetRecord.sampleBudgets
+    @Published var transactions: [FinanceTransactionRecord] = FinanceTransactionRecord.samplePosted
+    @Published var pendingTransactions: [FinanceTransactionRecord] = FinanceTransactionRecord.samplePending
+    @Published var recurringBills: [FinanceRecurringBillRecord] = FinanceRecurringBillRecord.sampleBills
+    @Published var composer = FinanceTransactionComposer.sample
+    @Published var budgetBuffer = 650.0
+    @Published var advisorNote = "Protect runway first: resolve uncategorized spend, pay critical bills, then move surplus into reserve."
 
-    init(
-        snapshot: FinanceDashboardSnapshot,
-        actions: [FinanceQuickAction],
-        state: FinanceWorkspaceState
-    ) {
-        self.snapshot = snapshot
-        self.actions = actions
-        self.state = state
+    var netCash: Double {
+        accounts.filter { $0.kind != .credit }.reduce(0) { $0 + $1.balance }
     }
 
-    public var body: some View {
+    var totalCreditUsed: Double {
+        accounts.filter { $0.kind == .credit }.reduce(0) { $0 + abs(min(0, $1.balance)) }
+    }
+
+    var monthlyIncome: Double {
+        transactions.filter { $0.type == .income }.reduce(0) { $0 + $1.amount }
+    }
+
+    var monthlySpend: Double {
+        transactions.filter { $0.type == .expense }.reduce(0) { $0 + abs($1.amount) }
+    }
+
+    var reserveAccountID: UUID? {
+        accounts.first(where: { $0.kind == .savings })?.id
+    }
+
+    var operatingAccountID: UUID? {
+        accounts.first(where: { $0.kind == .checking })?.id
+    }
+
+    func account(id: UUID) -> FinanceAccountRecord? {
+        accounts.first(where: { $0.id == id })
+    }
+
+    func approvePending(_ transactionID: UUID) {
+        guard let pendingIndex = pendingTransactions.firstIndex(where: { $0.id == transactionID }) else { return }
+        var transaction = pendingTransactions.remove(at: pendingIndex)
+        transaction.status = "Posted"
+        transaction.date = "Today"
+        apply(transaction)
+        transactions.insert(transaction, at: 0)
+    }
+
+    func deferPending(_ transactionID: UUID) {
+        guard let pendingIndex = pendingTransactions.firstIndex(where: { $0.id == transactionID }) else { return }
+        pendingTransactions[pendingIndex].status = "Awaiting receipt"
+        pendingTransactions[pendingIndex].note = "Receipt requested from owner before posting."
+    }
+
+    func payRecurringBill(_ billID: UUID) {
+        guard let billIndex = recurringBills.firstIndex(where: { $0.id == billID }),
+              !recurringBills[billIndex].isPaid else { return }
+
+        recurringBills[billIndex].isPaid = true
+        let bill = recurringBills[billIndex]
+        let transaction = FinanceTransactionRecord(
+            merchant: bill.name,
+            category: bill.category,
+            amount: -bill.amount,
+            date: "Today",
+            accountID: bill.accountID,
+            status: "Posted",
+            note: bill.note,
+            type: .expense
+        )
+        apply(transaction)
+        transactions.insert(transaction, at: 0)
+    }
+
+    func moveToReserve() {
+        guard let sourceID = operatingAccountID,
+              let destinationID = reserveAccountID else { return }
+        moveCash(amount: 1200, from: sourceID, to: destinationID, merchant: "Reserve Transfer", note: "Protected extra runway after approvals and bill coverage.")
+    }
+
+    func fundOperations() {
+        guard let sourceID = reserveAccountID,
+              let destinationID = operatingAccountID else { return }
+        moveCash(amount: 750, from: sourceID, to: destinationID, merchant: "Operations Top-up", note: "Returned cash to operating lane for near-term obligations.")
+    }
+
+    func rebalanceBudget(_ budgetID: UUID) {
+        guard let budgetIndex = budgets.firstIndex(where: { $0.id == budgetID }),
+              budgetBuffer >= 150 else { return }
+        budgets[budgetIndex].limit += 150
+        budgetBuffer -= 150
+    }
+
+    func submitManualTransaction() {
+        let merchant = composer.merchant.trimmingCharacters(in: .whitespacesAndNewlines)
+        let note = composer.note.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !merchant.isEmpty,
+              let accountID = composer.selectedAccountID,
+              let amount = Double(composer.amountText),
+              amount > 0 else {
+            return
+        }
+
+        let signedAmount = composer.type == .income ? amount : -amount
+        let transaction = FinanceTransactionRecord(
+            merchant: merchant,
+            category: composer.category,
+            amount: signedAmount,
+            date: "Today",
+            accountID: accountID,
+            status: "Posted",
+            note: note.isEmpty ? "Manual operator entry." : note,
+            type: composer.type
+        )
+
+        apply(transaction)
+        transactions.insert(transaction, at: 0)
+        composer = FinanceTransactionComposer(selectedAccountID: operatingAccountID)
+    }
+
+    private func moveCash(amount: Double, from sourceID: UUID, to destinationID: UUID, merchant: String, note: String) {
+        guard let sourceIndex = accounts.firstIndex(where: { $0.id == sourceID }),
+              let destinationIndex = accounts.firstIndex(where: { $0.id == destinationID }),
+              accounts[sourceIndex].balance >= amount else {
+            return
+        }
+
+        accounts[sourceIndex].balance -= amount
+        accounts[destinationIndex].balance += amount
+
+        let outflow = FinanceTransactionRecord(
+            merchant: merchant,
+            category: "Transfer",
+            amount: -amount,
+            date: "Today",
+            accountID: sourceID,
+            status: "Posted",
+            note: note,
+            type: .expense
+        )
+
+        let inflow = FinanceTransactionRecord(
+            merchant: merchant,
+            category: "Transfer",
+            amount: amount,
+            date: "Today",
+            accountID: destinationID,
+            status: "Posted",
+            note: note,
+            type: .income
+        )
+
+        transactions.insert(inflow, at: 0)
+        transactions.insert(outflow, at: 0)
+    }
+
+    private func apply(_ transaction: FinanceTransactionRecord) {
+        guard let accountIndex = accounts.firstIndex(where: { $0.id == transaction.accountID }) else { return }
+        accounts[accountIndex].balance += transaction.amount
+
+        if transaction.type == .expense,
+           let budgetIndex = budgets.firstIndex(where: { $0.category == transaction.category }) {
+            budgets[budgetIndex].spent += abs(transaction.amount)
+        }
+    }
+}
+
+struct FinanceOverviewWorkspaceView: View {
+    @ObservedObject var store: FinanceOperatingStore
+
+    var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    FinanceHeroCard(snapshot: snapshot, state: state)
-                    FinanceQuickActionGrid(actions: actions)
-                    FinanceCashFlowCard(state: state)
-                    FinanceBudgetHighlightsView(budgets: state.budgets)
-                    FinanceRecurringPaymentsCard(recurringPayments: state.recurringPayments)
+                    FinanceHeroCard(store: store)
+                    FinanceLiquidityActionCard(store: store)
+                    FinanceRecurringBillsCard(store: store)
+                    FinanceBudgetRiskCard(store: store)
                 }
                 .padding(16)
             }
@@ -101,36 +236,26 @@ struct FinanceDashboardView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct FinanceHeroCard: View {
-    let snapshot: FinanceDashboardSnapshot
-    let state: FinanceWorkspaceState
+    @ObservedObject var store: FinanceOperatingStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Executive Snapshot")
+            Text("Operator Snapshot")
                 .font(.headline)
                 .foregroundStyle(.secondary)
 
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(snapshot.netCash)
-                        .font(.system(size: 34, weight: .bold, design: .rounded))
-                    Text(snapshot.reviewMessage)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer()
-                VStack(alignment: .trailing, spacing: 8) {
-                    FinanceDeltaPill(title: "Income", value: state.monthlyIncome, color: .green)
-                    FinanceDeltaPill(title: "Spend", value: state.monthlySpend, color: .orange)
-                }
-            }
+            Text("Net cash \(store.netCash.currencyString) with \(store.pendingTransactions.count) items still waiting for review.")
+                .font(.system(size: 30, weight: .bold, design: .rounded))
+
+            Text(store.advisorNote)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
 
             HStack(spacing: 12) {
-                FinanceMetricTile(title: "Accounts", value: "\(snapshot.accounts)")
-                FinanceMetricTile(title: "Budget Usage", value: snapshot.budgetUsage)
-                FinanceMetricTile(title: "Bills Due", value: "\(state.dueThisWeekCount)")
+                FinanceMetricTile(title: "Income", value: store.monthlyIncome.currencyString)
+                FinanceMetricTile(title: "Spend", value: store.monthlySpend.currencyString)
+                FinanceMetricTile(title: "Credit Used", value: store.totalCreditUsed.currencyString)
             }
         }
         .padding(20)
@@ -145,29 +270,6 @@ struct FinanceHeroCard: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceDeltaPill: View {
-    let title: String
-    let value: String
-    let color: Color
-
-    var body: some View {
-        VStack(alignment: .trailing, spacing: 4) {
-            Text(title)
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
-            Text(value)
-                .font(.headline.weight(.bold))
-                .foregroundStyle(color)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .background(Color(.secondarySystemBackground))
-        .clipShape(Capsule())
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
 struct FinanceMetricTile: View {
     let title: String
     let value: String
@@ -187,64 +289,69 @@ struct FinanceMetricTile: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceQuickActionGrid: View {
-    let actions: [FinanceQuickAction]
+struct FinanceLiquidityActionCard: View {
+    @ObservedObject var store: FinanceOperatingStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Quick Actions")
+            Text("Liquidity Actions")
                 .font(.title3.weight(.bold))
 
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                ForEach(actions) { action in
-                    VStack(alignment: .leading, spacing: 10) {
-                        Image(systemName: action.systemImage)
-                            .font(.title3)
-                            .foregroundStyle(.green)
-                        Text(action.title)
-                            .font(.subheadline.weight(.semibold))
-                        Text(action.detail)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                }
+            Button("Move $1,200 to Reserve") {
+                store.moveToReserve()
             }
+            .buttonStyle(.borderedProminent)
+
+            Button("Fund Operations with $750") {
+                store.fundOperations()
+            }
+            .buttonStyle(.bordered)
+
+            Text("Budget buffer available: \(store.budgetBuffer.currencyString)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 18))
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceCashFlowCard: View {
-    let state: FinanceWorkspaceState
+struct FinanceRecurringBillsCard: View {
+    @ObservedObject var store: FinanceOperatingStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Cash Flow")
+            Text("Recurring Bills")
                 .font(.title3.weight(.bold))
 
-            HStack(spacing: 12) {
-                FinanceCashFlowColumn(title: "Income", value: state.monthlyIncome, subtitle: "Payroll + side revenue", accent: .green)
-                FinanceCashFlowColumn(title: "Spend", value: state.monthlySpend, subtitle: "Cards + subscriptions", accent: .orange)
-                FinanceCashFlowColumn(title: "Saved", value: state.monthlySaved, subtitle: "Transferred to reserve", accent: .blue)
-            }
-
-            Divider()
-
-            ForEach(state.cashFlowBreakdown) { item in
-                HStack {
-                    Label(item.category, systemImage: item.systemImage)
-                    Spacer()
-                    Text(item.amount)
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(item.accent)
+            ForEach(store.recurringBills) { bill in
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text(bill.name)
+                            .font(.headline)
+                        Spacer()
+                        Text(bill.amount.currencyString)
+                            .font(.subheadline.weight(.bold))
+                    }
+                    Text("Due \(bill.dueDate) • \(store.account(id: bill.accountID)?.name ?? "Unknown Account")")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    HStack {
+                        Text(bill.category)
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Button(bill.isPaid ? "Paid" : "Pay Now") {
+                            store.payRecurringBill(bill.id)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(bill.isPaid)
+                    }
                 }
-                .font(.subheadline)
+                .padding()
+                .background(Color(.tertiarySystemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
             }
         }
         .padding()
@@ -253,47 +360,101 @@ struct FinanceCashFlowCard: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceCashFlowColumn: View {
-    let title: String
-    let value: String
-    let subtitle: String
-    let accent: Color
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title)
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
-            Text(value)
-                .font(.headline.weight(.bold))
-                .foregroundStyle(accent)
-            Text(subtitle)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceBudgetHighlightsView: View {
-    let budgets: [FinanceBudget]
+struct FinanceBudgetRiskCard: View {
+    @ObservedObject var store: FinanceOperatingStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Budget Guardrails")
                 .font(.title3.weight(.bold))
 
-            ForEach(budgets.prefix(3)) { budget in
-                NavigationLink {
-                    FinanceBudgetDetailView(budget: budget)
-                } label: {
+            ForEach(store.budgets.sorted(by: { $0.progress > $1.progress }).prefix(3)) { budget in
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text(budget.category)
+                            .font(.headline)
+                        Spacer()
+                        Text(budget.remaining.currencyString)
+                            .foregroundStyle(budget.statusColor)
+                    }
+                    ProgressView(value: budget.progress)
+                        .tint(budget.statusColor)
+                    Text(budget.note)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 18))
+    }
+}
+
+struct FinanceAccountsWorkspaceView: View {
+    @ObservedObject var store: FinanceOperatingStore
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(store.accounts) { account in
+                    NavigationLink {
+                        FinanceAccountDetailView(store: store, accountID: account.id)
+                    } label: {
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text(account.name)
+                                Spacer()
+                                Text(account.balance.currencyString)
+                                    .font(.headline.weight(.bold))
+                            }
+                            Text("\(account.institution) • \(account.kind.label)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Accounts")
+        }
+    }
+}
+
+struct FinanceAccountDetailView: View {
+    @ObservedObject var store: FinanceOperatingStore
+    let accountID: UUID
+
+    var body: some View {
+        if let account = store.account(id: accountID) {
+            List {
+                Section("Account Summary") {
+                    LabeledContent("Institution", value: account.institution)
+                    LabeledContent("Balance", value: account.balance.currencyString)
+                    LabeledContent("Type", value: account.kind.label)
+                    LabeledContent("Owner", value: account.owner)
+                }
+
+                Section("Recent Activity") {
+                    ForEach(store.transactions.filter { $0.accountID == accountID }.prefix(4)) { transaction in
+                        FinanceTransactionRow(store: store, transaction: transaction)
+                    }
+                }
+            }
+            .navigationTitle(account.name)
+        }
+    }
+}
+
+struct FinanceBudgetsWorkspaceView: View {
+    @ObservedObject var store: FinanceOperatingStore
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(store.budgets) { budget in
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text(budget.category)
-                                .font(.headline)
-                                .foregroundStyle(.primary)
                             Spacer()
                             Text(budget.statusLabel)
                                 .font(.caption.weight(.semibold))
@@ -302,138 +463,22 @@ struct FinanceBudgetHighlightsView: View {
                         ProgressView(value: budget.progress)
                             .tint(budget.statusColor)
                         HStack {
-                            Text("Spent \(budget.spent)")
+                            Text("Spent \(budget.spent.currencyString)")
                             Spacer()
-                            Text("Target \(budget.limit)")
+                            Text("Remaining \(budget.remaining.currencyString)")
                         }
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    }
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                }
-                .buttonStyle(.plain)
-            }
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceRecurringPaymentsCard: View {
-    let recurringPayments: [FinanceRecurringPayment]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Recurring Payments")
-                .font(.title3.weight(.bold))
-
-            ForEach(recurringPayments) { payment in
-                HStack(spacing: 12) {
-                    Image(systemName: payment.systemImage)
-                        .foregroundStyle(payment.accent)
-                        .frame(width: 24)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(payment.name)
-                            .font(.headline)
-                        Text("Due \(payment.dueDate) • \(payment.account)")
+                        Text(budget.note)
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    Text(payment.amount)
-                        .font(.subheadline.weight(.bold))
-                }
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-            }
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceAccountsView: View {
-    let state: FinanceWorkspaceState
-
-    var body: some View {
-        NavigationStack {
-            List {
-                Section("Accounts") {
-                    ForEach(state.accounts) { account in
-                        NavigationLink {
-                            FinanceAccountDetailView(account: account, transactions: transactions(for: account))
-                        } label: {
-                            VStack(alignment: .leading, spacing: 8) {
-                                HStack {
-                                    Text(account.name)
-                                    Spacer()
-                                    Text(account.balance)
-                                        .font(.headline.weight(.bold))
-                                }
-                                HStack {
-                                    Label(account.kind.label, systemImage: account.kind.systemImage)
-                                    Spacer()
-                                    Text(account.availableLabel)
-                                }
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                            }
-                            .padding(.vertical, 4)
+                        Button("Top Up by $150") {
+                            store.rebalanceBudget(budget.id)
                         }
+                        .buttonStyle(.bordered)
+                        .disabled(store.budgetBuffer < 150)
                     }
-                }
-
-                Section("Coverage") {
-                    LabeledContent("Emergency Reserve", value: state.emergencyReserveCoverage)
-                    LabeledContent("Credit Utilization", value: state.creditUtilization)
-                    LabeledContent("Upcoming Transfers", value: state.upcomingTransfers)
-                }
-            }
-            .navigationTitle("Accounts")
-        }
-    }
-
-    private func transactions(for account: FinanceAccount) -> [FinanceTransaction] {
-        state.transactions.filter { $0.accountName == account.name }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceBudgetsView: View {
-    let state: FinanceWorkspaceState
-
-    var body: some View {
-        NavigationStack {
-            List {
-                Section("Current Month") {
-                    ForEach(state.budgets) { budget in
-                        NavigationLink {
-                            FinanceBudgetDetailView(budget: budget)
-                        } label: {
-                            VStack(alignment: .leading, spacing: 8) {
-                                HStack {
-                                    Text(budget.category)
-                                    Spacer()
-                                    Text(budget.remaining)
-                                        .font(.subheadline.weight(.semibold))
-                                        .foregroundStyle(budget.statusColor)
-                                }
-                                ProgressView(value: budget.progress)
-                                    .tint(budget.statusColor)
-                                Text(budget.note)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                            .padding(.vertical, 4)
-                        }
-                    }
-                }
-
-                Section("Budget Rules") {
-                    ForEach(state.budgetRules, id: \.self) { rule in
-                        Label(rule, systemImage: "shield.lefthalf.filled")
-                    }
+                    .padding(.vertical, 6)
                 }
             }
             .navigationTitle("Budgets")
@@ -441,30 +486,59 @@ struct FinanceBudgetsView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceActivityView: View {
-    let state: FinanceWorkspaceState
+struct FinanceActivityWorkspaceView: View {
+    @ObservedObject var store: FinanceOperatingStore
 
     var body: some View {
         NavigationStack {
             List {
-                Section("Pending Review") {
-                    ForEach(state.pendingTransactions) { transaction in
-                        NavigationLink {
-                            FinanceTransactionDetailView(transaction: transaction)
-                        } label: {
-                            FinanceTransactionRow(transaction: transaction)
+                Section("Pending Approval") {
+                    ForEach(store.pendingTransactions) { transaction in
+                        VStack(alignment: .leading, spacing: 8) {
+                            FinanceTransactionRow(store: store, transaction: transaction)
+                            HStack {
+                                Button("Approve") {
+                                    store.approvePending(transaction.id)
+                                }
+                                .buttonStyle(.borderedProminent)
+                                Button("Defer") {
+                                    store.deferPending(transaction.id)
+                                }
+                                .buttonStyle(.bordered)
+                            }
                         }
+                        .padding(.vertical, 4)
                     }
                 }
 
-                Section("Latest Activity") {
-                    ForEach(state.transactions) { transaction in
-                        NavigationLink {
-                            FinanceTransactionDetailView(transaction: transaction)
-                        } label: {
-                            FinanceTransactionRow(transaction: transaction)
+                Section("Manual Entry") {
+                    TextField("Merchant", text: $store.composer.merchant)
+                    TextField("Amount", text: $store.composer.amountText)
+                        .keyboardType(.decimalPad)
+                    Picker("Type", selection: $store.composer.type) {
+                        Text("Expense").tag(FinanceTransactionType.expense)
+                        Text("Income").tag(FinanceTransactionType.income)
+                    }
+                    Picker("Account", selection: $store.composer.selectedAccountID) {
+                        ForEach(store.accounts) { account in
+                            Text(account.name).tag(Optional(account.id))
                         }
+                    }
+                    Picker("Category", selection: $store.composer.category) {
+                        ForEach(FinanceTransactionComposer.categories, id: \.self) { category in
+                            Text(category).tag(category)
+                        }
+                    }
+                    TextField("Note", text: $store.composer.note)
+                    Button("Post Transaction") {
+                        store.submitManualTransaction()
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+
+                Section("Latest Activity") {
+                    ForEach(store.transactions.prefix(8)) { transaction in
+                        FinanceTransactionRow(store: store, transaction: transaction)
                     }
                 }
             }
@@ -473,25 +547,25 @@ struct FinanceActivityView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct FinanceTransactionRow: View {
-    let transaction: FinanceTransaction
+    @ObservedObject var store: FinanceOperatingStore
+    let transaction: FinanceTransactionRecord
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: transaction.categoryIcon)
-                .foregroundStyle(transaction.accent)
+            Image(systemName: transaction.iconName)
+                .foregroundStyle(transaction.type == .income ? .green : .orange)
                 .frame(width: 24)
             VStack(alignment: .leading, spacing: 4) {
                 Text(transaction.merchant)
                     .font(.headline)
-                Text("\(transaction.accountName) • \(transaction.date)")
+                Text("\(store.account(id: transaction.accountID)?.name ?? "Unknown") • \(transaction.date)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 4) {
-                Text(transaction.amount)
+                Text(transaction.amount.currencyString)
                     .font(.subheadline.weight(.bold))
                     .foregroundStyle(transaction.type == .income ? .green : .primary)
                 Text(transaction.status)
@@ -503,42 +577,22 @@ struct FinanceTransactionRow: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceInsightsView: View {
-    let state: FinanceWorkspaceState
+struct FinanceInsightsWorkspaceView: View {
+    @ObservedObject var store: FinanceOperatingStore
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Signals") {
-                    ForEach(state.insights) { insight in
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Label(insight.title, systemImage: insight.systemImage)
-                                    .font(.headline)
-                                Spacer()
-                                Text(insight.level)
-                                    .font(.caption.weight(.semibold))
-                                    .foregroundStyle(insight.accent)
-                            }
-                            Text(insight.detail)
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding(.vertical, 6)
-                    }
+                    Label("Reserve covers \(store.netCash.currencyString) of non-credit liquidity.", systemImage: "lock.shield.fill")
+                    Label("\(store.pendingTransactions.count) pending entries can still change month-end accuracy.", systemImage: "exclamationmark.bubble.fill")
+                    Label("Budget buffer left: \(store.budgetBuffer.currencyString)", systemImage: "chart.bar.fill")
                 }
 
                 Section("Advisor Notes") {
-                    ForEach(state.advisorNotes, id: \.self) { note in
-                        Label(note, systemImage: "text.bubble")
-                    }
-                }
-
-                Section("Profile") {
-                    LabeledContent("Primary Goal", value: state.primaryGoal)
-                    LabeledContent("Risk Posture", value: state.riskProfile)
-                    LabeledContent("Last Review", value: state.lastReviewDate)
+                    Text(store.advisorNote)
+                    Text("Top up any category above 85% only after receipts and recurring bills are settled.")
+                        .foregroundStyle(.secondary)
                 }
             }
             .navigationTitle("Insights")
@@ -546,196 +600,7 @@ struct FinanceInsightsView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceAccountDetailView: View {
-    let account: FinanceAccount
-    let transactions: [FinanceTransaction]
-
-    var body: some View {
-        List {
-            Section("Account Summary") {
-                LabeledContent("Institution", value: account.institution)
-                LabeledContent("Balance", value: account.balance)
-                LabeledContent("Available", value: account.availableLabel)
-                LabeledContent("Owner", value: account.owner)
-            }
-
-            Section("Latest Transactions") {
-                ForEach(transactions.prefix(4)) { transaction in
-                    FinanceTransactionRow(transaction: transaction)
-                }
-            }
-        }
-        .navigationTitle(account.name)
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceBudgetDetailView: View {
-    let budget: FinanceBudget
-
-    var body: some View {
-        List {
-            Section("Budget") {
-                LabeledContent("Category", value: budget.category)
-                LabeledContent("Limit", value: budget.limit)
-                LabeledContent("Spent", value: budget.spent)
-                LabeledContent("Remaining", value: budget.remaining)
-                ProgressView(value: budget.progress)
-                    .tint(budget.statusColor)
-            }
-
-            Section("Guidance") {
-                Text(budget.note)
-                Text(budget.recoveryPlan)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .navigationTitle(budget.category)
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct FinanceTransactionDetailView: View {
-    let transaction: FinanceTransaction
-
-    var body: some View {
-        List {
-            Section("Transaction") {
-                LabeledContent("Merchant", value: transaction.merchant)
-                LabeledContent("Amount", value: transaction.amount)
-                LabeledContent("Date", value: transaction.date)
-                LabeledContent("Account", value: transaction.accountName)
-                LabeledContent("Status", value: transaction.status)
-            }
-
-            Section("Details") {
-                Text(transaction.note)
-                Label(transaction.category, systemImage: transaction.categoryIcon)
-                    .foregroundStyle(transaction.accent)
-            }
-        }
-        .navigationTitle("Transaction")
-    }
-}
-
-public struct FinanceQuickAction: Identifiable, Hashable, Sendable {
-    public let id: UUID
-    public let title: String
-    public let detail: String
-    public let systemImage: String
-
-    public init(
-        id: UUID = UUID(),
-        title: String,
-        detail: String,
-        systemImage: String
-    ) {
-        self.id = id
-        self.title = title
-        self.detail = detail
-        self.systemImage = systemImage
-    }
-
-    public static let defaultActions: [FinanceQuickAction] = [
-        FinanceQuickAction(title: "Review Budget", detail: "Flag categories that are above the weekly pacing threshold.", systemImage: "chart.pie.fill"),
-        FinanceQuickAction(title: "Add Transaction", detail: "Capture reimbursements, cash expenses, and one-off adjustments.", systemImage: "plus.rectangle.on.rectangle"),
-        FinanceQuickAction(title: "Move Cash", detail: "Transfer reserve funds before the upcoming card payment hits.", systemImage: "arrow.left.arrow.right"),
-        FinanceQuickAction(title: "Export Report", detail: "Prepare the monthly close summary for operations and tax review.", systemImage: "square.and.arrow.up")
-    ]
-}
-
-struct FinanceWorkspaceState: Hashable, Sendable {
-    let monthlyIncome: String
-    let monthlySpend: String
-    let monthlySaved: String
-    let dueThisWeekCount: Int
-    let emergencyReserveCoverage: String
-    let creditUtilization: String
-    let upcomingTransfers: String
-    let primaryGoal: String
-    let riskProfile: String
-    let lastReviewDate: String
-    let accounts: [FinanceAccount]
-    let budgets: [FinanceBudget]
-    let transactions: [FinanceTransaction]
-    let pendingTransactions: [FinanceTransaction]
-    let recurringPayments: [FinanceRecurringPayment]
-    let insights: [FinanceInsight]
-    let advisorNotes: [String]
-    let budgetRules: [String]
-    let cashFlowBreakdown: [FinanceCashFlowBreakdown]
-
-    static let sample = FinanceWorkspaceState(
-        monthlyIncome: "$14,200",
-        monthlySpend: "$8,640",
-        monthlySaved: "$2,750",
-        dueThisWeekCount: 3,
-        emergencyReserveCoverage: "5.2 months",
-        creditUtilization: "18%",
-        upcomingTransfers: "$1,400 scheduled",
-        primaryGoal: "Build the Q3 operating reserve to $30,000.",
-        riskProfile: "Balanced growth",
-        lastReviewDate: "Apr 24",
-        accounts: [
-            FinanceAccount(name: "Operating Cash", institution: "Mercury", balance: "$18,420", availableLabel: "$18,420 available", owner: "Operations", kind: .checking),
-            FinanceAccount(name: "Growth Reserve", institution: "Wise", balance: "$9,200", availableLabel: "$9,200 available", owner: "Finance", kind: .savings),
-            FinanceAccount(name: "Team Card", institution: "Ramp", balance: "$-2,160", availableLabel: "$9,840 limit left", owner: "Ops + Marketing", kind: .credit)
-        ],
-        budgets: [
-            FinanceBudget(category: "Travel", limit: "$1,800", spent: "$1,420", remaining: "$380", note: "Conference travel is above the normal pacing curve.", recoveryPlan: "Hold non-essential trips until the close review.", progress: 0.79),
-            FinanceBudget(category: "Tools", limit: "$2,400", spent: "$1,180", remaining: "$1,220", note: "Tooling is healthy after vendor consolidation.", recoveryPlan: "Renegotiate the analytics renewal next week.", progress: 0.49),
-            FinanceBudget(category: "Marketing", limit: "$3,600", spent: "$2,940", remaining: "$660", note: "Paid acquisition is hot but still inside the target band.", recoveryPlan: "Shift 15% to creator partnerships if CAC rises again.", progress: 0.81)
-        ],
-        transactions: [
-            FinanceTransaction(merchant: "Stripe Payout", category: "Revenue", categoryIcon: "arrow.down.circle.fill", amount: "+$4,820", date: "Today", accountName: "Operating Cash", status: "Posted", note: "Weekly payout from subscriptions.", type: .income, accent: .green),
-            FinanceTransaction(merchant: "Notion", category: "Software", categoryIcon: "doc.text.fill", amount: "-$184", date: "Today", accountName: "Team Card", status: "Needs tagging", note: "Workspace renewal for product and ops.", type: .expense, accent: .blue),
-            FinanceTransaction(merchant: "Delta Airlines", category: "Travel", categoryIcon: "airplane", amount: "-$620", date: "Yesterday", accountName: "Team Card", status: "Manager review", note: "Flight for the Berlin customer summit.", type: .expense, accent: .orange),
-            FinanceTransaction(merchant: "Contractor Payroll", category: "Payroll", categoryIcon: "person.2.fill", amount: "-$2,400", date: "Apr 24", accountName: "Operating Cash", status: "Posted", note: "Design and content sprint payment.", type: .expense, accent: .purple)
-        ],
-        pendingTransactions: [
-            FinanceTransaction(merchant: "Slack", category: "Software", categoryIcon: "message.fill", amount: "-$92", date: "Pending", accountName: "Team Card", status: "Awaiting owner", note: "Needs workspace allocation.", type: .expense, accent: .blue),
-            FinanceTransaction(merchant: "Reimbursement", category: "Ops", categoryIcon: "arrow.uturn.left.circle", amount: "+$240", date: "Pending", accountName: "Operating Cash", status: "Needs receipt", note: "Office supply reimbursement from admin.", type: .income, accent: .green)
-        ],
-        recurringPayments: [
-            FinanceRecurringPayment(name: "Payroll Run", amount: "$6,800", dueDate: "Mon", account: "Operating Cash", systemImage: "building.2.fill", accent: .green),
-            FinanceRecurringPayment(name: "AWS", amount: "$480", dueDate: "Tue", account: "Team Card", systemImage: "server.rack", accent: .orange),
-            FinanceRecurringPayment(name: "Product Hunt Sponsorship", amount: "$350", dueDate: "Thu", account: "Team Card", systemImage: "megaphone.fill", accent: .pink)
-        ],
-        insights: [
-            FinanceInsight(title: "Travel needs intervention", detail: "Travel spend is 14% above the mid-month pace and will miss the target without a policy hold.", systemImage: "airplane.departure", level: "Watch", accent: .orange),
-            FinanceInsight(title: "Cash runway is healthy", detail: "Current reserve plus operating cash covers 5.2 months of base burn.", systemImage: "checkmark.shield", level: "Healthy", accent: .green),
-            FinanceInsight(title: "Marketing efficiency improved", detail: "Paid acquisition CAC fell 9% after moving spend into remarketing cohorts.", systemImage: "chart.line.uptrend.xyaxis", level: "Improve", accent: .blue)
-        ],
-        advisorNotes: [
-            "Delay non-essential travel approvals until the Q2 close is locked.",
-            "Move the next Stripe payout directly into reserve after payroll settles.",
-            "Review card tagging automation for software renewals."
-        ],
-        budgetRules: [
-            "Any category above 80% usage by mid-month requires an owner note.",
-            "All uncategorized card transactions must be resolved within 48 hours.",
-            "Reserve transfers happen before discretionary spend is approved."
-        ],
-        cashFlowBreakdown: [
-            FinanceCashFlowBreakdown(category: "Payroll", amount: "$6,800", systemImage: "person.2.fill", accent: .purple),
-            FinanceCashFlowBreakdown(category: "Subscriptions", amount: "$2,140", systemImage: "repeat.circle.fill", accent: .orange),
-            FinanceCashFlowBreakdown(category: "Operations", amount: "$1,120", systemImage: "shippingbox.fill", accent: .blue)
-        ]
-    )
-}
-
-struct FinanceAccount: Identifiable, Hashable, Sendable {
-    let id = UUID()
-    let name: String
-    let institution: String
-    let balance: String
-    let availableLabel: String
-    let owner: String
-    let kind: FinanceAccountKind
-}
-
-enum FinanceAccountKind: String, Hashable, Sendable {
+enum FinanceAccountKind {
     case checking
     case savings
     case credit
@@ -747,77 +612,145 @@ enum FinanceAccountKind: String, Hashable, Sendable {
         case .credit: return "Credit"
         }
     }
-
-    var systemImage: String {
-        switch self {
-        case .checking: return "banknote"
-        case .savings: return "lock.shield"
-        case .credit: return "creditcard.fill"
-        }
-    }
 }
 
-struct FinanceBudget: Identifiable, Hashable, Sendable {
-    let id = UUID()
-    let category: String
-    let limit: String
-    let spent: String
-    let remaining: String
-    let note: String
-    let recoveryPlan: String
-    let progress: Double
-
-    var statusLabel: String {
-        progress >= 0.8 ? "At risk" : "On track"
-    }
-
-    var statusColor: Color {
-        progress >= 0.8 ? .orange : .green
-    }
-}
-
-struct FinanceTransaction: Identifiable, Hashable, Sendable {
-    let id = UUID()
-    let merchant: String
-    let category: String
-    let categoryIcon: String
-    let amount: String
-    let date: String
-    let accountName: String
-    let status: String
-    let note: String
-    let type: FinanceTransactionType
-    let accent: Color
-}
-
-enum FinanceTransactionType: Hashable, Sendable {
+enum FinanceTransactionType {
     case income
     case expense
 }
 
-struct FinanceRecurringPayment: Identifiable, Hashable, Sendable {
+struct FinanceAccountRecord: Identifiable {
     let id = UUID()
     let name: String
-    let amount: String
-    let dueDate: String
-    let account: String
-    let systemImage: String
-    let accent: Color
+    let institution: String
+    var balance: Double
+    let owner: String
+    let kind: FinanceAccountKind
+
+    static let sampleAccounts: [FinanceAccountRecord] = [
+        FinanceAccountRecord(name: "Operating Cash", institution: "Mercury", balance: 18_420, owner: "Operations", kind: .checking),
+        FinanceAccountRecord(name: "Growth Reserve", institution: "Wise", balance: 9_200, owner: "Finance", kind: .savings),
+        FinanceAccountRecord(name: "Team Card", institution: "Ramp", balance: -2_160, owner: "Ops + Marketing", kind: .credit)
+    ]
 }
 
-struct FinanceInsight: Identifiable, Hashable, Sendable {
-    let id = UUID()
-    let title: String
-    let detail: String
-    let systemImage: String
-    let level: String
-    let accent: Color
-}
-
-struct FinanceCashFlowBreakdown: Identifiable, Hashable, Sendable {
+struct FinanceBudgetRecord: Identifiable {
     let id = UUID()
     let category: String
-    let amount: String
-    let systemImage: String
-    let accent: Color
+    var limit: Double
+    var spent: Double
+    let note: String
+
+    var remaining: Double { max(0, limit - spent) }
+    var progress: Double { limit == 0 ? 0 : min(1, spent / limit) }
+    var statusLabel: String { progress >= 0.85 ? "At risk" : "Healthy" }
+    var statusColor: Color { progress >= 0.85 ? .orange : .green }
+
+    static let sampleBudgets: [FinanceBudgetRecord] = [
+        FinanceBudgetRecord(category: "Travel", limit: 1_800, spent: 1_420, note: "Conference travel is above the normal pacing curve."),
+        FinanceBudgetRecord(category: "Tools", limit: 2_400, spent: 1_180, note: "Tooling is healthy after vendor consolidation."),
+        FinanceBudgetRecord(category: "Marketing", limit: 3_600, spent: 2_940, note: "Paid acquisition is hot but still inside target band."),
+        FinanceBudgetRecord(category: "Payroll", limit: 6_800, spent: 4_900, note: "Contractor and operator coverage stay inside monthly plan.")
+    ]
+}
+
+struct FinanceTransactionRecord: Identifiable {
+    let id = UUID()
+    let merchant: String
+    let category: String
+    let amount: Double
+    var date: String
+    let accountID: UUID
+    var status: String
+    var note: String
+    let type: FinanceTransactionType
+
+    var iconName: String {
+        switch category {
+        case "Revenue": return "arrow.down.circle.fill"
+        case "Travel": return "airplane"
+        case "Payroll": return "person.2.fill"
+        case "Tools": return "wrench.and.screwdriver.fill"
+        case "Marketing": return "megaphone.fill"
+        case "Transfer": return "arrow.left.arrow.right.circle.fill"
+        default: return "banknote.fill"
+        }
+    }
+
+    static let samplePosted: [FinanceTransactionRecord] = {
+        let accounts = FinanceAccountRecord.sampleAccounts
+        return [
+            FinanceTransactionRecord(merchant: "Stripe Payout", category: "Revenue", amount: 4_820, date: "Today", accountID: accounts[0].id, status: "Posted", note: "Weekly payout from subscriptions.", type: .income),
+            FinanceTransactionRecord(merchant: "Delta Airlines", category: "Travel", amount: -620, date: "Yesterday", accountID: accounts[2].id, status: "Posted", note: "Flight for Berlin customer summit.", type: .expense),
+            FinanceTransactionRecord(merchant: "Contractor Payroll", category: "Payroll", amount: -2_400, date: "Apr 24", accountID: accounts[0].id, status: "Posted", note: "Design and content sprint payment.", type: .expense)
+        ]
+    }()
+
+    static let samplePending: [FinanceTransactionRecord] = {
+        let accounts = FinanceAccountRecord.sampleAccounts
+        return [
+            FinanceTransactionRecord(merchant: "Notion", category: "Tools", amount: -184, date: "Pending", accountID: accounts[2].id, status: "Needs tagging", note: "Workspace renewal for product and ops.", type: .expense),
+            FinanceTransactionRecord(merchant: "Reimbursement", category: "Marketing", amount: 240, date: "Pending", accountID: accounts[0].id, status: "Needs receipt", note: "Office supply reimbursement from admin.", type: .income)
+        ]
+    }()
+}
+
+struct FinanceRecurringBillRecord: Identifiable {
+    let id = UUID()
+    let name: String
+    let amount: Double
+    let dueDate: String
+    let category: String
+    let accountID: UUID
+    var isPaid: Bool
+    let note: String
+
+    static let sampleBills: [FinanceRecurringBillRecord] = {
+        let accounts = FinanceAccountRecord.sampleAccounts
+        return [
+            FinanceRecurringBillRecord(name: "Payroll Run", amount: 6_800, dueDate: "Mon", category: "Payroll", accountID: accounts[0].id, isPaid: false, note: "Critical operator and contractor payroll run."),
+            FinanceRecurringBillRecord(name: "AWS", amount: 480, dueDate: "Tue", category: "Tools", accountID: accounts[2].id, isPaid: false, note: "Infrastructure bill for core product services."),
+            FinanceRecurringBillRecord(name: "Creator Sponsorship", amount: 350, dueDate: "Thu", category: "Marketing", accountID: accounts[2].id, isPaid: false, note: "Campaign payment for creator acquisition.")
+        ]
+    }()
+}
+
+struct FinanceTransactionComposer {
+    static let categories = ["Tools", "Travel", "Marketing", "Payroll", "Revenue", "Transfer"]
+
+    var merchant: String
+    var amountText: String
+    var selectedAccountID: UUID?
+    var category: String
+    var note: String
+    var type: FinanceTransactionType
+
+    init(
+        merchant: String = "",
+        amountText: String = "",
+        selectedAccountID: UUID? = FinanceAccountRecord.sampleAccounts.first?.id,
+        category: String = "Tools",
+        note: String = "",
+        type: FinanceTransactionType = .expense
+    ) {
+        self.merchant = merchant
+        self.amountText = amountText
+        self.selectedAccountID = selectedAccountID
+        self.category = category
+        self.note = note
+        self.type = type
+    }
+
+    static let sample = FinanceTransactionComposer()
+}
+
+private extension Double {
+    var currencyString: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = "USD"
+        formatter.maximumFractionDigits = 0
+        formatter.minimumFractionDigits = 0
+        return formatter.string(from: NSNumber(value: self)) ?? "$0"
+    }
 }

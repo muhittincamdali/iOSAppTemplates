@@ -1,58 +1,39 @@
 import SwiftUI
 import MessagingAppCore
 
-@available(iOS 18.0, macOS 15.0, *)
-public struct MessagingAppShell: App {
-    public init() {}
-
-    public var body: some Scene {
+@main
+struct MessagingApp: App {
+    var body: some Scene {
         WindowGroup {
-            MessagingWorkspaceRootView(
-                snapshot: .sample,
-                conversations: MessagingConversationCard.sampleCards,
-                actions: MessagingQuickAction.defaultActions,
-                health: .sample,
-                state: .sample
-            )
+            MessagingRuntimeRootView()
         }
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct MessagingWorkspaceRootView: View {
-    let snapshot: MessagingDashboardSnapshot
-    let conversations: [MessagingConversationCard]
-    let actions: [MessagingQuickAction]
-    let health: MessagingOperationalHealth
-    let state: MessagingWorkspaceState
+struct MessagingRuntimeRootView: View {
+    @StateObject private var store = MessagingCommandCenterStore()
 
     var body: some View {
         TabView {
-            MessagingInboxView(
-                snapshot: snapshot,
-                conversations: conversations,
-                actions: actions,
-                health: health,
-                state: state
-            )
-            .tabItem {
-                Image(systemName: "tray.full.fill")
-                Text("Inbox")
-            }
+            MessagingInboxWorkspaceView(store: store)
+                .tabItem {
+                    Image(systemName: "tray.full.fill")
+                    Text("Inbox")
+                }
 
-            MessagingRoomsView(state: state)
+            MessagingRoomsWorkspaceView(store: store)
                 .tabItem {
                     Image(systemName: "person.3.fill")
                     Text("Rooms")
                 }
 
-            MessagingSafetyView(health: health, state: state)
+            MessagingSafetyWorkspaceView(store: store)
                 .tabItem {
                     Image(systemName: "shield.lefthalf.filled")
                     Text("Safety")
                 }
 
-            MessagingProfileView(snapshot: snapshot, health: health, state: state)
+            MessagingProfileWorkspaceView(store: store)
                 .tabItem {
                     Image(systemName: "person.crop.circle.fill")
                     Text("Profile")
@@ -62,23 +43,158 @@ struct MessagingWorkspaceRootView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct MessagingInboxView: View {
-    let snapshot: MessagingDashboardSnapshot
-    let conversations: [MessagingConversationCard]
-    let actions: [MessagingQuickAction]
-    let health: MessagingOperationalHealth
-    let state: MessagingWorkspaceState
+@MainActor
+final class MessagingCommandCenterStore: ObservableObject {
+    @Published var threads: [MessagingThreadRecord] = MessagingThreadRecord.sampleThreads
+    @Published var rooms: [MessagingRoomRecord] = MessagingRoomRecord.sampleRooms
+    @Published var safetyCases: [MessagingSafetyCaseRecord] = MessagingSafetyCaseRecord.sampleCases
+    @Published var selectedFilter: MessagingInboxFilter = .priority
+    @Published var operatorNote = "Chargeback, creator abuse, and payout phishing stay under ten-minute escalation SLA."
+
+    let operatorName = "Ivy Bennett"
+    let coverageShift = "EU + US overlap shift"
+
+    var filteredThreads: [MessagingThreadRecord] {
+        threads.filter { selectedFilter.includes($0) }
+    }
+
+    var priorityThread: MessagingThreadRecord? {
+        threads.first(where: \.isPinned) ?? threads.sorted { $0.unreadCount > $1.unreadCount }.first
+    }
+
+    var unreadCount: Int {
+        threads.reduce(0) { $0 + $1.unreadCount }
+    }
+
+    var escalatedCaseCount: Int {
+        safetyCases.filter { $0.status == .escalated }.count
+    }
+
+    var resolvedCaseCount: Int {
+        safetyCases.filter { $0.status == .resolved }.count
+    }
+
+    var activeRoomRequests: Int {
+        rooms.reduce(0) { $0 + $1.pendingRequests }
+    }
+
+    var controlCenterHeadline: String {
+        if escalatedCaseCount > 0 {
+            return "\(escalatedCaseCount) trust escalations need active coverage."
+        }
+        if unreadCount > 10 {
+            return "Inbox pressure is rising. Clear support and creator queues now."
+        }
+        return "Inbox is stable and room moderation is under control."
+    }
+
+    func thread(id: UUID) -> MessagingThreadRecord? {
+        threads.first(where: { $0.id == id })
+    }
+
+    func updateDraft(_ threadID: UUID, text: String) {
+        guard let index = threads.firstIndex(where: { $0.id == threadID }) else { return }
+        threads[index].draftReply = text
+    }
+
+    func togglePin(_ threadID: UUID) {
+        guard let index = threads.firstIndex(where: { $0.id == threadID }) else { return }
+        threads[index].isPinned.toggle()
+    }
+
+    func sendReply(to threadID: UUID) {
+        guard let index = threads.firstIndex(where: { $0.id == threadID }) else { return }
+        let draft = threads[index].draftReply.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !draft.isEmpty else { return }
+
+        threads[index].messages.append(
+            MessagingThreadMessage(author: operatorName, timestamp: "Now", body: draft)
+        )
+        threads[index].latestMessage = draft
+        threads[index].lastSender = operatorName
+        threads[index].lastActive = "Now"
+        threads[index].unreadCount = 0
+        threads[index].status = .awaitingCustomer
+        threads[index].draftReply = ""
+    }
+
+    func resolveThread(_ threadID: UUID) {
+        guard let index = threads.firstIndex(where: { $0.id == threadID }) else { return }
+        threads[index].status = .resolved
+        threads[index].unreadCount = 0
+        threads[index].lastActive = "Resolved"
+        threads[index].latestMessage = "Resolution sent with final policy and next-step summary."
+        threads[index].messages.append(
+            MessagingThreadMessage(author: operatorName, timestamp: "Now", body: "Resolution sent with final policy and next-step summary.")
+        )
+    }
+
+    func postRoomUpdate(_ roomID: UUID) {
+        guard let index = rooms.firstIndex(where: { $0.id == roomID }) else { return }
+        let roomName = rooms[index].name
+        let update = rooms[index].operatorDraft.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !update.isEmpty else { return }
+
+        rooms[index].lastUpdate = "Posted now"
+        rooms[index].activity = "Fresh operator broadcast"
+        rooms[index].pendingRequests = max(0, rooms[index].pendingRequests - 1)
+        rooms[index].announcements.insert(update, at: 0)
+        rooms[index].operatorDraft = ""
+
+        if let threadIndex = threads.firstIndex(where: { $0.roomName == roomName }) {
+            threads[threadIndex].messages.append(
+                MessagingThreadMessage(author: operatorName, timestamp: "Now", body: update)
+            )
+            threads[threadIndex].latestMessage = update
+            threads[threadIndex].lastSender = operatorName
+            threads[threadIndex].lastActive = "Now"
+            threads[threadIndex].status = .monitoring
+        }
+    }
+
+    func assignModerator(_ roomID: UUID) {
+        guard let index = rooms.firstIndex(where: { $0.id == roomID }) else { return }
+        rooms[index].pendingRequests = max(0, rooms[index].pendingRequests - 2)
+        rooms[index].activity = "Extra moderator assigned"
+    }
+
+    func resolveSafetyCase(_ caseID: UUID) {
+        guard let index = safetyCases.firstIndex(where: { $0.id == caseID }) else { return }
+        safetyCases[index].status = .resolved
+        safetyCases[index].nextAction = "User warned, evidence archived, and linked thread returned to monitored state."
+        syncThreadStatus(for: safetyCases[index].threadTitle, to: .monitoring)
+    }
+
+    func escalateSafetyCase(_ caseID: UUID) {
+        guard let index = safetyCases.firstIndex(where: { $0.id == caseID }) else { return }
+        safetyCases[index].status = .escalated
+        safetyCases[index].nextAction = "Escalated to trust lead and legal review with transcript export."
+        syncThreadStatus(for: safetyCases[index].threadTitle, to: .escalated)
+    }
+
+    private func syncThreadStatus(for title: String, to status: MessagingThreadStatus) {
+        guard let index = threads.firstIndex(where: { $0.title == title }) else { return }
+        threads[index].status = status
+        threads[index].isPinned = true
+        threads[index].lastActive = "Escalated"
+    }
+}
+
+struct MessagingInboxWorkspaceView: View {
+    @ObservedObject var store: MessagingCommandCenterStore
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    MessagingHeroCard(snapshot: snapshot, health: health, state: state)
-                    MessagingQuickActionGrid(actions: actions)
-                    MessagingPriorityThreadCard(thread: state.priorityThread)
-                    MessagingConversationLane(title: "Priority Inbox", threads: state.priorityThreads)
-                    MessagingConversationLane(title: "Recent Replies", threads: state.recentThreads)
+                    MessagingHeroCard(store: store)
+                    MessagingInboxFilterStrip(store: store)
+
+                    if let thread = store.priorityThread {
+                        MessagingPriorityThreadCard(store: store, thread: thread)
+                    }
+
+                    MessagingThreadLane(title: "Active Threads", threads: store.filteredThreads, store: store)
                 }
                 .padding(16)
             }
@@ -87,11 +203,8 @@ struct MessagingInboxView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct MessagingHeroCard: View {
-    let snapshot: MessagingDashboardSnapshot
-    let health: MessagingOperationalHealth
-    let state: MessagingWorkspaceState
+    @ObservedObject var store: MessagingCommandCenterStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -99,27 +212,18 @@ struct MessagingHeroCard: View {
                 .font(.headline)
                 .foregroundStyle(.secondary)
 
-            Text(state.operatorHeadline)
+            Text(store.controlCenterHeadline)
                 .font(.system(size: 30, weight: .bold, design: .rounded))
-            Text(state.statusNote)
+
+            Text(store.operatorNote)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
             HStack(spacing: 12) {
-                MessagingMetricChip(title: "Unread", value: "\(snapshot.unreadMessages)")
-                MessagingMetricChip(title: "Threads", value: "\(snapshot.activeThreads)")
-                MessagingMetricChip(title: "Rooms", value: "\(snapshot.communityRooms)")
+                MessagingMetricChip(title: "Unread", value: "\(store.unreadCount)")
+                MessagingMetricChip(title: "Cases", value: "\(store.escalatedCaseCount)")
+                MessagingMetricChip(title: "Room Requests", value: "\(store.activeRoomRequests)")
             }
-
-            HStack {
-                Label(snapshot.syncHealth, systemImage: "antenna.radiowaves.left.and.right")
-                Spacer()
-                Text("\(health.messageDeliveryLatencyMs) ms")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.indigo)
-            }
-            .font(.caption)
-            .foregroundStyle(.secondary)
         }
         .padding(20)
         .background(
@@ -133,7 +237,6 @@ struct MessagingHeroCard: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct MessagingMetricChip: View {
     let title: String
     let value: String
@@ -153,56 +256,50 @@ struct MessagingMetricChip: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct MessagingQuickActionGrid: View {
-    let actions: [MessagingQuickAction]
+struct MessagingInboxFilterStrip: View {
+    @ObservedObject var store: MessagingCommandCenterStore
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Quick Actions")
-                .font(.title3.weight(.bold))
-
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                ForEach(actions) { action in
-                    VStack(alignment: .leading, spacing: 10) {
-                        Image(systemName: action.systemImage)
-                            .font(.title3)
-                            .foregroundStyle(.indigo)
-                        Text(action.title)
-                            .font(.subheadline.weight(.semibold))
-                        Text(action.detail)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                ForEach(MessagingInboxFilter.allCases) { filter in
+                    Button(filter.title) {
+                        store.selectedFilter = filter
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .buttonStyle(.borderedProminent)
+                    .tint(store.selectedFilter == filter ? .indigo : .gray.opacity(0.35))
                 }
             }
         }
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct MessagingPriorityThreadCard: View {
-    let thread: MessagingThread
+    @ObservedObject var store: MessagingCommandCenterStore
+    let thread: MessagingThreadRecord
 
     var body: some View {
         NavigationLink {
-            MessagingThreadDetailView(thread: thread)
+            MessagingThreadDetailView(store: store, threadID: thread.id)
         } label: {
             VStack(alignment: .leading, spacing: 12) {
-                Text("Priority Thread")
-                    .font(.title3.weight(.bold))
-                    .foregroundStyle(.primary)
+                HStack {
+                    Text("Priority Thread")
+                        .font(.title3.weight(.bold))
+                    Spacer()
+                    Text(thread.status.label)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(thread.status.tint)
+                }
+
                 Text(thread.title)
                     .font(.headline)
+                    .foregroundStyle(.primary)
                 Text(thread.latestMessage)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
+
                 HStack {
                     Label("\(thread.members) members", systemImage: "person.2.fill")
                     Spacer()
@@ -219,10 +316,10 @@ struct MessagingPriorityThreadCard: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct MessagingConversationLane: View {
+struct MessagingThreadLane: View {
     let title: String
-    let threads: [MessagingThread]
+    let threads: [MessagingThreadRecord]
+    @ObservedObject var store: MessagingCommandCenterStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -231,32 +328,34 @@ struct MessagingConversationLane: View {
 
             ForEach(threads) { thread in
                 NavigationLink {
-                    MessagingThreadDetailView(thread: thread)
+                    MessagingThreadDetailView(store: store, threadID: thread.id)
                 } label: {
-                    VStack(alignment: .leading, spacing: 6) {
+                    VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text(thread.title)
                                 .font(.headline)
                                 .foregroundStyle(.primary)
                             Spacer()
-                            if thread.unreadCount > 0 {
-                                Text("\(thread.unreadCount)")
-                                    .font(.caption2.weight(.bold))
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 4)
-                                    .background(.indigo.opacity(0.16))
-                                    .clipShape(Capsule())
-                            }
+                            Text(thread.status.label)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(thread.status.tint)
                         }
+
                         Text(thread.latestMessage)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .lineLimit(2)
-                        Text("\(thread.lastSender) • \(thread.lastActive)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+
+                        HStack {
+                            Text("\(thread.lastSender) • \(thread.lastActive)")
+                            Spacer()
+                            if thread.unreadCount > 0 {
+                                Text("\(thread.unreadCount) unread")
+                            }
+                        }
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
                     .background(Color(.secondarySystemBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -267,19 +366,26 @@ struct MessagingConversationLane: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct MessagingRoomsView: View {
-    let state: MessagingWorkspaceState
+struct MessagingRoomsWorkspaceView: View {
+    @ObservedObject var store: MessagingCommandCenterStore
 
     var body: some View {
         NavigationStack {
             List {
-                ForEach(state.rooms) { room in
+                ForEach(store.rooms) { room in
                     NavigationLink {
-                        MessagingRoomDetailView(room: room)
+                        MessagingRoomDetailView(store: store, roomID: room.id)
                     } label: {
                         VStack(alignment: .leading, spacing: 6) {
-                            Text(room.name)
+                            HStack {
+                                Text(room.name)
+                                Spacer()
+                                if room.pendingRequests > 0 {
+                                    Text("\(room.pendingRequests) open")
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(.orange)
+                                }
+                            }
                             Text(room.description)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
@@ -295,23 +401,68 @@ struct MessagingRoomsView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct MessagingSafetyView: View {
-    let health: MessagingOperationalHealth
-    let state: MessagingWorkspaceState
+struct MessagingRoomDetailView: View {
+    @ObservedObject var store: MessagingCommandCenterStore
+    let roomID: UUID
+
+    var body: some View {
+        if let room = store.rooms.first(where: { $0.id == roomID }) {
+            List {
+                Section("Room Overview") {
+                    Text(room.description)
+                    Label("\(room.members) members", systemImage: "person.3.fill")
+                    Label(room.activity, systemImage: "waveform.path.ecg")
+                    Label(room.lastUpdate, systemImage: "clock.fill")
+                }
+
+                Section("Operator Actions") {
+                    Button("Post Room Update") {
+                        store.postRoomUpdate(roomID)
+                    }
+                    Button("Assign Extra Moderator") {
+                        store.assignModerator(roomID)
+                    }
+                }
+
+                Section("Broadcast Draft") {
+                    TextEditor(
+                        text: Binding(
+                            get: { store.rooms.first(where: { $0.id == roomID })?.operatorDraft ?? "" },
+                            set: { value in
+                                guard let index = store.rooms.firstIndex(where: { $0.id == roomID }) else { return }
+                                store.rooms[index].operatorDraft = value
+                            }
+                        )
+                    )
+                    .frame(minHeight: 120)
+                }
+
+                Section("Recent Broadcasts") {
+                    ForEach(room.announcements, id: \.self) { announcement in
+                        Text(announcement)
+                    }
+                }
+            }
+            .navigationTitle(room.name)
+        }
+    }
+}
+
+struct MessagingSafetyWorkspaceView: View {
+    @ObservedObject var store: MessagingCommandCenterStore
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Moderation Queue") {
-                    ForEach(state.safetyCases) { safetyCase in
-                        VStack(alignment: .leading, spacing: 6) {
+                    ForEach(store.safetyCases) { safetyCase in
+                        VStack(alignment: .leading, spacing: 8) {
                             HStack {
                                 Text(safetyCase.title)
                                 Spacer()
-                                Text(safetyCase.severity)
+                                Text(safetyCase.status.label)
                                     .font(.caption.weight(.semibold))
-                                    .foregroundStyle(safetyCase.severityColor)
+                                    .foregroundStyle(safetyCase.status.tint)
                             }
                             Text(safetyCase.summary)
                                 .font(.caption)
@@ -319,14 +470,26 @@ struct MessagingSafetyView: View {
                             Text(safetyCase.nextAction)
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
+                            HStack {
+                                Button("Resolve") {
+                                    store.resolveSafetyCase(safetyCase.id)
+                                }
+                                .buttonStyle(.borderedProminent)
+
+                                Button("Escalate") {
+                                    store.escalateSafetyCase(safetyCase.id)
+                                }
+                                .buttonStyle(.bordered)
+                            }
                         }
+                        .padding(.vertical, 4)
                     }
                 }
 
-                Section("Operational Health") {
-                    Label("\(health.moderationQueue) active reviews", systemImage: "tray.full.fill")
-                    Label("\(health.messageDeliveryLatencyMs) ms delivery latency", systemImage: "bolt.horizontal.circle.fill")
-                    Label(health.safetyChecksReady ? "Safety checks ready" : "Safety checks degraded", systemImage: health.safetyChecksReady ? "checkmark.shield.fill" : "exclamationmark.shield.fill")
+                Section("Coverage") {
+                    Label("\(store.resolvedCaseCount) resolved today", systemImage: "checkmark.shield.fill")
+                    Label("\(store.escalatedCaseCount) escalated cases", systemImage: "exclamationmark.shield.fill")
+                    Label(store.operatorNote, systemImage: "text.bubble.fill")
                 }
             }
             .navigationTitle("Safety")
@@ -334,27 +497,25 @@ struct MessagingSafetyView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct MessagingProfileView: View {
-    let snapshot: MessagingDashboardSnapshot
-    let health: MessagingOperationalHealth
-    let state: MessagingWorkspaceState
+struct MessagingProfileWorkspaceView: View {
+    @ObservedObject var store: MessagingCommandCenterStore
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Operator") {
-                    Label(state.operatorName, systemImage: "person.crop.circle.fill")
-                    Label(state.coverageShift, systemImage: "clock.fill")
+                    Label(store.operatorName, systemImage: "person.crop.circle.fill")
+                    Label(store.coverageShift, systemImage: "clock.fill")
                 }
-                Section("Messaging Metrics") {
-                    Label("\(snapshot.activeThreads) active threads", systemImage: "bubble.left.and.bubble.right.fill")
-                    Label("\(snapshot.communityRooms) community rooms", systemImage: "person.3.fill")
-                    Label("\(state.resolutionRate) resolution rate", systemImage: "chart.line.uptrend.xyaxis")
+
+                Section("Performance") {
+                    Label("\(store.unreadCount) unread messages", systemImage: "tray.full.fill")
+                    Label("\(store.activeRoomRequests) room requests", systemImage: "person.3.fill")
+                    Label("\(store.resolvedCaseCount) trust cases resolved", systemImage: "shield.checkered")
                 }
-                Section("Trust") {
-                    Label("\(health.moderationQueue) cases waiting", systemImage: "shield.lefthalf.filled")
-                    Label(state.escalationPolicy, systemImage: "exclamationmark.bubble.fill")
+
+                Section("Operating Rules") {
+                    Text(store.operatorNote)
                 }
             }
             .navigationTitle("Profile")
@@ -362,190 +523,311 @@ struct MessagingProfileView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct MessagingThreadDetailView: View {
-    let thread: MessagingThread
+    @ObservedObject var store: MessagingCommandCenterStore
+    let threadID: UUID
 
     var body: some View {
-        List {
-            Section("Thread") {
-                Text(thread.title)
-                    .font(.title3.weight(.bold))
-                Text(thread.latestMessage)
-                    .foregroundStyle(.secondary)
-            }
-            Section("Recent Messages") {
-                ForEach(thread.messages) { message in
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Text(message.author)
-                                .font(.headline)
-                            Spacer()
-                            Text(message.timestamp)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+        if let thread = store.thread(id: threadID) {
+            List {
+                Section("Thread") {
+                    Text(thread.title)
+                        .font(.title3.weight(.bold))
+                    Text(thread.latestMessage)
+                        .foregroundStyle(.secondary)
+                    Label(thread.status.label, systemImage: thread.status.systemImage)
+                        .foregroundStyle(thread.status.tint)
+                }
+
+                Section("Recent Messages") {
+                    ForEach(thread.messages) { message in
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text(message.author)
+                                    .font(.headline)
+                                Spacer()
+                                Text(message.timestamp)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Text(message.body)
+                                .font(.subheadline)
                         }
-                        Text(message.body)
-                            .font(.subheadline)
+                        .padding(.vertical, 4)
                     }
-                    .padding(.vertical, 4)
+                }
+
+                Section("Composer") {
+                    TextEditor(
+                        text: Binding(
+                            get: { store.thread(id: threadID)?.draftReply ?? "" },
+                            set: { store.updateDraft(threadID, text: $0) }
+                        )
+                    )
+                    .frame(minHeight: 120)
+
+                    Button("Send Reply") {
+                        store.sendReply(to: threadID)
+                    }
+                    .buttonStyle(.borderedProminent)
+
+                    Button("Resolve Thread") {
+                        store.resolveThread(threadID)
+                    }
+                    .buttonStyle(.bordered)
+
+                    Button(thread.isPinned ? "Unpin Thread" : "Pin Thread") {
+                        store.togglePin(threadID)
+                    }
+                    .buttonStyle(.borderless)
                 }
             }
-            Section("Composer") {
-                Label(thread.draft, systemImage: "square.and.pencil")
-                Label(thread.replyMode, systemImage: "arrowshape.turn.up.left.fill")
-            }
+            .navigationTitle("Thread")
         }
-        .navigationTitle("Thread")
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct MessagingRoomDetailView: View {
-    let room: MessagingRoom
+enum MessagingInboxFilter: String, CaseIterable, Identifiable {
+    case priority
+    case support
+    case community
+    case escalated
 
-    var body: some View {
-        List {
-            Section("Room Overview") {
-                Text(room.description)
-                Label("\(room.members) members", systemImage: "person.3.fill")
-                Label(room.activity, systemImage: "waveform.path.ecg")
-            }
-            Section("Rules") {
-                ForEach(room.rules, id: \.self) { rule in
-                    Label(rule, systemImage: "checkmark.circle.fill")
-                }
-            }
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .priority: return "Priority"
+        case .support: return "Support"
+        case .community: return "Community"
+        case .escalated: return "Escalated"
         }
-        .navigationTitle(room.name)
+    }
+
+    func includes(_ thread: MessagingThreadRecord) -> Bool {
+        switch self {
+        case .priority:
+            return thread.isPinned || thread.unreadCount > 0
+        case .support:
+            return thread.kind == .support
+        case .community:
+            return thread.kind == .community
+        case .escalated:
+            return thread.status == .escalated
+        }
     }
 }
 
-public struct MessagingQuickAction: Identifiable, Hashable, Sendable {
-    public let id: UUID
-    public let title: String
-    public let detail: String
-    public let systemImage: String
-
-    public init(
-        id: UUID = UUID(),
-        title: String,
-        detail: String,
-        systemImage: String
-    ) {
-        self.id = id
-        self.title = title
-        self.detail = detail
-        self.systemImage = systemImage
-    }
-
-    public static let defaultActions: [MessagingQuickAction] = [
-        MessagingQuickAction(title: "Open Priority Inbox", detail: "Review high-signal customer and team threads before the handoff window.", systemImage: "tray.full.fill"),
-        MessagingQuickAction(title: "Review Community Rooms", detail: "Check rooms with elevated activity and unanswered moderator requests.", systemImage: "person.3.fill"),
-        MessagingQuickAction(title: "Moderate Safety Queue", detail: "Resolve abusive content, spam patterns and escalation requests quickly.", systemImage: "shield.lefthalf.filled")
-    ]
+enum MessagingThreadKind {
+    case support
+    case community
+    case internalOps
 }
 
-struct MessagingWorkspaceState {
-    let operatorHeadline: String
-    let statusNote: String
-    let operatorName: String
-    let coverageShift: String
-    let resolutionRate: String
-    let escalationPolicy: String
-    let priorityThread: MessagingThread
-    let priorityThreads: [MessagingThread]
-    let recentThreads: [MessagingThread]
-    let rooms: [MessagingRoom]
-    let safetyCases: [MessagingSafetyCase]
+enum MessagingThreadStatus {
+    case awaitingReply
+    case awaitingCustomer
+    case monitoring
+    case escalated
+    case resolved
 
-    static let sample = MessagingWorkspaceState(
-        operatorHeadline: "Priority inbox is under control",
-        statusNote: "Customer escalations are down, but creator community volume is rising into the evening shift.",
-        operatorName: "Ivy Bennett",
-        coverageShift: "EU + US overlap shift",
-        resolutionRate: "94% same-day",
-        escalationPolicy: "Escalate fraud, threats and minors policy breaches in under 10 min",
-        priorityThread: MessagingThread(
+    var label: String {
+        switch self {
+        case .awaitingReply: return "Awaiting reply"
+        case .awaitingCustomer: return "Awaiting customer"
+        case .monitoring: return "Monitoring"
+        case .escalated: return "Escalated"
+        case .resolved: return "Resolved"
+        }
+    }
+
+    var tint: Color {
+        switch self {
+        case .awaitingReply: return .orange
+        case .awaitingCustomer: return .blue
+        case .monitoring: return .green
+        case .escalated: return .red
+        case .resolved: return .secondary
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .awaitingReply: return "bubble.left.and.exclamationmark.bubble.right.fill"
+        case .awaitingCustomer: return "arrow.uturn.left.circle.fill"
+        case .monitoring: return "eye.fill"
+        case .escalated: return "exclamationmark.triangle.fill"
+        case .resolved: return "checkmark.circle.fill"
+        }
+    }
+}
+
+enum MessagingSafetyCaseStatus {
+    case open
+    case resolved
+    case escalated
+
+    var label: String {
+        switch self {
+        case .open: return "Open"
+        case .resolved: return "Resolved"
+        case .escalated: return "Escalated"
+        }
+    }
+
+    var tint: Color {
+        switch self {
+        case .open: return .orange
+        case .resolved: return .green
+        case .escalated: return .red
+        }
+    }
+}
+
+struct MessagingThreadRecord: Identifiable {
+    let id = UUID()
+    let title: String
+    let roomName: String?
+    let members: Int
+    let kind: MessagingThreadKind
+    var unreadCount: Int
+    var lastSender: String
+    var lastActive: String
+    var latestMessage: String
+    var draftReply: String
+    var status: MessagingThreadStatus
+    var isPinned: Bool
+    var messages: [MessagingThreadMessage]
+
+    static let sampleThreads: [MessagingThreadRecord] = [
+        MessagingThreadRecord(
             title: "Support Escalations",
+            roomName: nil,
             members: 6,
+            kind: .support,
             unreadCount: 4,
             lastSender: "Maya",
             lastActive: "2 min ago",
-            latestMessage: "Customer needs order refund confirmation before chargeback deadline.",
-            draft: "Routing finance confirmation and attaching refund policy excerpt.",
-            replyMode: "Reply to support squad",
+            latestMessage: "Customer needs refund confirmation before the chargeback deadline.",
+            draftReply: "Finance reversal is complete. Sending the receipt trail and dispute-safe wording now.",
+            status: .awaitingReply,
+            isPinned: true,
             messages: [
-                MessagingMessage(author: "Maya", timestamp: "17:18", body: "Customer needs order refund confirmation before chargeback deadline."),
-                MessagingMessage(author: "Owen", timestamp: "17:14", body: "Finance already reversed the charge, we only need the receipt trail."),
-                MessagingMessage(author: "Ivy", timestamp: "17:09", body: "Drafting the final response and adding account notes.")
+                .init(author: "Maya", timestamp: "17:18", body: "Customer needs refund confirmation before the chargeback deadline."),
+                .init(author: "Owen", timestamp: "17:14", body: "Finance already reversed the charge, we only need the receipt trail."),
+                .init(author: "Ivy", timestamp: "17:09", body: "Drafting the final response and adding account notes.")
             ]
         ),
-        priorityThreads: [
-            MessagingThread(title: "Support Escalations", members: 6, unreadCount: 4, lastSender: "Maya", lastActive: "2 min ago", latestMessage: "Customer needs order refund confirmation before chargeback deadline.", draft: "Routing finance confirmation and attaching refund policy excerpt.", replyMode: "Reply to support squad", messages: []),
-            MessagingThread(title: "Core Product Team", members: 12, unreadCount: 2, lastSender: "Eli", lastActive: "8 min ago", latestMessage: "Need final copy approval for the new onboarding checkpoint.", draft: "Sharing revised copy with analytics context.", replyMode: "Reply in thread", messages: [])
-        ],
-        recentThreads: [
-            MessagingThread(title: "Creator Community", members: 184, unreadCount: 12, lastSender: "Tara", lastActive: "12 min ago", latestMessage: "Creators are asking for clearer payout timing after yesterday’s incident.", draft: "Posting the payout FAQ and status page link.", replyMode: "Broadcast to room", messages: []),
-            MessagingThread(title: "Ops Hand-off", members: 9, unreadCount: 0, lastSender: "Jon", lastActive: "21 min ago", latestMessage: "Evening shift inherits three moderation reviews and one policy escalation.", draft: "Summarize unresolved tickets for handoff.", replyMode: "Send handoff note", messages: [])
-        ],
-        rooms: [
-            MessagingRoom(name: "Creator Community", description: "High-volume community room for active creators and moderators.", members: 184, activity: "Peak activity 18:00-20:00", rules: ["Pin payout updates quickly", "Escalate threats immediately", "Move billing questions into support thread"]),
-            MessagingRoom(name: "Launch War Room", description: "Cross-functional room for incident triage and release-day decisions.", members: 23, activity: "War-room standby", rules: ["Keep updates timestamped", "One owner per blocker", "Close with rollback status"]),
-            MessagingRoom(name: "VIP Accounts", description: "Dedicated white-glove support room for enterprise and creator partners.", members: 14, activity: "Low volume, high priority", rules: ["Acknowledge within 5 min", "Tag account owner on every escalation"])
-        ],
-        safetyCases: [
-            MessagingSafetyCase(title: "Spam burst in Creator Community", severity: "High", summary: "Thirty-seven duplicate invite links posted in under six minutes.", nextAction: "Auto-mute new accounts and promote one moderator."),
-            MessagingSafetyCase(title: "Harassment report in VIP Accounts", severity: "Critical", summary: "Partner reported direct threats in a private support thread.", nextAction: "Freeze thread, export transcript and page trust lead."),
-            MessagingSafetyCase(title: "Payment phishing attempt", severity: "Medium", summary: "Suspicious fake refund instructions shared in a support DM.", nextAction: "Warn affected users and remove message template.")
-        ]
-    )
+        MessagingThreadRecord(
+            title: "Creator Community",
+            roomName: "Creator Community",
+            members: 184,
+            kind: .community,
+            unreadCount: 12,
+            lastSender: "Tara",
+            lastActive: "12 min ago",
+            latestMessage: "Creators are asking for clearer payout timing after yesterday’s incident.",
+            draftReply: "Posting the payout FAQ, SLA, and incident recap now.",
+            status: .monitoring,
+            isPinned: false,
+            messages: [
+                .init(author: "Tara", timestamp: "16:58", body: "Creators are asking for clearer payout timing after yesterday’s incident."),
+                .init(author: "Ivy", timestamp: "16:51", body: "Preparing a broadcast with the payout FAQ and support lane.")
+            ]
+        ),
+        MessagingThreadRecord(
+            title: "Launch War Room",
+            roomName: "Launch War Room",
+            members: 23,
+            kind: .internalOps,
+            unreadCount: 3,
+            lastSender: "Eli",
+            lastActive: "8 min ago",
+            latestMessage: "Need final copy approval for the new onboarding checkpoint before rollout.",
+            draftReply: "Approving copy after analytics review and rollback note update.",
+            status: .awaitingReply,
+            isPinned: false,
+            messages: [
+                .init(author: "Eli", timestamp: "17:12", body: "Need final copy approval for the new onboarding checkpoint before rollout."),
+                .init(author: "Ivy", timestamp: "17:03", body: "Reviewing rollout note, metrics guardrail, and incident fallback.")
+            ]
+        )
+    ]
 }
 
-struct MessagingThread: Identifiable, Hashable {
-    let id = UUID()
-    let title: String
-    let members: Int
-    let unreadCount: Int
-    let lastSender: String
-    let lastActive: String
-    let latestMessage: String
-    let draft: String
-    let replyMode: String
-    let messages: [MessagingMessage]
-}
-
-struct MessagingMessage: Identifiable, Hashable {
+struct MessagingThreadMessage: Identifiable {
     let id = UUID()
     let author: String
     let timestamp: String
     let body: String
 }
 
-struct MessagingRoom: Identifiable, Hashable {
+struct MessagingRoomRecord: Identifiable {
     let id = UUID()
     let name: String
     let description: String
     let members: Int
-    let activity: String
-    let rules: [String]
+    var activity: String
+    var pendingRequests: Int
+    var lastUpdate: String
+    var operatorDraft: String
+    var announcements: [String]
+
+    static let sampleRooms: [MessagingRoomRecord] = [
+        MessagingRoomRecord(
+            name: "Creator Community",
+            description: "High-volume community room for active creators and moderators.",
+            members: 184,
+            activity: "Peak activity 18:00-20:00",
+            pendingRequests: 5,
+            lastUpdate: "FAQ posted 42 min ago",
+            operatorDraft: "Posting updated payout FAQ with precise settlement windows and escalation form.",
+            announcements: [
+                "Reminder: route threats and payment fraud into the trust escalation lane immediately.",
+                "Pinning the revised payout timing note until the incident closes."
+            ]
+        ),
+        MessagingRoomRecord(
+            name: "Launch War Room",
+            description: "Cross-functional room for incident triage and release-day decisions.",
+            members: 23,
+            activity: "War-room standby",
+            pendingRequests: 2,
+            lastUpdate: "Rollback guardrail synced 19 min ago",
+            operatorDraft: "Approving the onboarding rollout note and attaching rollback thresholds.",
+            announcements: [
+                "One owner per blocker. Close every thread with rollback status.",
+                "Keep updates timestamped once the release window opens."
+            ]
+        )
+    ]
 }
 
-struct MessagingSafetyCase: Identifiable, Hashable {
+struct MessagingSafetyCaseRecord: Identifiable {
     let id = UUID()
     let title: String
-    let severity: String
     let summary: String
-    let nextAction: String
+    let severity: String
+    let threadTitle: String
+    var status: MessagingSafetyCaseStatus
+    var nextAction: String
 
-    var severityColor: Color {
-        switch severity {
-        case "Critical":
-            return .red
-        case "High":
-            return .orange
-        default:
-            return .yellow
-        }
-    }
+    static let sampleCases: [MessagingSafetyCaseRecord] = [
+        MessagingSafetyCaseRecord(
+            title: "Spam burst in Creator Community",
+            summary: "Thirty-seven duplicate invite links posted in under six minutes.",
+            severity: "High",
+            threadTitle: "Creator Community",
+            status: .open,
+            nextAction: "Mute new accounts, remove links, and issue a room-wide trust notice."
+        ),
+        MessagingSafetyCaseRecord(
+            title: "Harassment report in VIP support lane",
+            summary: "Partner reported direct threats in a private support thread.",
+            severity: "Critical",
+            threadTitle: "Support Escalations",
+            status: .open,
+            nextAction: "Freeze the thread, export transcript, and page the trust lead."
+        )
+    ]
 }
