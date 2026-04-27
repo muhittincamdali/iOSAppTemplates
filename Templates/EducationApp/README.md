@@ -6,7 +6,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Today
 
-- Label: `Standalone Root + richer example surface`
+- Label: `Standalone Root + richer example + rebuilt runtime flow`
 - Lane: `Education`
 - Entry: `Package.swift`
 - Product target: `Education / Learning`
@@ -16,19 +16,19 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ### Best for
 
-- teams evaluating a course and lesson starter shell
+- teams evaluating a course and lesson starter flow
 - readers comparing education family targets with a standalone root
 - maintainers reviewing study-session and content models
 
 ### Not for
 
 - teams expecting a fully instrumented LMS today
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- course overview shell
+- course overview flow
 - lesson routing
 - assignment and quiz models
 - study-session summary

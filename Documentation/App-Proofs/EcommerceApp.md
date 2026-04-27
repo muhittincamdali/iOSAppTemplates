@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Commerce`
-- Label today: `Standalone Root + richer example surface`
+- Label today: `Standalone Root + richer example + rebuilt runtime flow`
 - Entry path: `Templates/EcommerceApp/Package.swift`
 - Extra route: `Examples/EcommerceExample`
 - Product target: `E-Commerce Store`
@@ -14,22 +14,22 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ### Best for
 
-- teams evaluating a catalog and checkout starter shell
+- teams evaluating a catalog and checkout starter flow
 - commerce lanes that need a SwiftUI package entry first
 - maintainers comparing standalone root packaging against the richer example
 
 ### Not for
 
 - teams that expect release-grade commerce integrations today
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- auth shell
+- auth flow
 - catalog and featured-product surface
 - cart flow
-- checkout shell
+- checkout flow
 - order domain surface
 
 ## Current Proof

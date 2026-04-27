@@ -6,7 +6,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Product Shape
 
-- availability shell
+- availability flow
 - reservation detail surface
 - calendar or timeslot routing
 - confirmation starter flow
@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting a separate runnable Xcode project
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario set
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 
 ## Current Truth
 

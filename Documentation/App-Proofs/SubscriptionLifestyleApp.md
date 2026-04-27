@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Subscription Lifestyle`
-- Label today: `Standalone Root + richer example surface`
+- Label today: `Standalone Root + richer example + rebuilt runtime flow`
 - Entry path: `Templates/SubscriptionLifestyleApp/Package.swift`
 - Extra route: `Examples/SubscriptionLifestyleExample`
 - Product target: `Subscription Lifestyle / Habit Tracker`
@@ -21,12 +21,12 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting production billing and entitlement flows today
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- habit dashboard shell
+- habit dashboard flow
 - streak and progress surface
 - premium plan starter cards
 - routine detail routing

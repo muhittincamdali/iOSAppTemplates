@@ -12,7 +12,7 @@ Production-grade SwiftUI app starter system for Apple platforms.
 | --- | --- |
 | Root coverage | `20` standalone app roots under `Templates/` |
 | Build proof | local generic iOS `xcodebuild` tracked for `20` roots; hosted standalone iOS workflow is versioned |
-| Runtime proof | local simulator launch proof plus launch-to-ready scenario frames tracked for `20` roots |
+| Runtime proof | local simulator launch proof plus runtime screenshots, demo clips, and scenario frames tracked for `20` roots |
 | Public proof | per-app proof and media pages exist for `20` roots |
 | Visual layer | gallery cards, preview boards, runtime screenshots, demo clips, and scenario frames published for `20` roots |
 | Remaining gap | stable green hosted standalone iOS baseline, equal depth across all lanes |
@@ -23,14 +23,14 @@ This repository is a strong fit if you want to:
 
 - evaluate a broad SwiftUI starter portfolio from one codebase
 - inspect reusable template families before building your own app
-- generate a starter shell quickly from the CLI
+- generate a starter flow quickly from the CLI
 - compare multiple architecture approaches in one repository
 
 This repository is not yet a full fit if you expect:
 
 - `20 complete apps` already shipping at equal maturity
 - the same proof depth for every lane today
-- deeper interactive flows beyond the current launch-to-ready scenario set
+- automated multi-step interaction proof beyond the current first-screen runtime proof set
 
 ![Portfolio Board](Documentation/Assets/Readme/iosapptemplates-portfolio-board.svg)
 
@@ -161,7 +161,7 @@ open Templates/PrivacyVaultApp/Package.swift
 This proves today:
 
 - manifest-valid package entry
-- lane-specific source shell
+- lane-specific source flow
 - standalone root packaging
 - deterministic `Package.resolved` coverage for `8` standalone roots with external packages
 - local generic iOS `xcodebuild` proof for `20` standalone roots:
@@ -198,7 +198,7 @@ This proves today:
 This does not yet prove today:
 
 - stable green hosted standalone iOS proof baseline for the tracked roots
-- full complete-app parity for all lanes
+- automated second-screen and third-screen interaction proof for all lanes
 
 ### 3. Use the generator
 
@@ -222,6 +222,7 @@ swift Scripts/TemplateGenerator.swift --list
 - the repo now has published runtime screenshots for `20` standalone roots
 - the repo now has published runtime demo clips for `20` standalone roots
 - the repo now has published launch-to-ready scenario frames for `20` standalone roots
+- the repo now has rebuilt runtime flows across the tracked `20` standalone roots
 
 ## Canonical Docs
 

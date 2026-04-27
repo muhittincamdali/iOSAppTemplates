@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Creator / Short Video`
-- Label today: `Standalone Root + richer example surface`
+- Label today: `Standalone Root + richer example + rebuilt runtime flow`
 - Entry path: `Templates/CreatorShortVideoApp/Package.swift`
 - Extra route: `Examples/CreatorShortVideoExample`
 - Product target: `Creator / Short Video`
@@ -21,15 +21,15 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting production video pipelines today
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- creator feed shell
+- creator feed flow
 - clip card surface
 - engagement starter routing
-- publish or upload shell
+- publish or upload flow
 - creator starter domain model
 
 ## Current Proof

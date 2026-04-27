@@ -6,9 +6,9 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Product Shape
 
-- auth shell
+- auth flow
 - profile model surface
-- feed and community shell
+- feed and community flow
 - notification manager surface
 
 ## Best For / Not For
@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting a separate runnable Xcode project
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario set
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 
 ## Current Truth
 

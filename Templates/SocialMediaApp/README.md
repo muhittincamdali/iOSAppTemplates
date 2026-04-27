@@ -6,7 +6,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Today
 
-- Label: `Standalone Root + richer example surface`
+- Label: `Standalone Root + richer example + rebuilt runtime flow`
 - Lane: `Social`
 - Entry: `Package.swift`
 - Product target: `Social Media`
@@ -18,19 +18,19 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 - teams inspecting feed and community starter flows
 - teams that want a standalone root plus richer example route
-- maintainers reviewing auth, feed, and interaction shells at source level
+- maintainers reviewing auth, feed, and interaction flows at source level
 
 ### Not for
 
 - teams expecting full production social parity today
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- auth shell
+- auth flow
 - profile model surface
-- feed and community shell
+- feed and community flow
 - notification manager surface
 - richer social example route
 

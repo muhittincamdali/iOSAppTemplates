@@ -6,10 +6,10 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Product Shape
 
-- headline list shell
+- headline list flow
 - article detail surface
 - category routing
-- saved or trending content shell
+- saved or trending content flow
 
 ## Best For / Not For
 
@@ -21,7 +21,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting a separate runnable Xcode project
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario set
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 
 ## Current Truth
 

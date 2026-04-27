@@ -33,7 +33,7 @@
   <rect x="876" y="526" width="452" height="112" rx="28" fill="white" fill-opacity="0.10"/>
   <rect x="876" y="662" width="214" height="110" rx="28" fill="white" fill-opacity="0.10"/>
   <rect x="1114" y="662" width="214" height="110" rx="28" fill="white" fill-opacity="0.10"/>
-  <text x="904" y="232" fill="#F8FAFC" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">dashboard shell</text>
+  <text x="904" y="232" fill="#F8FAFC" font-size="30" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-weight="700">rebuilt runtime flow</text>
   <text x="904" y="588" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">app proof route</text>
   <text x="904" y="724" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">media route</text>
   <text x="1142" y="724" fill="#E5E7EB" font-size="24" font-family="SF Pro Display, Helvetica, Arial, sans-serif">gallery card</text>

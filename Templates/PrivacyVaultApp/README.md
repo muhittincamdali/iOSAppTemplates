@@ -6,7 +6,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Today
 
-- Label: `Standalone Root + richer example surface`
+- Label: `Standalone Root + richer example + rebuilt runtime flow`
 - Lane: `Privacy / Secure Vault`
 - Entry: `Package.swift`
 - Product target: `Privacy / Secure Vault`
@@ -16,22 +16,22 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ### Best for
 
-- teams evaluating a privacy-first storage starter shell
+- teams evaluating a privacy-first storage starter flow
 - readers comparing security-oriented packaging with a richer example route
 - maintainers reviewing secure-list and vault UI patterns
 
 ### Not for
 
 - teams expecting production audited secure storage today
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- vault overview shell
+- vault overview flow
 - secure item list surface
 - detail and reveal starter flow
-- privacy settings shell
+- privacy settings flow
 - secure-vault starter model
 
 ## Current Proof

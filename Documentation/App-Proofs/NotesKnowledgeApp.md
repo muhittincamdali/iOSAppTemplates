@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Notes / Knowledge`
-- Label today: `Standalone Root + richer example surface`
+- Label today: `Standalone Root + richer example + rebuilt runtime flow`
 - Entry path: `Templates/NotesKnowledgeApp/Package.swift`
 - Extra route: `Examples/NotesKnowledgeExample`
 - Product target: `Notes / Knowledge Base`
@@ -21,12 +21,12 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting a full PKM platform today
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- notes list shell
+- notes list flow
 - note detail surface
 - tag or workspace routing
 - search starter flow

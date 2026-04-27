@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Music / Podcast`
-- Label today: `Standalone Root + richer example surface`
+- Label today: `Standalone Root + richer example + rebuilt runtime flow`
 - Entry path: `Templates/MusicPodcastApp/Package.swift`
 - Extra route: `Examples/MusicPodcastExample`
 - Product target: `Music / Podcast`
@@ -14,19 +14,19 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ### Best for
 
-- teams evaluating media-library and player starter shells
+- teams evaluating media-library and player starter flows
 - readers comparing entertainment packaging and richer example routing
 - maintainers reviewing audio-first UI patterns
 
 ### Not for
 
 - teams expecting production streaming infrastructure today
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape Today
 
-- library shell
+- library flow
 - player surface
 - episode or track cards
 - queue starter flow

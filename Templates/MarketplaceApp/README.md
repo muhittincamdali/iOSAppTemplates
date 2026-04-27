@@ -6,7 +6,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Today
 
-- Label: `Standalone Root + richer example surface`
+- Label: `Standalone Root + richer example + rebuilt runtime flow`
 - Lane: `Marketplace`
 - Entry: `Package.swift`
 - Product target: `Marketplace`
@@ -23,12 +23,12 @@ Generated from `Documentation/app-surface-catalog.json`.
 ### Not for
 
 - teams expecting production seller operations today
-- readers who expect deeper interactive runtime flows than the current launch-to-ready scenario proof
+- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
 - teams that assume the hosted standalone iOS workflow is already green for this app pack
 
 ## Product Shape
 
-- listing discovery shell
+- listing discovery flow
 - seller highlight cards
 - product detail starter flow
 - saved or cart-adjacent surface
