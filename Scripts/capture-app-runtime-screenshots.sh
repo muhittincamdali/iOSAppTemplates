@@ -52,8 +52,7 @@ python3 "$repo_root/Scripts/generate-runtime-screenshot-hosts.py"
 )
 
 simulator_id="$(
-  xcrun simctl list devices available -j \
-    | python3 -c 'import json, sys; data=json.load(sys.stdin); devices=data["devices"]; print(next(device["udid"] for entries in devices.values() for device in entries if "iPhone" in device["name"]))'
+  "$repo_root/Scripts/resolve-runtime-simulator.sh"
 )"
 
 xcrun simctl boot "$simulator_id" >/dev/null 2>&1 || true
