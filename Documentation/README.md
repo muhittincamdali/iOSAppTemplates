@@ -28,6 +28,7 @@ This page is the canonical documentation router for `iOSAppTemplates`.
 | See GitHub distribution rules | [GitHub-Distribution.md](./GitHub-Distribution.md) |
 | See release rules | [Release-Process.md](./Release-Process.md) |
 | Read the market-backed 20-app strategy | [World-Class-20-App-Strategy-2026-04-19.md](./World-Class-20-App-Strategy-2026-04-19.md) |
+| Read the brutal 20-app rebuild audit | [Brutal-20-App-Rebuild-Audit-2026-04-27.md](./Brutal-20-App-Rebuild-Audit-2026-04-27.md) |
 | See the Wave 1 execution plan | [Wave-1-Implementation-Plan.md](./Wave-1-Implementation-Plan.md) |
 | Inspect template families | [TemplateGuide.md](./TemplateGuide.md) |
 | Inspect the examples router | [../Examples/README.md](../Examples/README.md) |
@@ -50,6 +51,7 @@ This page is the canonical documentation router for `iOSAppTemplates`.
 - [App-Media/README.md](./App-Media/README.md)
 - [App-Gallery.md](./App-Gallery.md)
 - [World-Class-20-App-Strategy-2026-04-19.md](./World-Class-20-App-Strategy-2026-04-19.md)
+- [Brutal-20-App-Rebuild-Audit-2026-04-27.md](./Brutal-20-App-Rebuild-Audit-2026-04-27.md)
 - [Wave-1-Implementation-Plan.md](./Wave-1-Implementation-Plan.md)
 - [Wave-1-App-Pack-Spec.md](./Wave-1-App-Pack-Spec.md)
 - [TemplateGuide.md](./TemplateGuide.md)
