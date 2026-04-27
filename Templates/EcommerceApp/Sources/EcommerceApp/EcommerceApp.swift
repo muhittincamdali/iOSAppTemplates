@@ -1,1252 +1,574 @@
 import SwiftUI
 
-private enum RuntimeCaptureMode {
-    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_SCREENSHOT_MODE"] == "1"
-}
-
-// MARK: - E-commerce App
 @main
 struct EcommerceApp: App {
-    
-    @StateObject private var authManager = AuthManager.shared
-    @StateObject private var cartManager = CartManager.shared
-    @StateObject private var productManager = ProductManager.shared
-    @StateObject private var orderManager = OrderManager.shared
-    
-    init() {
-        setupStripe()
-        setupAppearance()
-    }
-    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(authManager)
-                .environmentObject(cartManager)
-        .environmentObject(productManager)
-        .environmentObject(orderManager)
-        .onAppear {
-                    setupApp()
-                }
+            EcommerceRuntimeRootView()
         }
     }
-    
-    // MARK: - Setup Methods
-    private func setupStripe() {
-        guard !RuntimeCaptureMode.isEnabled else { return }
-        print("💳 Payment provider placeholder configured")
+}
+
+struct EcommerceRuntimeRootView: View {
+    @StateObject private var store = CommerceStore()
+
+    var body: some View {
+        TabView {
+            CommerceHomeView(store: store)
+                .tabItem {
+                    Image(systemName: "bag.fill")
+                    Text("Shop")
+                }
+
+            CommerceCatalogView(store: store)
+                .tabItem {
+                    Image(systemName: "square.grid.2x2.fill")
+                    Text("Browse")
+                }
+
+            CommerceCartView(store: store)
+                .tabItem {
+                    Image(systemName: "cart.fill")
+                    Text("Cart")
+                }
+
+            CommerceOrdersView(store: store)
+                .tabItem {
+                    Image(systemName: "shippingbox.fill")
+                    Text("Orders")
+                }
+
+            CommerceProfileView(store: store)
+                .tabItem {
+                    Image(systemName: "person.crop.circle.fill")
+                    Text("Profile")
+                }
+        }
+        .tint(.orange)
     }
-    
-    private func setupAppearance() {
-        // Navigation bar appearance
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor.systemBackground
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
-        
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        UINavigationBar.appearance().compactAppearance = appearance
-        
-        // Tab bar appearance
-        let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.backgroundColor = UIColor.systemBackground
-        
-        UITabBar.appearance().standardAppearance = tabBarAppearance
-        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-        
-        print("🎨 App appearance configured")
+}
+
+@MainActor
+final class CommerceStore: ObservableObject {
+    @Published var categories: [CommerceCategory] = CommerceCategory.sampleCategories
+    @Published var products: [CommerceProduct] = CommerceProduct.sampleProducts
+    @Published var cartItems: [CommerceCartItem] = []
+    @Published var placedOrders: [CommerceOrder] = CommerceOrder.sampleOrders
+    @Published var selectedCategoryID: UUID?
+    @Published var selectedAddressID: UUID?
+    @Published var selectedPaymentID: UUID?
+    @Published var appliedCouponCode = ""
+    @Published var checkoutNotice = "Orders placed before 21:00 ship same day from the Istanbul fulfillment lane."
+    @Published var wishlistIDs: Set<UUID> = []
+
+    let savedAddresses: [CommerceAddress] = CommerceAddress.sampleAddresses
+    let paymentMethods: [CommercePaymentMethod] = CommercePaymentMethod.sampleMethods
+
+    init() {
+        selectedCategoryID = categories.first?.id
+        selectedAddressID = savedAddresses.first?.id
+        selectedPaymentID = paymentMethods.first?.id
+        seedCart()
     }
-    
-    private func setupApp() {
-        if RuntimeCaptureMode.isEnabled {
-            authManager.currentUser = .preview
-            authManager.isAuthenticated = true
-            productManager.seedPreviewState()
-            cartManager.seedPreviewState(products: productManager.products)
-            orderManager.seedPreviewState(products: productManager.products)
+
+    var featuredProducts: [CommerceProduct] {
+        products.filter(\.isFeatured)
+    }
+
+    var selectedCategory: CommerceCategory? {
+        categories.first(where: { $0.id == selectedCategoryID }) ?? categories.first
+    }
+
+    var visibleProducts: [CommerceProduct] {
+        guard let selectedCategoryID else { return products }
+        return products.filter { $0.categoryID == selectedCategoryID }
+    }
+
+    var subtotal: Double {
+        cartItems.reduce(0) { partial, item in
+            partial + (item.product.price * Double(item.quantity))
+        }
+    }
+
+    var savings: Double {
+        appliedCouponCode == "SPRINT10" ? subtotal * 0.1 : 0
+    }
+
+    var shippingFee: Double {
+        subtotal >= 150 ? 0 : 12.99
+    }
+
+    var taxes: Double {
+        max(0, (subtotal - savings) * 0.08)
+    }
+
+    var total: Double {
+        max(0, subtotal - savings + shippingFee + taxes)
+    }
+
+    var selectedAddress: CommerceAddress? {
+        savedAddresses.first(where: { $0.id == selectedAddressID }) ?? savedAddresses.first
+    }
+
+    var selectedPaymentMethod: CommercePaymentMethod? {
+        paymentMethods.first(where: { $0.id == selectedPaymentID }) ?? paymentMethods.first
+    }
+
+    func selectCategory(_ categoryID: UUID) {
+        selectedCategoryID = categoryID
+    }
+
+    func toggleWishlist(_ productID: UUID) {
+        if wishlistIDs.contains(productID) {
+            wishlistIDs.remove(productID)
+        } else {
+            wishlistIDs.insert(productID)
+        }
+    }
+
+    func addToCart(_ productID: UUID) {
+        guard let product = products.first(where: { $0.id == productID }) else { return }
+
+        if let itemIndex = cartItems.firstIndex(where: { $0.product.id == productID }) {
+            cartItems[itemIndex].quantity += 1
+        } else {
+            cartItems.append(.init(product: product, quantity: 1))
+        }
+    }
+
+    func incrementCartItem(_ itemID: UUID) {
+        guard let itemIndex = cartItems.firstIndex(where: { $0.id == itemID }) else { return }
+        cartItems[itemIndex].quantity += 1
+    }
+
+    func decrementCartItem(_ itemID: UUID) {
+        guard let itemIndex = cartItems.firstIndex(where: { $0.id == itemID }) else { return }
+        cartItems[itemIndex].quantity -= 1
+        if cartItems[itemIndex].quantity <= 0 {
+            cartItems.remove(at: itemIndex)
+        }
+    }
+
+    func applyCoupon(_ code: String) {
+        let normalized = code.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        guard !normalized.isEmpty else { return }
+        appliedCouponCode = normalized == "SPRINT10" ? normalized : ""
+    }
+
+    func selectAddress(_ addressID: UUID) {
+        selectedAddressID = addressID
+    }
+
+    func selectPaymentMethod(_ paymentID: UUID) {
+        selectedPaymentID = paymentID
+    }
+
+    func placeOrder() {
+        guard !cartItems.isEmpty,
+              let address = selectedAddress,
+              let payment = selectedPaymentMethod else {
             return
         }
 
-        Task {
-            await authManager.checkAuthState()
-            await productManager.loadProducts()
-            await cartManager.loadCart()
-            await orderManager.loadOrders(products: productManager.products)
-        }
+        let statusTrail = [
+            CommerceOrderStatusEvent(title: "Confirmed", detail: "Payment authorized with \(payment.label).", state: .completed),
+            CommerceOrderStatusEvent(title: "Packed", detail: "Items routed into same-day fulfillment.", state: .completed),
+            CommerceOrderStatusEvent(title: "Shipped", detail: "Courier assigned for \(address.city) delivery.", state: .active),
+            CommerceOrderStatusEvent(title: "Delivered", detail: "Expected tomorrow before 19:00.", state: .pending)
+        ]
+
+        let order = CommerceOrder(
+            title: "Order #\(1000 + placedOrders.count + 1)",
+            summary: "Placed \(cartItems.count) items for \(address.label) with \(payment.label).",
+            total: total,
+            timeline: statusTrail,
+            items: cartItems,
+            shipmentETA: "Tomorrow before 19:00",
+            supportAction: "Open courier issue"
+        )
+
+        placedOrders.insert(order, at: 0)
+        cartItems.removeAll()
+        appliedCouponCode = ""
+    }
+
+    func reorder(_ orderID: UUID) {
+        guard let order = placedOrders.first(where: { $0.id == orderID }) else { return }
+        cartItems = order.items
+    }
+
+    private func seedCart() {
+        guard let first = products.first, let second = products.dropFirst().first else { return }
+        cartItems = [
+            CommerceCartItem(product: first, quantity: 1),
+            CommerceCartItem(product: second, quantity: 2)
+        ]
+        wishlistIDs = [first.id]
     }
 }
 
-// MARK: - Content View
-struct ContentView: View {
-    @StateObject private var authManager = AuthManager.shared
-    @State private var isLoading = true
-    
+struct CommerceHomeView: View {
+    @ObservedObject var store: CommerceStore
+
     var body: some View {
-        Group {
-            if isLoading {
-                SplashView()
-            } else if authManager.isAuthenticated {
-                MainTabView()
-            } else {
-                AuthView()
-            }
-        }
-        .animation(.easeInOut(duration: 0.3), value: authManager.isAuthenticated)
-        .animation(.easeInOut(duration: 0.3), value: isLoading)
-        .onAppear {
-            let delay = RuntimeCaptureMode.isEnabled ? 0.1 : 2.0
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                withAnimation {
-                    isLoading = false
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    CommerceHeroCard(store: store)
+                    CommerceCategoryStrip(store: store)
+                    CommerceFeaturedSection(store: store)
+                    CommerceServiceSurface(store: store)
                 }
+                .padding(16)
             }
+            .navigationTitle("Shop")
         }
     }
 }
 
-// MARK: - Splash View
-struct SplashView: View {
-    @State private var logoScale: CGFloat = 0.5
-    @State private var logoOpacity: Double = 0.0
-    @State private var textOpacity: Double = 0.0
-    
+struct CommerceHeroCard: View {
+    @ObservedObject var store: CommerceStore
+
     var body: some View {
-        ZStack {
-            // Background gradient
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Commerce Pulse")
+                .font(.headline)
+                .foregroundStyle(.secondary)
+
+            Text(store.cartItems.isEmpty ? "Your cart is clear. Build the next order with one fast checkout path." : "Your current cart is ready for same-day fulfillment.")
+                .font(.system(size: 30, weight: .bold, design: .rounded))
+
+            Text(store.checkoutNotice)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 12) {
+                CommerceMetricChip(title: "Items", value: "\(store.cartItems.count)")
+                CommerceMetricChip(title: "Wishlist", value: "\(store.wishlistIDs.count)")
+                CommerceMetricChip(title: "Orders", value: "\(store.placedOrders.count)")
+            }
+        }
+        .padding(20)
+        .background(
             LinearGradient(
-                colors: [Color.orange.opacity(0.8), Color.red.opacity(0.6)],
+                colors: [.orange.opacity(0.18), .red.opacity(0.10)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            .ignoresSafeArea()
-            
-            VStack(spacing: 24) {
-                // App logo
-                Image(systemName: "bag.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(.white)
-                    .scaleEffect(logoScale)
-                    .opacity(logoOpacity)
-                    .onAppear {
-                        withAnimation(.easeOut(duration: 1.0)) {
-                            logoScale = 1.0
-                            logoOpacity = 1.0
-                        }
-                    }
-                
-                // App name
-                Text("ShopConnect")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                    .opacity(textOpacity)
-                    .onAppear {
-                        withAnimation(.easeOut(duration: 1.0).delay(0.5)) {
-                            textOpacity = 1.0
-                        }
-                    }
-                
-                // Tagline
-                Text("Discover amazing products")
-                    .font(.subheadline)
-                    .foregroundColor(.white.opacity(0.8))
-                    .opacity(textOpacity)
-            }
-        }
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 22))
     }
 }
 
-// MARK: - Auth View
-struct AuthView: View {
-    @State private var isSignUp = false
-    
-    var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                // Header
-                AuthHeaderView()
-                
-                // Auth forms
-                if isSignUp {
-                    SignUpView()
-                        .transition(.asymmetric(
-                            insertion: .move(edge: .trailing).combined(with: .opacity),
-                            removal: .move(edge: .leading).combined(with: .opacity)
-                        ))
-                } else {
-                    SignInView()
-                        .transition(.asymmetric(
-                            insertion: .move(edge: .leading).combined(with: .opacity),
-                            removal: .move(edge: .trailing).combined(with: .opacity)
-                        ))
-                }
-                
-                // Toggle button
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        isSignUp.toggle()
-                    }
-                }) {
-                    Text(isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up")
-                        .font(.subheadline)
-                        .foregroundColor(.orange)
-                        .padding()
-                }
-            }
-            .navigationBarHidden(true)
-        }
-    }
-}
-
-// MARK: - Auth Header View
-struct AuthHeaderView: View {
-    var body: some View {
-        VStack(spacing: 16) {
-            // Logo
-            Image(systemName: "bag.fill")
-                .font(.system(size: 60))
-                .foregroundColor(.orange)
-            
-            // Title
-            Text("Welcome to ShopConnect")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .multilineTextAlignment(.center)
-            
-            // Subtitle
-            Text("Shop, discover, and save on amazing products")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .padding(.top, 60)
-        .padding(.horizontal, 32)
-    }
-}
-
-// MARK: - Sign In View
-struct SignInView: View {
-    @StateObject private var authManager = AuthManager.shared
-    @State private var email = ""
-    @State private var password = ""
-    @State private var isLoading = false
-    @State private var showAlert = false
-    @State private var alertMessage = ""
-    
-    var body: some View {
-        VStack(spacing: 24) {
-            // Form fields
-            VStack(spacing: 16) {
-                CustomTextField(
-                    text: $email,
-                    placeholder: "Email",
-                    icon: "envelope",
-                    validation: .email
-                )
-                
-                CustomTextField(
-                    text: $password,
-                    placeholder: "Password",
-                    icon: "lock",
-                    validation: .password,
-                    isSecure: true
-                )
-            }
-            .padding(.horizontal, 32)
-            
-            // Sign in button
-            PrimaryButton(
-                title: "Sign In",
-                isLoading: isLoading
-            ) {
-                signIn()
-            }
-            .padding(.horizontal, 32)
-            
-            // Forgot password
-            Button("Forgot Password?") {
-                // Handle forgot password
-            }
-            .font(.subheadline)
-            .foregroundColor(.orange)
-            
-            Spacer()
-        }
-        .alert("Sign In Error", isPresented: $showAlert) {
-            Button("OK") { }
-        } message: {
-            Text(alertMessage)
-        }
-    }
-    
-    private func signIn() {
-        guard !email.isEmpty && !password.isEmpty else {
-            alertMessage = "Please fill in all fields"
-            showAlert = true
-            return
-        }
-        
-        isLoading = true
-        
-        Task {
-            do {
-                try await authManager.signIn(email: email, password: password)
-                await MainActor.run {
-                    isLoading = false
-                }
-            } catch {
-                await MainActor.run {
-                    isLoading = false
-                    alertMessage = error.localizedDescription
-                    showAlert = true
-                }
-            }
-        }
-    }
-}
-
-// MARK: - Sign Up View
-struct SignUpView: View {
-    @StateObject private var authManager = AuthManager.shared
-    @State private var username = ""
-    @State private var email = ""
-    @State private var password = ""
-    @State private var confirmPassword = ""
-    @State private var isLoading = false
-    @State private var showAlert = false
-    @State private var alertMessage = ""
-    
-    var body: some View {
-        VStack(spacing: 24) {
-            // Form fields
-            VStack(spacing: 16) {
-                CustomTextField(
-                    text: $username,
-                    placeholder: "Username",
-                    icon: "person",
-                    validation: .username
-                )
-                
-                CustomTextField(
-                    text: $email,
-                    placeholder: "Email",
-                    icon: "envelope",
-                    validation: .email
-                )
-                
-                CustomTextField(
-                    text: $password,
-                    placeholder: "Password",
-                    icon: "lock",
-                    validation: .password,
-                    isSecure: true
-                )
-                
-                CustomTextField(
-                    text: $confirmPassword,
-                    placeholder: "Confirm Password",
-                    icon: "lock",
-                    validation: .password,
-                    isSecure: true
-                )
-            }
-            .padding(.horizontal, 32)
-            
-            // Sign up button
-            PrimaryButton(
-                title: "Create Account",
-                isLoading: isLoading
-            ) {
-                signUp()
-            }
-            .padding(.horizontal, 32)
-            
-            Spacer()
-        }
-        .alert("Sign Up Error", isPresented: $showAlert) {
-            Button("OK") { }
-        } message: {
-            Text(alertMessage)
-        }
-    }
-    
-    private func signUp() {
-        guard !username.isEmpty && !email.isEmpty && !password.isEmpty && !confirmPassword.isEmpty else {
-            alertMessage = "Please fill in all fields"
-            showAlert = true
-            return
-        }
-        
-        guard password == confirmPassword else {
-            alertMessage = "Passwords do not match"
-            showAlert = true
-            return
-        }
-        
-        isLoading = true
-        
-        Task {
-            do {
-                try await authManager.signUp(username: username, email: email, password: password)
-                await MainActor.run {
-                    isLoading = false
-                }
-            } catch {
-                await MainActor.run {
-                    isLoading = false
-                    alertMessage = error.localizedDescription
-                    showAlert = true
-                }
-            }
-        }
-    }
-}
-
-// MARK: - Main Tab View
-struct MainTabView: View {
-    @State private var selectedTab = 0
-    
-    var body: some View {
-        TabView(selection: $selectedTab) {
-            HomeView()
-                .tabItem {
-                    Image(systemName: "house")
-                    Text("Home")
-                }
-                .tag(0)
-            
-            CategoriesView()
-                .tabItem {
-                    Image(systemName: "square.grid.2x2")
-                    Text("Categories")
-                }
-                .tag(1)
-            
-            CartView()
-                .tabItem {
-                    Image(systemName: "cart")
-                    Text("Cart")
-                }
-                .tag(2)
-            
-            OrdersView()
-                .tabItem {
-                    Image(systemName: "bag")
-                    Text("Orders")
-                }
-                .tag(3)
-            
-            ProfileView()
-                .tabItem {
-                    Image(systemName: "person")
-                    Text("Profile")
-                }
-                .tag(4)
-        }
-        .accentColor(.orange)
-    }
-}
-
-// MARK: - Home View
-struct HomeView: View {
-    @StateObject private var productManager = ProductManager.shared
-    @State private var searchText = ""
-    @State private var selectedCategory: String?
-    
-    var body: some View {
-        NavigationView {
-            ScrollView {
-                LazyVStack(spacing: 20) {
-                    SearchBar(text: $searchText, placeholder: "Search products...")
-                        .padding(.horizontal, 16)
-                    
-                    categoryFilterBar
-                    
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Featured Products")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .padding(.horizontal, 16)
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            LazyHStack(spacing: 16) {
-                                ForEach(productManager.featuredProducts) { product in
-                                    FeaturedProductCard(product: product)
-                                }
-                            }
-                            .padding(.horizontal, 16)
-                        }
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Categories")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .padding(.horizontal, 16)
-                        
-                        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
-                            ForEach(productManager.categories, id: \.self) { category in
-                                CategoryCard(category: category)
-                            }
-                        }
-                        .padding(.horizontal, 16)
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            Text(selectedCategory == nil ? "Catalog" : "\(selectedCategory!) Picks")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                            Spacer()
-                            Text("\(filteredProducts.count) items")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        .padding(.horizontal, 16)
-                        
-                        if filteredProducts.isEmpty {
-                            EmptyCatalogStateView(searchText: searchText, clearFilters: resetFilters)
-                                .padding(.horizontal, 16)
-                        } else {
-                            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
-                                ForEach(filteredProducts) { product in
-                                    NavigationLink(destination: ProductDetailView(product: product)) {
-                                        ProductCard(product: product)
-                                    }
-                                    .buttonStyle(.plain)
-                                }
-                            }
-                            .padding(.horizontal, 16)
-                        }
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Popular Brands")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .padding(.horizontal, 16)
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 12) {
-                                ForEach(productManager.topBrands, id: \.self) { brand in
-                                    VStack(alignment: .leading, spacing: 6) {
-                                        Text(brand)
-                                            .font(.headline)
-                                        Text("\(productManager.products.filter { $0.brand == brand }.count) products")
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
-                                    }
-                                    .padding()
-                                    .frame(width: 150, alignment: .leading)
-                                    .background(Color.orange.opacity(0.08))
-                                    .clipShape(RoundedRectangle(cornerRadius: 14))
-                                }
-                            }
-                            .padding(.horizontal, 16)
-                        }
-                    }
-                }
-                .padding(.vertical, 16)
-            }
-            .navigationTitle("ShopConnect")
-            .navigationBarTitleDisplayMode(.large)
-            .refreshable {
-                await productManager.refreshProducts()
-            }
-        }
-    }
-    
-    private var filteredProducts: [Product] {
-        productManager.filteredProducts(matching: searchText, category: selectedCategory)
-    }
-    
-    private var categoryFilterBar: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 10) {
-                CategoryFilterChip(title: "All", isSelected: selectedCategory == nil) {
-                    selectedCategory = nil
-                }
-                
-                ForEach(productManager.categories, id: \.self) { category in
-                    CategoryFilterChip(title: category, isSelected: selectedCategory == category) {
-                        selectedCategory = category
-                    }
-                }
-            }
-            .padding(.horizontal, 16)
-        }
-    }
-    
-    private func resetFilters() {
-        searchText = ""
-        selectedCategory = nil
-    }
-}
-
-// MARK: - Product Card
-struct ProductCard: View {
-    let product: Product
-    @StateObject private var cartManager = CartManager.shared
-    @State private var isFavorite = false
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            // Product image
-            AsyncImage(url: URL(string: product.imageURL)) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } placeholder: {
-                Rectangle()
-                    .fill(Color.gray.opacity(0.3))
-            }
-            .frame(height: 150)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            
-            // Product info
-            VStack(alignment: .leading, spacing: 4) {
-                Text(product.name)
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .lineLimit(2)
-                
-                Text(product.category)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                
-                HStack {
-                    Text("$\(String(format: "%.2f", product.price))")
-                        .font(.title3)
-                        .fontWeight(.bold)
-                        .foregroundColor(.orange)
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            isFavorite.toggle()
-                        }
-                    }) {
-                        Image(systemName: isFavorite ? "heart.fill" : "heart")
-                            .foregroundColor(isFavorite ? .red : .gray)
-                    }
-                }
-                
-                // Add to cart button
-                Button(action: {
-                    cartManager.addToCart(product: product)
-                }) {
-                    Text("Add to Cart")
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 32)
-                        .background(Color.orange)
-                        .cornerRadius(8)
-                }
-            }
-        }
-        .padding(12)
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-    }
-}
-
-// MARK: - Featured Product Card
-struct FeaturedProductCard: View {
-    let product: Product
-    
-    var body: some View {
-        NavigationLink(destination: ProductDetailView(product: product)) {
-            VStack(alignment: .leading, spacing: 8) {
-                AsyncImage(url: URL(string: product.imageURL)) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } placeholder: {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.3))
-                }
-                .frame(width: 200, height: 200)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(product.name)
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                        .lineLimit(2)
-                    
-                    HStack {
-                        Text("$\(String(format: "%.2f", product.price))")
-                            .font(.title3)
-                            .fontWeight(.bold)
-                            .foregroundColor(.orange)
-                        Spacer()
-                        Text("\(String(format: "%.1f", product.rating)) ★")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
-            }
-            .frame(width: 200)
-            .padding(12)
-            .background(Color(.systemBackground))
-            .cornerRadius(12)
-            .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-// MARK: - Category Card
-struct CategoryCard: View {
-    let category: String
-    
-    var body: some View {
-        VStack {
-            Image(systemName: categoryIcon)
-                .font(.system(size: 40))
-                .foregroundColor(.orange)
-            
-            Text(category)
-                .font(.headline)
-                .fontWeight(.semibold)
-                .multilineTextAlignment(.center)
-        }
-        .frame(height: 100)
-        .frame(maxWidth: .infinity)
-        .background(Color.orange.opacity(0.1))
-        .cornerRadius(12)
-    }
-    
-    private var categoryIcon: String {
-        switch category.lowercased() {
-        case "electronics": return "laptopcomputer"
-        case "clothing": return "tshirt"
-        case "books": return "book"
-        case "sports": return "sportscourt"
-        case "home": return "house"
-        case "beauty": return "sparkles"
-        default: return "cube"
-        }
-    }
-}
-
-struct CategoryFilterChip: View {
+struct CommerceMetricChip: View {
     let title: String
-    let isSelected: Bool
-    let action: () -> Void
-    
+    let value: String
+
     var body: some View {
-        Button(action: action) {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(value)
+                .font(.title3.weight(.bold))
             Text(title)
-                .font(.subheadline.weight(.semibold))
-                .foregroundColor(isSelected ? .white : .primary)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
-                .background(isSelected ? Color.orange : Color(.systemGray6))
-                .clipShape(Capsule())
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
-        .buttonStyle(.plain)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 }
 
-struct EmptyCatalogStateView: View {
-    let searchText: String
-    let clearFilters: () -> Void
-    
+struct CommerceCategoryStrip: View {
+    @ObservedObject var store: CommerceStore
+
     var body: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "magnifyingglass.circle")
-                .font(.system(size: 42))
-                .foregroundColor(.orange)
-            Text("No results for \"\(searchText)\"")
-                .font(.headline)
-            Text("Try a broader query or reset category filters.")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-            Button("Clear filters", action: clearFilters)
-                .font(.subheadline.weight(.semibold))
-                .foregroundColor(.orange)
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Collections")
+                .font(.title3.weight(.bold))
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(store.categories) { category in
+                        Button {
+                            store.selectCategory(category.id)
+                        } label: {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Image(systemName: category.icon)
+                                    .font(.title3)
+                                Text(category.title)
+                                    .font(.subheadline.weight(.semibold))
+                                Text(category.tagline)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(2)
+                            }
+                            .frame(width: 160, alignment: .leading)
+                            .padding()
+                            .background(store.selectedCategoryID == category.id ? Color.orange.opacity(0.18) : Color(.secondarySystemBackground))
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
         }
-        .frame(maxWidth: .infinity)
-        .padding(24)
-        .background(Color(.systemGray6))
+    }
+}
+
+struct CommerceFeaturedSection: View {
+    @ObservedObject var store: CommerceStore
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Featured Picks")
+                .font(.title3.weight(.bold))
+
+            ForEach(store.featuredProducts) { product in
+                NavigationLink {
+                    CommerceProductDetailView(store: store, productID: product.id)
+                } label: {
+                    CommerceProductCard(product: product, isWishlisted: store.wishlistIDs.contains(product.id))
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+}
+
+struct CommerceProductCard: View {
+    let product: CommerceProduct
+    let isWishlisted: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(product.title)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                    Text(product.subtitle)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: isWishlisted ? "heart.fill" : "heart")
+                    .foregroundStyle(.orange)
+            }
+
+            Text(product.heroBenefit)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            HStack {
+                Text(product.price.currencyString)
+                    .font(.headline)
+                Spacer()
+                Text(product.shippingETA)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.orange)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(Color(.secondarySystemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
 
-struct ProductDetailView: View {
-    let product: Product
-    @StateObject private var cartManager = CartManager.shared
-    
+struct CommerceServiceSurface: View {
+    @ObservedObject var store: CommerceStore
+
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                AsyncImage(url: URL(string: product.imageURL)) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } placeholder: {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.2))
-                }
-                .frame(height: 280)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack(alignment: .top) {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(product.brand.uppercased())
-                                .font(.caption.weight(.bold))
-                                .foregroundColor(.orange)
-                            Text(product.name)
-                                .font(.title2.weight(.bold))
-                            Text(product.category)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        Spacer()
-                        VStack(alignment: .trailing, spacing: 6) {
-                            Text("$\(String(format: "%.2f", product.price))")
-                                .font(.title3.weight(.bold))
-                            if let originalPrice = product.originalPrice {
-                                Text("$\(String(format: "%.2f", originalPrice))")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                    .strikethrough()
-                            }
-                        }
-                    }
-                    
-                    HStack(spacing: 14) {
-                        Label("\(String(format: "%.1f", product.rating))", systemImage: "star.fill")
-                        Label("\(product.reviewCount) reviews", systemImage: "text.bubble")
-                        Label("\(product.stockQuantity) in stock", systemImage: "shippingbox")
-                    }
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    
-                    Text(product.description)
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                    
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Why customers buy this")
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Buyer Confidence")
+                .font(.title3.weight(.bold))
+
+            ForEach(CommerceTrustSignal.sampleSignals) { signal in
+                HStack(alignment: .top, spacing: 12) {
+                    Image(systemName: signal.icon)
+                        .foregroundStyle(signal.tint)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(signal.title)
                             .font(.headline)
-                        ForEach(product.tags, id: \.self) { tag in
-                            Label(tag.replacingOccurrences(of: "-", with: " ").capitalized, systemImage: "checkmark.seal")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
+                        Text(signal.detail)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
-                    
-                    Button {
-                        cartManager.addToCart(product: product)
+                    Spacer()
+                }
+                .padding()
+                .background(Color(.secondarySystemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+            }
+        }
+    }
+}
+
+struct CommerceCatalogView: View {
+    @ObservedObject var store: CommerceStore
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(store.visibleProducts) { product in
+                    NavigationLink {
+                        CommerceProductDetailView(store: store, productID: product.id)
                     } label: {
-                        Text("Add to Cart")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 52)
-                            .background(Color.orange)
-                            .clipShape(RoundedRectangle(cornerRadius: 14))
-                    }
-                }
-            }
-            .padding(16)
-        }
-        .navigationTitle("Product Details")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-// MARK: - Models
-struct Product: Identifiable, Codable {
-    let id: String
-    let name: String
-    let description: String
-    let price: Double
-    let originalPrice: Double?
-    let imageURL: String
-    let category: String
-    let brand: String
-    let rating: Double
-    let reviewCount: Int
-    let stockQuantity: Int
-    let isFeatured: Bool
-    let isOnSale: Bool
-    let salePercentage: Int?
-    let tags: [String]
-    let createdAt: Date
-    let updatedAt: Date
-}
-
-// MARK: - View Models
-@MainActor
-class ProductManager: ObservableObject {
-    static let shared = ProductManager()
-
-    @Published var products: [Product] = []
-    @Published var featuredProducts: [Product] = []
-    @Published var recentProducts: [Product] = []
-    @Published var categories: [String] = []
-    @Published var isLoading = false
-    @Published var errorMessage: String?
-    
-    init() {
-        loadMockData()
-    }
-    
-    func loadProducts() async {
-        await MainActor.run {
-            isLoading = true
-        }
-        
-        // Simulate API call
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        
-        await MainActor.run {
-            loadMockData()
-            isLoading = false
-        }
-    }
-    
-    func refreshProducts() async {
-        await loadProducts()
-    }
-    
-    func filteredProducts(matching query: String, category: String?) -> [Product] {
-        products.filter { product in
-            let categoryMatches = category == nil || product.category == category
-            let normalizedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-            
-            guard !normalizedQuery.isEmpty else { return categoryMatches }
-            
-            let textMatches =
-                product.name.lowercased().contains(normalizedQuery) ||
-                product.description.lowercased().contains(normalizedQuery) ||
-                product.brand.lowercased().contains(normalizedQuery) ||
-                product.tags.joined(separator: " ").lowercased().contains(normalizedQuery)
-            return categoryMatches && textMatches
-        }
-    }
-    
-    var topBrands: [String] {
-        Array(Set(products.map(\.brand))).sorted()
-    }
-    
-    func seedPreviewState() {
-        loadMockData()
-    }
-    
-    private func loadMockData() {
-        products = [
-            Product(
-                id: "1",
-                name: "Wireless Bluetooth Headphones",
-                description: "High-quality wireless headphones with noise cancellation",
-                price: 99.99,
-                originalPrice: 129.99,
-                imageURL: "https://picsum.photos/300/300",
-                category: "Electronics",
-                brand: "TechBrand",
-                rating: 4.5,
-                reviewCount: 128,
-                stockQuantity: 50,
-                isFeatured: true,
-                isOnSale: true,
-                salePercentage: 23,
-                tags: ["wireless", "bluetooth", "noise-cancellation"],
-                createdAt: Date(),
-                updatedAt: Date()
-            ),
-            Product(
-                id: "2",
-                name: "Premium Cotton T-Shirt",
-                description: "Comfortable and stylish cotton t-shirt",
-                price: 29.99,
-                originalPrice: nil,
-                imageURL: "https://picsum.photos/301/301",
-                category: "Clothing",
-                brand: "FashionBrand",
-                rating: 4.2,
-                reviewCount: 89,
-                stockQuantity: 100,
-                isFeatured: false,
-                isOnSale: false,
-                salePercentage: nil,
-                tags: ["cotton", "comfortable", "stylish"],
-                createdAt: Date(),
-                updatedAt: Date()
-            ),
-            Product(
-                id: "3",
-                name: "Smart Fitness Watch",
-                description: "Advanced fitness tracking with heart rate monitor",
-                price: 199.99,
-                originalPrice: 249.99,
-                imageURL: "https://picsum.photos/302/302",
-                category: "Electronics",
-                brand: "FitTech",
-                rating: 4.7,
-                reviewCount: 256,
-                stockQuantity: 25,
-                isFeatured: true,
-                isOnSale: true,
-                salePercentage: 20,
-                tags: ["fitness", "smartwatch", "heart-rate"],
-                createdAt: Date(),
-                updatedAt: Date()
-            ),
-            Product(
-                id: "4",
-                name: "Standing Desk Lamp",
-                description: "Minimalist lamp with adjustable brightness for home offices and study corners.",
-                price: 64.99,
-                originalPrice: 79.99,
-                imageURL: "https://picsum.photos/303/303",
-                category: "Home",
-                brand: "NordicHome",
-                rating: 4.4,
-                reviewCount: 73,
-                stockQuantity: 40,
-                isFeatured: false,
-                isOnSale: true,
-                salePercentage: 18,
-                tags: ["desk", "lighting", "workspace"],
-                createdAt: Date(),
-                updatedAt: Date()
-            ),
-            Product(
-                id: "5",
-                name: "Trail Running Shoes",
-                description: "Durable trail shoes with responsive cushioning and all-weather grip.",
-                price: 149.00,
-                originalPrice: nil,
-                imageURL: "https://picsum.photos/304/304",
-                category: "Sports",
-                brand: "PeakMotion",
-                rating: 4.8,
-                reviewCount: 311,
-                stockQuantity: 64,
-                isFeatured: true,
-                isOnSale: false,
-                salePercentage: nil,
-                tags: ["trail", "running", "grip"],
-                createdAt: Date(),
-                updatedAt: Date()
-            ),
-            Product(
-                id: "6",
-                name: "Daily Planning Notebook",
-                description: "Guided planner with weekly goals, reflection prompts, and habit trackers.",
-                price: 18.50,
-                originalPrice: 24.00,
-                imageURL: "https://picsum.photos/305/305",
-                category: "Books",
-                brand: "PaperForm",
-                rating: 4.6,
-                reviewCount: 142,
-                stockQuantity: 90,
-                isFeatured: false,
-                isOnSale: true,
-                salePercentage: 23,
-                tags: ["planner", "habits", "goals"],
-                createdAt: Date(),
-                updatedAt: Date()
-            ),
-            Product(
-                id: "7",
-                name: "Vitamin C Skin Serum",
-                description: "Brightening serum with niacinamide and hydration support for daily routines.",
-                price: 32.75,
-                originalPrice: 39.99,
-                imageURL: "https://picsum.photos/306/306",
-                category: "Beauty",
-                brand: "GlowLab",
-                rating: 4.3,
-                reviewCount: 88,
-                stockQuantity: 120,
-                isFeatured: false,
-                isOnSale: true,
-                salePercentage: 18,
-                tags: ["serum", "brightening", "skincare"],
-                createdAt: Date(),
-                updatedAt: Date()
-            ),
-            Product(
-                id: "8",
-                name: "Noise Isolating Bookshelf Speakers",
-                description: "Compact speakers with warm sound tuning for studio desks and living rooms.",
-                price: 219.00,
-                originalPrice: 259.00,
-                imageURL: "https://picsum.photos/307/307",
-                category: "Electronics",
-                brand: "SoundForge",
-                rating: 4.7,
-                reviewCount: 203,
-                stockQuantity: 18,
-                isFeatured: true,
-                isOnSale: true,
-                salePercentage: 15,
-                tags: ["speaker", "audio", "home-office"],
-                createdAt: Date(),
-                updatedAt: Date()
-            )
-        ]
-        
-        featuredProducts = products.filter { $0.isFeatured }
-        recentProducts = Array(products.sorted { $0.rating > $1.rating }.prefix(6))
-        categories = ["Electronics", "Clothing", "Books", "Sports", "Home", "Beauty"]
-    }
-}
-
-// MARK: - Supporting Views
-struct CategoriesView: View {
-    @StateObject private var productManager = ProductManager.shared
-    @State private var selectedCategory = "Electronics"
-    
-    var body: some View {
-        NavigationView {
-            List {
-                Section("Browse Categories") {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 10) {
-                            ForEach(productManager.categories, id: \.self) { category in
-                                CategoryFilterChip(title: category, isSelected: selectedCategory == category) {
-                                    selectedCategory = category
-                                }
-                            }
-                        }
-                        .padding(.vertical, 4)
-                    }
-                    .listRowInsets(EdgeInsets())
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                }
-                
-                Section("\(selectedCategory) Best Sellers") {
-                    ForEach(productManager.filteredProducts(matching: "", category: selectedCategory)) { product in
-                        NavigationLink(destination: ProductDetailView(product: product)) {
-                            VStack(alignment: .leading, spacing: 6) {
-                                Text(product.name)
-                                    .font(.headline)
-                                Text(product.description)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                    .lineLimit(2)
-                                HStack {
-                                    Text("$\(String(format: "%.2f", product.price))")
-                                        .font(.subheadline.weight(.bold))
-                                        .foregroundColor(.orange)
-                                    Spacer()
-                                    Text(product.brand)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                            .padding(.vertical, 4)
-                        }
-                    }
-                }
-            }
-            .navigationTitle("Categories")
-        }
-    }
-}
-
-struct CartView: View {
-    @StateObject private var cartManager = CartManager.shared
-    @StateObject private var productManager = ProductManager.shared
-    
-    var body: some View {
-        NavigationView {
-            List {
-                if cartManager.cartItems.isEmpty {
-                    Section {
-                        VStack(spacing: 12) {
-                            Image(systemName: "cart.badge.questionmark")
-                                .font(.system(size: 36))
-                                .foregroundColor(.orange)
-                            Text("Your cart is empty")
-                                .font(.headline)
-                            Text("Save products you want to compare, then come back to checkout.")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                                .multilineTextAlignment(.center)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 24)
-                    }
-                } else {
-                    Section("Cart Items") {
-                        ForEach(cartManager.cartItems) { item in
-                            VStack(alignment: .leading, spacing: 10) {
-                                HStack(alignment: .top) {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(item.product.name)
-                                            .font(.headline)
-                                        Text(item.product.brand)
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                    }
-                                    Spacer()
-                                    Text("$\(String(format: "%.2f", item.product.price * Double(item.quantity)))")
-                                        .font(.headline)
-                                }
-                                
-                                HStack {
-                                    Stepper(
-                                        "Qty \(item.quantity)",
-                                        value: Binding(
-                                            get: { item.quantity },
-                                            set: { cartManager.updateQuantity(productId: item.product.id, quantity: $0) }
-                                        ),
-                                        in: 1...10
-                                    )
-                                    Spacer()
-                                    Button("Remove") {
-                                        cartManager.removeFromCart(productId: item.product.id)
-                                    }
-                                    .foregroundColor(.red)
-                                }
-                            }
-                            .padding(.vertical, 4)
-                        }
-                    }
-                    
-                    Section("Order Summary") {
-                        SummaryRow(title: "Subtotal", value: cartManager.totalAmount)
-                        SummaryRow(title: "Shipping", value: cartManager.shippingCost)
-                        SummaryRow(title: "Tax", value: cartManager.taxAmount)
-                        SummaryRow(title: "Total", value: cartManager.grandTotal, isEmphasized: true)
-                    }
-                    
-                    Section("Recommended Add-ons") {
-                        ForEach(Array(productManager.products.filter { product in
-                            !cartManager.cartItems.contains(where: { $0.product.id == product.id })
-                        }.prefix(3))) { product in
+                        VStack(alignment: .leading, spacing: 6) {
                             HStack {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(product.name)
-                                        .font(.subheadline.weight(.semibold))
-                                    Text("$\(String(format: "%.2f", product.price))")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
+                                Text(product.title)
+                                    .font(.headline)
                                 Spacer()
-                                Button("Add") {
-                                    cartManager.addToCart(product: product)
+                                Text(product.price.currencyString)
+                                    .font(.subheadline.weight(.semibold))
+                            }
+                            Text(product.subtitle)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            Text("\(product.rating, specifier: "%.1f")★ • \(product.reviewCount) reviews • \(product.shippingETA)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+            .navigationTitle(store.selectedCategory?.title ?? "Browse")
+        }
+    }
+}
+
+struct CommerceProductDetailView: View {
+    @ObservedObject var store: CommerceStore
+    let productID: UUID
+
+    private var product: CommerceProduct? {
+        store.products.first(where: { $0.id == productID })
+    }
+
+    var body: some View {
+        Group {
+            if let product {
+                List {
+                    Section("Product") {
+                        Text(product.title)
+                            .font(.title3.weight(.bold))
+                        Text(product.subtitle)
+                            .foregroundStyle(.secondary)
+                        Text(product.heroBenefit)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Label(product.price.currencyString, systemImage: "creditcard.fill")
+                        Label(product.shippingETA, systemImage: "truck.box.fill")
+                        Label("\(product.stockStatus)", systemImage: "shippingbox.fill")
+                    }
+
+                    Section("Variants") {
+                        ForEach(product.variants, id: \.self) { variant in
+                            Label(variant, systemImage: "circle.grid.2x2.fill")
+                        }
+                    }
+
+                    Section("Proof") {
+                        Label("\(product.rating, specifier: "%.1f") average rating", systemImage: "star.fill")
+                        Label("\(product.reviewCount) customer reviews", systemImage: "bubble.left.and.bubble.right.fill")
+                        Label(product.returnPolicy, systemImage: "arrow.uturn.backward.circle.fill")
+                    }
+
+                    Section("Actions") {
+                        Button(store.wishlistIDs.contains(product.id) ? "Remove From Wishlist" : "Save To Wishlist") {
+                            store.toggleWishlist(product.id)
+                        }
+                        Button("Add To Cart") {
+                            store.addToCart(product.id)
+                        }
+                        .foregroundStyle(.orange)
+                    }
+                }
+                .navigationTitle("Product Detail")
+            } else {
+                ContentUnavailableView("Product unavailable", systemImage: "bag")
+            }
+        }
+    }
+}
+
+struct CommerceCartView: View {
+    @ObservedObject var store: CommerceStore
+    @State private var couponDraft = ""
+
+    var body: some View {
+        NavigationStack {
+            List {
+                if store.cartItems.isEmpty {
+                    ContentUnavailableView(
+                        "Cart is empty",
+                        systemImage: "cart",
+                        description: Text("Add products from the catalog to open the checkout path.")
+                    )
+                } else {
+                    Section("Items") {
+                        ForEach(store.cartItems) { item in
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Text(item.product.title)
+                                        .font(.headline)
+                                    Spacer()
+                                    Text(item.product.price.currencyString)
+                                        .font(.subheadline.weight(.semibold))
                                 }
-                                .font(.subheadline.weight(.semibold))
-                                .foregroundColor(.orange)
+                                Text(item.product.subtitle)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                HStack {
+                                    Button {
+                                        store.decrementCartItem(item.id)
+                                    } label: {
+                                        Image(systemName: "minus.circle.fill")
+                                    }
+
+                                    Text("Qty \(item.quantity)")
+                                        .font(.subheadline.weight(.semibold))
+
+                                    Button {
+                                        store.incrementCartItem(item.id)
+                                    } label: {
+                                        Image(systemName: "plus.circle.fill")
+                                    }
+
+                                    Spacer()
+                                    Text((item.product.price * Double(item.quantity)).currencyString)
+                                        .font(.subheadline.weight(.semibold))
+                                }
+                                .foregroundStyle(.orange)
+                            }
+                            .padding(.vertical, 4)
+                        }
+                    }
+
+                    Section("Coupon") {
+                        TextField("Enter code", text: $couponDraft)
+                        Button("Apply Coupon") {
+                            store.applyCoupon(couponDraft)
+                            couponDraft = ""
+                        }
+                        .buttonStyle(.bordered)
+                        if !store.appliedCouponCode.isEmpty {
+                            Label("\(store.appliedCouponCode) applied", systemImage: "checkmark.seal.fill")
+                                .foregroundStyle(.green)
+                        }
+                    }
+
+                    Section("Checkout") {
+                        NavigationLink {
+                            CommerceCheckoutView(store: store)
+                        } label: {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("Open checkout")
+                                    .font(.headline)
+                                Text("Review address, payment, savings, and shipping before placing the order.")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
                             }
                         }
                     }
@@ -1257,21 +579,114 @@ struct CartView: View {
     }
 }
 
-struct OrdersView: View {
-    @StateObject private var orderManager = OrderManager.shared
-    
+struct CommerceCheckoutView: View {
+    @ObservedObject var store: CommerceStore
+
     var body: some View {
-        NavigationView {
-            List {
-                Section("Active Orders") {
-                    ForEach(orderManager.orders.filter { $0.status != .delivered }) { order in
-                        OrderRow(order: order)
+        List {
+            Section("Shipping Address") {
+                ForEach(store.savedAddresses) { address in
+                    Button {
+                        store.selectAddress(address.id)
+                    } label: {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(address.label)
+                                    .foregroundStyle(.primary)
+                                Text(address.summary)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: store.selectedAddressID == address.id ? "checkmark.circle.fill" : "circle")
+                                .foregroundStyle(store.selectedAddressID == address.id ? .orange : .secondary)
+                        }
                     }
+                    .buttonStyle(.plain)
                 }
-                
-                Section("Delivered") {
-                    ForEach(orderManager.orders.filter { $0.status == .delivered }) { order in
-                        OrderRow(order: order)
+            }
+
+            Section("Payment") {
+                ForEach(store.paymentMethods) { method in
+                    Button {
+                        store.selectPaymentMethod(method.id)
+                    } label: {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(method.label)
+                                    .foregroundStyle(.primary)
+                                Text(method.detail)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: store.selectedPaymentID == method.id ? "checkmark.circle.fill" : "circle")
+                                .foregroundStyle(store.selectedPaymentID == method.id ? .orange : .secondary)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+
+            Section("Summary") {
+                CommerceSummaryRow(title: "Subtotal", value: store.subtotal.currencyString)
+                CommerceSummaryRow(title: "Savings", value: "-\(store.savings.currencyString)")
+                CommerceSummaryRow(title: "Shipping", value: store.shippingFee == 0 ? "Free" : store.shippingFee.currencyString)
+                CommerceSummaryRow(title: "Taxes", value: store.taxes.currencyString)
+                CommerceSummaryRow(title: "Total", value: store.total.currencyString, isPrimary: true)
+            }
+
+            Section("Action") {
+                Text(store.checkoutNotice)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Button("Place Order") {
+                    store.placeOrder()
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.orange)
+            }
+        }
+        .navigationTitle("Checkout")
+    }
+}
+
+struct CommerceSummaryRow: View {
+    let title: String
+    let value: String
+    var isPrimary = false
+
+    var body: some View {
+        HStack {
+            Text(title)
+            Spacer()
+            Text(value)
+                .font(isPrimary ? .headline : .body)
+                .foregroundStyle(isPrimary ? .orange : .primary)
+        }
+    }
+}
+
+struct CommerceOrdersView: View {
+    @ObservedObject var store: CommerceStore
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(store.placedOrders) { order in
+                    NavigationLink {
+                        CommerceOrderDetailView(store: store, orderID: order.id)
+                    } label: {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(order.title)
+                                .font(.headline)
+                            Text(order.summary)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            Text("\(order.total.currencyString) • ETA \(order.shipmentETA)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
             }
@@ -1280,520 +695,408 @@ struct OrdersView: View {
     }
 }
 
-struct ProfileView: View {
-    @StateObject private var authManager = AuthManager.shared
-    @StateObject private var cartManager = CartManager.shared
-    @StateObject private var orderManager = OrderManager.shared
-    
+struct CommerceOrderDetailView: View {
+    @ObservedObject var store: CommerceStore
+    let orderID: UUID
+
+    private var order: CommerceOrder? {
+        store.placedOrders.first(where: { $0.id == orderID })
+    }
+
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    if let user = authManager.currentUser {
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text(user.displayName ?? "Guest Shopper")
-                                .font(.title2.weight(.bold))
-                            Text(user.email)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                            if let tier = user.membershipTier {
-                                Label("\(tier) member", systemImage: "star.circle.fill")
-                                    .font(.subheadline)
-                                    .foregroundColor(.orange)
+        Group {
+            if let order {
+                List {
+                    Section("Order") {
+                        Text(order.title)
+                            .font(.title3.weight(.bold))
+                        Text(order.summary)
+                            .foregroundStyle(.secondary)
+                        Label(order.total.currencyString, systemImage: "creditcard.fill")
+                        Label(order.shipmentETA, systemImage: "clock.badge.checkmark.fill")
+                    }
+
+                    Section("Timeline") {
+                        ForEach(order.timeline) { event in
+                            HStack(alignment: .top, spacing: 12) {
+                                Image(systemName: event.state.icon)
+                                    .foregroundStyle(event.state.tint)
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(event.title)
+                                        .font(.headline)
+                                    Text(event.detail)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                            .padding(.vertical, 4)
+                        }
+                    }
+
+                    Section("Items") {
+                        ForEach(order.items) { item in
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(item.product.title)
+                                    Text("Qty \(item.quantity)")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                Text((item.product.price * Double(item.quantity)).currencyString)
                             }
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        .background(Color.orange.opacity(0.08))
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
                     }
-                    
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 12) {
-                        ProfileMetricCard(title: "Open Orders", value: "\(orderManager.orders.filter { $0.status != .delivered }.count)")
-                        ProfileMetricCard(title: "Cart Value", value: "$\(String(format: "%.0f", cartManager.grandTotal))")
-                        ProfileMetricCard(title: "Saved Address", value: authManager.currentUser?.primaryAddress?.city ?? "None")
-                        ProfileMetricCard(title: "Support SLA", value: "2h")
-                    }
-                    
-                    if let address = authManager.currentUser?.primaryAddress {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Primary Delivery Address")
-                                .font(.headline)
-                            Text(address.street)
-                            Text("\(address.city), \(address.state) \(address.zipCode)")
-                                .foregroundColor(.secondary)
-                            Text(address.country)
-                                .foregroundColor(.secondary)
+
+                    Section("Actions") {
+                        Button("Reorder Items") {
+                            store.reorder(order.id)
                         }
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Account Actions")
-                            .font(.headline)
-                        ProfileActionRow(title: "Payment methods", subtitle: "Visa ending in 2048", icon: "creditcard")
-                        ProfileActionRow(title: "Order notifications", subtitle: "Push and email enabled", icon: "bell.badge")
-                        ProfileActionRow(title: "Returns and refunds", subtitle: "Average resolution 1.2 days", icon: "arrow.uturn.backward")
-                        Button("Sign Out") {
-                            authManager.signOut()
-                        }
-                        .foregroundColor(.red)
-                        .padding(.top, 4)
+                        Button(order.supportAction) {}
+                            .foregroundStyle(.orange)
                     }
                 }
-                .padding(16)
+                .navigationTitle("Order Detail")
+            } else {
+                ContentUnavailableView("Order unavailable", systemImage: "shippingbox")
+            }
+        }
+    }
+}
+
+struct CommerceProfileView: View {
+    @ObservedObject var store: CommerceStore
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section("Buyer") {
+                    Label("Mina Aksoy", systemImage: "person.crop.circle.fill")
+                    Label("Express delivery eligible", systemImage: "bolt.fill")
+                }
+
+                Section("Commerce Rules") {
+                    Label("Same-day shipping starts before 21:00", systemImage: "clock.fill")
+                    Label("Coupon `SPRINT10` unlocks a 10% cart discount", systemImage: "tag.fill")
+                    Label("Post-purchase support opens from order detail", systemImage: "lifepreserver.fill")
+                }
+
+                Section("Saved Surfaces") {
+                    if let address = store.selectedAddress {
+                        Label(address.label, systemImage: "house.fill")
+                    }
+                    if let payment = store.selectedPaymentMethod {
+                        Label(payment.label, systemImage: "creditcard.fill")
+                    }
+                }
             }
             .navigationTitle("Profile")
         }
     }
 }
 
-struct SummaryRow: View {
+struct CommerceCategory: Identifiable, Hashable {
+    let id: UUID
     let title: String
-    let value: Double
-    var isEmphasized = false
-    
-    var body: some View {
-        HStack {
-            Text(title)
-                .font(isEmphasized ? .headline : .body)
-            Spacer()
-            Text("$\(String(format: "%.2f", value))")
-                .font(isEmphasized ? .headline : .body)
-                .foregroundColor(isEmphasized ? .orange : .primary)
-        }
+    let tagline: String
+    let icon: String
+
+    init(id: UUID = UUID(), title: String, tagline: String, icon: String) {
+        self.id = id
+        self.title = title
+        self.tagline = tagline
+        self.icon = icon
     }
+
+    static let sampleCategories: [CommerceCategory] = [
+        .init(title: "Desk Setup", tagline: "Performance gear for deep work and clean shipping.", icon: "laptopcomputer"),
+        .init(title: "Carry", tagline: "Travel-ready accessories with fast reorder paths.", icon: "suitcase.rolling.fill"),
+        .init(title: "Audio", tagline: "Premium listening gear with buyer proof and returns.", icon: "headphones")
+    ]
 }
 
-struct OrderRow: View {
-    let order: Order
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text("Order #\(order.id)")
-                    .font(.headline)
-                Spacer()
-                Text(order.status.rawValue.capitalized)
-                    .font(.caption.weight(.bold))
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(statusColor.opacity(0.12))
-                    .foregroundColor(statusColor)
-                    .clipShape(Capsule())
-            }
-            
-            Text("\(order.items.count) items • $\(String(format: "%.2f", order.totalAmount))")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-            Text(order.updatedAt.formatted(date: .abbreviated, time: .omitted))
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .padding(.vertical, 4)
-    }
-    
-    private var statusColor: Color {
-        switch order.status {
-        case .pending: return .orange
-        case .confirmed: return .blue
-        case .shipped: return .purple
-        case .delivered: return .green
-        case .cancelled: return .red
-        }
-    }
-}
-
-struct ProfileMetricCard: View {
-    let title: String
-    let value: String
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(value)
-                .font(.title3.weight(.bold))
-            Text(title)
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color(.systemGray6))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
-    }
-}
-
-struct ProfileActionRow: View {
+struct CommerceProduct: Identifiable, Hashable {
+    let id: UUID
+    let categoryID: UUID
     let title: String
     let subtitle: String
-    let icon: String
-    
-    var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            Image(systemName: icon)
-                .foregroundColor(.orange)
-                .frame(width: 20)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.subheadline.weight(.semibold))
-                Text(subtitle)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            Spacer()
-        }
-    }
-}
-
-// MARK: - Custom Components
-struct CustomTextField: View {
-    @Binding var text: String
-    let placeholder: String
-    let icon: String?
-    let validation: TextFieldValidation
-    let isSecure: Bool
-    
-    init(
-        text: Binding<String>,
-        placeholder: String,
-        icon: String? = nil,
-        validation: TextFieldValidation = .none,
-        isSecure: Bool = false
-    ) {
-        self._text = text
-        self.placeholder = placeholder
-        self.icon = icon
-        self.validation = validation
-        self.isSecure = isSecure
-    }
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                if let icon = icon {
-                    Image(systemName: icon)
-                        .foregroundColor(.secondary)
-                        .frame(width: 20)
-                }
-                
-                if isSecure {
-                    SecureField(placeholder, text: $text)
-                } else {
-                    TextField(placeholder, text: $text)
-                }
-            }
-            .padding()
-            .background(Color(.systemGray6))
-            .cornerRadius(10)
-        }
-    }
-}
-
-enum TextFieldValidation {
-    case none
-    case email
-    case password
-    case username
-}
-
-struct PrimaryButton: View {
-    let title: String
-    let isLoading: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            HStack {
-                if isLoading {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                        .scaleEffect(0.8)
-                } else {
-                    Text(title)
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                }
-            }
-            .foregroundColor(.white)
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(Color.orange)
-            .cornerRadius(10)
-        }
-        .disabled(isLoading)
-    }
-}
-
-struct SearchBar: View {
-    @Binding var text: String
-    let placeholder: String
-    
-    var body: some View {
-        HStack {
-            Image(systemName: "magnifyingglass")
-                .foregroundColor(.secondary)
-            
-            TextField(placeholder, text: $text)
-                .textFieldStyle(PlainTextFieldStyle())
-            
-            if !text.isEmpty {
-                Button(action: {
-                    text = ""
-                }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.secondary)
-                }
-            }
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
-        .background(Color(.systemGray6))
-        .cornerRadius(10)
-    }
-}
-
-// MARK: - Managers
-@MainActor
-class AuthManager: ObservableObject {
-    static let shared = AuthManager()
-    
-    @Published var isAuthenticated = false
-    @Published var currentUser: EcommerceUser?
-    
-    private init() {}
-    
-    func checkAuthState() async {
-        if currentUser != nil {
-            isAuthenticated = true
-        }
-    }
-    
-    func signIn(email: String, password: String) async throws {
-        try await simulateNetworkLatency()
-        currentUser = EcommerceUser(email: email)
-        isAuthenticated = true
-    }
-    
-    func signUp(username: String, email: String, password: String) async throws {
-        try await simulateNetworkLatency()
-        currentUser = EcommerceUser(email: email, displayName: username)
-        isAuthenticated = true
-    }
-    
-    func signOut() {
-        isAuthenticated = false
-        currentUser = nil
-    }
-
-    private func simulateNetworkLatency() async throws {
-        try await Task.sleep(for: .milliseconds(200))
-    }
-}
-
-struct EcommerceUser: Equatable {
-    let email: String
-    let displayName: String?
-    let membershipTier: String?
-    let primaryAddress: Address?
+    let heroBenefit: String
+    let price: Double
+    let shippingETA: String
+    let stockStatus: String
+    let rating: Double
+    let reviewCount: Int
+    let variants: [String]
+    let returnPolicy: String
+    let isFeatured: Bool
 
     init(
-        email: String,
-        displayName: String? = nil,
-        membershipTier: String? = nil,
-        primaryAddress: Address? = nil
+        id: UUID = UUID(),
+        categoryID: UUID,
+        title: String,
+        subtitle: String,
+        heroBenefit: String,
+        price: Double,
+        shippingETA: String,
+        stockStatus: String,
+        rating: Double,
+        reviewCount: Int,
+        variants: [String],
+        returnPolicy: String,
+        isFeatured: Bool
     ) {
-        self.email = email
-        self.displayName = displayName
-        self.membershipTier = membershipTier
-        self.primaryAddress = primaryAddress
+        self.id = id
+        self.categoryID = categoryID
+        self.title = title
+        self.subtitle = subtitle
+        self.heroBenefit = heroBenefit
+        self.price = price
+        self.shippingETA = shippingETA
+        self.stockStatus = stockStatus
+        self.rating = rating
+        self.reviewCount = reviewCount
+        self.variants = variants
+        self.returnPolicy = returnPolicy
+        self.isFeatured = isFeatured
     }
-    
-    static let preview = EcommerceUser(
-        email: "preview@iosapptemplates.dev",
-        displayName: "Preview User",
-        membershipTier: "Gold",
-        primaryAddress: Address(
-            street: "12 Market Street",
-            city: "San Francisco",
-            state: "CA",
-            zipCode: "94105",
-            country: "USA"
-        )
-    )
-}
 
-@MainActor
-class CartManager: ObservableObject {
-    static let shared = CartManager()
-    
-    @Published var cartItems: [CartItem] = []
-    @Published var totalAmount: Double = 0.0
-    
-    private init() {}
-    
-    func loadCart() async {
-        if cartItems.isEmpty {
-            seedPreviewState(products: ProductManager.shared.products)
-        }
-    }
-    
-    func addToCart(product: Product) {
-        if let existingIndex = cartItems.firstIndex(where: { $0.product.id == product.id }) {
-            cartItems[existingIndex].quantity += 1
-        } else {
-            cartItems.append(CartItem(product: product, quantity: 1))
-        }
-        calculateTotal()
-    }
-    
-    func removeFromCart(productId: String) {
-        cartItems.removeAll { $0.product.id == productId }
-        calculateTotal()
-    }
-    
-    func updateQuantity(productId: String, quantity: Int) {
-        if let itemIndex = cartItems.firstIndex(where: { $0.product.id == productId }) {
-            cartItems[itemIndex].quantity = quantity
-            if quantity <= 0 {
-                removeFromCart(productId: productId)
-            }
-        }
-        calculateTotal()
-    }
-    
-    private func calculateTotal() {
-        totalAmount = cartItems.reduce(0) { $0 + ($1.product.price * Double($1.quantity)) }
-    }
-    
-    var shippingCost: Double {
-        cartItems.isEmpty ? 0 : (totalAmount >= 150 ? 0 : 9.99)
-    }
-    
-    var taxAmount: Double {
-        totalAmount * 0.08
-    }
-    
-    var grandTotal: Double {
-        totalAmount + shippingCost + taxAmount
-    }
-    
-    func seedPreviewState(products: [Product]) {
-        guard !products.isEmpty else { return }
-        cartItems = Array(products.prefix(2)).enumerated().map { index, product in
-            CartItem(product: product, quantity: index + 1)
-        }
-        calculateTotal()
-    }
-}
-
-@MainActor
-class OrderManager: ObservableObject {
-    static let shared = OrderManager()
-    
-    @Published var orders: [Order] = []
-    
-    private init() {}
-    
-    func loadOrders(products: [Product]) async {
-        if orders.isEmpty {
-            orders = sampleOrders(from: products)
-        }
-    }
-    
-    func seedPreviewState(products: [Product]) {
-        orders = sampleOrders(from: products)
-    }
-    
-    private func sampleOrders(from products: [Product]) -> [Order] {
-        let primary = products.prefix(2).map {
-            OrderItem(
-                id: UUID().uuidString,
-                productId: $0.id,
-                productName: $0.name,
-                quantity: 1,
-                price: $0.price
-            )
-        }
-        let delivered = products.dropFirst(2).prefix(1).map {
-            OrderItem(
-                id: UUID().uuidString,
-                productId: $0.id,
-                productName: $0.name,
-                quantity: 1,
-                price: $0.price
-            )
-        }
-        
+    static let sampleProducts: [CommerceProduct] = {
+        let categories = CommerceCategory.sampleCategories
         return [
-            Order(
-                id: "SC-1042",
-                userId: "preview-user",
-                items: primary,
-                totalAmount: primary.reduce(0) { $0 + $1.price * Double($1.quantity) },
-                status: .shipped,
-                createdAt: Date().addingTimeInterval(-86_400),
-                updatedAt: Date().addingTimeInterval(-3_600)
+            .init(
+                categoryID: categories[0].id,
+                title: "Arc Desk Lamp",
+                subtitle: "Ambient task light with focused warm-cool control.",
+                heroBenefit: "Cuts evening glare without flattening your workspace contrast.",
+                price: 89.0,
+                shippingETA: "Ships today",
+                stockStatus: "In stock",
+                rating: 4.8,
+                reviewCount: 241,
+                variants: ["Matte black", "Soft silver"],
+                returnPolicy: "30-day free returns and prepaid label.",
+                isFeatured: true
             ),
-            Order(
-                id: "SC-1014",
-                userId: "preview-user",
-                items: delivered,
-                totalAmount: delivered.reduce(0) { $0 + $1.price * Double($1.quantity) },
-                status: .delivered,
-                createdAt: Date().addingTimeInterval(-604_800),
-                updatedAt: Date().addingTimeInterval(-345_600)
+            .init(
+                categoryID: categories[0].id,
+                title: "Focus Mat",
+                subtitle: "Desk mat with cable pass-through and spill resistance.",
+                heroBenefit: "Stabilizes your work area and keeps keyboard noise down.",
+                price: 32.0,
+                shippingETA: "Ships tomorrow",
+                stockStatus: "Low stock",
+                rating: 4.6,
+                reviewCount: 119,
+                variants: ["Graphite", "Sand", "Olive"],
+                returnPolicy: "14-day exchanges on unused mats.",
+                isFeatured: false
+            ),
+            .init(
+                categoryID: categories[1].id,
+                title: "Transit Sling",
+                subtitle: "Daily carry bag with hidden passport and charger lanes.",
+                heroBenefit: "Moves quickly through airport and commuter transitions.",
+                price: 124.0,
+                shippingETA: "Ships today",
+                stockStatus: "In stock",
+                rating: 4.9,
+                reviewCount: 312,
+                variants: ["Coal", "Navy"],
+                returnPolicy: "30-day returns with courier pickup.",
+                isFeatured: true
+            ),
+            .init(
+                categoryID: categories[2].id,
+                title: "Studio Buds Pro",
+                subtitle: "Noise control earbuds tuned for calls and editing.",
+                heroBenefit: "Maintains clean voice clarity in loud indoor lanes.",
+                price: 149.0,
+                shippingETA: "Ships today",
+                stockStatus: "In stock",
+                rating: 4.7,
+                reviewCount: 198,
+                variants: ["Onyx", "Stone"],
+                returnPolicy: "30-day audio fit guarantee.",
+                isFeatured: true
             )
         ]
+    }()
+}
+
+struct CommerceCartItem: Identifiable, Hashable {
+    let id: UUID
+    let product: CommerceProduct
+    var quantity: Int
+
+    init(id: UUID = UUID(), product: CommerceProduct, quantity: Int) {
+        self.id = id
+        self.product = product
+        self.quantity = quantity
     }
 }
 
-struct CartItem: Identifiable {
-    let id = UUID()
-    let product: Product
-    var quantity: Int
-}
-
-struct Order: Identifiable, Codable {
-    let id: String
-    let userId: String
-    let items: [OrderItem]
-    let totalAmount: Double
-    let status: OrderStatus
-    let createdAt: Date
-    let updatedAt: Date
-}
-
-struct OrderItem: Identifiable, Codable {
-    let id: String
-    let productId: String
-    let productName: String
-    let quantity: Int
-    let price: Double
-}
-
-enum OrderStatus: String, Codable {
-    case pending = "pending"
-    case confirmed = "confirmed"
-    case shipped = "shipped"
-    case delivered = "delivered"
-    case cancelled = "cancelled"
-}
-
-struct User: Identifiable, Codable {
-    let id: String
-    let username: String
-    let email: String
-    let displayName: String
-    let avatarURL: String?
-    let address: Address?
-    let phoneNumber: String?
-    let createdAt: Date
-    let updatedAt: Date
-}
-
-struct Address: Codable, Equatable {
-    let street: String
+struct CommerceAddress: Identifiable, Hashable {
+    let id: UUID
+    let label: String
     let city: String
-    let state: String
-    let zipCode: String
-    let country: String
-} 
+    let summary: String
+
+    init(id: UUID = UUID(), label: String, city: String, summary: String) {
+        self.id = id
+        self.label = label
+        self.city = city
+        self.summary = summary
+    }
+
+    static let sampleAddresses: [CommerceAddress] = [
+        .init(label: "Home", city: "Istanbul", summary: "Acibadem, Kadikoy • door delivery between 14:00-19:00"),
+        .init(label: "Studio", city: "Istanbul", summary: "Levent, Besiktas • business hours drop-off")
+    ]
+}
+
+struct CommercePaymentMethod: Identifiable, Hashable {
+    let id: UUID
+    let label: String
+    let detail: String
+
+    init(id: UUID = UUID(), label: String, detail: String) {
+        self.id = id
+        self.label = label
+        self.detail = detail
+    }
+
+    static let sampleMethods: [CommercePaymentMethod] = [
+        .init(label: "Visa •••• 1842", detail: "Primary card with instant refund support"),
+        .init(label: "Apple Pay", detail: "Fast checkout with device auth")
+    ]
+}
+
+enum CommerceTimelineState: Hashable {
+    case completed
+    case active
+    case pending
+
+    var icon: String {
+        switch self {
+        case .completed:
+            return "checkmark.circle.fill"
+        case .active:
+            return "shippingbox.fill"
+        case .pending:
+            return "circle"
+        }
+    }
+
+    var tint: Color {
+        switch self {
+        case .completed:
+            return .green
+        case .active:
+            return .orange
+        case .pending:
+            return .secondary
+        }
+    }
+}
+
+struct CommerceOrderStatusEvent: Identifiable, Hashable {
+    let id: UUID
+    let title: String
+    let detail: String
+    let state: CommerceTimelineState
+
+    init(id: UUID = UUID(), title: String, detail: String, state: CommerceTimelineState) {
+        self.id = id
+        self.title = title
+        self.detail = detail
+        self.state = state
+    }
+}
+
+struct CommerceOrder: Identifiable, Hashable {
+    let id: UUID
+    let title: String
+    let summary: String
+    let total: Double
+    let timeline: [CommerceOrderStatusEvent]
+    let items: [CommerceCartItem]
+    let shipmentETA: String
+    let supportAction: String
+
+    init(
+        id: UUID = UUID(),
+        title: String,
+        summary: String,
+        total: Double,
+        timeline: [CommerceOrderStatusEvent],
+        items: [CommerceCartItem],
+        shipmentETA: String,
+        supportAction: String
+    ) {
+        self.id = id
+        self.title = title
+        self.summary = summary
+        self.total = total
+        self.timeline = timeline
+        self.items = items
+        self.shipmentETA = shipmentETA
+        self.supportAction = supportAction
+    }
+
+    static let sampleOrders: [CommerceOrder] = {
+        let products = CommerceProduct.sampleProducts
+        let items = [
+            CommerceCartItem(product: products[0], quantity: 1),
+            CommerceCartItem(product: products[2], quantity: 1)
+        ]
+
+        return [
+            CommerceOrder(
+                title: "Order #1001",
+                summary: "Two-item workstation upgrade currently moving through the courier lane.",
+                total: 213.0,
+                timeline: [
+                    .init(title: "Confirmed", detail: "Payment cleared instantly with Visa.", state: .completed),
+                    .init(title: "Packed", detail: "Warehouse packed both items with protection inserts.", state: .completed),
+                    .init(title: "Shipped", detail: "Courier accepted the route at 17:40.", state: .active),
+                    .init(title: "Delivered", detail: "Expected tomorrow by 18:30.", state: .pending)
+                ],
+                items: items,
+                shipmentETA: "Tomorrow 18:30",
+                supportAction: "Open courier issue"
+            )
+        ]
+    }()
+}
+
+struct CommerceTrustSignal: Identifiable, Hashable {
+    let id: UUID
+    let title: String
+    let detail: String
+    let icon: String
+    let tint: Color
+
+    init(id: UUID = UUID(), title: String, detail: String, icon: String, tint: Color) {
+        self.id = id
+        self.title = title
+        self.detail = detail
+        self.icon = icon
+        self.tint = tint
+    }
+
+    static let sampleSignals: [CommerceTrustSignal] = [
+        .init(title: "Fast refunds", detail: "Refund reviews start from the order detail without external support hops.", icon: "arrow.uturn.backward.circle.fill", tint: .green),
+        .init(title: "Delivery confidence", detail: "Checkout ETA is tied to the selected address and same-day lane availability.", icon: "truck.box.fill", tint: .orange),
+        .init(title: "Buyer proof", detail: "Every featured product exposes review count, return policy, and stock status on the PDP.", icon: "checkmark.shield.fill", tint: .blue)
+    ]
+}
+
+private extension Double {
+    var currencyString: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = "USD"
+        formatter.maximumFractionDigits = 2
+        return formatter.string(from: NSNumber(value: self)) ?? "$0.00"
+    }
+}
