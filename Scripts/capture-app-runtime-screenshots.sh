@@ -8,6 +8,7 @@ project_name="iOSAppTemplatesRuntimeHosts"
 screenshots_dir="$repo_root/Documentation/Assets/AppScreenshots"
 derived_data_dir="$repo_root/.build/runtime-screenshot-derived-data"
 runtime_flag="IOSAPPTEMPLATES_SCREENSHOT_MODE"
+lock_dir="$repo_root/.build/runtime-capture.lock"
 
 default_apps=(
   "EcommerceApp"
@@ -43,6 +44,17 @@ command -v xcodegen >/dev/null 2>&1 || {
 }
 
 mkdir -p "$screenshots_dir"
+
+while ! mkdir "$lock_dir" 2>/dev/null; do
+  sleep 1
+done
+
+cleanup() {
+  rmdir "$lock_dir" >/dev/null 2>&1 || true
+}
+
+trap cleanup EXIT
+
 python3 "$repo_root/Scripts/generate-runtime-screenshot-hosts.py"
 
 (
