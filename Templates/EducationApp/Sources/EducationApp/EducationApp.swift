@@ -1,56 +1,48 @@
 import SwiftUI
 import EducationAppCore
 
-@available(iOS 18.0, macOS 15.0, *)
 public struct EducationAppShell: App {
     public init() {}
 
     public var body: some Scene {
         WindowGroup {
-            EducationWorkspaceRootView(
-                snapshot: .sample,
-                actions: EducationQuickAction.defaultActions,
-                state: .sample
-            )
+            EducationRuntimeRootView()
         }
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct EducationWorkspaceRootView: View {
-    let snapshot: EducationDashboardSnapshot
-    let actions: [EducationQuickAction]
-    let state: EducationWorkspaceState
+struct EducationRuntimeRootView: View {
+    @StateObject private var store = EducationLearningStore()
 
     var body: some View {
         TabView {
-            EducationDashboardView(snapshot: snapshot, actions: actions, state: state)
+            EducationDashboardView(store: store)
                 .tabItem {
-                    Image(systemName: "house")
+                    Image(systemName: "house.fill")
                     Text("Home")
                 }
 
-            EducationCoursesView(state: state)
+            EducationCoursesView(store: store)
                 .tabItem {
-                    Image(systemName: "books.vertical")
+                    Image(systemName: "books.vertical.fill")
                     Text("Courses")
                 }
 
-            EducationLessonsView(state: state)
+            EducationLessonsView(store: store)
                 .tabItem {
-                    Image(systemName: "play.rectangle")
+                    Image(systemName: "play.rectangle.fill")
                     Text("Lessons")
                 }
 
-            EducationQuizHubView(state: state)
+            EducationAssessmentView(store: store)
                 .tabItem {
                     Image(systemName: "checklist.checked")
-                    Text("Quizzes")
+                    Text("Assessments")
                 }
 
-            EducationProgressView(state: state)
+            EducationProgressView(store: store)
                 .tabItem {
-                    Image(systemName: "chart.bar")
+                    Image(systemName: "chart.bar.fill")
                     Text("Progress")
                 }
         }
@@ -58,21 +50,149 @@ struct EducationWorkspaceRootView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
+@MainActor
+final class EducationLearningStore: ObservableObject {
+    @Published var courses: [EducationCourseRecord] = EducationCourseRecord.sampleCourses
+    @Published var lessons: [EducationLessonRecord] = EducationLessonRecord.sampleLessons
+    @Published var quizzes: [EducationQuizRecord] = EducationQuizRecord.sampleQuizzes
+    @Published var assignments: [EducationAssignmentRecord] = EducationAssignmentRecord.sampleAssignments
+    @Published var notes: [EducationNoteRecord] = EducationNoteRecord.sampleNotes
+    @Published var noteDraft = ""
+    @Published var selectedLessonID: UUID?
+    @Published var selectedCourseID: UUID?
+    @Published var studyStreakDays = 12
+    @Published var completedLessonsCount = 28
+    @Published var quizAverage = 91
+
+    init() {
+        selectedLessonID = lessons.first?.id
+        selectedCourseID = courses.first?.id
+    }
+
+    var selectedLesson: EducationLessonRecord? {
+        lessons.first(where: { $0.id == selectedLessonID }) ?? lessons.first
+    }
+
+    var selectedCourse: EducationCourseRecord? {
+        courses.first(where: { $0.id == selectedCourseID }) ?? courses.first
+    }
+
+    var nextLesson: EducationLessonRecord? {
+        lessons.first(where: { !$0.isCompleted }) ?? lessons.first
+    }
+
+    var activeAssignments: [EducationAssignmentRecord] {
+        assignments.filter { !$0.isSubmitted }
+    }
+
+    var completionRateText: String {
+        let average = Int((courses.map(\.progress).reduce(0, +) / Double(max(courses.count, 1))) * 100)
+        return "\(average)%"
+    }
+
+    var dashboardHeadline: String {
+        if quizzes.contains(where: { $0.status == .readyToSubmit }) {
+            return "One assessment is ready to submit and can unlock the next module."
+        }
+        if assignments.contains(where: { !$0.isSubmitted && $0.priority == .high }) {
+            return "A high-priority assignment still needs submission before the deadline."
+        }
+        return "Learning pace is healthy and the next lesson is ready."
+    }
+
+    func selectCourse(_ id: UUID) {
+        selectedCourseID = id
+    }
+
+    func selectLesson(_ id: UUID) {
+        selectedLessonID = id
+    }
+
+    func completeLesson(_ lessonID: UUID) {
+        guard let lessonIndex = lessons.firstIndex(where: { $0.id == lessonID }),
+              !lessons[lessonIndex].isCompleted else { return }
+        lessons[lessonIndex].isCompleted = true
+        completedLessonsCount += 1
+        studyStreakDays += 1
+
+        if let courseIndex = courses.firstIndex(where: { $0.title == lessons[lessonIndex].course }) {
+            courses[courseIndex].progress = min(1, courses[courseIndex].progress + 0.08)
+            courses[courseIndex].nextStep = "Take the checkpoint quiz to lock this lesson."
+        }
+
+        if let quizIndex = quizzes.firstIndex(where: { $0.course == lessons[lessonIndex].course && $0.status == .locked }) {
+            quizzes[quizIndex].status = .ready
+        }
+    }
+
+    func saveLessonNote() {
+        let trimmed = noteDraft.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty, let lesson = selectedLesson else { return }
+        notes.insert(
+            EducationNoteRecord(lessonTitle: lesson.title, body: trimmed, isPinned: false),
+            at: 0
+        )
+        noteDraft = ""
+    }
+
+    func togglePinnedNote(_ noteID: UUID) {
+        guard let index = notes.firstIndex(where: { $0.id == noteID }) else { return }
+        notes[index].isPinned.toggle()
+    }
+
+    func answerQuizQuestion(_ quizID: UUID) {
+        guard let index = quizzes.firstIndex(where: { $0.id == quizID }),
+              quizzes[index].status == .ready || quizzes[index].status == .inProgress else { return }
+        quizzes[index].status = .inProgress
+        quizzes[index].answeredQuestions = min(quizzes[index].questionCount, quizzes[index].answeredQuestions + 1)
+        if quizzes[index].answeredQuestions == quizzes[index].questionCount {
+            quizzes[index].status = .readyToSubmit
+        }
+    }
+
+    func submitQuiz(_ quizID: UUID) {
+        guard let index = quizzes.firstIndex(where: { $0.id == quizID }),
+              quizzes[index].status == .readyToSubmit else { return }
+        quizzes[index].status = .submitted
+        quizzes[index].score = max(quizzes[index].score, 94)
+        quizAverage = min(99, max(quizAverage, quizzes[index].score))
+
+        if let courseIndex = courses.firstIndex(where: { $0.title == quizzes[index].course }) {
+            courses[courseIndex].progress = min(1, courses[courseIndex].progress + 0.07)
+            courses[courseIndex].nextStep = "Submit the assignment while the lesson context is still fresh."
+        }
+
+        if let assignmentIndex = assignments.firstIndex(where: { $0.course == quizzes[index].course && !$0.isSubmitted }) {
+            assignments[assignmentIndex].status = "Ready to submit"
+        }
+    }
+
+    func submitAssignment(_ assignmentID: UUID) {
+        guard let index = assignments.firstIndex(where: { $0.id == assignmentID }),
+              !assignments[index].isSubmitted else { return }
+        assignments[index].isSubmitted = true
+        assignments[index].status = "Submitted"
+
+        if let courseIndex = courses.firstIndex(where: { $0.title == assignments[index].course }) {
+            courses[courseIndex].progress = min(1, courses[courseIndex].progress + 0.1)
+            courses[courseIndex].nextStep = "Great. Move into the next module and coaching review."
+        }
+    }
+}
+
 struct EducationDashboardView: View {
-    let snapshot: EducationDashboardSnapshot
-    let actions: [EducationQuickAction]
-    let state: EducationWorkspaceState
+    @ObservedObject var store: EducationLearningStore
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    EducationHeroCard(snapshot: snapshot, state: state)
-                    EducationQuickActionGrid(actions: actions)
-                    EducationContinueLearningCard(lesson: state.nextLesson)
-                    EducationDeadlineCard(assignments: state.assignments)
-                    EducationCourseMomentumCard(courses: state.courses)
+                    EducationHeroCard(store: store)
+                    if let lesson = store.nextLesson {
+                        EducationContinueLearningCard(store: store, lesson: lesson)
+                    }
+                    EducationDeadlineCard(store: store)
+                    EducationCourseMomentumCard(store: store)
                 }
                 .padding(16)
             }
@@ -81,10 +201,8 @@ struct EducationDashboardView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct EducationHeroCard: View {
-    let snapshot: EducationDashboardSnapshot
-    let state: EducationWorkspaceState
+    @ObservedObject var store: EducationLearningStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -92,26 +210,17 @@ struct EducationHeroCard: View {
                 .font(.headline)
                 .foregroundStyle(.secondary)
 
-            Text(snapshot.nextMilestone)
+            Text(store.dashboardHeadline)
                 .font(.title2.weight(.bold))
-            Text(snapshot.coachMessage)
+            Text("Completion \(store.completionRateText) • Streak \(store.studyStreakDays) days • Quiz average \(store.quizAverage)%")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
             HStack(spacing: 12) {
-                EducationMetricChip(title: "Active Courses", value: "\(snapshot.activeCourses)")
-                EducationMetricChip(title: "Completion", value: snapshot.completionRate)
-                EducationMetricChip(title: "Study Streak", value: state.studyStreak)
+                EducationMetricChip(title: "Courses", value: "\(store.courses.count)")
+                EducationMetricChip(title: "Lessons", value: "\(store.completedLessonsCount)")
+                EducationMetricChip(title: "Open Work", value: "\(store.activeAssignments.count)")
             }
-
-            HStack {
-                Label(state.weeklyGoal, systemImage: "flag.checkered")
-                Spacer()
-                Text(state.coachStatus)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-            .font(.subheadline.weight(.semibold))
         }
         .padding(20)
         .background(
@@ -125,7 +234,6 @@ struct EducationHeroCard: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct EducationMetricChip: View {
     let title: String
     let value: String
@@ -145,45 +253,13 @@ struct EducationMetricChip: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct EducationQuickActionGrid: View {
-    let actions: [EducationQuickAction]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Quick Actions")
-                .font(.title3.weight(.bold))
-
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                ForEach(actions) { action in
-                    VStack(alignment: .leading, spacing: 10) {
-                        Image(systemName: action.systemImage)
-                            .font(.title3)
-                            .foregroundStyle(.teal)
-                        Text(action.title)
-                            .font(.subheadline.weight(.semibold))
-                        Text(action.detail)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                }
-            }
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
 struct EducationContinueLearningCard: View {
-    let lesson: EducationLesson
+    @ObservedObject var store: EducationLearningStore
+    let lesson: EducationLessonRecord
 
     var body: some View {
         NavigationLink {
-            EducationLessonDetailView(lesson: lesson)
+            EducationLessonDetailView(store: store, lessonID: lesson.id)
         } label: {
             VStack(alignment: .leading, spacing: 12) {
                 Text("Continue Learning")
@@ -210,16 +286,15 @@ struct EducationContinueLearningCard: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct EducationDeadlineCard: View {
-    let assignments: [EducationAssignment]
+    @ObservedObject var store: EducationLearningStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Due Soon")
                 .font(.title3.weight(.bold))
 
-            ForEach(assignments.prefix(3)) { assignment in
+            ForEach(store.activeAssignments.prefix(3)) { assignment in
                 HStack(alignment: .top, spacing: 12) {
                     Circle()
                         .fill(assignment.priority.color)
@@ -245,22 +320,21 @@ struct EducationDeadlineCard: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct EducationCourseMomentumCard: View {
-    let courses: [EducationCourse]
+    @ObservedObject var store: EducationLearningStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Course Momentum")
                 .font(.title3.weight(.bold))
 
-            ForEach(courses) { course in
+            ForEach(store.courses) { course in
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Text(course.title)
                             .font(.headline)
                         Spacer()
-                        Text(course.pace)
+                        Text("\(Int(course.progress * 100))%")
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(course.paceColor)
                     }
@@ -278,33 +352,30 @@ struct EducationCourseMomentumCard: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct EducationCoursesView: View {
-    let state: EducationWorkspaceState
+    @ObservedObject var store: EducationLearningStore
 
     var body: some View {
         NavigationStack {
             List {
-                Section("Courses") {
-                    ForEach(state.courses) { course in
-                        NavigationLink {
-                            EducationCourseDetailView(course: course, lessons: state.lessons.filter { $0.course == course.title })
-                        } label: {
-                            VStack(alignment: .leading, spacing: 8) {
-                                HStack {
-                                    Text(course.title)
-                                    Spacer()
-                                    Text("\(Int(course.progress * 100))%")
-                                        .font(.subheadline.weight(.bold))
-                                }
-                                ProgressView(value: course.progress)
-                                    .tint(course.paceColor)
-                                Text(course.nextStep)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                ForEach(store.courses) { course in
+                    NavigationLink {
+                        EducationCourseDetailView(store: store, courseID: course.id)
+                    } label: {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text(course.title)
+                                Spacer()
+                                Text("\(Int(course.progress * 100))%")
+                                    .font(.subheadline.weight(.bold))
                             }
-                            .padding(.vertical, 4)
+                            ProgressView(value: course.progress)
+                                .tint(course.paceColor)
+                            Text(course.nextStep)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
+                        .padding(.vertical, 4)
                     }
                 }
             }
@@ -313,31 +384,51 @@ struct EducationCoursesView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
+struct EducationCourseDetailView: View {
+    @ObservedObject var store: EducationLearningStore
+    let courseID: UUID
+
+    var body: some View {
+        if let course = store.courses.first(where: { $0.id == courseID }) {
+            List {
+                Section("Course") {
+                    LabeledContent("Title", value: course.title)
+                    LabeledContent("Progress", value: "\(Int(course.progress * 100))%")
+                    LabeledContent("Next Step", value: course.nextStep)
+                }
+
+                Section("Lessons") {
+                    ForEach(store.lessons.filter { $0.course == course.title }) { lesson in
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(lesson.title)
+                            Text(lesson.isCompleted ? "Completed" : lesson.duration)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+            .navigationTitle(course.title)
+        }
+    }
+}
+
 struct EducationLessonsView: View {
-    let state: EducationWorkspaceState
+    @ObservedObject var store: EducationLearningStore
 
     var body: some View {
         NavigationStack {
             List {
-                Section("Today") {
-                    ForEach(state.lessons.prefix(3)) { lesson in
-                        NavigationLink {
-                            EducationLessonDetailView(lesson: lesson)
-                        } label: {
-                            VStack(alignment: .leading, spacing: 6) {
-                                Text(lesson.title)
-                                Text("\(lesson.course) • \(lesson.duration)")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
+                ForEach(store.lessons) { lesson in
+                    NavigationLink {
+                        EducationLessonDetailView(store: store, lessonID: lesson.id)
+                    } label: {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(lesson.title)
+                            Text("\(lesson.course) • \(lesson.duration)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
-                    }
-                }
-
-                Section("Saved Notes") {
-                    ForEach(state.lessonNotes, id: \.self) { note in
-                        Label(note, systemImage: "note.text")
                     }
                 }
             }
@@ -346,42 +437,88 @@ struct EducationLessonsView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct EducationQuizHubView: View {
-    let state: EducationWorkspaceState
+struct EducationLessonDetailView: View {
+    @ObservedObject var store: EducationLearningStore
+    let lessonID: UUID
+
+    var body: some View {
+        if let lesson = store.lessons.first(where: { $0.id == lessonID }) {
+            List {
+                Section("Lesson") {
+                    Text(lesson.title)
+                        .font(.headline)
+                    Text(lesson.summary)
+                        .foregroundStyle(.secondary)
+                }
+
+                Section("Session") {
+                    LabeledContent("Course", value: lesson.course)
+                    LabeledContent("Duration", value: lesson.duration)
+                    LabeledContent("Resource", value: lesson.resourceType)
+                }
+
+                Section("Actions") {
+                    Button(lesson.isCompleted ? "Lesson Completed" : "Complete Lesson") {
+                        store.completeLesson(lesson.id)
+                    }
+                    .disabled(lesson.isCompleted)
+                }
+
+                Section("Capture Note") {
+                    TextEditor(text: $store.noteDraft)
+                        .frame(minHeight: 120)
+                    Button("Save Note") {
+                        store.selectLesson(lesson.id)
+                        store.saveLessonNote()
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+            }
+            .navigationTitle("Lesson")
+        }
+    }
+}
+
+struct EducationAssessmentView: View {
+    @ObservedObject var store: EducationLearningStore
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Quizzes") {
-                    ForEach(state.quizzes) { quiz in
+                    ForEach(store.quizzes) { quiz in
                         NavigationLink {
-                            EducationQuizDetailView(quiz: quiz)
+                            EducationQuizDetailView(store: store, quizID: quiz.id)
                         } label: {
                             VStack(alignment: .leading, spacing: 8) {
                                 HStack {
                                     Text(quiz.title)
                                     Spacer()
-                                    Text(quiz.status)
+                                    Text(quiz.status.label)
                                         .font(.caption.weight(.semibold))
-                                        .foregroundStyle(quiz.statusColor)
+                                        .foregroundStyle(quiz.status.color)
                                 }
                                 Text("\(quiz.questionCount) questions • \(quiz.dueDate)")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
-                            .padding(.vertical, 4)
                         }
                     }
                 }
 
                 Section("Assignments") {
-                    ForEach(state.assignments) { assignment in
-                        VStack(alignment: .leading, spacing: 6) {
+                    ForEach(store.assignments) { assignment in
+                        VStack(alignment: .leading, spacing: 8) {
                             Text(assignment.title)
-                            Text("Due \(assignment.dueDate)")
+                            Text("Due \(assignment.dueDate) • \(assignment.status)")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                            if !assignment.isSubmitted {
+                                Button("Submit Assignment") {
+                                    store.submitAssignment(assignment.id)
+                                }
+                                .buttonStyle(.bordered)
+                            }
                         }
                     }
                 }
@@ -391,28 +528,76 @@ struct EducationQuizHubView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
+struct EducationQuizDetailView: View {
+    @ObservedObject var store: EducationLearningStore
+    let quizID: UUID
+
+    var body: some View {
+        if let quiz = store.quizzes.first(where: { $0.id == quizID }) {
+            List {
+                Section("Quiz") {
+                    LabeledContent("Title", value: quiz.title)
+                    LabeledContent("Questions", value: "\(quiz.questionCount)")
+                    LabeledContent("Due", value: quiz.dueDate)
+                    LabeledContent("Status", value: quiz.status.label)
+                }
+
+                Section("Progress") {
+                    LabeledContent("Answered", value: "\(quiz.answeredQuestions)/\(quiz.questionCount)")
+                    if quiz.score > 0 {
+                        LabeledContent("Score", value: "\(quiz.score)%")
+                    }
+                    Text(quiz.guidance)
+                }
+
+                Section("Actions") {
+                    if quiz.status == .ready || quiz.status == .inProgress {
+                        Button("Answer Next Question") {
+                            store.answerQuizQuestion(quiz.id)
+                        }
+                    }
+                    if quiz.status == .readyToSubmit {
+                        Button("Submit Quiz") {
+                            store.submitQuiz(quiz.id)
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                }
+            }
+            .navigationTitle("Quiz")
+        }
+    }
+}
+
 struct EducationProgressView: View {
-    let state: EducationWorkspaceState
+    @ObservedObject var store: EducationLearningStore
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Progress") {
-                    LabeledContent("Study Streak", value: state.studyStreak)
-                    LabeledContent("Completed Lessons", value: state.completedLessons)
-                    LabeledContent("Quiz Average", value: state.quizAverage)
+                    LabeledContent("Study Streak", value: "\(store.studyStreakDays) days")
+                    LabeledContent("Completed Lessons", value: "\(store.completedLessonsCount)")
+                    LabeledContent("Quiz Average", value: "\(store.quizAverage)%")
                 }
 
-                Section("Wins") {
-                    ForEach(state.progressWins, id: \.self) { win in
-                        Label(win, systemImage: "sparkles")
-                    }
-                }
-
-                Section("Next Coaching Moves") {
-                    ForEach(state.coachingMoves, id: \.self) { move in
-                        Label(move, systemImage: "arrow.right.circle")
+                Section("Pinned Notes") {
+                    ForEach(store.notes) { note in
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text(note.lessonTitle)
+                                    .font(.headline)
+                                Spacer()
+                                Button(note.isPinned ? "Unpin" : "Pin") {
+                                    store.togglePinnedNote(note.id)
+                                }
+                                .buttonStyle(.borderless)
+                            }
+                            Text(note.body)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.vertical, 4)
                     }
                 }
             }
@@ -421,200 +606,82 @@ struct EducationProgressView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct EducationCourseDetailView: View {
-    let course: EducationCourse
-    let lessons: [EducationLesson]
+struct EducationCourseRecord: Identifiable {
+    let id = UUID()
+    let title: String
+    var progress: Double
+    var nextStep: String
+    let paceColor: Color
 
-    var body: some View {
-        List {
-            Section("Course") {
-                LabeledContent("Title", value: course.title)
-                LabeledContent("Progress", value: "\(Int(course.progress * 100))%")
-                LabeledContent("Next Step", value: course.nextStep)
-            }
-
-            Section("Lessons") {
-                ForEach(lessons) { lesson in
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(lesson.title)
-                        Text(lesson.duration)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-        }
-        .navigationTitle(course.title)
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct EducationLessonDetailView: View {
-    let lesson: EducationLesson
-
-    var body: some View {
-        List {
-            Section("Lesson") {
-                Text(lesson.title)
-                    .font(.headline)
-                Text(lesson.summary)
-                    .foregroundStyle(.secondary)
-            }
-
-            Section("Session") {
-                LabeledContent("Course", value: lesson.course)
-                LabeledContent("Duration", value: lesson.duration)
-                LabeledContent("Resource", value: lesson.resourceType)
-            }
-        }
-        .navigationTitle("Lesson")
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct EducationQuizDetailView: View {
-    let quiz: EducationQuiz
-
-    var body: some View {
-        List {
-            Section("Quiz") {
-                LabeledContent("Title", value: quiz.title)
-                LabeledContent("Questions", value: "\(quiz.questionCount)")
-                LabeledContent("Due", value: quiz.dueDate)
-                LabeledContent("Status", value: quiz.status)
-            }
-
-            Section("Guidance") {
-                Text(quiz.guidance)
-            }
-        }
-        .navigationTitle("Quiz")
-    }
-}
-
-public struct EducationQuickAction: Identifiable, Hashable, Sendable {
-    public let id: UUID
-    public let title: String
-    public let detail: String
-    public let systemImage: String
-
-    public init(
-        id: UUID = UUID(),
-        title: String,
-        detail: String,
-        systemImage: String
-    ) {
-        self.id = id
-        self.title = title
-        self.detail = detail
-        self.systemImage = systemImage
-    }
-
-    public static let defaultActions: [EducationQuickAction] = [
-        EducationQuickAction(title: "Continue Course", detail: "Resume the next lesson in the design systems path.", systemImage: "play.circle.fill"),
-        EducationQuickAction(title: "Open Quiz", detail: "Review the highest-risk assessment before tomorrow's deadline.", systemImage: "questionmark.circle.fill"),
-        EducationQuickAction(title: "Review Progress", detail: "Compare current completion pace against the weekly coaching goal.", systemImage: "chart.bar.fill"),
-        EducationQuickAction(title: "Capture Notes", detail: "Save takeaways from the latest workshop and apply them to the next assignment.", systemImage: "square.and.pencil")
+    static let sampleCourses: [EducationCourseRecord] = [
+        EducationCourseRecord(title: "Design Systems", progress: 0.78, nextStep: "Ship the token exercise and pass Quiz 4.", paceColor: .green),
+        EducationCourseRecord(title: "Product Analytics", progress: 0.62, nextStep: "Complete funnel instrumentation lesson.", paceColor: .blue),
+        EducationCourseRecord(title: "Growth Writing", progress: 0.54, nextStep: "Submit the onboarding rewrite peer review.", paceColor: .orange)
     ]
 }
 
-struct EducationWorkspaceState: Hashable, Sendable {
-    let weeklyGoal: String
-    let coachStatus: String
-    let studyStreak: String
-    let completedLessons: String
-    let quizAverage: String
-    let nextLesson: EducationLesson
-    let courses: [EducationCourse]
-    let lessons: [EducationLesson]
-    let quizzes: [EducationQuiz]
-    let assignments: [EducationAssignment]
-    let progressWins: [String]
-    let coachingMoves: [String]
-    let lessonNotes: [String]
-
-    static let sample = EducationWorkspaceState(
-        weeklyGoal: "Finish two lessons and submit the mobile UI case study.",
-        coachStatus: "On pace",
-        studyStreak: "12 days",
-        completedLessons: "28",
-        quizAverage: "91%",
-        nextLesson: EducationLesson(course: "Design Systems", title: "Token orchestration across iOS surfaces", summary: "Translate typography, spacing, and motion tokens into reusable SwiftUI primitives.", duration: "18 min", resourceType: "Video + notes"),
-        courses: [
-            EducationCourse(title: "Design Systems", progress: 0.78, nextStep: "Ship the token exercise and pass Quiz 4.", pace: "Ahead", paceColor: .green),
-            EducationCourse(title: "Product Analytics", progress: 0.62, nextStep: "Complete funnel instrumentation lesson.", pace: "On track", paceColor: .blue),
-            EducationCourse(title: "Growth Writing", progress: 0.54, nextStep: "Submit the onboarding rewrite peer review.", pace: "Needs focus", paceColor: .orange)
-        ],
-        lessons: [
-            EducationLesson(course: "Design Systems", title: "Token orchestration across iOS surfaces", summary: "Translate typography, spacing, and motion tokens into reusable SwiftUI primitives.", duration: "18 min", resourceType: "Video + notes"),
-            EducationLesson(course: "Product Analytics", title: "Lifecycle dashboard baselines", summary: "Build a retention and activation lens for weekly reporting.", duration: "14 min", resourceType: "Workshop"),
-            EducationLesson(course: "Growth Writing", title: "Rewrite the first-run onboarding", summary: "Turn product value into clear learning prompts and friction removal.", duration: "11 min", resourceType: "Reading")
-        ],
-        quizzes: [
-            EducationQuiz(title: "Quiz 4: Component contracts", questionCount: 12, dueDate: "Tomorrow", status: "Ready", statusColor: .green, guidance: "Focus on naming consistency, hierarchy decisions, and token fallback rules."),
-            EducationQuiz(title: "Quiz 3: Funnel analysis", questionCount: 10, dueDate: "Apr 29", status: "Needs review", statusColor: .orange, guidance: "Review activation metrics before attempting the scenario questions.")
-        ],
-        assignments: [
-            EducationAssignment(title: "Mobile UI case study", course: "Design Systems", dueDate: "Tomorrow", priority: .high),
-            EducationAssignment(title: "Instrumentation workbook", course: "Product Analytics", dueDate: "Apr 28", priority: .medium),
-            EducationAssignment(title: "Peer review notes", course: "Growth Writing", dueDate: "Apr 30", priority: .medium)
-        ],
-        progressWins: [
-            "Finished the full lesson sequence for analytics cohort week 3.",
-            "Raised quiz performance from 84% to 91% over the last two sprints.",
-            "Closed the backlog on missed annotations for the design systems course."
-        ],
-        coachingMoves: [
-            "Block a 45-minute deep work slot for the case study before noon.",
-            "Review last quiz mistakes before starting the next assessment.",
-            "Convert workshop notes into flashcards while the context is still fresh."
-        ],
-        lessonNotes: [
-            "Keep motion tokens separate from semantic animation presets.",
-            "Funnel drop-off without cohort context hides the real retention story.",
-            "Learning copy should explain the payoff before the instruction."
-        ]
-    )
-}
-
-struct EducationCourse: Identifiable, Hashable, Sendable {
-    let id = UUID()
-    let title: String
-    let progress: Double
-    let nextStep: String
-    let pace: String
-    let paceColor: Color
-}
-
-struct EducationLesson: Identifiable, Hashable, Sendable {
+struct EducationLessonRecord: Identifiable {
     let id = UUID()
     let course: String
     let title: String
     let summary: String
     let duration: String
     let resourceType: String
+    var isCompleted: Bool
+
+    static let sampleLessons: [EducationLessonRecord] = [
+        EducationLessonRecord(course: "Design Systems", title: "Token orchestration across iOS surfaces", summary: "Translate typography, spacing, and motion tokens into reusable SwiftUI primitives.", duration: "18 min", resourceType: "Video + notes", isCompleted: false),
+        EducationLessonRecord(course: "Product Analytics", title: "Lifecycle dashboard baselines", summary: "Build a retention and activation lens for weekly reporting.", duration: "14 min", resourceType: "Workshop", isCompleted: false),
+        EducationLessonRecord(course: "Growth Writing", title: "Rewrite the first-run onboarding", summary: "Turn product value into clear learning prompts and friction removal.", duration: "11 min", resourceType: "Reading", isCompleted: false)
+    ]
 }
 
-struct EducationQuiz: Identifiable, Hashable, Sendable {
+enum EducationQuizStatus {
+    case locked
+    case ready
+    case inProgress
+    case readyToSubmit
+    case submitted
+
+    var label: String {
+        switch self {
+        case .locked: return "Locked"
+        case .ready: return "Ready"
+        case .inProgress: return "In progress"
+        case .readyToSubmit: return "Ready to submit"
+        case .submitted: return "Submitted"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .locked: return .secondary
+        case .ready: return .green
+        case .inProgress: return .blue
+        case .readyToSubmit: return .orange
+        case .submitted: return .teal
+        }
+    }
+}
+
+struct EducationQuizRecord: Identifiable {
     let id = UUID()
+    let course: String
     let title: String
     let questionCount: Int
     let dueDate: String
-    let status: String
-    let statusColor: Color
     let guidance: String
+    var status: EducationQuizStatus
+    var answeredQuestions: Int
+    var score: Int
+
+    static let sampleQuizzes: [EducationQuizRecord] = [
+        EducationQuizRecord(course: "Design Systems", title: "Quiz 4: Component contracts", questionCount: 12, dueDate: "Tomorrow", guidance: "Focus on naming consistency, hierarchy decisions, and token fallback rules.", status: .ready, answeredQuestions: 0, score: 0),
+        EducationQuizRecord(course: "Product Analytics", title: "Quiz 3: Funnel analysis", questionCount: 10, dueDate: "Apr 29", guidance: "Review activation metrics before attempting the scenario questions.", status: .locked, answeredQuestions: 0, score: 0)
+    ]
 }
 
-struct EducationAssignment: Identifiable, Hashable, Sendable {
-    let id = UUID()
-    let title: String
-    let course: String
-    let dueDate: String
-    let priority: EducationPriority
-}
-
-enum EducationPriority: Hashable, Sendable {
+enum EducationPriority {
     case high
     case medium
 
@@ -624,4 +691,32 @@ enum EducationPriority: Hashable, Sendable {
         case .medium: return .orange
         }
     }
+}
+
+struct EducationAssignmentRecord: Identifiable {
+    let id = UUID()
+    let title: String
+    let course: String
+    let dueDate: String
+    let priority: EducationPriority
+    var status: String
+    var isSubmitted: Bool
+
+    static let sampleAssignments: [EducationAssignmentRecord] = [
+        EducationAssignmentRecord(title: "Mobile UI case study", course: "Design Systems", dueDate: "Tomorrow", priority: .high, status: "Draft in progress", isSubmitted: false),
+        EducationAssignmentRecord(title: "Instrumentation workbook", course: "Product Analytics", dueDate: "Apr 28", priority: .medium, status: "Waiting on quiz unlock", isSubmitted: false),
+        EducationAssignmentRecord(title: "Peer review notes", course: "Growth Writing", dueDate: "Apr 30", priority: .medium, status: "Ready to polish", isSubmitted: false)
+    ]
+}
+
+struct EducationNoteRecord: Identifiable {
+    let id = UUID()
+    let lessonTitle: String
+    let body: String
+    var isPinned: Bool
+
+    static let sampleNotes: [EducationNoteRecord] = [
+        EducationNoteRecord(lessonTitle: "Token orchestration across iOS surfaces", body: "Keep motion tokens separate from semantic animation presets.", isPinned: true),
+        EducationNoteRecord(lessonTitle: "Lifecycle dashboard baselines", body: "Funnel drop-off without cohort context hides the real retention story.", isPinned: false)
+    ]
 }
