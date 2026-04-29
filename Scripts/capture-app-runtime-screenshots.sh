@@ -74,6 +74,7 @@ xcrun simctl bootstatus "$simulator_id" -b
 for app in "${apps_to_capture[@]}"; do
   scheme="${app}Runtime"
   bundle_id="com.muhittincamdali.iOSAppTemplates.RuntimeHosts.${scheme}"
+  screenshot_path="$screenshots_dir/${app}.png"
 
   echo "Capturing runtime screenshot for $app..."
 
@@ -90,12 +91,13 @@ for app in "${apps_to_capture[@]}"; do
     exit 1
   fi
 
+  rm -f "$screenshot_path"
   xcrun simctl uninstall "$simulator_id" "$bundle_id" >/dev/null 2>&1 || true
   xcrun simctl install "$simulator_id" "$app_path"
   env "SIMCTL_CHILD_${runtime_flag}=1" \
     xcrun simctl launch --terminate-running-process "$simulator_id" "$bundle_id" >/dev/null
   sleep 3
-  xcrun simctl io "$simulator_id" screenshot "$screenshots_dir/${app}.png" >/dev/null
+  xcrun simctl io "$simulator_id" screenshot "$screenshot_path" >/dev/null
 done
 
 echo "Captured runtime screenshots for:"

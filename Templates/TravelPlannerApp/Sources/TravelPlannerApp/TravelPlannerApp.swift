@@ -1,66 +1,48 @@
 import SwiftUI
 import TravelPlannerAppCore
 
-@available(iOS 18.0, macOS 15.0, *)
 public struct TravelPlannerAppShell: App {
     public init() {}
 
     public var body: some Scene {
         WindowGroup {
-            TravelPlannerWorkspaceRootView(
-                snapshot: .sample,
-                cards: TravelPlannerItineraryCard.sampleCards,
-                actions: TravelPlannerQuickAction.defaultActions,
-                health: .sample,
-                state: .sample
-            )
+            TravelPlannerRuntimeRootView()
         }
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct TravelPlannerWorkspaceRootView: View {
-    let snapshot: TravelPlannerDashboardSnapshot
-    let cards: [TravelPlannerItineraryCard]
-    let actions: [TravelPlannerQuickAction]
-    let health: TravelPlannerBookingHealth
-    let state: TravelPlannerWorkspaceState
+struct TravelPlannerRuntimeRootView: View {
+    @StateObject private var store = TravelPlannerOperationsStore()
 
     var body: some View {
         TabView {
-            TravelPlannerDashboardView(
-                snapshot: snapshot,
-                cards: cards,
-                actions: actions,
-                health: health,
-                state: state
-            )
-            .tabItem {
-                Image(systemName: "globe.europe.africa.fill")
-                Text("Trips")
-            }
+            TravelPlannerTripsWorkspaceView(store: store)
+                .tabItem {
+                    Image(systemName: "globe.europe.africa.fill")
+                    Text("Trips")
+                }
 
-            TravelPlannerTimelineView(state: state)
+            TravelPlannerTimelineWorkspaceView(store: store)
                 .tabItem {
                     Image(systemName: "calendar")
                     Text("Timeline")
                 }
 
-            TravelPlannerBookingsView(state: state)
+            TravelPlannerBookingsWorkspaceView(store: store)
                 .tabItem {
                     Image(systemName: "airplane.departure")
                     Text("Bookings")
                 }
 
-            TravelPlannerEssentialsView(state: state)
+            TravelPlannerEssentialsWorkspaceView(store: store)
                 .tabItem {
                     Image(systemName: "suitcase.rolling.fill")
                     Text("Essentials")
                 }
 
-            TravelPlannerProfileView(state: state)
+            TravelPlannerProfileWorkspaceView(store: store)
                 .tabItem {
-                    Image(systemName: "person.crop.circle")
+                    Image(systemName: "person.crop.circle.fill")
                     Text("Profile")
                 }
         }
@@ -68,23 +50,139 @@ struct TravelPlannerWorkspaceRootView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct TravelPlannerDashboardView: View {
-    let snapshot: TravelPlannerDashboardSnapshot
-    let cards: [TravelPlannerItineraryCard]
-    let actions: [TravelPlannerQuickAction]
-    let health: TravelPlannerBookingHealth
-    let state: TravelPlannerWorkspaceState
+@MainActor
+final class TravelPlannerOperationsStore: ObservableObject {
+    @Published var trips: [TravelTripRecord] = TravelTripRecord.sampleTrips
+    @Published var timelineDays: [TravelTimelineDayRecord] = TravelTimelineDayRecord.sampleDays
+    @Published var flights: [TravelFlightRecord] = TravelFlightRecord.sampleFlights
+    @Published var stays: [TravelStayRecord] = TravelStayRecord.sampleStays
+    @Published var packingTasks: [TravelPackingTaskRecord] = TravelPackingTaskRecord.sampleTasks
+    @Published var documents: [TravelDocumentRecord] = TravelDocumentRecord.sampleDocuments
+    @Published var alerts: [TravelAlertRecord] = TravelAlertRecord.sampleAlerts
+    @Published var selectedTripID: UUID?
+    @Published var operationsNote = "Check-in, airport transfer, and passport validity must close before the departure lock window."
+
+    init() {
+        selectedTripID = trips.first?.id
+    }
+
+    var selectedTrip: TravelTripRecord? {
+        trips.first(where: { $0.id == selectedTripID }) ?? trips.first
+    }
+
+    var nextFlight: TravelFlightRecord? {
+        flights.sorted { $0.departureCode < $1.departureCode }.first
+    }
+
+    var unresolvedAlerts: Int {
+        alerts.filter { !$0.isResolved }.count
+    }
+
+    var checkedInFlights: Int {
+        flights.filter(\.isCheckedIn).count
+    }
+
+    var packedTasks: Int {
+        packingTasks.filter(\.isPacked).count
+    }
+
+    var verifiedDocuments: Int {
+        documents.filter(\.isReady).count
+    }
+
+    var readinessHeadline: String {
+        if unresolvedAlerts > 0 {
+            return "\(unresolvedAlerts) trip alerts still need rerouting or traveler action."
+        }
+        if documents.contains(where: { !$0.isReady }) {
+            return "Travel documents are still incomplete for the departure window."
+        }
+        return "Trip operations are aligned for departure."
+    }
+
+    func selectTrip(_ tripID: UUID) {
+        selectedTripID = tripID
+    }
+
+    func confirmCheckIn(_ flightID: UUID) {
+        guard let index = flights.firstIndex(where: { $0.id == flightID }) else { return }
+        flights[index].isCheckedIn = true
+        flights[index].seat = flights[index].seat == nil ? "12A" : flights[index].seat
+        flights[index].status = "Checked in"
+        alerts.removeAll { $0.linkedFlightID == flightID && $0.type == .checkIn }
+    }
+
+    func requestRebook(_ flightID: UUID) {
+        guard let index = flights.firstIndex(where: { $0.id == flightID }) else { return }
+        flights[index].status = "Rebooking requested"
+        alerts.append(
+            TravelAlertRecord(
+                title: "Rebook \(flights[index].route)",
+                detail: "Operations requested a safer connection window with extra buffer before hotel transfer.",
+                type: .disruption,
+                linkedFlightID: flightID,
+                isResolved: false
+            )
+        )
+    }
+
+    func confirmStay(_ stayID: UUID) {
+        guard let index = stays.firstIndex(where: { $0.id == stayID }) else { return }
+        stays[index].confirmationState = "Confirmed"
+        stays[index].checkInNote = "Late arrival shared with concierge and airport pickup vendor."
+    }
+
+    func moveActivityForward(_ activityID: UUID, from dayID: UUID) {
+        guard let dayIndex = timelineDays.firstIndex(where: { $0.id == dayID }),
+              dayIndex + 1 < timelineDays.count,
+              let activityIndex = timelineDays[dayIndex].activities.firstIndex(where: { $0.id == activityID }) else {
+            return
+        }
+
+        let activity = timelineDays[dayIndex].activities.remove(at: activityIndex)
+        timelineDays[dayIndex + 1].activities.insert(activity, at: 0)
+        timelineDays[dayIndex].summary = "Agenda rebalanced after shifting a lower-priority item."
+        timelineDays[dayIndex + 1].summary = "Buffer block absorbed one moved activity from the previous day."
+    }
+
+    func lockDayPlan(_ dayID: UUID) {
+        guard let dayIndex = timelineDays.firstIndex(where: { $0.id == dayID }) else { return }
+        timelineDays[dayIndex].isLocked = true
+        timelineDays[dayIndex].summary = "Day plan locked with transport, reservations, and meeting windows confirmed."
+    }
+
+    func togglePackingTask(_ taskID: UUID) {
+        guard let index = packingTasks.firstIndex(where: { $0.id == taskID }) else { return }
+        packingTasks[index].isPacked.toggle()
+    }
+
+    func markDocumentReady(_ documentID: UUID) {
+        guard let index = documents.firstIndex(where: { $0.id == documentID }) else { return }
+        documents[index].isReady = true
+        documents[index].status = "Ready"
+        alerts.removeAll { $0.linkedDocumentID == documentID }
+    }
+
+    func resolveAlert(_ alertID: UUID) {
+        guard let index = alerts.firstIndex(where: { $0.id == alertID }) else { return }
+        alerts[index].isResolved = true
+        alerts[index].detail = "Operator action completed and traveler brief synced."
+    }
+}
+
+struct TravelPlannerTripsWorkspaceView: View {
+    @ObservedObject var store: TravelPlannerOperationsStore
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    TravelPlannerHeroCard(snapshot: snapshot, health: health, state: state)
-                    TravelPlannerQuickActionGrid(actions: actions)
-                    TravelPlannerTripOverviewCard(trip: state.primaryTrip)
-                    TravelPlannerDailyAgendaCard(cards: cards)
-                    TravelPlannerTravelerSignalsCard(signals: state.signals)
+                    TravelPlannerHeroCard(store: store)
+                    TravelPlannerTripPickerSection(store: store)
+                    if let trip = store.selectedTrip {
+                        TravelPlannerTripOverviewCard(store: store, trip: trip)
+                    }
+                    TravelPlannerAlertLane(store: store)
                 }
                 .padding(16)
             }
@@ -93,41 +191,27 @@ struct TravelPlannerDashboardView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct TravelPlannerHeroCard: View {
-    let snapshot: TravelPlannerDashboardSnapshot
-    let health: TravelPlannerBookingHealth
-    let state: TravelPlannerWorkspaceState
+    @ObservedObject var store: TravelPlannerOperationsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Upcoming Journey")
+            Text("Departure Readiness")
                 .font(.headline)
                 .foregroundStyle(.secondary)
 
-            Text(snapshot.nextDestination)
-                .font(.system(size: 34, weight: .bold, design: .rounded))
-            Text(snapshot.upcomingFlight)
-                .font(.title3.weight(.semibold))
-            Text(snapshot.itineraryStatus)
+            Text(store.readinessHeadline)
+                .font(.system(size: 32, weight: .bold, design: .rounded))
+
+            Text(store.operationsNote)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
             HStack(spacing: 12) {
-                TravelPlannerMetricChip(title: "Trips", value: "\(snapshot.activeTrips)")
-                TravelPlannerMetricChip(title: "Flights", value: "\(health.flightsConfirmed)")
-                TravelPlannerMetricChip(title: "Alerts", value: "\(health.alerts)")
+                TravelMetricChip(title: "Trips", value: "\(store.trips.count)")
+                TravelMetricChip(title: "Checked In", value: "\(store.checkedInFlights)")
+                TravelMetricChip(title: "Docs", value: "\(store.verifiedDocuments)")
             }
-
-            HStack {
-                Label(state.homeAirport, systemImage: "airplane.circle.fill")
-                Spacer()
-                Text(state.membershipTier)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.blue)
-            }
-            .font(.caption)
-            .foregroundStyle(.secondary)
         }
         .padding(20)
         .background(
@@ -141,8 +225,7 @@ struct TravelPlannerHeroCard: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct TravelPlannerMetricChip: View {
+struct TravelMetricChip: View {
     let title: String
     let value: String
 
@@ -161,98 +244,105 @@ struct TravelPlannerMetricChip: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct TravelPlannerQuickActionGrid: View {
-    let actions: [TravelPlannerQuickAction]
+struct TravelPlannerTripPickerSection: View {
+    @ObservedObject var store: TravelPlannerOperationsStore
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Quick Actions")
-                .font(.title3.weight(.bold))
-
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                ForEach(actions) { action in
-                    VStack(alignment: .leading, spacing: 10) {
-                        Image(systemName: action.systemImage)
-                            .font(.title3)
-                            .foregroundStyle(.blue)
-                        Text(action.title)
-                            .font(.subheadline.weight(.semibold))
-                        Text(action.detail)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                ForEach(store.trips) { trip in
+                    Button {
+                        store.selectTrip(trip.id)
+                    } label: {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(trip.title)
+                                .font(.headline)
+                            Text("\(trip.dateRange) • \(trip.party)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(width: 220, alignment: .leading)
+                        .padding()
+                        .background(
+                            (store.selectedTripID == trip.id ? Color.blue.opacity(0.15) : Color(.secondarySystemBackground))
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .buttonStyle(.plain)
                 }
             }
         }
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct TravelPlannerTripOverviewCard: View {
-    let trip: TravelPlannerTrip
+    @ObservedObject var store: TravelPlannerOperationsStore
+    let trip: TravelTripRecord
 
     var body: some View {
-        NavigationLink {
-            TravelPlannerTripDetailView(trip: trip)
-        } label: {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Primary Trip")
-                    .font(.title3.weight(.bold))
-                    .foregroundStyle(.primary)
-                Text(trip.title)
-                    .font(.headline)
-                Text("\(trip.dateRange) • \(trip.party)")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                HStack {
-                    Label(trip.hotel, systemImage: "bed.double.fill")
-                    Spacer()
-                    Label(trip.localTransport, systemImage: "tram.fill")
-                }
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Primary Trip")
+                .font(.title3.weight(.bold))
+            Text(trip.title)
+                .font(.headline)
+            Text("\(trip.dateRange) • \(trip.party)")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            Label(trip.hotel, systemImage: "bed.double.fill")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+            Label(trip.localTransport, systemImage: "tram.fill")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            if let flight = store.nextFlight {
+                HStack {
+                    Button(flight.isCheckedIn ? "Checked In" : "Confirm Check-In") {
+                        store.confirmCheckIn(flight.id)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(flight.isCheckedIn)
+
+                    Button("Request Rebook") {
+                        store.requestRebook(flight.id)
+                    }
+                    .buttonStyle(.bordered)
+                }
             }
-            .padding()
-            .background(Color(.secondarySystemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 18))
         }
-        .buttonStyle(.plain)
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 18))
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct TravelPlannerDailyAgendaCard: View {
-    let cards: [TravelPlannerItineraryCard]
+struct TravelPlannerAlertLane: View {
+    @ObservedObject var store: TravelPlannerOperationsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Today Timeline")
+            Text("Alerts")
                 .font(.title3.weight(.bold))
 
-            ForEach(cards) { card in
-                HStack(alignment: .top, spacing: 12) {
-                    Text(card.timeLabel)
-                        .font(.caption.weight(.semibold))
+            ForEach(store.alerts) { alert in
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text(alert.title)
+                            .font(.headline)
+                        Spacer()
+                        Text(alert.isResolved ? "Resolved" : alert.type.label)
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(alert.isResolved ? .green : .orange)
+                    }
+                    Text(alert.detail)
+                        .font(.caption)
                         .foregroundStyle(.secondary)
-                        .frame(width: 58, alignment: .leading)
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(.blue)
-                        .frame(width: 6, height: 42)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(card.title)
-                            .font(.headline)
-                            .foregroundStyle(.primary)
-                        Text(card.status)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                    if !alert.isResolved {
+                        Button("Resolve Alert") {
+                            store.resolveAlert(alert.id)
+                        }
+                        .buttonStyle(.bordered)
                     }
-                    Spacer()
                 }
                 .padding()
                 .background(Color(.secondarySystemBackground))
@@ -262,61 +352,26 @@ struct TravelPlannerDailyAgendaCard: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct TravelPlannerTravelerSignalsCard: View {
-    let signals: [TravelPlannerSignal]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Traveler Signals")
-                .font(.title3.weight(.bold))
-
-            ForEach(signals) { signal in
-                HStack(alignment: .top, spacing: 12) {
-                    Image(systemName: signal.systemImage)
-                        .foregroundStyle(signal.accent)
-                        .frame(width: 24)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(signal.title)
-                            .font(.headline)
-                        Text(signal.detail)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                }
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-            }
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct TravelPlannerTimelineView: View {
-    let state: TravelPlannerWorkspaceState
+struct TravelPlannerTimelineWorkspaceView: View {
+    @ObservedObject var store: TravelPlannerOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
-                Section("Agenda") {
-                    ForEach(state.timelineDays) { day in
-                        NavigationLink {
-                            TravelPlannerDayDetailView(day: day)
-                        } label: {
-                            VStack(alignment: .leading, spacing: 8) {
-                                HStack {
-                                    Text(day.title)
-                                    Spacer()
-                                    Text(day.weather)
-                                        .font(.subheadline.weight(.semibold))
-                                }
-                                Text(day.summary)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                ForEach(store.timelineDays) { day in
+                    NavigationLink {
+                        TravelPlannerDayDetailView(store: store, dayID: day.id)
+                    } label: {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text(day.title)
+                                Spacer()
+                                Text(day.isLocked ? "Locked" : day.weather)
+                                    .font(.subheadline.weight(.semibold))
                             }
-                            .padding(.vertical, 4)
+                            Text(day.summary)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -326,51 +381,102 @@ struct TravelPlannerTimelineView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct TravelPlannerBookingsView: View {
-    let state: TravelPlannerWorkspaceState
+struct TravelPlannerDayDetailView: View {
+    @ObservedObject var store: TravelPlannerOperationsStore
+    let dayID: UUID
+
+    var body: some View {
+        if let day = store.timelineDays.first(where: { $0.id == dayID }) {
+            List {
+                Section("Day Summary") {
+                    Text(day.summary)
+                    Label(day.weather, systemImage: "cloud.sun.fill")
+                    Label(day.isLocked ? "Locked" : "Open for changes", systemImage: day.isLocked ? "lock.fill" : "lock.open.fill")
+                }
+
+                Section("Activities") {
+                    ForEach(day.activities) { activity in
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text(activity.timeLabel)
+                                    .font(.caption.weight(.semibold))
+                                Spacer()
+                                Text(activity.priority)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Text(activity.title)
+                                .font(.headline)
+                            Text(activity.detail)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            if !day.isLocked {
+                                Button("Move to Next Day Buffer") {
+                                    store.moveActivityForward(activity.id, from: dayID)
+                                }
+                                .buttonStyle(.bordered)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+
+                if !day.isLocked {
+                    Section {
+                        Button("Lock Day Plan") {
+                            store.lockDayPlan(dayID)
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                }
+            }
+            .navigationTitle(day.title)
+        }
+    }
+}
+
+struct TravelPlannerBookingsWorkspaceView: View {
+    @ObservedObject var store: TravelPlannerOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Flights") {
-                    ForEach(state.flights) { flight in
+                    ForEach(store.flights) { flight in
                         NavigationLink {
-                            TravelPlannerFlightDetailView(flight: flight)
+                            TravelPlannerFlightDetailView(store: store, flightID: flight.id)
                         } label: {
-                            VStack(alignment: .leading, spacing: 8) {
+                            VStack(alignment: .leading, spacing: 6) {
                                 HStack {
                                     Text(flight.route)
                                     Spacer()
-                                    Text(flight.time)
-                                        .font(.subheadline.weight(.semibold))
+                                    Text(flight.status)
+                                        .font(.caption.weight(.semibold))
                                 }
-                                Text("\(flight.status) • \(flight.seat)")
+                                Text("\(flight.departureCode) • \(flight.departureTime)")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
-                            .padding(.vertical, 4)
                         }
                     }
                 }
 
-                Section("Hotels") {
-                    ForEach(state.hotels) { hotel in
+                Section("Stays") {
+                    ForEach(store.stays) { stay in
                         NavigationLink {
-                            TravelPlannerHotelDetailView(hotel: hotel)
+                            TravelPlannerStayDetailView(store: store, stayID: stay.id)
                         } label: {
-                            VStack(alignment: .leading, spacing: 8) {
+                            VStack(alignment: .leading, spacing: 6) {
                                 HStack {
-                                    Text(hotel.name)
+                                    Text(stay.name)
                                     Spacer()
-                                    Text(hotel.nights)
-                                        .font(.subheadline.weight(.semibold))
+                                    Text(stay.confirmationState)
+                                        .font(.caption.weight(.semibold))
                                 }
-                                Text("\(hotel.status) • \(hotel.roomType)")
+                                Text(stay.dateRange)
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
-                            .padding(.vertical, 4)
                         }
                     }
                 }
@@ -380,32 +486,112 @@ struct TravelPlannerBookingsView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct TravelPlannerEssentialsView: View {
-    let state: TravelPlannerWorkspaceState
+struct TravelPlannerFlightDetailView: View {
+    @ObservedObject var store: TravelPlannerOperationsStore
+    let flightID: UUID
+
+    var body: some View {
+        if let flight = store.flights.first(where: { $0.id == flightID }) {
+            List {
+                Section("Flight") {
+                    LabeledContent("Route", value: flight.route)
+                    LabeledContent("Departure", value: flight.departureTime)
+                    LabeledContent("Seat", value: flight.seat ?? "Not assigned")
+                    LabeledContent("Status", value: flight.status)
+                }
+
+                Section("Actions") {
+                    Button(flight.isCheckedIn ? "Checked In" : "Confirm Check-In") {
+                        store.confirmCheckIn(flight.id)
+                    }
+                    .disabled(flight.isCheckedIn)
+
+                    Button("Request Rebook") {
+                        store.requestRebook(flight.id)
+                    }
+                }
+            }
+            .navigationTitle("Flight")
+        }
+    }
+}
+
+struct TravelPlannerStayDetailView: View {
+    @ObservedObject var store: TravelPlannerOperationsStore
+    let stayID: UUID
+
+    var body: some View {
+        if let stay = store.stays.first(where: { $0.id == stayID }) {
+            List {
+                Section("Stay") {
+                    LabeledContent("Hotel", value: stay.name)
+                    LabeledContent("Dates", value: stay.dateRange)
+                    LabeledContent("State", value: stay.confirmationState)
+                }
+
+                Section("Check-In Notes") {
+                    Text(stay.checkInNote)
+                }
+
+                Section {
+                    Button("Confirm Stay") {
+                        store.confirmStay(stay.id)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(stay.confirmationState == "Confirmed")
+                }
+            }
+            .navigationTitle(stay.name)
+        }
+    }
+}
+
+struct TravelPlannerEssentialsWorkspaceView: View {
+    @ObservedObject var store: TravelPlannerOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
-                Section("Packing Checklist") {
-                    ForEach(state.checklist) { item in
-                        HStack {
-                            Image(systemName: item.packed ? "checkmark.circle.fill" : "circle")
-                                .foregroundStyle(item.packed ? .green : .secondary)
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(item.title)
-                                Text(item.group)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                Section("Packing List") {
+                    ForEach(store.packingTasks) { task in
+                        Button {
+                            store.togglePackingTask(task.id)
+                        } label: {
+                            HStack {
+                                Image(systemName: task.isPacked ? "checkmark.circle.fill" : "circle")
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(task.title)
+                                    Text(task.note)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
                             }
-                            Spacer()
                         }
+                        .buttonStyle(.plain)
                     }
                 }
 
                 Section("Documents") {
-                    ForEach(state.documents, id: \.self) { document in
-                        Label(document, systemImage: "doc.text.fill")
+                    ForEach(store.documents) { document in
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text(document.title)
+                                Spacer()
+                                Text(document.status)
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(document.isReady ? .green : .orange)
+                            }
+                            Text(document.note)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            if !document.isReady {
+                                Button("Mark Ready") {
+                                    store.markDocumentReady(document.id)
+                                }
+                                .buttonStyle(.bordered)
+                            }
+                        }
+                        .padding(.vertical, 4)
                     }
                 }
             }
@@ -414,29 +600,20 @@ struct TravelPlannerEssentialsView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct TravelPlannerProfileView: View {
-    let state: TravelPlannerWorkspaceState
+struct TravelPlannerProfileWorkspaceView: View {
+    @ObservedObject var store: TravelPlannerOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
-                Section("Traveler") {
-                    LabeledContent("Membership", value: state.membershipTier)
-                    LabeledContent("Home Airport", value: state.homeAirport)
-                    LabeledContent("Insurance", value: state.insuranceStatus)
+                Section("Operations") {
+                    Label("Checked-in flights: \(store.checkedInFlights)", systemImage: "airplane.circle.fill")
+                    Label("Packed tasks: \(store.packedTasks)", systemImage: "suitcase.rolling.fill")
+                    Label("Ready documents: \(store.verifiedDocuments)", systemImage: "doc.text.fill")
                 }
 
-                Section("Preferences") {
-                    LabeledContent("Seat Preference", value: state.seatPreference)
-                    LabeledContent("Hotel Preference", value: state.hotelPreference)
-                    LabeledContent("Transfers", value: state.transferPreference)
-                }
-
-                Section("Actions") {
-                    ForEach(state.profileActions, id: \.self) { action in
-                        Label(action, systemImage: "arrow.right.circle")
-                    }
+                Section("Policy") {
+                    Text(store.operationsNote)
                 }
             }
             .navigationTitle("Profile")
@@ -444,235 +621,160 @@ struct TravelPlannerProfileView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct TravelPlannerTripDetailView: View {
-    let trip: TravelPlannerTrip
-
-    var body: some View {
-        List {
-            Section("Trip") {
-                LabeledContent("Title", value: trip.title)
-                LabeledContent("Dates", value: trip.dateRange)
-                LabeledContent("Party", value: trip.party)
-                LabeledContent("Hotel", value: trip.hotel)
-                LabeledContent("Transport", value: trip.localTransport)
-            }
-
-            Section("Goals") {
-                ForEach(trip.goals, id: \.self) { goal in
-                    Label(goal, systemImage: "star.circle")
-                }
-            }
-        }
-        .navigationTitle("Trip")
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct TravelPlannerDayDetailView: View {
-    let day: TravelPlannerDay
-
-    var body: some View {
-        List {
-            Section("Day Plan") {
-                LabeledContent("Date", value: day.title)
-                LabeledContent("Weather", value: day.weather)
-                Text(day.summary)
-                    .foregroundStyle(.secondary)
-            }
-
-            Section("Stops") {
-                ForEach(day.stops, id: \.self) { stop in
-                    Label(stop, systemImage: "mappin.circle.fill")
-                }
-            }
-        }
-        .navigationTitle(day.title)
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct TravelPlannerFlightDetailView: View {
-    let flight: TravelPlannerFlight
-
-    var body: some View {
-        List {
-            Section("Flight") {
-                LabeledContent("Route", value: flight.route)
-                LabeledContent("Time", value: flight.time)
-                LabeledContent("Status", value: flight.status)
-                LabeledContent("Seat", value: flight.seat)
-                LabeledContent("Fare Class", value: flight.fareClass)
-            }
-        }
-        .navigationTitle("Flight")
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct TravelPlannerHotelDetailView: View {
-    let hotel: TravelPlannerHotel
-
-    var body: some View {
-        List {
-            Section("Hotel") {
-                LabeledContent("Name", value: hotel.name)
-                LabeledContent("Room", value: hotel.roomType)
-                LabeledContent("Stay", value: hotel.nights)
-                LabeledContent("Status", value: hotel.status)
-                LabeledContent("District", value: hotel.district)
-            }
-        }
-        .navigationTitle("Hotel")
-    }
-}
-
-public struct TravelPlannerQuickAction: Identifiable, Hashable, Sendable {
-    public let id: UUID
-    public let title: String
-    public let detail: String
-    public let systemImage: String
-
-    public init(
-        id: UUID = UUID(),
-        title: String,
-        detail: String,
-        systemImage: String
-    ) {
-        self.id = id
-        self.title = title
-        self.detail = detail
-        self.systemImage = systemImage
-    }
-
-    public static let defaultActions: [TravelPlannerQuickAction] = [
-        TravelPlannerQuickAction(title: "Open Itinerary", detail: "Review today's schedule and protect airport transfer timing.", systemImage: "map.fill"),
-        TravelPlannerQuickAction(title: "Review Flights", detail: "Check seat, gate and baggage details before leaving for the airport.", systemImage: "airplane"),
-        TravelPlannerQuickAction(title: "Manage Hotels", detail: "Confirm check-in, late arrival notes and room preferences.", systemImage: "bed.double.fill"),
-        TravelPlannerQuickAction(title: "Pack Essentials", detail: "Close remaining checklist items before departure morning.", systemImage: "suitcase.rolling.fill")
-    ]
-}
-
-struct TravelPlannerWorkspaceState: Hashable, Sendable {
-    let membershipTier: String
-    let homeAirport: String
-    let insuranceStatus: String
-    let seatPreference: String
-    let hotelPreference: String
-    let transferPreference: String
-    let primaryTrip: TravelPlannerTrip
-    let signals: [TravelPlannerSignal]
-    let timelineDays: [TravelPlannerDay]
-    let flights: [TravelPlannerFlight]
-    let hotels: [TravelPlannerHotel]
-    let checklist: [TravelPlannerChecklistItem]
-    let documents: [String]
-    let profileActions: [String]
-
-    static let sample = TravelPlannerWorkspaceState(
-        membershipTier: "Gold Traveler",
-        homeAirport: "IST",
-        insuranceStatus: "Premium coverage active",
-        seatPreference: "Aisle seat",
-        hotelPreference: "Late check-in, high floor",
-        transferPreference: "Private airport transfer",
-        primaryTrip: TravelPlannerTrip(
-            title: "Tokyo Product Sprint",
-            dateRange: "Apr 29 - May 4",
-            party: "2 travelers",
-            hotel: "Hotel Toranomon Hills",
-            localTransport: "Suica + airport transfer",
-            goals: [
-                "Close partner meetings before Thursday evening.",
-                "Protect two local exploration blocks for context gathering.",
-                "Keep departure morning under a 45-minute packing load."
-            ]
-        ),
-        signals: [
-            TravelPlannerSignal(title: "Airport transfer ready", detail: "Driver assigned and pickup note shared with the hotel concierge.", systemImage: "car.fill", accent: .green),
-            TravelPlannerSignal(title: "Rain expected on Friday", detail: "Move the outdoor photo walk to Thursday evening and keep umbrellas packed.", systemImage: "cloud.rain.fill", accent: .blue),
-            TravelPlannerSignal(title: "One meal booking still open", detail: "Reserve the Friday team dinner before the 20:00 local rush window.", systemImage: "fork.knife.circle.fill", accent: .orange)
-        ],
-        timelineDays: [
-            TravelPlannerDay(title: "Apr 29", weather: "17° / light rain", summary: "Arrival, hotel check-in and evening food tour in Shibuya.", stops: ["IST departure", "Haneda arrival", "Hotel check-in", "Shibuya food tour"]),
-            TravelPlannerDay(title: "Apr 30", weather: "20° / clear", summary: "Partner sessions in Minato and team dinner in Ginza.", stops: ["Breakfast brief", "Partner meeting", "Design review", "Ginza dinner"]),
-            TravelPlannerDay(title: "May 1", weather: "19° / cloudy", summary: "Buffer day for workspace sprint, museum walk and remote check-ins.", stops: ["Sprint block", "Museum walk", "Remote review"])
-        ],
-        flights: [
-            TravelPlannerFlight(route: "IST → HND", time: "08:45", status: "Confirmed", seat: "14C", fareClass: "Economy Flex"),
-            TravelPlannerFlight(route: "HND → IST", time: "22:10", status: "Confirmed", seat: "15C", fareClass: "Economy Flex")
-        ],
-        hotels: [
-            TravelPlannerHotel(name: "Hotel Toranomon Hills", roomType: "Deluxe King", nights: "5 nights", status: "Confirmed", district: "Minato"),
-            TravelPlannerHotel(name: "Airport Lounge Stay", roomType: "Day room backup", nights: "Optional", status: "Hold until Apr 28", district: "Haneda")
-        ],
-        checklist: [
-            TravelPlannerChecklistItem(title: "Passport", group: "Documents", packed: true),
-            TravelPlannerChecklistItem(title: "Universal adapter", group: "Electronics", packed: true),
-            TravelPlannerChecklistItem(title: "Rain jacket", group: "Clothing", packed: false),
-            TravelPlannerChecklistItem(title: "Printed meeting deck", group: "Work", packed: false)
-        ],
-        documents: [
-            "Passport copy",
-            "Flight confirmations",
-            "Hotel reservation PDF",
-            "Insurance certificate",
-            "Meeting itinerary export"
-        ],
-        profileActions: [
-            "Share the final itinerary with the traveling team.",
-            "Confirm roaming package before departure morning.",
-            "Review the checklist one last time after the meeting deck is printed."
-        ]
-    )
-}
-
-struct TravelPlannerTrip: Hashable, Sendable {
+struct TravelTripRecord: Identifiable {
+    let id = UUID()
     let title: String
     let dateRange: String
     let party: String
     let hotel: String
     let localTransport: String
-    let goals: [String]
+
+    static let sampleTrips: [TravelTripRecord] = [
+        TravelTripRecord(title: "Barcelona Client Summit", dateRange: "May 3-7", party: "3 travelers", hotel: "Grand Central Barcelona", localTransport: "Airport pickup + metro pass"),
+        TravelTripRecord(title: "Berlin Product Sprint", dateRange: "May 20-24", party: "2 travelers", hotel: "Hotel Oderberger", localTransport: "Rail + shared shuttle")
+    ]
 }
 
-struct TravelPlannerSignal: Identifiable, Hashable, Sendable {
-    let id = UUID()
-    let title: String
-    let detail: String
-    let systemImage: String
-    let accent: Color
-}
-
-struct TravelPlannerDay: Identifiable, Hashable, Sendable {
+struct TravelTimelineDayRecord: Identifiable {
     let id = UUID()
     let title: String
     let weather: String
-    let summary: String
-    let stops: [String]
+    var summary: String
+    var isLocked: Bool
+    var activities: [TravelActivityRecord]
+
+    static let sampleDays: [TravelTimelineDayRecord] = [
+        TravelTimelineDayRecord(
+            title: "Day 1 • Arrival",
+            weather: "21°C",
+            summary: "Arrival, hotel check-in, and first partner dinner are still adjustable.",
+            isLocked: false,
+            activities: [
+                TravelActivityRecord(timeLabel: "09:20", title: "Arrive BCN", detail: "Airport pickup meets terminal 1 baggage claim.", priority: "Critical"),
+                TravelActivityRecord(timeLabel: "13:30", title: "Hotel check-in", detail: "Drop bags, test Wi-Fi, confirm concierge late-night key support.", priority: "High"),
+                TravelActivityRecord(timeLabel: "19:00", title: "Partner dinner", detail: "Opening dinner with summit hosts and product stakeholders.", priority: "Medium")
+            ]
+        ),
+        TravelTimelineDayRecord(
+            title: "Day 2 • Summit",
+            weather: "24°C",
+            summary: "Full summit day with extra buffer for customer breakout sessions.",
+            isLocked: false,
+            activities: [
+                TravelActivityRecord(timeLabel: "08:30", title: "Keynote prep", detail: "Check slides, audio, and badge logistics before doors open.", priority: "Critical"),
+                TravelActivityRecord(timeLabel: "15:00", title: "Customer breakout", detail: "Run operator notes and success stories with CS leads.", priority: "High")
+            ]
+        )
+    ]
 }
 
-struct TravelPlannerFlight: Identifiable, Hashable, Sendable {
+struct TravelActivityRecord: Identifiable {
+    let id = UUID()
+    let timeLabel: String
+    let title: String
+    let detail: String
+    let priority: String
+}
+
+struct TravelFlightRecord: Identifiable {
     let id = UUID()
     let route: String
-    let time: String
-    let status: String
-    let seat: String
-    let fareClass: String
+    let departureCode: String
+    let departureTime: String
+    var seat: String?
+    var status: String
+    var isCheckedIn: Bool
+
+    static let sampleFlights: [TravelFlightRecord] = [
+        TravelFlightRecord(route: "IST → BCN", departureCode: "TK1853", departureTime: "May 3 • 06:40", seat: nil, status: "Awaiting check-in", isCheckedIn: false),
+        TravelFlightRecord(route: "BCN → IST", departureCode: "TK1856", departureTime: "May 7 • 18:15", seat: "10C", status: "Confirmed", isCheckedIn: true)
+    ]
 }
 
-struct TravelPlannerHotel: Identifiable, Hashable, Sendable {
+struct TravelStayRecord: Identifiable {
     let id = UUID()
     let name: String
-    let roomType: String
-    let nights: String
-    let status: String
-    let district: String
+    let dateRange: String
+    var confirmationState: String
+    var checkInNote: String
+
+    static let sampleStays: [TravelStayRecord] = [
+        TravelStayRecord(name: "Grand Central Barcelona", dateRange: "May 3-7", confirmationState: "Pending operator reconfirmation", checkInNote: "Late arrival note still needs concierge confirmation.")
+    ]
 }
 
-struct TravelPlannerChecklistItem: Identifiable, Hashable, Sendable {
+struct TravelPackingTaskRecord: Identifiable {
     let id = UUID()
     let title: String
-    let group: String
-    let packed: Bool
+    let note: String
+    var isPacked: Bool
+
+    static let sampleTasks: [TravelPackingTaskRecord] = [
+        TravelPackingTaskRecord(title: "Passport + backup copy", note: "Carry-on pocket and offline backup in Files.", isPacked: true),
+        TravelPackingTaskRecord(title: "Presentation adapter kit", note: "USB-C hub, HDMI backup, and portable clicker.", isPacked: false),
+        TravelPackingTaskRecord(title: "Medication pouch", note: "Jet lag and allergy pack for whole party.", isPacked: false)
+    ]
+}
+
+struct TravelDocumentRecord: Identifiable {
+    let id = UUID()
+    let title: String
+    var status: String
+    let note: String
+    var isReady: Bool
+
+    static let sampleDocuments: [TravelDocumentRecord] = [
+        TravelDocumentRecord(title: "Passport validity", status: "Ready", note: "All travelers above 6-month validity window.", isReady: true),
+        TravelDocumentRecord(title: "Hotel confirmation PDF", status: "Missing backup copy", note: "Export offline copy for concierge and pickup vendor.", isReady: false),
+        TravelDocumentRecord(title: "Customer summit badge QR", status: "Pending organizer resend", note: "Organizer promised reissue before departure.", isReady: false)
+    ]
+}
+
+enum TravelAlertType {
+    case checkIn
+    case disruption
+    case document
+
+    var label: String {
+        switch self {
+        case .checkIn: return "Check-in"
+        case .disruption: return "Disruption"
+        case .document: return "Document"
+        }
+    }
+}
+
+struct TravelAlertRecord: Identifiable {
+    let id = UUID()
+    let title: String
+    var detail: String
+    let type: TravelAlertType
+    let linkedFlightID: UUID?
+    let linkedDocumentID: UUID?
+    var isResolved: Bool
+
+    init(
+        title: String,
+        detail: String,
+        type: TravelAlertType,
+        linkedFlightID: UUID? = nil,
+        linkedDocumentID: UUID? = nil,
+        isResolved: Bool
+    ) {
+        self.title = title
+        self.detail = detail
+        self.type = type
+        self.linkedFlightID = linkedFlightID
+        self.linkedDocumentID = linkedDocumentID
+        self.isResolved = isResolved
+    }
+
+    static let sampleAlerts: [TravelAlertRecord] = {
+        let flights = TravelFlightRecord.sampleFlights
+        let documents = TravelDocumentRecord.sampleDocuments
+        return [
+            TravelAlertRecord(title: "Open airline check-in", detail: "Check-in opens tonight for IST → BCN. Seat assignment still missing.", type: .checkIn, linkedFlightID: flights[0].id, isResolved: false),
+            TravelAlertRecord(title: "Badge QR missing", detail: "Organizer has not resent the summit badge pack yet.", type: .document, linkedDocumentID: documents[2].id, isResolved: false)
+        ]
+    }()
 }
