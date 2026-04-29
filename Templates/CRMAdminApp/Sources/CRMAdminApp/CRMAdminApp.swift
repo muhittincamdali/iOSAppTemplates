@@ -7,58 +7,42 @@ public struct CRMAdminAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            CRMAdminWorkspaceRootView(
-                snapshot: .sample,
-                workspaces: CRMAdminWorkspaceCard.sampleCards,
-                actions: CRMAdminQuickAction.defaultActions,
-                health: .sample,
-                state: .sample
-            )
+            CRMRuntimeRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminWorkspaceRootView: View {
-    let snapshot: CRMAdminDashboardSnapshot
-    let workspaces: [CRMAdminWorkspaceCard]
-    let actions: [CRMAdminQuickAction]
-    let health: CRMAdminOperationalHealth
-    let state: CRMAdminWorkspaceState
+struct CRMRuntimeRootView: View {
+    @StateObject private var store = CRMOperationsStore()
 
     var body: some View {
         TabView {
-            CRMAdminPipelineView(
-                snapshot: snapshot,
-                workspaces: workspaces,
-                actions: actions,
-                health: health,
-                state: state
-            )
-            .tabItem {
-                Image(systemName: "chart.bar.xaxis")
-                Text("Pipeline")
-            }
+            CRMPipelineView(store: store)
+                .tabItem {
+                    Image(systemName: "chart.bar.xaxis")
+                    Text("Pipeline")
+                }
 
-            CRMAdminAccountsView(state: state)
+            CRMAccountsView(store: store)
                 .tabItem {
                     Image(systemName: "building.2.fill")
                     Text("Accounts")
                 }
 
-            CRMAdminRenewalsView(state: state)
+            CRMRenewalsView(store: store)
                 .tabItem {
                     Image(systemName: "calendar.badge.clock")
                     Text("Renewals")
                 }
 
-            CRMAdminTasksView(state: state)
+            CRMTasksView(store: store)
                 .tabItem {
                     Image(systemName: "checklist.checked")
                     Text("Tasks")
                 }
 
-            CRMAdminProfileView(snapshot: snapshot, health: health, state: state)
+            CRMProfileView(store: store)
                 .tabItem {
                     Image(systemName: "person.crop.circle.fill")
                     Text("Profile")
@@ -69,22 +53,128 @@ struct CRMAdminWorkspaceRootView: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminPipelineView: View {
-    let snapshot: CRMAdminDashboardSnapshot
-    let workspaces: [CRMAdminWorkspaceCard]
-    let actions: [CRMAdminQuickAction]
-    let health: CRMAdminOperationalHealth
-    let state: CRMAdminWorkspaceState
+@MainActor
+final class CRMOperationsStore: ObservableObject {
+    @Published var accounts: [CRMAccountRecord]
+    @Published var renewals: [CRMRenewalRecord]
+    @Published var tasks: [CRMTaskRecord]
+    @Published var operatorHeadline: String
+    @Published var coverageWindow: String
+    @Published var targetQuarter: String
+    @Published var managedARR: Int
+    @Published var rescueARR: Int
+    @Published var expansionARR: Int
+
+    init(
+        accounts: [CRMAccountRecord] = CRMAccountRecord.samples,
+        renewals: [CRMRenewalRecord] = CRMRenewalRecord.samples,
+        tasks: [CRMTaskRecord] = CRMTaskRecord.samples,
+        operatorHeadline: String = "Northstar Health needs a rescue path before Friday's sponsor call.",
+        coverageWindow: String = "Coverage window closes in 3 hours",
+        targetQuarter: String = "Q2 revenue save plan",
+        managedARR: Int = 4_800_000,
+        rescueARR: Int = 420_000,
+        expansionARR: Int = 610_000
+    ) {
+        self.accounts = accounts
+        self.renewals = renewals
+        self.tasks = tasks
+        self.operatorHeadline = operatorHeadline
+        self.coverageWindow = coverageWindow
+        self.targetQuarter = targetQuarter
+        self.managedARR = managedARR
+        self.rescueARR = rescueARR
+        self.expansionARR = expansionARR
+    }
+
+    var atRiskAccounts: [CRMAccountRecord] {
+        accounts.filter { $0.risk != .healthy }
+    }
+
+    func logSponsorRecovery(_ accountID: UUID) {
+        guard let index = accounts.firstIndex(where: { $0.id == accountID }) else { return }
+        accounts[index].risk = .watch
+        accounts[index].summary = "Sponsor recovery logged and executive rescue plan moved to watch."
+        accounts[index].nextStep = "Review weekly usage rebound with the account team."
+        operatorHeadline = "\(accounts[index].name) moved from high risk to watch."
+        rescueARR = max(0, rescueARR - 120_000)
+    }
+
+    func resolveRisk(_ accountID: UUID) {
+        guard let index = accounts.firstIndex(where: { $0.id == accountID }) else { return }
+        accounts[index].risk = .healthy
+        accounts[index].summary = "Risk cleared after adoption, sponsor recovery and finance approval."
+        accounts[index].nextStep = "Prepare healthy renewal story for the next QBR."
+        operatorHeadline = "\(accounts[index].name) is back to healthy."
+    }
+
+    func approveDiscount(_ renewalID: UUID) {
+        guard let index = renewals.firstIndex(where: { $0.id == renewalID }) else { return }
+        renewals[index].stage = .commercialReview
+        renewals[index].nextAction = "Approved guardrail discount is ready for final proposal packaging."
+        renewals[index].ownerNote = "Do not exceed the approved discount envelope."
+        operatorHeadline = "Discount guardrail approved for \(renewals[index].accountName)."
+    }
+
+    func sendProposal(_ renewalID: UUID) {
+        guard let index = renewals.firstIndex(where: { $0.id == renewalID }) else { return }
+        renewals[index].stage = .proposalSent
+        renewals[index].nextAction = "Proposal delivered and waiting on customer signature workflow."
+        renewals[index].ownerNote = "Follow up with procurement if signature stalls for 48 hours."
+        operatorHeadline = "Proposal sent to \(renewals[index].accountName)."
+    }
+
+    func signRenewal(_ renewalID: UUID) {
+        guard let renewalIndex = renewals.firstIndex(where: { $0.id == renewalID }) else { return }
+        let renewal = renewals[renewalIndex]
+        renewals[renewalIndex].stage = .signed
+        renewals[renewalIndex].nextAction = "Renewal signed and handoff sent to revenue operations."
+        renewals[renewalIndex].ownerNote = "Track onboarding tasks for the new commercial term."
+        operatorHeadline = "\(renewal.accountName) signed renewal."
+
+        if let accountIndex = accounts.firstIndex(where: { $0.name == renewal.accountName }) {
+            accounts[accountIndex].risk = .healthy
+            accounts[accountIndex].summary = "Renewal signed and risk retired."
+            accounts[accountIndex].nextStep = "Move focus to expansion adoption."
+        }
+    }
+
+    func createExpansion(_ accountID: UUID) {
+        guard let index = accounts.firstIndex(where: { $0.id == accountID }) else { return }
+        accounts[index].summary = "Expansion motion opened with analytics add-on and multi-year structure."
+        accounts[index].nextStep = "Route expansion pack to legal and procurement."
+        operatorHeadline = "Expansion created for \(accounts[index].name)."
+        expansionARR += 80_000
+    }
+
+    func reassignTask(_ taskID: UUID) {
+        guard let index = tasks.firstIndex(where: { $0.id == taskID }) else { return }
+        tasks[index].owner = "Revenue Operations"
+        tasks[index].status = .inFlight
+        tasks[index].note = "Task reassigned to operations for immediate follow-through."
+        operatorHeadline = "\(tasks[index].title) reassigned to Revenue Operations."
+    }
+
+    func completeTask(_ taskID: UUID) {
+        guard let index = tasks.firstIndex(where: { $0.id == taskID }) else { return }
+        tasks[index].status = .done
+        tasks[index].note = "Task completed and logged into the revenue desk timeline."
+        operatorHeadline = "\(tasks[index].title) completed."
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+struct CRMPipelineView: View {
+    @ObservedObject var store: CRMOperationsStore
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    CRMAdminHeroCard(snapshot: snapshot, health: health, state: state)
-                    CRMAdminQuickActionGrid(actions: actions)
-                    CRMAdminAtRiskAccountsCard(accounts: state.atRiskAccounts)
-                    CRMAdminWorkspaceLaneView(workspaces: workspaces)
-                    CRMAdminOperationsCard(health: health, state: state)
+                    CRMPipelineHeroCard(store: store)
+                    CRMMetricRow(store: store)
+                    CRMAtRiskBoard(store: store)
+                    CRMRenewalBoard(store: store)
                 }
                 .padding(16)
             }
@@ -94,10 +184,8 @@ struct CRMAdminPipelineView: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminHeroCard: View {
-    let snapshot: CRMAdminDashboardSnapshot
-    let health: CRMAdminOperationalHealth
-    let state: CRMAdminWorkspaceState
+struct CRMPipelineHeroCard: View {
+    @ObservedObject var store: CRMOperationsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -105,22 +193,15 @@ struct CRMAdminHeroCard: View {
                 .font(.headline)
                 .foregroundStyle(.secondary)
 
-            Text(state.operatorHeadline)
+            Text(store.operatorHeadline)
                 .font(.system(size: 30, weight: .bold, design: .rounded))
-            Text(snapshot.pipelineHealth)
-                .font(.subheadline)
+            Text(store.targetQuarter)
                 .foregroundStyle(.secondary)
 
-            HStack(spacing: 12) {
-                CRMAdminMetricChip(title: "Open Accounts", value: "\(snapshot.openAccounts)")
-                CRMAdminMetricChip(title: "At Risk", value: "\(snapshot.atRiskDeals)")
-                CRMAdminMetricChip(title: "Renewals", value: "\(snapshot.renewalQueue)")
-            }
-
             HStack {
-                Label(state.coverageWindow, systemImage: "clock.fill")
+                Label(store.coverageWindow, systemImage: "clock.fill")
                 Spacer()
-                Text(state.targetQuarter)
+                Text("$\(store.rescueARR.formatted()) rescue ARR")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.indigo)
             }
@@ -140,7 +221,20 @@ struct CRMAdminHeroCard: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminMetricChip: View {
+struct CRMMetricRow: View {
+    @ObservedObject var store: CRMOperationsStore
+
+    var body: some View {
+        HStack(spacing: 12) {
+            CRMMetricChip(title: "Managed ARR", value: "$\(store.managedARR.formatted())")
+            CRMMetricChip(title: "At Risk", value: "\(store.atRiskAccounts.count)")
+            CRMMetricChip(title: "Expansion", value: "$\(store.expansionARR.formatted())")
+        }
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+struct CRMMetricChip: View {
     let title: String
     let value: String
 
@@ -160,49 +254,17 @@ struct CRMAdminMetricChip: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminQuickActionGrid: View {
-    let actions: [CRMAdminQuickAction]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Quick Actions")
-                .font(.title3.weight(.bold))
-
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                ForEach(actions) { action in
-                    VStack(alignment: .leading, spacing: 10) {
-                        Image(systemName: action.systemImage)
-                            .font(.title3)
-                            .foregroundStyle(.indigo)
-                        Text(action.title)
-                            .font(.subheadline.weight(.semibold))
-                        Text(action.detail)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                }
-            }
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminAtRiskAccountsCard: View {
-    let accounts: [CRMAdminAccount]
+struct CRMAtRiskBoard: View {
+    @ObservedObject var store: CRMOperationsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("At-Risk Accounts")
                 .font(.title3.weight(.bold))
 
-            ForEach(accounts) { account in
+            ForEach(store.accounts) { account in
                 NavigationLink {
-                    CRMAdminAccountDetailView(account: account)
+                    CRMAccountDetailView(store: store, accountID: account.id)
                 } label: {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
@@ -210,27 +272,22 @@ struct CRMAdminAtRiskAccountsCard: View {
                                 Text(account.name)
                                     .font(.headline)
                                     .foregroundStyle(.primary)
-                                Text("\(account.segment) - \(account.owner)")
+                                Text("\(account.segment) • \(account.owner)")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
                             Spacer()
-                            Text(account.riskLevel)
+                            Text(account.risk.label)
                                 .font(.caption.weight(.semibold))
-                                .foregroundStyle(account.riskColor)
+                                .foregroundStyle(account.risk.color)
                         }
                         Text(account.summary)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                            .lineLimit(2)
-                        HStack {
-                            Label(account.arrValue, systemImage: "dollarsign.circle.fill")
-                            Label(account.renewalDate, systemImage: "calendar")
-                        }
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        Text(account.nextStep)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
                     .background(Color(.secondarySystemBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -242,107 +299,68 @@ struct CRMAdminAtRiskAccountsCard: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminWorkspaceLaneView: View {
-    let workspaces: [CRMAdminWorkspaceCard]
+struct CRMRenewalBoard: View {
+    @ObservedObject var store: CRMOperationsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Coverage Lanes")
+            Text("Renewal Queue")
                 .font(.title3.weight(.bold))
 
-            ForEach(workspaces) { workspace in
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(workspace.title)
-                            .font(.headline)
-                        Text(workspace.ctaLabel)
+            ForEach(store.renewals) { renewal in
+                NavigationLink {
+                    CRMRenewalDetailView(store: store, renewalID: renewal.id)
+                } label: {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text(renewal.accountName)
+                                .font(.headline)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Text(renewal.stage.label)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(renewal.stage.color)
+                        }
+                        Text("\(renewal.amount) • \(renewal.deadline)")
                             .font(.caption)
                             .foregroundStyle(.secondary)
+                        Text(renewal.nextAction)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
                     }
-                    Spacer()
-                    Text("\(workspace.ownerCount) owners")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.indigo)
+                    .padding()
+                    .background(Color(.secondarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
                 }
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .buttonStyle(.plain)
             }
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminOperationsCard: View {
-    let health: CRMAdminOperationalHealth
-    let state: CRMAdminWorkspaceState
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Operations")
-                .font(.title3.weight(.bold))
-
-            HStack(spacing: 12) {
-                CRMAdminOperationTile(title: "SLA Breaches", value: "\(health.slaBreaches)")
-                CRMAdminOperationTile(title: "First Reply", value: "\(health.medianFirstReplyMinutes)m")
-                CRMAdminOperationTile(title: "Automation", value: health.automationReady ? "Ready" : "Paused")
-            }
-
-            ForEach(state.operationsNotes, id: \.self) { note in
-                Label(note, systemImage: "arrow.right.circle")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 18))
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminOperationTile: View {
-    let title: String
-    let value: String
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(value)
-                .font(.headline.weight(.bold))
-            Text(title)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminAccountsView: View {
-    let state: CRMAdminWorkspaceState
+struct CRMAccountsView: View {
+    @ObservedObject var store: CRMOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
-                ForEach(state.accounts) { account in
+                ForEach(store.accounts) { account in
                     NavigationLink {
-                        CRMAdminAccountDetailView(account: account)
+                        CRMAccountDetailView(store: store, accountID: account.id)
                     } label: {
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: 6) {
                             HStack {
                                 Text(account.name)
                                 Spacer()
-                                Text(account.arrValue)
-                                    .font(.subheadline.weight(.bold))
+                                Text(account.risk.label)
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(account.risk.color)
                             }
-                            Text("\(account.segment) - \(account.owner)")
+                            Text(account.summary)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            Text(account.summary)
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
                         }
-                        .padding(.vertical, 4)
                     }
                 }
             }
@@ -352,32 +370,28 @@ struct CRMAdminAccountsView: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminRenewalsView: View {
-    let state: CRMAdminWorkspaceState
+struct CRMRenewalsView: View {
+    @ObservedObject var store: CRMOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
-                ForEach(state.renewals) { renewal in
+                ForEach(store.renewals) { renewal in
                     NavigationLink {
-                        CRMAdminRenewalDetailView(renewal: renewal)
+                        CRMRenewalDetailView(store: store, renewalID: renewal.id)
                     } label: {
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: 6) {
                             HStack {
                                 Text(renewal.accountName)
                                 Spacer()
-                                Text(renewal.stage)
+                                Text(renewal.stage.label)
                                     .font(.caption.weight(.semibold))
-                                    .foregroundStyle(renewal.stageColor)
+                                    .foregroundStyle(renewal.stage.color)
                             }
-                            Text("\(renewal.amount) - \(renewal.deadline)")
+                            Text(renewal.nextAction)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            Text(renewal.nextAction)
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
                         }
-                        .padding(.vertical, 4)
                     }
                 }
             }
@@ -387,21 +401,31 @@ struct CRMAdminRenewalsView: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminTasksView: View {
-    let state: CRMAdminWorkspaceState
+struct CRMTasksView: View {
+    @ObservedObject var store: CRMOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
-                ForEach(state.tasks) { task in
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(task.title)
-                        Text("\(task.accountName) - \(task.owner)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text("\(task.priority) priority - due \(task.deadline)")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
+                ForEach(store.tasks) { task in
+                    NavigationLink {
+                        CRMTaskDetailView(store: store, taskID: task.id)
+                    } label: {
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text(task.title)
+                                Spacer()
+                                Text(task.status.label)
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(task.status.color)
+                            }
+                            Text("\(task.accountName) • \(task.owner)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Text(task.note)
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
             }
@@ -411,44 +435,20 @@ struct CRMAdminTasksView: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminProfileView: View {
-    let snapshot: CRMAdminDashboardSnapshot
-    let health: CRMAdminOperationalHealth
-    let state: CRMAdminWorkspaceState
+struct CRMProfileView: View {
+    @ObservedObject var store: CRMOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Operator") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(state.operatorName)
-                            .font(.headline)
-                        Text(state.roleSummary)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                        Label(state.coverageWindow, systemImage: "person.3.fill")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(.vertical, 4)
+                    Label("Elena Brooks", systemImage: "person.crop.circle.fill")
+                    Label(store.targetQuarter, systemImage: "chart.line.uptrend.xyaxis")
                 }
-
-                Section("Book Health") {
-                    Label("Open accounts: \(snapshot.openAccounts)", systemImage: "building.2.fill")
-                    Label("At-risk deals: \(snapshot.atRiskDeals)", systemImage: "exclamationmark.triangle.fill")
-                    Label("Automation ready: \(health.automationReady ? "Yes" : "No")", systemImage: "gearshape.2.fill")
-                }
-
-                Section("Coverage Metrics") {
-                    ForEach(state.profileMetrics, id: \.label) { metric in
-                        HStack {
-                            Text(metric.label)
-                            Spacer()
-                            Text(metric.value)
-                                .font(.subheadline.weight(.semibold))
-                                .foregroundStyle(.indigo)
-                        }
-                    }
+                Section("Metrics") {
+                    Label("$\(store.managedARR.formatted()) managed ARR", systemImage: "dollarsign.circle.fill")
+                    Label("$\(store.rescueARR.formatted()) rescue ARR", systemImage: "lifepreserver")
+                    Label("$\(store.expansionARR.formatted()) expansion ARR", systemImage: "arrow.up.right.circle.fill")
                 }
             }
             .navigationTitle("Profile")
@@ -457,365 +457,229 @@ struct CRMAdminProfileView: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminAccountDetailView: View {
-    let account: CRMAdminAccount
+struct CRMAccountDetailView: View {
+    @ObservedObject var store: CRMOperationsStore
+    let accountID: UUID
 
     var body: some View {
-        List {
-            Section("Account") {
-                Text(account.name)
-                    .font(.headline)
-                Text(account.summary)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+        if let account = store.accounts.first(where: { $0.id == accountID }) {
+            List {
+                Section("Account") {
+                    Text(account.name)
+                        .font(.title3.weight(.bold))
+                    Text(account.summary)
+                        .foregroundStyle(.secondary)
+                    Text(account.nextStep)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Section("Commercial") {
+                    Label(account.arrValue, systemImage: "dollarsign.circle.fill")
+                    Label(account.renewalDate, systemImage: "calendar")
+                    Label(account.risk.label, systemImage: "exclamationmark.triangle.fill")
+                }
+                Section("Actions") {
+                    if account.risk == .high {
+                        Button("Log Sponsor Recovery") { store.logSponsorRecovery(account.id) }
+                    }
+                    if account.risk != .healthy {
+                        Button("Resolve Risk") { store.resolveRisk(account.id) }
+                    }
+                    Button("Create Expansion Motion") { store.createExpansion(account.id) }
+                }
             }
-
-            Section("Signals") {
-                Label(account.segment, systemImage: "building.columns.fill")
-                Label(account.owner, systemImage: "person.fill")
-                Label(account.renewalDate, systemImage: "calendar")
-                Label(account.arrValue, systemImage: "dollarsign.circle.fill")
-            }
-
-            Section("Next Step") {
-                Text(account.nextStep)
-                    .font(.body)
-            }
+            .navigationTitle("Account")
         }
-        .navigationTitle(account.name)
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct CRMAdminRenewalDetailView: View {
-    let renewal: CRMAdminRenewal
+struct CRMRenewalDetailView: View {
+    @ObservedObject var store: CRMOperationsStore
+    let renewalID: UUID
 
     var body: some View {
-        List {
-            Section("Renewal") {
-                Text(renewal.accountName)
-                    .font(.headline)
-                Text(renewal.nextAction)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+        if let renewal = store.renewals.first(where: { $0.id == renewalID }) {
+            List {
+                Section("Renewal") {
+                    Text(renewal.accountName)
+                        .font(.title3.weight(.bold))
+                    Text(renewal.nextAction)
+                        .foregroundStyle(.secondary)
+                    Text(renewal.ownerNote)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Section("Status") {
+                    Label(renewal.amount, systemImage: "dollarsign.circle.fill")
+                    Label(renewal.deadline, systemImage: "clock.fill")
+                    Label(renewal.stage.label, systemImage: "checkmark.circle.fill")
+                }
+                Section("Actions") {
+                    if renewal.stage == .rescue {
+                        Button("Approve Discount Guardrail") { store.approveDiscount(renewal.id) }
+                    }
+                    if renewal.stage == .commercialReview {
+                        Button("Send Proposal") { store.sendProposal(renewal.id) }
+                    }
+                    if renewal.stage == .proposalSent {
+                        Button("Mark Signed") { store.signRenewal(renewal.id) }
+                    }
+                }
             }
-
-            Section("Commercial") {
-                Label(renewal.amount, systemImage: "creditcard.fill")
-                Label(renewal.deadline, systemImage: "calendar.badge.clock")
-                Label(renewal.stage, systemImage: "flag.fill")
-            }
-
-            Section("Owner Notes") {
-                Text(renewal.ownerNote)
-                    .font(.body)
-            }
+            .navigationTitle("Renewal")
         }
-        .navigationTitle("Renewal")
     }
 }
 
-public struct CRMAdminQuickAction: Identifiable, Hashable, Sendable {
-    public let id: UUID
-    public let title: String
-    public let systemImage: String
-    public let detail: String
+@available(iOS 18.0, macOS 15.0, *)
+struct CRMTaskDetailView: View {
+    @ObservedObject var store: CRMOperationsStore
+    let taskID: UUID
 
-    public init(
-        id: UUID = UUID(),
-        title: String,
-        systemImage: String,
-        detail: String
-    ) {
-        self.id = id
-        self.title = title
-        self.systemImage = systemImage
-        self.detail = detail
+    var body: some View {
+        if let task = store.tasks.first(where: { $0.id == taskID }) {
+            List {
+                Section("Task") {
+                    Text(task.title)
+                        .font(.title3.weight(.bold))
+                    Text(task.note)
+                        .foregroundStyle(.secondary)
+                }
+                Section("Ownership") {
+                    Label(task.accountName, systemImage: "building.2.fill")
+                    Label(task.owner, systemImage: "person.fill")
+                    Label(task.deadline, systemImage: "calendar")
+                }
+                Section("Actions") {
+                    if task.status == .queued {
+                        Button("Reassign to RevOps") { store.reassignTask(task.id) }
+                    }
+                    if task.status != .done {
+                        Button("Complete Task") { store.completeTask(task.id) }
+                    }
+                }
+            }
+            .navigationTitle("Task")
+        }
+    }
+}
+
+enum CRMRiskLevel: String, Hashable {
+    case healthy
+    case watch
+    case high
+
+    var label: String {
+        switch self {
+        case .healthy: return "Healthy"
+        case .watch: return "Watch"
+        case .high: return "High Risk"
+        }
     }
 
-    public static let defaultActions: [CRMAdminQuickAction] = [
-        CRMAdminQuickAction(
-            title: "Review At-Risk Accounts",
-            systemImage: "person.crop.circle.badge.exclamationmark",
-            detail: "Start the morning with accounts that show usage drops, sponsor change or budget pressure."
-        ),
-        CRMAdminQuickAction(
-            title: "Open Renewal Queue",
-            systemImage: "calendar.badge.clock",
-            detail: "Sort upcoming renewals by ARR, deadline confidence and executive escalation need."
-        ),
-        CRMAdminQuickAction(
-            title: "Inspect SLA Board",
-            systemImage: "checklist",
-            detail: "Check breached reply windows, overdue follow-ups and owner rebalancing opportunities."
-        ),
-        CRMAdminQuickAction(
-            title: "Prep QBR Brief",
-            systemImage: "doc.text.magnifyingglass",
-            detail: "Assemble expansion notes, adoption wins and risk signals for this week's exec reviews."
-        )
-    ]
+    var color: Color {
+        switch self {
+        case .healthy: return .green
+        case .watch: return .orange
+        case .high: return .red
+        }
+    }
 }
 
-struct CRMAdminWorkspaceState: Hashable, Sendable {
-    let operatorHeadline: String
-    let operatorName: String
-    let roleSummary: String
-    let targetQuarter: String
-    let coverageWindow: String
-    let operationsNotes: [String]
-    let atRiskAccounts: [CRMAdminAccount]
-    let accounts: [CRMAdminAccount]
-    let renewals: [CRMAdminRenewal]
-    let tasks: [CRMAdminTask]
-    let profileMetrics: [CRMAdminMetric]
-
-    static let sample = CRMAdminWorkspaceState(
-        operatorHeadline: "Enterprise retention is on track, but three expansion paths need executive help this week.",
-        operatorName: "Elena Brooks",
-        roleSummary: "Senior Revenue Operations Manager covering enterprise renewals and strategic expansions",
-        targetQuarter: "Q3 target: 118% NRR",
-        coverageWindow: "North America enterprise book",
-        operationsNotes: [
-            "Two platinum accounts need pricing approvals before Friday.",
-            "Automation rules caught 14 overdue health check tasks overnight.",
-            "Customer success and sales leadership share one risk review on Thursday."
-        ],
-        atRiskAccounts: [
-            CRMAdminAccount(
-                name: "Northstar Health",
-                segment: "Enterprise",
-                owner: "Sam Rivera",
-                arrValue: "$420K ARR",
-                renewalDate: "Renews in 24 days",
-                riskLevel: "High Risk",
-                summary: "Champion left the company and weekly active seats are down 18% month over month.",
-                nextStep: "Book sponsor rescue call and confirm interim rollout owner.",
-                riskColorName: "red"
-            ),
-            CRMAdminAccount(
-                name: "Atlas Freight",
-                segment: "Mid-Market",
-                owner: "Nora White",
-                arrValue: "$188K ARR",
-                renewalDate: "Renews in 41 days",
-                riskLevel: "Watch",
-                summary: "Legal redlines are open and procurement paused signature pending usage proof.",
-                nextStep: "Send adoption packet and finance-approved discount guardrails.",
-                riskColorName: "orange"
-            )
-        ],
-        accounts: [
-            CRMAdminAccount(
-                name: "Northstar Health",
-                segment: "Enterprise",
-                owner: "Sam Rivera",
-                arrValue: "$420K ARR",
-                renewalDate: "May 21",
-                riskLevel: "High Risk",
-                summary: "Sponsor turnover plus declining activation in two business units.",
-                nextStep: "Escalate to VP sponsor and lock rescue plan by Wednesday.",
-                riskColorName: "red"
-            ),
-            CRMAdminAccount(
-                name: "Halcyon Capital",
-                segment: "Enterprise",
-                owner: "Priya Shah",
-                arrValue: "$610K ARR",
-                renewalDate: "June 02",
-                riskLevel: "Healthy",
-                summary: "Expansion addendum is in legal review with adoption at a quarterly high.",
-                nextStep: "Prepare QBR storyline and expansion SKU rollout plan.",
-                riskColorName: "green"
-            ),
-            CRMAdminAccount(
-                name: "Atlas Freight",
-                segment: "Mid-Market",
-                owner: "Nora White",
-                arrValue: "$188K ARR",
-                renewalDate: "June 08",
-                riskLevel: "Watch",
-                summary: "Finance wants ROI evidence before renewal approval.",
-                nextStep: "Deliver procurement memo with usage-to-outcome mapping.",
-                riskColorName: "orange"
-            )
-        ],
-        renewals: [
-            CRMAdminRenewal(
-                accountName: "Northstar Health",
-                amount: "$420K ARR",
-                deadline: "24 days left",
-                stage: "Exec Rescue",
-                nextAction: "Finalize sponsor call agenda and prepare recovery narrative.",
-                ownerNote: "Escalate if seat recovery stays below 8% by next Monday.",
-                stageColorName: "red"
-            ),
-            CRMAdminRenewal(
-                accountName: "Halcyon Capital",
-                amount: "$610K ARR",
-                deadline: "36 days left",
-                stage: "Expansion Ready",
-                nextAction: "Bundle analytics add-on into multi-year proposal.",
-                ownerNote: "Legal expects final clause review by end of week.",
-                stageColorName: "green"
-            ),
-            CRMAdminRenewal(
-                accountName: "Atlas Freight",
-                amount: "$188K ARR",
-                deadline: "41 days left",
-                stage: "Commercial Review",
-                nextAction: "Align procurement packet with CFO objection log.",
-                ownerNote: "Do not approve extra discount until ROI memo lands.",
-                stageColorName: "orange"
-            )
-        ],
-        tasks: [
-            CRMAdminTask(
-                title: "Update executive risk board",
-                accountName: "Northstar Health",
-                owner: "Elena Brooks",
-                priority: "Critical",
-                deadline: "Today 17:00"
-            ),
-            CRMAdminTask(
-                title: "Review usage export before QBR",
-                accountName: "Halcyon Capital",
-                owner: "Priya Shah",
-                priority: "High",
-                deadline: "Tomorrow"
-            ),
-            CRMAdminTask(
-                title: "Send procurement ROI memo",
-                accountName: "Atlas Freight",
-                owner: "Nora White",
-                priority: "High",
-                deadline: "Tomorrow 13:00"
-            )
-        ],
-        profileMetrics: [
-            CRMAdminMetric(label: "Managed ARR", value: "$4.8M"),
-            CRMAdminMetric(label: "Renewals this quarter", value: "19"),
-            CRMAdminMetric(label: "Expansion candidates", value: "7")
-        ]
-    )
-}
-
-struct CRMAdminAccount: Identifiable, Hashable, Sendable {
+struct CRMAccountRecord: Identifiable, Hashable {
     let id: UUID
     let name: String
     let segment: String
     let owner: String
     let arrValue: String
     let renewalDate: String
-    let riskLevel: String
-    let summary: String
-    let nextStep: String
-    let riskColorName: String
+    var risk: CRMRiskLevel
+    var summary: String
+    var nextStep: String
 
-    init(
-        id: UUID = UUID(),
-        name: String,
-        segment: String,
-        owner: String,
-        arrValue: String,
-        renewalDate: String,
-        riskLevel: String,
-        summary: String,
-        nextStep: String,
-        riskColorName: String
-    ) {
-        self.id = id
-        self.name = name
-        self.segment = segment
-        self.owner = owner
-        self.arrValue = arrValue
-        self.renewalDate = renewalDate
-        self.riskLevel = riskLevel
-        self.summary = summary
-        self.nextStep = nextStep
-        self.riskColorName = riskColorName
+    static let samples: [CRMAccountRecord] = [
+        CRMAccountRecord(id: UUID(), name: "Northstar Health", segment: "Enterprise", owner: "Sam Rivera", arrValue: "$420K ARR", renewalDate: "May 21", risk: .high, summary: "Sponsor turnover plus declining activation in two business units.", nextStep: "Escalate to VP sponsor and lock rescue plan by Wednesday."),
+        CRMAccountRecord(id: UUID(), name: "Halcyon Capital", segment: "Enterprise", owner: "Priya Shah", arrValue: "$610K ARR", renewalDate: "June 02", risk: .healthy, summary: "Expansion addendum is in legal review with adoption at a quarterly high.", nextStep: "Prepare QBR storyline and expansion SKU rollout plan."),
+        CRMAccountRecord(id: UUID(), name: "Atlas Freight", segment: "Mid-Market", owner: "Nora White", arrValue: "$188K ARR", renewalDate: "June 08", risk: .watch, summary: "Finance wants ROI evidence before renewal approval.", nextStep: "Deliver procurement memo with usage-to-outcome mapping.")
+    ]
+}
+
+enum CRMRenewalStage: String, Hashable {
+    case rescue
+    case commercialReview
+    case proposalSent
+    case signed
+
+    var label: String {
+        switch self {
+        case .rescue: return "Exec Rescue"
+        case .commercialReview: return "Commercial Review"
+        case .proposalSent: return "Proposal Sent"
+        case .signed: return "Signed"
+        }
     }
 
-    var riskColor: Color {
-        switch riskColorName {
-        case "red":
-            return .red
-        case "orange":
-            return .orange
-        default:
-            return .green
+    var color: Color {
+        switch self {
+        case .rescue: return .red
+        case .commercialReview: return .orange
+        case .proposalSent: return .blue
+        case .signed: return .green
         }
     }
 }
 
-struct CRMAdminRenewal: Identifiable, Hashable, Sendable {
+struct CRMRenewalRecord: Identifiable, Hashable {
     let id: UUID
     let accountName: String
     let amount: String
     let deadline: String
-    let stage: String
-    let nextAction: String
-    let ownerNote: String
-    let stageColorName: String
+    var stage: CRMRenewalStage
+    var nextAction: String
+    var ownerNote: String
 
-    init(
-        id: UUID = UUID(),
-        accountName: String,
-        amount: String,
-        deadline: String,
-        stage: String,
-        nextAction: String,
-        ownerNote: String,
-        stageColorName: String
-    ) {
-        self.id = id
-        self.accountName = accountName
-        self.amount = amount
-        self.deadline = deadline
-        self.stage = stage
-        self.nextAction = nextAction
-        self.ownerNote = ownerNote
-        self.stageColorName = stageColorName
+    static let samples: [CRMRenewalRecord] = [
+        CRMRenewalRecord(id: UUID(), accountName: "Northstar Health", amount: "$420K ARR", deadline: "24 days left", stage: .rescue, nextAction: "Finalize sponsor call agenda and prepare recovery narrative.", ownerNote: "Escalate if seat recovery stays below 8% by next Monday."),
+        CRMRenewalRecord(id: UUID(), accountName: "Halcyon Capital", amount: "$610K ARR", deadline: "36 days left", stage: .commercialReview, nextAction: "Bundle analytics add-on into multi-year proposal.", ownerNote: "Legal expects final clause review by end of week."),
+        CRMRenewalRecord(id: UUID(), accountName: "Atlas Freight", amount: "$188K ARR", deadline: "41 days left", stage: .proposalSent, nextAction: "Align procurement packet with CFO objection log.", ownerNote: "Follow up after proposal lands in procurement.")
+    ]
+}
+
+enum CRMTaskStatus: String, Hashable {
+    case queued
+    case inFlight
+    case done
+
+    var label: String {
+        switch self {
+        case .queued: return "Queued"
+        case .inFlight: return "In Flight"
+        case .done: return "Done"
+        }
     }
 
-    var stageColor: Color {
-        switch stageColorName {
-        case "red":
-            return .red
-        case "orange":
-            return .orange
-        default:
-            return .green
+    var color: Color {
+        switch self {
+        case .queued: return .orange
+        case .inFlight: return .blue
+        case .done: return .green
         }
     }
 }
 
-struct CRMAdminTask: Identifiable, Hashable, Sendable {
+struct CRMTaskRecord: Identifiable, Hashable {
     let id: UUID
     let title: String
     let accountName: String
-    let owner: String
-    let priority: String
+    var owner: String
     let deadline: String
+    var status: CRMTaskStatus
+    var note: String
 
-    init(
-        id: UUID = UUID(),
-        title: String,
-        accountName: String,
-        owner: String,
-        priority: String,
-        deadline: String
-    ) {
-        self.id = id
-        self.title = title
-        self.accountName = accountName
-        self.owner = owner
-        self.priority = priority
-        self.deadline = deadline
-    }
-}
-
-struct CRMAdminMetric: Hashable, Sendable {
-    let label: String
-    let value: String
+    static let samples: [CRMTaskRecord] = [
+        CRMTaskRecord(id: UUID(), title: "Update executive risk board", accountName: "Northstar Health", owner: "Elena Brooks", deadline: "Today 17:00", status: .queued, note: "Board is waiting for the latest sponsor risk notes."),
+        CRMTaskRecord(id: UUID(), title: "Review usage export before QBR", accountName: "Halcyon Capital", owner: "Priya Shah", deadline: "Tomorrow", status: .inFlight, note: "Usage proof is being prepared for the QBR narrative."),
+        CRMTaskRecord(id: UUID(), title: "Send procurement ROI memo", accountName: "Atlas Freight", owner: "Nora White", deadline: "Tomorrow 13:00", status: .queued, note: "Finance blocked the deal until the ROI memo lands.")
+    ]
 }

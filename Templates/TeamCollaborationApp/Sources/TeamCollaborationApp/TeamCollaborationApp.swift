@@ -7,58 +7,42 @@ public struct TeamCollaborationAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            TeamCollaborationWorkspaceRootView(
-                snapshot: .sample,
-                projects: TeamCollaborationProjectCard.sampleCards,
-                actions: TeamCollaborationQuickAction.defaultActions,
-                health: .sample,
-                state: .sample
-            )
+            TeamCollaborationRuntimeRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct TeamCollaborationWorkspaceRootView: View {
-    let snapshot: TeamCollaborationDashboardSnapshot
-    let projects: [TeamCollaborationProjectCard]
-    let actions: [TeamCollaborationQuickAction]
-    let health: TeamCollaborationOperationalHealth
-    let state: TeamCollaborationWorkspaceState
+struct TeamCollaborationRuntimeRootView: View {
+    @StateObject private var store = TeamCollaborationOperationsStore()
 
     var body: some View {
         TabView {
-            TeamCollaborationDashboardView(
-                snapshot: snapshot,
-                projects: projects,
-                actions: actions,
-                health: health,
-                state: state
-            )
-            .tabItem {
-                Image(systemName: "rectangle.and.pencil.and.ellipsis")
-                Text("Workspace")
-            }
+            TeamCollaborationWorkspaceView(store: store)
+                .tabItem {
+                    Image(systemName: "rectangle.3.group.bubble.left.fill")
+                    Text("Workspace")
+                }
 
-            TeamCollaborationTasksView(state: state)
+            TeamCollaborationTasksView(store: store)
                 .tabItem {
                     Image(systemName: "checklist.checked")
                     Text("Tasks")
                 }
 
-            TeamCollaborationDecisionsView(state: state)
+            TeamCollaborationDecisionsView(store: store)
                 .tabItem {
                     Image(systemName: "arrow.triangle.branch")
                     Text("Decisions")
                 }
 
-            TeamCollaborationHandoffsView(state: state)
+            TeamCollaborationHandoffsView(store: store)
                 .tabItem {
                     Image(systemName: "arrow.left.arrow.right.square.fill")
                     Text("Handoffs")
                 }
 
-            TeamCollaborationProfileView(snapshot: snapshot, health: health, state: state)
+            TeamCollaborationProfileView(store: store)
                 .tabItem {
                     Image(systemName: "person.crop.circle.fill")
                     Text("Profile")
@@ -69,22 +53,146 @@ struct TeamCollaborationWorkspaceRootView: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct TeamCollaborationDashboardView: View {
-    let snapshot: TeamCollaborationDashboardSnapshot
-    let projects: [TeamCollaborationProjectCard]
-    let actions: [TeamCollaborationQuickAction]
-    let health: TeamCollaborationOperationalHealth
-    let state: TeamCollaborationWorkspaceState
+@MainActor
+final class TeamCollaborationOperationsStore: ObservableObject {
+    @Published var standups: [TeamStandup]
+    @Published var tasks: [CollaborationTask]
+    @Published var decisions: [CollaborationDecision]
+    @Published var handoffs: [CollaborationHandoff]
+    @Published var operatorHeadline: String
+    @Published var overlapWindow: String
+    @Published var workspaceLead: String
+    @Published var teamScope: String
+    @Published var decisionPolicy: String
+    @Published var completedShipments: Int
+    @Published var blockedCount: Int
+    @Published var reviewQueue: Int
+
+    init(
+        standups: [TeamStandup] = TeamStandup.samples,
+        tasks: [CollaborationTask] = CollaborationTask.samples,
+        decisions: [CollaborationDecision] = CollaborationDecision.samples,
+        handoffs: [CollaborationHandoff] = CollaborationHandoff.samples,
+        operatorHeadline: String = "Two launch blockers need sign-off before overlap closes.",
+        overlapWindow: String = "Overlap window closes at 18:00",
+        workspaceLead: String = "Ethan Cole",
+        teamScope: String = "Product, design, support and GTM coordination",
+        decisionPolicy: String = "Every blocker needs one owner, one decision and one receiving team.",
+        completedShipments: Int = 12,
+        blockedCount: Int = 2,
+        reviewQueue: Int = 5
+    ) {
+        self.standups = standups
+        self.tasks = tasks
+        self.decisions = decisions
+        self.handoffs = handoffs
+        self.operatorHeadline = operatorHeadline
+        self.overlapWindow = overlapWindow
+        self.workspaceLead = workspaceLead
+        self.teamScope = teamScope
+        self.decisionPolicy = decisionPolicy
+        self.completedShipments = completedShipments
+        self.blockedCount = blockedCount
+        self.reviewQueue = reviewQueue
+    }
+
+    var activeTasks: [CollaborationTask] {
+        tasks.filter { $0.status != .done }
+    }
+
+    var pendingDecisions: [CollaborationDecision] {
+        decisions.filter { $0.status != .published }
+    }
+
+    var liveHandoffs: [CollaborationHandoff] {
+        handoffs.filter { $0.status != .completed }
+    }
+
+    func startTask(_ taskID: UUID) {
+        guard let index = tasks.firstIndex(where: { $0.id == taskID }) else { return }
+        tasks[index].status = .active
+        tasks[index].update = "Execution resumed and owner accepted the current plan."
+        operatorHeadline = "\(tasks[index].title) is back in execution."
+        blockedCount = max(0, blockedCount - 1)
+    }
+
+    func unblockTask(_ taskID: UUID) {
+        guard let index = tasks.firstIndex(where: { $0.id == taskID }) else { return }
+        tasks[index].status = .review
+        tasks[index].update = "Blocker removed and task moved to review lane."
+        operatorHeadline = "\(tasks[index].owner) cleared a blocker for \(tasks[index].project)."
+        blockedCount = max(0, blockedCount - 1)
+        reviewQueue += 1
+    }
+
+    func completeTask(_ taskID: UUID) {
+        guard let index = tasks.firstIndex(where: { $0.id == taskID }) else { return }
+        tasks[index].status = .done
+        tasks[index].update = "Task shipped and downstream owners were notified."
+        operatorHeadline = "\(tasks[index].title) shipped to the next team."
+        completedShipments += 1
+        reviewQueue = max(0, reviewQueue - 1)
+    }
+
+    func approveDecision(_ decisionID: UUID) {
+        guard let index = decisions.firstIndex(where: { $0.id == decisionID }) else { return }
+        decisions[index].status = .approved
+        decisions[index].note = "Decision approved by product, design and support."
+        operatorHeadline = "\(decisions[index].title) is approved and ready for publication."
+    }
+
+    func publishDecision(_ decisionID: UUID) {
+        guard let index = decisions.firstIndex(where: { $0.id == decisionID }) else { return }
+        decisions[index].status = .published
+        decisions[index].note = "Decision published to the workspace and routed to every receiving team."
+        operatorHeadline = "\(decisions[index].title) was published to all teams."
+        reviewQueue = max(0, reviewQueue - 1)
+    }
+
+    func queueHandoff(_ handoffID: UUID) {
+        guard let index = handoffs.firstIndex(where: { $0.id == handoffID }) else { return }
+        handoffs[index].status = .queued
+        handoffs[index].note = "Assets and notes packaged for receiving team."
+        operatorHeadline = "\(handoffs[index].title) is queued for receiver confirmation."
+    }
+
+    func acceptHandoff(_ handoffID: UUID) {
+        guard let index = handoffs.firstIndex(where: { $0.id == handoffID }) else { return }
+        handoffs[index].status = .accepted
+        handoffs[index].note = "Receiving team accepted ownership and SLA."
+        operatorHeadline = "\(handoffs[index].toTeam) accepted \(handoffs[index].title.lowercased())."
+    }
+
+    func completeHandoff(_ handoffID: UUID) {
+        guard let index = handoffs.firstIndex(where: { $0.id == handoffID }) else { return }
+        handoffs[index].status = .completed
+        handoffs[index].note = "Handoff completed with written verification from both teams."
+        operatorHeadline = "\(handoffs[index].title) closed cleanly."
+        completedShipments += 1
+    }
+
+    func resolveStandup(_ standupID: UUID) {
+        guard let index = standups.firstIndex(where: { $0.id == standupID }) else { return }
+        standups[index].status = .resolved
+        standups[index].nextStep = "Owner confirmed the blocker is closed and the lane is green."
+        operatorHeadline = "\(standups[index].owner) closed a standup blocker."
+        blockedCount = max(0, blockedCount - 1)
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+struct TeamCollaborationWorkspaceView: View {
+    @ObservedObject var store: TeamCollaborationOperationsStore
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    TeamCollaborationHeroCard(snapshot: snapshot, health: health, state: state)
-                    TeamCollaborationQuickActionGrid(actions: actions)
-                    TeamCollaborationDecisionBoardCard(items: state.openDecisions)
-                    TeamCollaborationProjectPulseCard(projects: projects)
-                    TeamCollaborationStandupCard(updates: state.asyncStandups)
+                    TeamWorkspaceHeroCard(store: store)
+                    TeamMetricRow(store: store)
+                    TeamStandupBoard(store: store)
+                    TeamDecisionLane(store: store)
+                    TeamHandoffLane(store: store)
                 }
                 .padding(16)
             }
@@ -94,33 +202,24 @@ struct TeamCollaborationDashboardView: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct TeamCollaborationHeroCard: View {
-    let snapshot: TeamCollaborationDashboardSnapshot
-    let health: TeamCollaborationOperationalHealth
-    let state: TeamCollaborationWorkspaceState
+struct TeamWorkspaceHeroCard: View {
+    @ObservedObject var store: TeamCollaborationOperationsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Workspace Snapshot")
+            Text("Workspace Pulse")
                 .font(.headline)
                 .foregroundStyle(.secondary)
 
-            Text(state.operatorHeadline)
+            Text(store.operatorHeadline)
                 .font(.system(size: 30, weight: .bold, design: .rounded))
-            Text(snapshot.workspaceHealth)
-                .font(.subheadline)
+            Text(store.teamScope)
                 .foregroundStyle(.secondary)
 
-            HStack(spacing: 12) {
-                TeamCollaborationMetricChip(title: "Projects", value: "\(snapshot.activeProjects)")
-                TeamCollaborationMetricChip(title: "Decisions", value: "\(snapshot.openDecisions)")
-                TeamCollaborationMetricChip(title: "Standups", value: "\(snapshot.dailyStandups)")
-            }
-
             HStack {
-                Label(state.shiftWindow, systemImage: "clock.fill")
+                Label(store.overlapWindow, systemImage: "clock.fill")
                 Spacer()
-                Text("\(health.averageReplyMinutes) min reply")
+                Text("\(store.reviewQueue) items in review")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.blue)
             }
@@ -140,7 +239,20 @@ struct TeamCollaborationHeroCard: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct TeamCollaborationMetricChip: View {
+struct TeamMetricRow: View {
+    @ObservedObject var store: TeamCollaborationOperationsStore
+
+    var body: some View {
+        HStack(spacing: 12) {
+            TeamMetricChip(title: "Active Tasks", value: "\(store.activeTasks.count)")
+            TeamMetricChip(title: "Pending Decisions", value: "\(store.pendingDecisions.count)")
+            TeamMetricChip(title: "Closed Shipments", value: "\(store.completedShipments)")
+        }
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+struct TeamMetricChip: View {
     let title: String
     let value: String
 
@@ -160,69 +272,76 @@ struct TeamCollaborationMetricChip: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct TeamCollaborationQuickActionGrid: View {
-    let actions: [TeamCollaborationQuickAction]
+struct TeamStandupBoard: View {
+    @ObservedObject var store: TeamCollaborationOperationsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Quick Actions")
+            Text("Async Standups")
                 .font(.title3.weight(.bold))
 
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                ForEach(actions) { action in
-                    VStack(alignment: .leading, spacing: 10) {
-                        Image(systemName: action.systemImage)
-                            .font(.title3)
-                            .foregroundStyle(.blue)
-                        Text(action.title)
-                            .font(.subheadline.weight(.semibold))
-                        Text(action.detail)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
+            ForEach(store.standups) { standup in
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text(standup.owner)
+                            .font(.headline)
+                        Spacer()
+                        Text(standup.status.label)
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(standup.status.color)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    Text(standup.summary)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    Text(standup.nextStep)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    if standup.status != .resolved {
+                        Button("Resolve Blocker") {
+                            store.resolveStandup(standup.id)
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
                 }
+                .padding()
+                .background(Color(.secondarySystemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
             }
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct TeamCollaborationDecisionBoardCard: View {
-    let items: [TeamCollaborationDecision]
+struct TeamDecisionLane: View {
+    @ObservedObject var store: TeamCollaborationOperationsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Decision Board")
+            Text("Decision Lane")
                 .font(.title3.weight(.bold))
 
-            ForEach(items) { item in
+            ForEach(store.decisions) { decision in
                 NavigationLink {
-                    TeamCollaborationDecisionDetailView(item: item)
+                    TeamDecisionDetailView(store: store, decisionID: decision.id)
                 } label: {
-                    VStack(alignment: .leading, spacing: 6) {
+                    VStack(alignment: .leading, spacing: 8) {
                         HStack {
-                            Text(item.title)
+                            Text(decision.title)
                                 .font(.headline)
                                 .foregroundStyle(.primary)
                             Spacer()
-                            Text(item.status)
+                            Text(decision.status.label)
                                 .font(.caption.weight(.semibold))
-                                .foregroundStyle(item.statusColor)
+                                .foregroundStyle(decision.status.color)
                         }
-                        Text(item.summary)
+                        Text(decision.summary)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                            .lineLimit(2)
-                        Text("\(item.owner) • \(item.deadline)")
+                        Text(decision.note)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
                     .background(Color(.secondarySystemBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -234,65 +353,40 @@ struct TeamCollaborationDecisionBoardCard: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct TeamCollaborationProjectPulseCard: View {
-    let projects: [TeamCollaborationProjectCard]
+struct TeamHandoffLane: View {
+    @ObservedObject var store: TeamCollaborationOperationsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Project Pulse")
+            Text("Handoff Lane")
                 .font(.title3.weight(.bold))
 
-            ForEach(projects) { project in
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(project.title)
-                            .font(.headline)
-                        Text("\(project.contributorCount) contributors")
+            ForEach(store.handoffs) { handoff in
+                NavigationLink {
+                    TeamHandoffDetailView(store: store, handoffID: handoff.id)
+                } label: {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text(handoff.title)
+                                .font(.headline)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Text(handoff.status.label)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(handoff.status.color)
+                        }
+                        Text("\(handoff.fromTeam) -> \(handoff.toTeam)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text(handoff.note)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
-                    Spacer()
-                    Text(project.ctaLabel)
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.blue)
+                    .padding()
+                    .background(Color(.secondarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
                 }
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-            }
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct TeamCollaborationStandupCard: View {
-    let updates: [TeamCollaborationStandup]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Async Standups")
-                .font(.title3.weight(.bold))
-
-            ForEach(updates) { update in
-                HStack(alignment: .top, spacing: 12) {
-                    Image(systemName: "person.fill")
-                        .foregroundStyle(.blue)
-                        .frame(width: 20)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(update.owner)
-                            .font(.headline)
-                        Text(update.summary)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text(update.nextStep)
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                }
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .buttonStyle(.plain)
             }
         }
     }
@@ -300,20 +394,30 @@ struct TeamCollaborationStandupCard: View {
 
 @available(iOS 18.0, macOS 15.0, *)
 struct TeamCollaborationTasksView: View {
-    let state: TeamCollaborationWorkspaceState
+    @ObservedObject var store: TeamCollaborationOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
-                ForEach(state.tasks) { task in
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(task.title)
-                        Text(task.project)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text("\(task.owner) • \(task.status)")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
+                ForEach(store.tasks) { task in
+                    NavigationLink {
+                        TeamTaskDetailView(store: store, taskID: task.id)
+                    } label: {
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text(task.title)
+                                Spacer()
+                                Text(task.status.label)
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(task.status.color)
+                            }
+                            Text("\(task.project) • \(task.owner)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Text(task.update)
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
             }
@@ -324,21 +428,21 @@ struct TeamCollaborationTasksView: View {
 
 @available(iOS 18.0, macOS 15.0, *)
 struct TeamCollaborationDecisionsView: View {
-    let state: TeamCollaborationWorkspaceState
+    @ObservedObject var store: TeamCollaborationOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
-                ForEach(state.openDecisions) { item in
+                ForEach(store.decisions) { decision in
                     NavigationLink {
-                        TeamCollaborationDecisionDetailView(item: item)
+                        TeamDecisionDetailView(store: store, decisionID: decision.id)
                     } label: {
                         VStack(alignment: .leading, spacing: 6) {
-                            Text(item.title)
-                            Text(item.summary)
+                            Text(decision.title)
+                            Text(decision.summary)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            Text("\(item.owner) • \(item.deadline)")
+                            Text(decision.note)
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
                         }
@@ -352,20 +456,30 @@ struct TeamCollaborationDecisionsView: View {
 
 @available(iOS 18.0, macOS 15.0, *)
 struct TeamCollaborationHandoffsView: View {
-    let state: TeamCollaborationWorkspaceState
+    @ObservedObject var store: TeamCollaborationOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
-                ForEach(state.handoffs) { handoff in
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(handoff.title)
-                        Text(handoff.summary)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text("\(handoff.fromTeam) -> \(handoff.toTeam)")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
+                ForEach(store.handoffs) { handoff in
+                    NavigationLink {
+                        TeamHandoffDetailView(store: store, handoffID: handoff.id)
+                    } label: {
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text(handoff.title)
+                                Spacer()
+                                Text(handoff.status.label)
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(handoff.status.color)
+                            }
+                            Text("\(handoff.fromTeam) -> \(handoff.toTeam)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Text(handoff.note)
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
             }
@@ -376,26 +490,22 @@ struct TeamCollaborationHandoffsView: View {
 
 @available(iOS 18.0, macOS 15.0, *)
 struct TeamCollaborationProfileView: View {
-    let snapshot: TeamCollaborationDashboardSnapshot
-    let health: TeamCollaborationOperationalHealth
-    let state: TeamCollaborationWorkspaceState
+    @ObservedObject var store: TeamCollaborationOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Operator") {
-                    Label(state.workspaceLead, systemImage: "person.crop.circle.fill")
-                    Label(state.teamScope, systemImage: "building.2.fill")
+                    Label(store.workspaceLead, systemImage: "person.crop.circle.fill")
+                    Label(store.teamScope, systemImage: "building.2.fill")
                 }
-                Section("Workspace Metrics") {
-                    Label("\(snapshot.activeProjects) active projects", systemImage: "rectangle.3.group.fill")
-                    Label("\(snapshot.openDecisions) open decisions", systemImage: "arrow.triangle.branch")
-                    Label("\(state.handoffCadence) handoff cadence", systemImage: "arrow.left.arrow.right.circle.fill")
+                Section("Operating Metrics") {
+                    Label("\(store.completedShipments) completed shipments", systemImage: "shippingbox.fill")
+                    Label("\(store.blockedCount) blockers open", systemImage: "exclamationmark.triangle.fill")
+                    Label("\(store.reviewQueue) items in review", systemImage: "tray.full.fill")
                 }
-                Section("Operating Rules") {
-                    Label("\(health.reviewQueue) items in review", systemImage: "tray.full.fill")
-                    Label(health.handoffReady ? "Handoff ready" : "Handoff blocked", systemImage: health.handoffReady ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
-                    Label(state.decisionPolicy, systemImage: "checkmark.seal.fill")
+                Section("Rules") {
+                    Text(store.decisionPolicy)
                 }
             }
             .navigationTitle("Profile")
@@ -404,138 +514,238 @@ struct TeamCollaborationProfileView: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct TeamCollaborationDecisionDetailView: View {
-    let item: TeamCollaborationDecision
+struct TeamTaskDetailView: View {
+    @ObservedObject var store: TeamCollaborationOperationsStore
+    let taskID: UUID
 
     var body: some View {
-        List {
-            Section("Decision") {
-                Text(item.title)
-                    .font(.title3.weight(.bold))
-                Text(item.summary)
-                    .foregroundStyle(.secondary)
-            }
-            Section("Ownership") {
-                Label(item.owner, systemImage: "person.fill")
-                Label(item.deadline, systemImage: "clock.fill")
-                Label(item.status, systemImage: "checkmark.circle.fill")
-            }
-            Section("Decision Tracks") {
-                ForEach(item.tracks, id: \.self) { track in
-                    Label(track, systemImage: "arrowshape.turn.up.right.circle")
+        if let task = store.tasks.first(where: { $0.id == taskID }) {
+            List {
+                Section("Task") {
+                    Text(task.title)
+                        .font(.title3.weight(.bold))
+                    Text(task.update)
+                        .foregroundStyle(.secondary)
+                }
+                Section("Ownership") {
+                    Label(task.project, systemImage: "folder.fill")
+                    Label(task.owner, systemImage: "person.fill")
+                    Label(task.status.label, systemImage: "checkmark.circle.fill")
+                }
+                Section("Actions") {
+                    if task.status == .blocked {
+                        Button("Start Task") { store.startTask(task.id) }
+                        Button("Unblock Task") { store.unblockTask(task.id) }
+                    } else if task.status == .active {
+                        Button("Send to Review") { store.unblockTask(task.id) }
+                    } else if task.status == .review {
+                        Button("Complete Task") { store.completeTask(task.id) }
+                    }
                 }
             }
-        }
-        .navigationTitle("Decision")
-    }
-}
-
-public struct TeamCollaborationQuickAction: Identifiable, Hashable, Sendable {
-    public let id: UUID
-    public let title: String
-    public let detail: String
-    public let systemImage: String
-
-    public init(
-        id: UUID = UUID(),
-        title: String,
-        detail: String,
-        systemImage: String
-    ) {
-        self.id = id
-        self.title = title
-        self.detail = detail
-        self.systemImage = systemImage
-    }
-
-    public static let defaultActions: [TeamCollaborationQuickAction] = [
-        TeamCollaborationQuickAction(title: "Open Decision Board", detail: "Review pending product, design and GTM decisions before the overlap ends.", systemImage: "rectangle.and.pencil.and.ellipsis"),
-        TeamCollaborationQuickAction(title: "Review Async Standups", detail: "Check blockers and updates before routing work to the next team.", systemImage: "person.3.fill"),
-        TeamCollaborationQuickAction(title: "Inspect Handoffs", detail: "Validate ownership, due dates and review trails across cross-team work.", systemImage: "arrow.left.arrow.right.square.fill")
-    ]
-}
-
-struct TeamCollaborationWorkspaceState {
-    let operatorHeadline: String
-    let shiftWindow: String
-    let workspaceLead: String
-    let teamScope: String
-    let handoffCadence: String
-    let decisionPolicy: String
-    let openDecisions: [TeamCollaborationDecision]
-    let asyncStandups: [TeamCollaborationStandup]
-    let tasks: [TeamCollaborationTask]
-    let handoffs: [TeamCollaborationHandoff]
-
-    static let sample = TeamCollaborationWorkspaceState(
-        operatorHeadline: "Cross-team handoffs are under control",
-        shiftWindow: "Overlap window closes at 18:00",
-        workspaceLead: "Ethan Cole",
-        teamScope: "Product, design and operations alignment",
-        handoffCadence: "Twice daily",
-        decisionPolicy: "Every launch blocker needs one owner, one due date and one written decision log",
-        openDecisions: [
-            TeamCollaborationDecision(title: "Launch copy freeze", owner: "Mia", deadline: "Today 17:30", status: "Waiting", summary: "Marketing, product and legal need a final decision on headline claims.", tracks: ["Finalize approved copy", "Lock localization scope", "Ship banner assets"]),
-            TeamCollaborationDecision(title: "Support routing redesign", owner: "Jon", deadline: "Tomorrow 10:00", status: "In review", summary: "Ops and support are aligning the new escalation path before rollout.", tracks: ["Agree on queue ownership", "Confirm reporting fields", "Publish runbook update"])
-        ],
-        asyncStandups: [
-            TeamCollaborationStandup(owner: "Ava", summary: "Design system tokens are ready; waiting on product sign-off for the component merge.", nextStep: "Collect sign-off by 16:00."),
-            TeamCollaborationStandup(owner: "Noah", summary: "Customer ops cleared 80% of inbox backlog after new routing rules went live.", nextStep: "Monitor for SLA drift tonight."),
-            TeamCollaborationStandup(owner: "Lena", summary: "Engineering resolved the export bug and prepared the release branch.", nextStep: "Schedule rollout after QA handoff.")
-        ],
-        tasks: [
-            TeamCollaborationTask(title: "Finalize onboarding copy", project: "Launch Sprint", owner: "Mia", status: "In review"),
-            TeamCollaborationTask(title: "Audit support escalation paths", project: "Customer Ops", owner: "Jon", status: "Active"),
-            TeamCollaborationTask(title: "Ship component token refresh", project: "Design System", owner: "Ava", status: "Blocked")
-        ],
-        handoffs: [
-            TeamCollaborationHandoff(title: "Release handoff", fromTeam: "Engineering", toTeam: "QA", summary: "Feature branch is ready for final smoke and production gate review."),
-            TeamCollaborationHandoff(title: "Support handoff", fromTeam: "Customer Ops", toTeam: "Evening Support", summary: "Three VIP tickets and one fraud escalation need continuity tonight."),
-            TeamCollaborationHandoff(title: "Design handoff", fromTeam: "Design", toTeam: "Marketing", summary: "Approved banner system and motion assets are ready for campaign prep.")
-        ]
-    )
-}
-
-struct TeamCollaborationDecision: Identifiable, Hashable {
-    let id = UUID()
-    let title: String
-    let owner: String
-    let deadline: String
-    let status: String
-    let summary: String
-    let tracks: [String]
-
-    var statusColor: Color {
-        switch status {
-        case "In review":
-            return .orange
-        case "Waiting":
-            return .red
-        default:
-            return .blue
+            .navigationTitle("Task")
         }
     }
 }
 
-struct TeamCollaborationStandup: Identifiable, Hashable {
-    let id = UUID()
-    let owner: String
-    let summary: String
-    let nextStep: String
+@available(iOS 18.0, macOS 15.0, *)
+struct TeamDecisionDetailView: View {
+    @ObservedObject var store: TeamCollaborationOperationsStore
+    let decisionID: UUID
+
+    var body: some View {
+        if let decision = store.decisions.first(where: { $0.id == decisionID }) {
+            List {
+                Section("Decision") {
+                    Text(decision.title)
+                        .font(.title3.weight(.bold))
+                    Text(decision.summary)
+                        .foregroundStyle(.secondary)
+                    Text(decision.note)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Section("Tracks") {
+                    ForEach(decision.tracks, id: \.self) { track in
+                        Label(track, systemImage: "arrowshape.turn.up.right.circle")
+                    }
+                }
+                Section("Actions") {
+                    if decision.status == .review {
+                        Button("Approve Decision") { store.approveDecision(decision.id) }
+                    }
+                    if decision.status == .approved {
+                        Button("Publish Decision") { store.publishDecision(decision.id) }
+                    }
+                }
+            }
+            .navigationTitle("Decision")
+        }
+    }
 }
 
-struct TeamCollaborationTask: Identifiable, Hashable {
-    let id = UUID()
+@available(iOS 18.0, macOS 15.0, *)
+struct TeamHandoffDetailView: View {
+    @ObservedObject var store: TeamCollaborationOperationsStore
+    let handoffID: UUID
+
+    var body: some View {
+        if let handoff = store.handoffs.first(where: { $0.id == handoffID }) {
+            List {
+                Section("Handoff") {
+                    Text(handoff.title)
+                        .font(.title3.weight(.bold))
+                    Text(handoff.summary)
+                        .foregroundStyle(.secondary)
+                    Text(handoff.note)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Section("Routing") {
+                    Label(handoff.fromTeam, systemImage: "arrow.up.circle.fill")
+                    Label(handoff.toTeam, systemImage: "arrow.down.circle.fill")
+                    Label(handoff.status.label, systemImage: "checkmark.circle.fill")
+                }
+                Section("Actions") {
+                    if handoff.status == .draft {
+                        Button("Queue Handoff") { store.queueHandoff(handoff.id) }
+                    }
+                    if handoff.status == .queued {
+                        Button("Accept Handoff") { store.acceptHandoff(handoff.id) }
+                    }
+                    if handoff.status == .accepted {
+                        Button("Complete Handoff") { store.completeHandoff(handoff.id) }
+                    }
+                }
+            }
+            .navigationTitle("Handoff")
+        }
+    }
+}
+
+enum CollaborationTaskStatus: String, CaseIterable, Hashable {
+    case blocked
+    case active
+    case review
+    case done
+
+    var label: String { rawValue.capitalized }
+
+    var color: Color {
+        switch self {
+        case .blocked: return .red
+        case .active: return .orange
+        case .review: return .blue
+        case .done: return .green
+        }
+    }
+}
+
+struct CollaborationTask: Identifiable, Hashable {
+    let id: UUID
     let title: String
     let project: String
     let owner: String
-    let status: String
+    var status: CollaborationTaskStatus
+    var update: String
+
+    static let samples: [CollaborationTask] = [
+        CollaborationTask(id: UUID(), title: "Finalize onboarding copy", project: "Launch Sprint", owner: "Mia", status: .review, update: "Legal comments landed and product is waiting for final review."),
+        CollaborationTask(id: UUID(), title: "Audit support escalation paths", project: "Customer Ops", owner: "Jon", status: .active, update: "Ops is mapping the last three VIP cases into the new route."),
+        CollaborationTask(id: UUID(), title: "Ship component token refresh", project: "Design System", owner: "Ava", status: .blocked, update: "Engineering needs final accessibility sign-off before merge.")
+    ]
 }
 
-struct TeamCollaborationHandoff: Identifiable, Hashable {
-    let id = UUID()
+enum CollaborationDecisionStatus: String, Hashable {
+    case review
+    case approved
+    case published
+
+    var label: String { rawValue.capitalized }
+
+    var color: Color {
+        switch self {
+        case .review: return .red
+        case .approved: return .orange
+        case .published: return .green
+        }
+    }
+}
+
+struct CollaborationDecision: Identifiable, Hashable {
+    let id: UUID
+    let title: String
+    let summary: String
+    let tracks: [String]
+    var status: CollaborationDecisionStatus
+    var note: String
+
+    static let samples: [CollaborationDecision] = [
+        CollaborationDecision(id: UUID(), title: "Launch copy freeze", summary: "Marketing, product and legal need a final decision on claim language.", tracks: ["Finalize approved copy", "Lock localization scope", "Ship banner assets"], status: .review, note: "Awaiting one final legal pass."),
+        CollaborationDecision(id: UUID(), title: "Support routing redesign", summary: "Ops and support are aligning the new escalation path before rollout.", tracks: ["Agree on queue ownership", "Confirm reporting fields", "Publish runbook update"], status: .approved, note: "Core routing approved; documentation not yet published.")
+    ]
+}
+
+enum CollaborationHandoffStatus: String, Hashable {
+    case draft
+    case queued
+    case accepted
+    case completed
+
+    var label: String { rawValue.capitalized }
+
+    var color: Color {
+        switch self {
+        case .draft: return .secondary
+        case .queued: return .orange
+        case .accepted: return .blue
+        case .completed: return .green
+        }
+    }
+}
+
+struct CollaborationHandoff: Identifiable, Hashable {
+    let id: UUID
     let title: String
     let fromTeam: String
     let toTeam: String
     let summary: String
+    var status: CollaborationHandoffStatus
+    var note: String
+
+    static let samples: [CollaborationHandoff] = [
+        CollaborationHandoff(id: UUID(), title: "Release handoff", fromTeam: "Engineering", toTeam: "QA", summary: "Feature branch is ready for final smoke and production gate review.", status: .queued, note: "Waiting on QA acknowledgement."),
+        CollaborationHandoff(id: UUID(), title: "Support handoff", fromTeam: "Customer Ops", toTeam: "Evening Support", summary: "Three VIP tickets and one fraud escalation need continuity tonight.", status: .accepted, note: "Receiving team owns response SLA."),
+        CollaborationHandoff(id: UUID(), title: "Design handoff", fromTeam: "Design", toTeam: "Marketing", summary: "Approved banner system and motion assets are ready for campaign prep.", status: .draft, note: "Packaging notes still need final export list.")
+    ]
+}
+
+enum StandupStatus: String, Hashable {
+    case blocked
+    case review
+    case resolved
+
+    var label: String { rawValue.capitalized }
+
+    var color: Color {
+        switch self {
+        case .blocked: return .red
+        case .review: return .orange
+        case .resolved: return .green
+        }
+    }
+}
+
+struct TeamStandup: Identifiable, Hashable {
+    let id: UUID
+    let owner: String
+    let summary: String
+    var nextStep: String
+    var status: StandupStatus
+
+    static let samples: [TeamStandup] = [
+        TeamStandup(id: UUID(), owner: "Ava", summary: "Design system tokens are ready; waiting on product sign-off for the component merge.", nextStep: "Collect sign-off by 16:00.", status: .review),
+        TeamStandup(id: UUID(), owner: "Noah", summary: "Customer ops cleared most of the inbox backlog, but VIP fraud review is still blocked.", nextStep: "Route fraud decision before the evening handoff.", status: .blocked),
+        TeamStandup(id: UUID(), owner: "Lena", summary: "Engineering resolved the export bug and prepared the release branch.", nextStep: "Schedule rollout after QA handoff.", status: .resolved)
+    ]
 }
