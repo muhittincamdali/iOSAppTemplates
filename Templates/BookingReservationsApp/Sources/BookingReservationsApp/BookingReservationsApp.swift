@@ -7,58 +7,38 @@ public struct BookingReservationsAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            BookingWorkspaceRootView(
-                snapshot: .sample,
-                properties: BookingPropertyCard.sampleCards,
-                actions: BookingReservationsQuickAction.defaultActions,
-                health: .sample,
-                state: .sample
-            )
+            BookingRuntimeRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct BookingWorkspaceRootView: View {
-    let snapshot: BookingReservationsDashboardSnapshot
-    let properties: [BookingPropertyCard]
-    let actions: [BookingReservationsQuickAction]
-    let health: BookingOperationsHealth
-    let state: BookingWorkspaceState
+struct BookingRuntimeRootView: View {
+    @StateObject private var store = BookingOperationsStore()
 
     var body: some View {
         TabView {
-            BookingDashboardView(
-                snapshot: snapshot,
-                properties: properties,
-                actions: actions,
-                health: health,
-                state: state
-            )
-            .tabItem {
-                Image(systemName: "house.fill")
-                Text("Home")
-            }
-
-            BookingCalendarView(state: state)
+            BookingDashboardView(store: store)
+                .tabItem {
+                    Image(systemName: "house.fill")
+                    Text("Home")
+                }
+            BookingCalendarView(store: store)
                 .tabItem {
                     Image(systemName: "calendar")
                     Text("Calendar")
                 }
-
-            BookingGuestsView(state: state)
+            BookingGuestsView(store: store)
                 .tabItem {
                     Image(systemName: "person.2.fill")
                     Text("Guests")
                 }
-
-            BookingRequestsView(state: state)
+            BookingRequestsView(store: store)
                 .tabItem {
                     Image(systemName: "message.badge.fill")
                     Text("Requests")
                 }
-
-            BookingProfileView(snapshot: snapshot, health: health, state: state)
+            BookingProfileView(store: store)
                 .tabItem {
                     Image(systemName: "person.crop.circle.fill")
                     Text("Profile")
@@ -69,22 +49,132 @@ struct BookingWorkspaceRootView: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
+@MainActor
+final class BookingOperationsStore: ObservableObject {
+    @Published var stays: [BookingStayRecord]
+    @Published var guestRequests: [BookingRequestRecord]
+    @Published var calendarDays: [BookingCalendarRecord]
+    @Published var operatorHeadline = "Weekend arrivals are on track and checkout risk is contained."
+    @Published var shiftSummary = "Morning desk covers 42 arrivals, 11 departures and 3 VIP recovery cases."
+
+    init() {
+        self.stays = [
+            BookingStayRecord(guestName: "Liam Carter", property: "City Loft", dateRange: "Apr 27 - Apr 30", status: .arrivalReady, departureTime: "Checkout 11:00", note: "Needs early key handoff and parking code.", preferences: ["Quiet room", "Late dinner recommendations"], identityVerified: true, checkedIn: false),
+            BookingStayRecord(guestName: "Mila Harper", property: "Coastal Retreat", dateRange: "Apr 27 - May 1", status: .awaitingID, departureTime: "Checkout 10:00", note: "Passport upload pending before self check-in.", preferences: ["Crib in room", "Ocean-view request"], identityVerified: false, checkedIn: false),
+            BookingStayRecord(guestName: "Oliver Reed", property: "Business Suites", dateRange: "Apr 24 - Apr 27", status: .checkoutToday, departureTime: "Departs 09:30", note: "Invoice copy requested before departure.", preferences: ["Invoice PDF", "Airport taxi"], identityVerified: true, checkedIn: true),
+            BookingStayRecord(guestName: "Ava Collins", property: "City Loft", dateRange: "Apr 25 - Apr 27", status: .pendingReview, departureTime: "Departs 12:00", note: "Housekeeping flagged minibar reconciliation.", preferences: ["Late checkout", "Digital receipt"], identityVerified: true, checkedIn: true)
+        ]
+        self.guestRequests = [
+            BookingRequestRecord(title: "Late checkout approval", guest: "Ava Collins • City Loft", priority: .high, nextAction: "Confirm cleaning slot before 18:00 arrival.", status: .open),
+            BookingRequestRecord(title: "Airport transfer update", guest: "Liam Carter • City Loft", priority: .medium, nextAction: "Send driver contact and pickup window.", status: .open),
+            BookingRequestRecord(title: "Family crib setup", guest: "Mila Harper • Coastal Retreat", priority: .high, nextAction: "Housekeeping to confirm room setup before 14:00.", status: .open)
+        ]
+        self.calendarDays = [
+            BookingCalendarRecord(label: "Today", occupancy: 92, summary: "42 arrivals, 11 departures, 3 VIP stays.", isLocked: false),
+            BookingCalendarRecord(label: "Tomorrow", occupancy: 88, summary: "High leisure demand on the coastal segment.", isLocked: false),
+            BookingCalendarRecord(label: "Friday", occupancy: 96, summary: "Business Suites nearly sold out for conference week.", isLocked: true)
+        ]
+    }
+
+    var arrivals: [BookingStayRecord] {
+        stays.filter { $0.status == .arrivalReady || $0.status == .awaitingID }
+    }
+
+    var checkouts: [BookingStayRecord] {
+        stays.filter { $0.status == .checkoutToday || $0.status == .pendingReview }
+    }
+
+    var openRequestCount: Int {
+        guestRequests.filter { $0.status != .resolved }.count
+    }
+
+    func verifyIdentity(for stay: BookingStayRecord) {
+        guard let index = stays.firstIndex(where: { $0.id == stay.id }) else { return }
+        stays[index].identityVerified = true
+        if stays[index].status == .awaitingID {
+            stays[index].status = .arrivalReady
+        }
+    }
+
+    func checkInGuest(_ stay: BookingStayRecord) {
+        guard let index = stays.firstIndex(where: { $0.id == stay.id }) else { return }
+        stays[index].checkedIn = true
+        stays[index].status = .inHouse
+        operatorHeadline = "\(stays[index].guestName) checked in and the arrival queue moved forward."
+    }
+
+    func completeCheckout(_ stay: BookingStayRecord) {
+        guard let index = stays.firstIndex(where: { $0.id == stay.id }) else { return }
+        stays[index].status = .checkedOut
+        operatorHeadline = "\(stays[index].guestName) checked out and the room is ready for turnover."
+    }
+
+    func approveRequest(_ request: BookingRequestRecord) {
+        guard let index = guestRequests.firstIndex(where: { $0.id == request.id }) else { return }
+        guestRequests[index].status = .approved
+    }
+
+    func resolveRequest(_ request: BookingRequestRecord) {
+        guard let index = guestRequests.firstIndex(where: { $0.id == request.id }) else { return }
+        guestRequests[index].status = .resolved
+    }
+
+    func lockDay(_ day: BookingCalendarRecord) {
+        guard let index = calendarDays.firstIndex(where: { $0.id == day.id }) else { return }
+        calendarDays[index].isLocked.toggle()
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
 struct BookingDashboardView: View {
-    let snapshot: BookingReservationsDashboardSnapshot
-    let properties: [BookingPropertyCard]
-    let actions: [BookingReservationsQuickAction]
-    let health: BookingOperationsHealth
-    let state: BookingWorkspaceState
+    @ObservedObject var store: BookingOperationsStore
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    BookingHeroCard(snapshot: snapshot, health: health, state: state)
-                    BookingQuickActionGrid(actions: actions)
-                    BookingArrivalBoardCard(arrivals: state.arrivals)
-                    BookingPropertyPerformanceCard(properties: properties)
-                    BookingCheckoutBoardCard(checkouts: state.checkouts)
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Operations Snapshot")
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                        Text(store.operatorHeadline)
+                            .font(.system(size: 28, weight: .bold, design: .rounded))
+                        Text(store.shiftSummary)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        HStack(spacing: 12) {
+                            BookingMetricChip(title: "Arrivals", value: "\(store.arrivals.count)")
+                            BookingMetricChip(title: "Checkouts", value: "\(store.checkouts.count)")
+                            BookingMetricChip(title: "Requests", value: "\(store.openRequestCount)")
+                        }
+                    }
+                    .padding(20)
+                    .background(LinearGradient(colors: [.mint.opacity(0.18), .teal.opacity(0.10)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .clipShape(RoundedRectangle(cornerRadius: 22))
+
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Arrival Board")
+                            .font(.title3.weight(.bold))
+                        ForEach(store.arrivals) { stay in
+                            BookingStayCard(
+                                stay: stay,
+                                primaryActionTitle: stay.identityVerified ? "Check In" : "Verify ID",
+                                primaryAction: {
+                                    stay.identityVerified ? store.checkInGuest(stay) : store.verifyIdentity(for: stay)
+                                }
+                            )
+                        }
+                    }
+
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Checkout Watch")
+                            .font(.title3.weight(.bold))
+                        ForEach(store.checkouts) { stay in
+                            BookingStayCard(stay: stay, primaryActionTitle: "Complete Checkout", primaryAction: {
+                                store.completeCheckout(stay)
+                            })
+                        }
+                    }
                 }
                 .padding(16)
             }
@@ -94,48 +184,122 @@ struct BookingDashboardView: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct BookingHeroCard: View {
-    let snapshot: BookingReservationsDashboardSnapshot
-    let health: BookingOperationsHealth
-    let state: BookingWorkspaceState
+struct BookingCalendarView: View {
+    @ObservedObject var store: BookingOperationsStore
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Operations Snapshot")
-                .font(.headline)
-                .foregroundStyle(.secondary)
-
-            Text(state.operatorHeadline)
-                .font(.system(size: 30, weight: .bold, design: .rounded))
-            Text(snapshot.occupancyHealth)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-
-            HStack(spacing: 12) {
-                BookingMetricChip(title: "Check-ins", value: "\(snapshot.checkInsToday)")
-                BookingMetricChip(title: "Properties", value: "\(snapshot.managedProperties)")
-                BookingMetricChip(title: "Requests", value: "\(snapshot.pendingRequests)")
+        NavigationStack {
+            List {
+                ForEach(store.calendarDays) { day in
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text(day.label)
+                            Spacer()
+                            Text("\(day.occupancy)%")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(day.occupancy > 90 ? .green : .orange)
+                        }
+                        Text(day.summary)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Button(day.isLocked ? "Unlock Inventory" : "Lock Inventory") {
+                            store.lockDay(day)
+                        }
+                        .buttonStyle(.bordered)
+                    }
+                    .padding(.vertical, 4)
+                }
             }
-
-            HStack {
-                Label(state.shiftSummary, systemImage: "clock.fill")
-                Spacer()
-                Text("\(health.averageResponseMinutes) min avg")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.mint)
-            }
-            .font(.caption)
-            .foregroundStyle(.secondary)
+            .navigationTitle("Calendar")
         }
-        .padding(20)
-        .background(
-            LinearGradient(
-                colors: [.mint.opacity(0.18), .teal.opacity(0.10)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 22))
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+struct BookingGuestsView: View {
+    @ObservedObject var store: BookingOperationsStore
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(store.stays) { stay in
+                    BookingStayCard(stay: stay, primaryActionTitle: stay.status == .checkoutToday ? "Complete Checkout" : stay.checkedIn ? "Checked In" : "Check In", primaryAction: {
+                        if stay.status == .checkoutToday {
+                            store.completeCheckout(stay)
+                        } else if !stay.checkedIn {
+                            store.checkInGuest(stay)
+                        }
+                    }, disablePrimary: stay.checkedIn && stay.status != .checkoutToday)
+                }
+            }
+            .navigationTitle("Guests")
+        }
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+struct BookingRequestsView: View {
+    @ObservedObject var store: BookingOperationsStore
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(store.guestRequests) { request in
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text(request.title)
+                            Spacer()
+                            Text(request.priority.label)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(request.priority.color)
+                        }
+                        Text(request.guest)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text(request.nextAction)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                        HStack {
+                            Button("Approve") { store.approveRequest(request) }
+                                .buttonStyle(.bordered)
+                            Button("Resolve") { store.resolveRequest(request) }
+                                .buttonStyle(.borderedProminent)
+                            Text(request.status.label)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(request.status.color)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
+            }
+            .navigationTitle("Requests")
+        }
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+struct BookingProfileView: View {
+    @ObservedObject var store: BookingOperationsStore
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section("Operator") {
+                    Label("Nora Fields", systemImage: "person.crop.circle.fill")
+                    Label("Europe coastal portfolio", systemImage: "globe")
+                }
+                Section("Performance") {
+                    Label("\(store.stays.count) active stays", systemImage: "building.2.fill")
+                    Label("\(store.arrivals.count) arrivals still in queue", systemImage: "door.left.hand.open")
+                    Label("\(store.openRequestCount) open requests", systemImage: "timer")
+                }
+                Section("Shift State") {
+                    Label(store.shiftSummary, systemImage: "clock.fill")
+                    Label(store.operatorHeadline, systemImage: "waveform.path.ecg")
+                }
+            }
+            .navigationTitle("Profile")
+        }
     }
 }
 
@@ -160,396 +324,141 @@ struct BookingMetricChip: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct BookingQuickActionGrid: View {
-    let actions: [BookingReservationsQuickAction]
+struct BookingStayCard: View {
+    let stay: BookingStayRecord
+    let primaryActionTitle: String
+    let primaryAction: () -> Void
+    var disablePrimary = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Quick Actions")
-                .font(.title3.weight(.bold))
-
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                ForEach(actions) { action in
-                    VStack(alignment: .leading, spacing: 10) {
-                        Image(systemName: action.systemImage)
-                            .font(.title3)
-                            .foregroundStyle(.mint)
-                        Text(action.title)
-                            .font(.subheadline.weight(.semibold))
-                        Text(action.detail)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                }
-            }
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct BookingArrivalBoardCard: View {
-    let arrivals: [BookingGuestStay]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Arrival Board")
-                .font(.title3.weight(.bold))
-
-            ForEach(arrivals) { stay in
-                NavigationLink {
-                    BookingStayDetailView(stay: stay)
-                } label: {
-                    HStack(alignment: .top, spacing: 12) {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(stay.guestName)
-                                .font(.headline)
-                                .foregroundStyle(.primary)
-                            Text("\(stay.property) • \(stay.dateRange)")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                            Text(stay.note)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        Text(stay.status)
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(stay.statusColor)
-                    }
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                }
-                .buttonStyle(.plain)
-            }
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct BookingPropertyPerformanceCard: View {
-    let properties: [BookingPropertyCard]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Property Pulse")
-                .font(.title3.weight(.bold))
-
-            ForEach(properties) { property in
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(property.title)
-                            .font(.headline)
-                        Text("\(property.reservationCount) active reservations")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    Text(property.ctaLabel)
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.mint)
-                }
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-            }
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct BookingCheckoutBoardCard: View {
-    let checkouts: [BookingGuestStay]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Checkout Watch")
-                .font(.title3.weight(.bold))
-
-            ForEach(checkouts) { stay in
-                HStack(alignment: .top, spacing: 12) {
-                    Image(systemName: "suitcase.rolling.fill")
-                        .foregroundStyle(.mint)
-                        .frame(width: 24)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(stay.guestName)
-                            .font(.headline)
-                        Text("\(stay.property) • departs \(stay.departureTime)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                }
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-            }
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct BookingCalendarView: View {
-    let state: BookingWorkspaceState
-
-    var body: some View {
-        NavigationStack {
-            List {
-                ForEach(state.calendarDays) { day in
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack {
-                            Text(day.label)
-                            Spacer()
-                            Text(day.occupancy)
-                                .font(.caption.weight(.semibold))
-                                .foregroundStyle(day.occupancyColor)
-                        }
-                        Text(day.summary)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-            .navigationTitle("Calendar")
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct BookingGuestsView: View {
-    let state: BookingWorkspaceState
-
-    var body: some View {
-        NavigationStack {
-            List(state.guests) { stay in
-                NavigationLink {
-                    BookingStayDetailView(stay: stay)
-                } label: {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(stay.guestName)
-                        Text("\(stay.property) • \(stay.dateRange)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text(stay.note)
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-            .navigationTitle("Guests")
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct BookingRequestsView: View {
-    let state: BookingWorkspaceState
-
-    var body: some View {
-        NavigationStack {
-            List {
-                ForEach(state.requests) { request in
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack {
-                            Text(request.title)
-                            Spacer()
-                            Text(request.priority)
-                                .font(.caption.weight(.semibold))
-                                .foregroundStyle(request.priorityColor)
-                        }
-                        Text(request.guest)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text(request.nextAction)
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-            .navigationTitle("Requests")
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct BookingProfileView: View {
-    let snapshot: BookingReservationsDashboardSnapshot
-    let health: BookingOperationsHealth
-    let state: BookingWorkspaceState
-
-    var body: some View {
-        NavigationStack {
-            List {
-                Section("Operator") {
-                    Label(state.operatorName, systemImage: "person.crop.circle.fill")
-                    Label(state.region, systemImage: "globe")
-                }
-                Section("Performance") {
-                    Label("\(snapshot.managedProperties) managed properties", systemImage: "building.2.fill")
-                    Label("\(snapshot.checkInsToday) check-ins today", systemImage: "door.left.hand.open")
-                    Label("\(health.averageResponseMinutes) min avg response", systemImage: "timer")
-                }
-                Section("Finance & Support") {
-                    Label(health.paymentCaptureReady ? "Payment capture healthy" : "Payment capture degraded", systemImage: health.paymentCaptureReady ? "creditcard.fill" : "exclamationmark.triangle.fill")
-                    Label("\(health.supportEscalations) escalations open", systemImage: "headphones.circle.fill")
-                }
-            }
-            .navigationTitle("Profile")
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct BookingStayDetailView: View {
-    let stay: BookingGuestStay
-
-    var body: some View {
-        List {
-            Section("Reservation") {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
                 Text(stay.guestName)
-                    .font(.title3.weight(.bold))
-                Text(stay.property)
-                Text(stay.dateRange)
-                    .foregroundStyle(.secondary)
+                    .font(.headline)
+                Spacer()
+                Text(stay.status.label)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(stay.status.color)
             }
-            Section("Stay Notes") {
-                Text(stay.note)
-                Label(stay.status, systemImage: "checkmark.circle.fill")
-                Label(stay.departureTime, systemImage: "clock.fill")
-            }
-            Section("Guest Preferences") {
-                ForEach(stay.preferences, id: \.self) { preference in
-                    Label(preference, systemImage: "sparkles")
+            Text("\(stay.property) • \(stay.dateRange)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text(stay.note)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            HStack {
+                Button(primaryActionTitle, action: primaryAction)
+                    .buttonStyle(.borderedProminent)
+                    .disabled(disablePrimary)
+                if !stay.identityVerified {
+                    Text("ID pending")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.orange)
                 }
             }
         }
-        .navigationTitle("Stay Detail")
+        .padding(.vertical, 4)
     }
 }
 
-public struct BookingReservationsQuickAction: Identifiable, Hashable, Sendable {
-    public let id: UUID
-    public let title: String
-    public let detail: String
-    public let systemImage: String
+enum BookingStayStatus: Hashable, Sendable {
+    case arrivalReady
+    case awaitingID
+    case inHouse
+    case checkoutToday
+    case pendingReview
+    case checkedOut
 
-    public init(
-        id: UUID = UUID(),
-        title: String,
-        detail: String,
-        systemImage: String
-    ) {
-        self.id = id
-        self.title = title
-        self.detail = detail
-        self.systemImage = systemImage
+    var label: String {
+        switch self {
+        case .arrivalReady: return "Ready"
+        case .awaitingID: return "Awaiting ID"
+        case .inHouse: return "In House"
+        case .checkoutToday: return "Checkout Today"
+        case .pendingReview: return "Pending Review"
+        case .checkedOut: return "Checked Out"
+        }
     }
 
-    public static let defaultActions: [BookingReservationsQuickAction] = [
-        BookingReservationsQuickAction(title: "Open Arrival Board", detail: "Review today’s arrivals, key exchange timing and VIP handling.", systemImage: "calendar"),
-        BookingReservationsQuickAction(title: "Review Guest Requests", detail: "Resolve late checkout, transport and amenity requests before handoff.", systemImage: "message.badge.fill"),
-        BookingReservationsQuickAction(title: "Inspect Occupancy Pulse", detail: "Check high-demand properties and close the last pricing gaps.", systemImage: "waveform.path.ecg")
-    ]
+    var color: Color {
+        switch self {
+        case .arrivalReady, .inHouse, .checkedOut: return .green
+        case .awaitingID, .pendingReview: return .orange
+        case .checkoutToday: return .blue
+        }
+    }
 }
 
-struct BookingWorkspaceState {
-    let operatorHeadline: String
-    let shiftSummary: String
-    let operatorName: String
-    let region: String
-    let arrivals: [BookingGuestStay]
-    let checkouts: [BookingGuestStay]
-    let guests: [BookingGuestStay]
-    let requests: [BookingGuestRequest]
-    let calendarDays: [BookingCalendarDay]
-
-    static let sample = BookingWorkspaceState(
-        operatorHeadline: "Weekend arrivals are on track",
-        shiftSummary: "Morning desk covers 42 arrivals and 11 departures",
-        operatorName: "Nora Fields",
-        region: "Europe coastal portfolio",
-        arrivals: [
-            BookingGuestStay(guestName: "Liam Carter", property: "City Loft", dateRange: "Apr 27 - Apr 30", status: "Ready", departureTime: "Checkout 11:00", note: "Needs early key handoff and parking code.", preferences: ["Quiet room", "Late dinner recommendations"]),
-            BookingGuestStay(guestName: "Mila Harper", property: "Coastal Retreat", dateRange: "Apr 27 - May 1", status: "Awaiting ID", departureTime: "Checkout 10:00", note: "Passport upload pending before self check-in.", preferences: ["Crib in room", "Ocean-view request"])
-        ],
-        checkouts: [
-            BookingGuestStay(guestName: "Oliver Reed", property: "Business Suites", dateRange: "Apr 24 - Apr 27", status: "Checkout Today", departureTime: "Departs 09:30", note: "Invoice copy requested before departure.", preferences: ["Invoice PDF", "Airport taxi"]),
-            BookingGuestStay(guestName: "Ava Collins", property: "City Loft", dateRange: "Apr 25 - Apr 27", status: "Pending Review", departureTime: "Departs 12:00", note: "Housekeeping flagged minibar reconciliation.", preferences: ["Late checkout", "Digital receipt"])
-        ],
-        guests: [
-            BookingGuestStay(guestName: "Liam Carter", property: "City Loft", dateRange: "Apr 27 - Apr 30", status: "Ready", departureTime: "Checkout 11:00", note: "Needs early key handoff and parking code.", preferences: ["Quiet room", "Late dinner recommendations"]),
-            BookingGuestStay(guestName: "Mila Harper", property: "Coastal Retreat", dateRange: "Apr 27 - May 1", status: "Awaiting ID", departureTime: "Checkout 10:00", note: "Passport upload pending before self check-in.", preferences: ["Crib in room", "Ocean-view request"]),
-            BookingGuestStay(guestName: "Oliver Reed", property: "Business Suites", dateRange: "Apr 24 - Apr 27", status: "Checkout Today", departureTime: "Departs 09:30", note: "Invoice copy requested before departure.", preferences: ["Invoice PDF", "Airport taxi"])
-        ],
-        requests: [
-            BookingGuestRequest(title: "Late checkout approval", guest: "Ava Collins • City Loft", priority: "High", nextAction: "Confirm cleaning slot before 18:00 arrival."),
-            BookingGuestRequest(title: "Airport transfer update", guest: "Liam Carter • City Loft", priority: "Medium", nextAction: "Send driver contact and pickup window."),
-            BookingGuestRequest(title: "Family crib setup", guest: "Mila Harper • Coastal Retreat", priority: "High", nextAction: "Housekeeping to confirm room setup before 14:00.")
-        ],
-        calendarDays: [
-            BookingCalendarDay(label: "Today", occupancy: "92%", summary: "42 arrivals, 11 departures, 3 VIP stays."),
-            BookingCalendarDay(label: "Tomorrow", occupancy: "88%", summary: "High leisure demand on the coastal segment."),
-            BookingCalendarDay(label: "Friday", occupancy: "96%", summary: "Business Suites nearly sold out for conference week.")
-        ]
-    )
-}
-
-struct BookingGuestStay: Identifiable, Hashable {
+struct BookingStayRecord: Identifiable, Hashable, Sendable {
     let id = UUID()
     let guestName: String
     let property: String
     let dateRange: String
-    let status: String
+    var status: BookingStayStatus
     let departureTime: String
     let note: String
     let preferences: [String]
+    var identityVerified: Bool
+    var checkedIn: Bool
+}
 
-    var statusColor: Color {
-        switch status {
-        case "Ready":
-            return .green
-        case "Awaiting ID":
-            return .orange
-        default:
-            return .blue
+enum BookingRequestPriority: Hashable, Sendable {
+    case high
+    case medium
+    case low
+
+    var label: String {
+        switch self {
+        case .high: return "High"
+        case .medium: return "Medium"
+        case .low: return "Low"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .high: return .red
+        case .medium: return .orange
+        case .low: return .blue
         }
     }
 }
 
-struct BookingGuestRequest: Identifiable, Hashable {
+enum BookingRequestStatus: Hashable, Sendable {
+    case open
+    case approved
+    case resolved
+
+    var label: String {
+        switch self {
+        case .open: return "Open"
+        case .approved: return "Approved"
+        case .resolved: return "Resolved"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .open: return .orange
+        case .approved: return .mint
+        case .resolved: return .green
+        }
+    }
+}
+
+struct BookingRequestRecord: Identifiable, Hashable, Sendable {
     let id = UUID()
     let title: String
     let guest: String
-    let priority: String
+    let priority: BookingRequestPriority
     let nextAction: String
-
-    var priorityColor: Color {
-        switch priority {
-        case "High":
-            return .red
-        case "Medium":
-            return .orange
-        default:
-            return .blue
-        }
-    }
+    var status: BookingRequestStatus
 }
 
-struct BookingCalendarDay: Identifiable, Hashable {
+struct BookingCalendarRecord: Identifiable, Hashable, Sendable {
     let id = UUID()
     let label: String
-    let occupancy: String
+    let occupancy: Int
     let summary: String
-
-    var occupancyColor: Color {
-        if occupancy.hasPrefix("9") {
-            return .green
-        }
-        return .orange
-    }
+    var isLocked: Bool
 }
