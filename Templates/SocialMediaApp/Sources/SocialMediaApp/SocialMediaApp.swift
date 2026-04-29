@@ -431,6 +431,7 @@ struct SignUpView: View {
 // MARK: - Main Tab View
 struct MainTabView: View {
     @State private var selectedTab = 0
+    @StateObject private var notificationManager = NotificationManager.shared
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -460,6 +461,7 @@ struct MainTabView: View {
                     Image(systemName: "bell")
                     Text("Notifications")
                 }
+                .badge(notificationManager.notifications.filter(\.isUnread).count)
                 .tag(3)
             
             ProfileView()
@@ -512,15 +514,26 @@ struct FeedView: View {
 // MARK: - Post Card
 struct PostCard: View {
     let post: Post
-    @State private var isLiked = false
-    @State private var isBookmarked = false
+    @StateObject private var dataManager = DataManager.shared
     @State private var showComments = false
+    
+    private var currentPost: Post {
+        dataManager.posts.first(where: { $0.id == post.id }) ?? post
+    }
+    
+    private var isLiked: Bool {
+        dataManager.likedPostIDs.contains(currentPost.id)
+    }
+    
+    private var isBookmarked: Bool {
+        dataManager.bookmarkedPostIDs.contains(currentPost.id)
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
             HStack {
-                AsyncImage(url: URL(string: post.authorAvatarURL ?? "")) { image in
+                AsyncImage(url: URL(string: currentPost.authorAvatarURL ?? "")) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -533,36 +546,36 @@ struct PostCard: View {
                 
                 VStack(alignment: .leading, spacing: 2) {
                     HStack {
-                        Text(post.authorDisplayName)
+                        Text(currentPost.authorDisplayName)
                             .font(.headline)
                             .fontWeight(.semibold)
                         
-                        if post.authorIsVerified {
+                        if currentPost.authorIsVerified {
                             Image(systemName: "checkmark.seal.fill")
                                 .foregroundColor(.blue)
                                 .font(.caption)
                         }
                     }
                     
-                    Text("@\(post.authorUsername)")
+                    Text("@\(currentPost.authorUsername)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
                 
                 Spacer()
                 
-                Text(post.createdAt, style: .relative)
+                Text(currentPost.createdAt, style: .relative)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
             
             // Content
-            Text(post.content)
+            Text(currentPost.content)
                 .font(.body)
                 .multilineTextAlignment(.leading)
             
             // Media
-            if let images = post.images, !images.isEmpty {
+            if let images = currentPost.images, !images.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
                         ForEach(images, id: \.self) { imageURL in
@@ -585,14 +598,12 @@ struct PostCard: View {
             // Actions
             HStack(spacing: 20) {
                 Button(action: {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isLiked.toggle()
-                    }
+                    dataManager.toggleLike(postID: currentPost.id)
                 }) {
                     HStack(spacing: 4) {
                         Image(systemName: isLiked ? "heart.fill" : "heart")
                             .foregroundColor(isLiked ? .red : .primary)
-                        Text("\(post.likesCount)")
+                        Text("\(currentPost.likesCount)")
                             .font(.caption)
                     }
                 }
@@ -602,17 +613,17 @@ struct PostCard: View {
                 }) {
                     HStack(spacing: 4) {
                         Image(systemName: "bubble.left")
-                        Text("\(post.commentsCount)")
+                        Text("\(currentPost.commentsCount)")
                             .font(.caption)
                     }
                 }
                 
                 Button(action: {
-                    // Handle share
+                    dataManager.sharePost(postID: currentPost.id)
                 }) {
                     HStack(spacing: 4) {
                         Image(systemName: "arrowshape.turn.up.right")
-                        Text("\(post.sharesCount)")
+                        Text("\(currentPost.sharesCount)")
                             .font(.caption)
                     }
                 }
@@ -620,9 +631,7 @@ struct PostCard: View {
                 Spacer()
                 
                 Button(action: {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isBookmarked.toggle()
-                    }
+                    dataManager.toggleBookmark(postID: currentPost.id)
                 }) {
                     Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
                         .foregroundColor(isBookmarked ? .blue : .primary)
@@ -636,7 +645,7 @@ struct PostCard: View {
         .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
         .padding(.horizontal, 16)
         .sheet(isPresented: $showComments) {
-            CommentsView(post: post)
+            CommentsView(post: currentPost)
         }
     }
 }
@@ -649,12 +658,12 @@ struct Post: Identifiable, Codable {
     let authorDisplayName: String
     let authorAvatarURL: String?
     let authorIsVerified: Bool
-    let content: String
-    let images: [String]?
+    var content: String
+    var images: [String]?
     let videoURL: String?
-    let likesCount: Int
-    let commentsCount: Int
-    let sharesCount: Int
+    var likesCount: Int
+    var commentsCount: Int
+    var sharesCount: Int
     let createdAt: Date
     let updatedAt: Date
 }
@@ -666,7 +675,7 @@ struct SuggestedProfile: Identifiable {
     let bio: String
     let avatarURL: String?
     let isVerified: Bool
-    let followersCount: Int
+    var followersCount: Int
 }
 
 struct PostComment: Identifiable {
@@ -683,7 +692,7 @@ struct SocialNotificationItem: Identifiable {
     let actorName: String
     let message: String
     let systemImage: String
-    let isUnread: Bool
+    var isUnread: Bool
     let createdAt: Date
 }
 
@@ -859,6 +868,11 @@ struct ExploreView: View {
 
 struct SuggestedProfileRow: View {
     let profile: SuggestedProfile
+    @StateObject private var dataManager = DataManager.shared
+    
+    private var isFollowing: Bool {
+        dataManager.followedProfileIDs.contains(profile.id)
+    }
     
     var body: some View {
         HStack(spacing: 12) {
@@ -893,13 +907,15 @@ struct SuggestedProfileRow: View {
             
             Spacer()
             
-            Button("Follow") {}
-                .font(.subheadline.weight(.semibold))
-                .foregroundColor(.white)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 8)
-                .background(Color.blue)
-                .clipShape(Capsule())
+            Button(isFollowing ? "Following" : "Follow") {
+                dataManager.toggleFollow(profileID: profile.id)
+            }
+            .font(.subheadline.weight(.semibold))
+            .foregroundColor(isFollowing ? .blue : .white)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .background(isFollowing ? Color.blue.opacity(0.12) : Color.blue)
+            .clipShape(Capsule())
         }
         .padding()
         .background(Color(.systemBackground))
@@ -989,11 +1005,13 @@ struct CreatePostView: View {
         Task {
             try? await Task.sleep(for: .milliseconds(250))
             await MainActor.run {
-                dataManager.addPost(
+                dataManager.publishPost(
                     content: trimmedCaption,
                     authorName: "Preview User",
                     username: "preview",
-                    isVerified: true
+                    isVerified: true,
+                    audience: selectedAudience,
+                    attachmentCount: attachedMedia.count
                 )
                 publishMessage = "Post published to the feed."
                 isPublishing = false
@@ -1021,6 +1039,14 @@ struct NotificationsView: View {
                 }
             }
             .navigationTitle("Notifications")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Mark All Read") {
+                        notificationManager.markAllRead()
+                    }
+                    .disabled(notificationManager.notifications.allSatisfy { !$0.isUnread })
+                }
+            }
         }
     }
 }
@@ -1153,6 +1179,7 @@ struct CommentsView: View {
 
 struct NotificationRow: View {
     let notification: SocialNotificationItem
+    @StateObject private var notificationManager = NotificationManager.shared
     
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -1178,6 +1205,10 @@ struct NotificationRow: View {
             }
         }
         .padding(.vertical, 6)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            notificationManager.markRead(notification.id)
+        }
     }
 }
 
@@ -1388,6 +1419,9 @@ class DataManager: ObservableObject {
     @Published var trendingTopics: [String] = []
     @Published var suggestedProfiles: [SuggestedProfile] = []
     @Published var commentsByPostId: [String: [PostComment]] = [:]
+    @Published var likedPostIDs: Set<String> = []
+    @Published var bookmarkedPostIDs: Set<String> = []
+    @Published var followedProfileIDs: Set<String> = []
     
     private init() {}
     
@@ -1425,6 +1459,18 @@ class DataManager: ObservableObject {
         commentsByPostId[post.id] = []
     }
     
+    func publishPost(
+        content: String,
+        authorName: String,
+        username: String,
+        isVerified: Bool,
+        audience: String,
+        attachmentCount: Int
+    ) {
+        let decoratedContent = "[\(audience)] \(content)\n\nAttached assets: \(attachmentCount)"
+        addPost(content: decoratedContent, authorName: authorName, username: username, isVerified: isVerified)
+    }
+    
     func profilePosts(for username: String) -> [Post] {
         posts.filter { $0.authorUsername == username }
     }
@@ -1445,6 +1491,44 @@ class DataManager: ObservableObject {
             createdAt: Date()
         )
         commentsByPostId[postId, default: []].append(comment)
+        if let index = posts.firstIndex(where: { $0.id == postId }) {
+            posts[index].commentsCount += 1
+        }
+    }
+    
+    func toggleLike(postID: String) {
+        guard let index = posts.firstIndex(where: { $0.id == postID }) else { return }
+        if likedPostIDs.contains(postID) {
+            likedPostIDs.remove(postID)
+            posts[index].likesCount = max(0, posts[index].likesCount - 1)
+        } else {
+            likedPostIDs.insert(postID)
+            posts[index].likesCount += 1
+        }
+    }
+    
+    func toggleBookmark(postID: String) {
+        if bookmarkedPostIDs.contains(postID) {
+            bookmarkedPostIDs.remove(postID)
+        } else {
+            bookmarkedPostIDs.insert(postID)
+        }
+    }
+    
+    func sharePost(postID: String) {
+        guard let index = posts.firstIndex(where: { $0.id == postID }) else { return }
+        posts[index].sharesCount += 1
+    }
+    
+    func toggleFollow(profileID: String) {
+        guard let index = suggestedProfiles.firstIndex(where: { $0.id == profileID }) else { return }
+        if followedProfileIDs.contains(profileID) {
+            followedProfileIDs.remove(profileID)
+            suggestedProfiles[index].followersCount = max(0, suggestedProfiles[index].followersCount - 1)
+        } else {
+            followedProfileIDs.insert(profileID)
+            suggestedProfiles[index].followersCount += 1
+        }
     }
     
     func seedPreviewState(currentUser: User?) {
@@ -1570,6 +1654,9 @@ class DataManager: ObservableObject {
                 PostComment(id: "c5", authorName: "Sam", authorUsername: "samship", body: "Good. Proof without flows is still theater.", likesCount: 10, createdAt: Date().addingTimeInterval(-1200))
             ]
         ]
+        likedPostIDs = ["2"]
+        bookmarkedPostIDs = ["preview-post"]
+        followedProfileIDs = ["p1"]
     }
 }
 
@@ -1594,6 +1681,17 @@ class NotificationManager: ObservableObject {
             SocialNotificationItem(id: "n3", actorName: "Ops For Apps", message: "shared your post with their release engineering circle.", systemImage: "arrowshape.turn.up.right.fill", isUnread: false, createdAt: Date().addingTimeInterval(-7200)),
             SocialNotificationItem(id: "n4", actorName: "Maya Studio", message: "started following you.", systemImage: "person.badge.plus", isUnread: false, createdAt: Date().addingTimeInterval(-14400))
         ]
+    }
+    
+    func markRead(_ notificationID: String) {
+        guard let index = notifications.firstIndex(where: { $0.id == notificationID }) else { return }
+        notifications[index].isUnread = false
+    }
+    
+    func markAllRead() {
+        for index in notifications.indices {
+            notifications[index].isUnread = false
+        }
     }
 }
 
