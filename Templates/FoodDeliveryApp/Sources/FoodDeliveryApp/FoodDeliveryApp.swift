@@ -1,56 +1,48 @@
 import SwiftUI
 import FoodDeliveryAppCore
 
-@available(iOS 18.0, macOS 15.0, *)
 public struct FoodDeliveryAppShell: App {
     public init() {}
 
     public var body: some Scene {
         WindowGroup {
-            FoodDeliveryWorkspaceRootView(
-                snapshot: .sample,
-                actions: FoodDeliveryQuickAction.defaultActions,
-                state: .sample
-            )
+            FoodDeliveryRuntimeRootView()
         }
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct FoodDeliveryWorkspaceRootView: View {
-    let snapshot: FoodDeliveryDashboardSnapshot
-    let actions: [FoodDeliveryQuickAction]
-    let state: FoodDeliveryWorkspaceState
+struct FoodDeliveryRuntimeRootView: View {
+    @StateObject private var store = FoodDeliveryOperationsStore()
 
     var body: some View {
         TabView {
-            FoodDeliveryDashboardView(snapshot: snapshot, actions: actions, state: state)
+            FoodDeliveryDashboardView(store: store)
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("Home")
                 }
 
-            FoodDeliveryRestaurantsView(state: state)
+            FoodDeliveryBrowseView(store: store)
                 .tabItem {
                     Image(systemName: "fork.knife")
                     Text("Browse")
                 }
 
-            FoodDeliveryCartView(state: state)
+            FoodDeliveryCartView(store: store)
                 .tabItem {
                     Image(systemName: "cart.fill")
                     Text("Cart")
                 }
 
-            FoodDeliveryOrdersView(state: state)
+            FoodDeliveryOrdersView(store: store)
                 .tabItem {
                     Image(systemName: "map.fill")
                     Text("Orders")
                 }
 
-            FoodDeliveryProfileView(state: state)
+            FoodDeliveryProfileView(store: store)
                 .tabItem {
-                    Image(systemName: "person.crop.circle")
+                    Image(systemName: "person.crop.circle.fill")
                     Text("Profile")
                 }
         }
@@ -58,21 +50,173 @@ struct FoodDeliveryWorkspaceRootView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
+@MainActor
+final class FoodDeliveryOperationsStore: ObservableObject {
+    @Published var restaurants: [DeliveryRestaurantRecord] = DeliveryRestaurantRecord.sampleRestaurants
+    @Published var cartItems: [DeliveryCartItemRecord] = DeliveryCartItemRecord.sampleCart
+    @Published var liveOrder: DeliveryOrderRecord = .sampleLive
+    @Published var pastOrders: [DeliveryOrderRecord] = DeliveryOrderRecord.samplePast
+    @Published var selectedRestaurantID: UUID?
+    @Published var selectedDeliverySlot = "Tonight • 19:40"
+    @Published var appliedPromoCode = ""
+    @Published var membershipTier = "Plus"
+    @Published var deliveryAddress = "Moda, Kadikoy"
+    @Published var paymentMethod = "Visa •••• 4021"
+    @Published var operatorNote = "Checkout should only lock after item totals, promo, payment, and courier window are aligned."
+
+    init() {
+        selectedRestaurantID = restaurants.first?.id
+    }
+
+    var selectedRestaurant: DeliveryRestaurantRecord? {
+        restaurants.first(where: { $0.id == selectedRestaurantID }) ?? restaurants.first
+    }
+
+    var featuredRestaurants: [DeliveryRestaurantRecord] {
+        Array(restaurants.prefix(3))
+    }
+
+    var subtotal: Double {
+        cartItems.reduce(0) { $0 + (Double($1.quantity) * $1.unitPrice) }
+    }
+
+    var deliveryFee: Double {
+        selectedRestaurant?.deliveryFee ?? 1.99
+    }
+
+    var serviceFee: Double {
+        subtotal * 0.05
+    }
+
+    var promoSavings: Double {
+        appliedPromoCode == "DINNER6" ? 6 : 0
+    }
+
+    var total: Double {
+        max(0, subtotal + deliveryFee + serviceFee - promoSavings)
+    }
+
+    var monthlySavings: String {
+        "$\(48 + (appliedPromoCode.isEmpty ? 0 : 6))"
+    }
+
+    var dashboardHeadline: String {
+        if liveOrder.progress < 1 {
+            return "\(liveOrder.status) and the courier wave is still active."
+        }
+        if cartItems.isEmpty {
+            return "Cart is empty. Build the next order before the evening peak."
+        }
+        return "Checkout is almost ready and promo coverage is available."
+    }
+
+    func selectRestaurant(_ id: UUID) {
+        selectedRestaurantID = id
+    }
+
+    func addMenuItem(_ item: DeliveryMenuItemRecord, from restaurant: DeliveryRestaurantRecord) {
+        if let index = cartItems.firstIndex(where: { $0.menuItemID == item.id }) {
+            cartItems[index].quantity += 1
+        } else {
+            cartItems.append(
+                DeliveryCartItemRecord(menuItemID: item.id, name: item.name, restaurant: restaurant.name, quantity: 1, unitPrice: item.price)
+            )
+        }
+    }
+
+    func incrementCartItem(_ id: UUID) {
+        guard let index = cartItems.firstIndex(where: { $0.id == id }) else { return }
+        cartItems[index].quantity += 1
+    }
+
+    func decrementCartItem(_ id: UUID) {
+        guard let index = cartItems.firstIndex(where: { $0.id == id }) else { return }
+        cartItems[index].quantity -= 1
+        if cartItems[index].quantity <= 0 {
+            cartItems.remove(at: index)
+        }
+    }
+
+    func applyPromo(_ code: String) {
+        let normalized = code.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        guard !normalized.isEmpty else { return }
+        appliedPromoCode = normalized == "DINNER6" ? normalized : ""
+    }
+
+    func placeOrder() {
+        guard !cartItems.isEmpty, let restaurant = selectedRestaurant else { return }
+
+        liveOrder = DeliveryOrderRecord(
+            restaurantName: restaurant.name,
+            status: "Order confirmed",
+            eta: "24 min",
+            courierName: "Mert",
+            total: total,
+            progress: 0.2,
+            timeline: [
+                "Order confirmed",
+                "Kitchen accepted the ticket",
+                "Courier assignment pending",
+                "Courier pickup pending"
+            ]
+        )
+
+        pastOrders.insert(liveOrder, at: 0)
+        cartItems.removeAll()
+        appliedPromoCode = ""
+    }
+
+    func advanceLiveOrder() {
+        switch liveOrder.status {
+        case "Order confirmed":
+            liveOrder.status = "Kitchen preparing"
+            liveOrder.progress = 0.45
+            liveOrder.timeline[1] = "Kitchen preparing"
+        case "Kitchen preparing":
+            liveOrder.status = "Courier picked up"
+            liveOrder.progress = 0.72
+            liveOrder.timeline[2] = "Courier assigned"
+            liveOrder.timeline[3] = "Courier picked up"
+        case "Courier picked up":
+            liveOrder.status = "Courier arriving"
+            liveOrder.progress = 0.9
+            liveOrder.eta = "8 min"
+        case "Courier arriving":
+            liveOrder.status = "Delivered"
+            liveOrder.progress = 1
+            liveOrder.eta = "Delivered now"
+        default:
+            break
+        }
+        syncPastOrder()
+    }
+
+    func reorder(_ orderID: UUID) {
+        guard let order = pastOrders.first(where: { $0.id == orderID }),
+              let restaurant = restaurants.first(where: { $0.name == order.restaurantName }) else { return }
+        selectedRestaurantID = restaurant.id
+        cartItems = restaurant.menu.prefix(2).map {
+            DeliveryCartItemRecord(menuItemID: $0.id, name: $0.name, restaurant: restaurant.name, quantity: 1, unitPrice: $0.price)
+        }
+    }
+
+    private func syncPastOrder() {
+        guard let index = pastOrders.firstIndex(where: { $0.id == liveOrder.id }) else { return }
+        pastOrders[index] = liveOrder
+    }
+}
+
 struct FoodDeliveryDashboardView: View {
-    let snapshot: FoodDeliveryDashboardSnapshot
-    let actions: [FoodDeliveryQuickAction]
-    let state: FoodDeliveryWorkspaceState
+    @ObservedObject var store: FoodDeliveryOperationsStore
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    FoodDeliveryHeroCard(snapshot: snapshot, state: state)
-                    FoodDeliveryQuickActionGrid(actions: actions)
-                    FoodDeliveryFeaturedRestaurantsView(restaurants: state.featuredRestaurants)
-                    FoodDeliveryOrderStatusCard(order: state.liveOrder)
-                    FoodDeliveryDealsCard(deals: state.activeDeals)
+                    FoodDeliveryHeroCard(store: store)
+                    FoodDeliveryFeaturedRestaurantsView(store: store)
+                    FoodDeliveryOrderStatusCard(store: store)
+                    FoodDeliveryDealsCard(store: store)
                 }
                 .padding(16)
             }
@@ -81,10 +225,8 @@ struct FoodDeliveryDashboardView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct FoodDeliveryHeroCard: View {
-    let snapshot: FoodDeliveryDashboardSnapshot
-    let state: FoodDeliveryWorkspaceState
+    @ObservedObject var store: FoodDeliveryOperationsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -92,27 +234,17 @@ struct FoodDeliveryHeroCard: View {
                 .font(.headline)
                 .foregroundStyle(.secondary)
 
-            Text(snapshot.liveOrderStatus)
+            Text(store.dashboardHeadline)
                 .font(.title2.weight(.bold))
-            Text("Featured cuisine: \(snapshot.featuredCuisine). Reorder your favorites or finish checkout before the next courier wave.")
+            Text("Address: \(store.deliveryAddress) • Membership: \(store.membershipTier)")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
             HStack(spacing: 12) {
-                FoodDeliveryMetricChip(title: "Restaurants", value: "\(snapshot.restaurants)")
-                FoodDeliveryMetricChip(title: "Average ETA", value: snapshot.averageETA)
-                FoodDeliveryMetricChip(title: "Saved This Month", value: state.monthlySavings)
+                FoodDeliveryMetricChip(title: "Restaurants", value: "\(store.restaurants.count)")
+                FoodDeliveryMetricChip(title: "Cart", value: "\(store.cartItems.count)")
+                FoodDeliveryMetricChip(title: "Savings", value: store.monthlySavings)
             }
-
-            HStack {
-                Label(state.deliveryAddress, systemImage: "location.fill")
-                Spacer()
-                Text(state.membershipTier)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.orange)
-            }
-            .font(.caption)
-            .foregroundStyle(.secondary)
         }
         .padding(20)
         .background(
@@ -126,7 +258,6 @@ struct FoodDeliveryHeroCard: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct FoodDeliveryMetricChip: View {
     let title: String
     let value: String
@@ -146,50 +277,17 @@ struct FoodDeliveryMetricChip: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct FoodDeliveryQuickActionGrid: View {
-    let actions: [FoodDeliveryQuickAction]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Quick Actions")
-                .font(.title3.weight(.bold))
-
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                ForEach(actions) { action in
-                    VStack(alignment: .leading, spacing: 10) {
-                        Image(systemName: action.systemImage)
-                            .font(.title3)
-                            .foregroundStyle(.orange)
-                        Text(action.title)
-                            .font(.subheadline.weight(.semibold))
-                        Text(action.detail)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                }
-            }
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
 struct FoodDeliveryFeaturedRestaurantsView: View {
-    let restaurants: [FoodDeliveryRestaurant]
+    @ObservedObject var store: FoodDeliveryOperationsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Featured Restaurants")
                 .font(.title3.weight(.bold))
 
-            ForEach(restaurants) { restaurant in
+            ForEach(store.featuredRestaurants) { restaurant in
                 NavigationLink {
-                    FoodDeliveryRestaurantDetailView(restaurant: restaurant)
+                    FoodDeliveryRestaurantDetailView(store: store, restaurantID: restaurant.id)
                 } label: {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
@@ -208,7 +306,7 @@ struct FoodDeliveryFeaturedRestaurantsView: View {
                         }
                         HStack {
                             Label(restaurant.rating, systemImage: "star.fill")
-                            Label(restaurant.deliveryFee, systemImage: "scooter")
+                            Label(restaurant.deliveryFee.currencyString, systemImage: "scooter")
                             Label(restaurant.bestSeller, systemImage: "flame.fill")
                         }
                         .font(.caption)
@@ -224,9 +322,8 @@ struct FoodDeliveryFeaturedRestaurantsView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct FoodDeliveryOrderStatusCard: View {
-    let order: FoodDeliveryOrder
+    @ObservedObject var store: FoodDeliveryOperationsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -235,28 +332,28 @@ struct FoodDeliveryOrderStatusCard: View {
 
             HStack {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text(order.restaurantName)
+                    Text(store.liveOrder.restaurantName)
                         .font(.headline)
-                    Text(order.status)
+                    Text(store.liveOrder.status)
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.orange)
-                    Text("Courier: \(order.courierName) • \(order.eta)")
+                    Text("Courier: \(store.liveOrder.courierName) • \(store.liveOrder.eta)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                Text(order.total)
+                Text(store.liveOrder.total.currencyString)
                     .font(.title3.weight(.bold))
             }
 
-            ProgressView(value: order.progress)
+            ProgressView(value: store.liveOrder.progress)
                 .tint(.orange)
 
-            ForEach(order.timeline, id: \.self) { checkpoint in
-                Label(checkpoint, systemImage: "checkmark.circle.fill")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            Button("Advance Live Order") {
+                store.advanceLiveOrder()
             }
+            .buttonStyle(.borderedProminent)
+            .disabled(store.liveOrder.progress >= 1)
         }
         .padding()
         .background(Color(.secondarySystemBackground))
@@ -264,68 +361,54 @@ struct FoodDeliveryOrderStatusCard: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct FoodDeliveryDealsCard: View {
-    let deals: [FoodDeliveryDeal]
+    @ObservedObject var store: FoodDeliveryOperationsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Deals")
                 .font(.title3.weight(.bold))
 
-            ForEach(deals) { deal in
-                HStack(alignment: .top, spacing: 12) {
-                    Image(systemName: deal.systemImage)
-                        .foregroundStyle(deal.accent)
-                        .frame(width: 24)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(deal.title)
-                            .font(.headline)
-                        Text(deal.detail)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    Spacer()
+            VStack(alignment: .leading, spacing: 8) {
+                Text("DINNER6")
+                    .font(.headline)
+                Text("Apply $6 off dinner checkout once the cart is above the service floor.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Button("Apply Promo") {
+                    store.applyPromo("DINNER6")
                 }
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .buttonStyle(.bordered)
             }
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
         }
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct FoodDeliveryRestaurantsView: View {
-    let state: FoodDeliveryWorkspaceState
+struct FoodDeliveryBrowseView: View {
+    @ObservedObject var store: FoodDeliveryOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
-                Section("Browse") {
-                    ForEach(state.restaurants) { restaurant in
-                        NavigationLink {
-                            FoodDeliveryRestaurantDetailView(restaurant: restaurant)
-                        } label: {
-                            VStack(alignment: .leading, spacing: 8) {
-                                HStack {
-                                    Text(restaurant.name)
-                                    Spacer()
-                                    Text(restaurant.deliveryTime)
-                                        .font(.subheadline.weight(.semibold))
-                                }
-                                Text("\(restaurant.cuisine) • \(restaurant.bestSeller)")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                ForEach(store.restaurants) { restaurant in
+                    NavigationLink {
+                        FoodDeliveryRestaurantDetailView(store: store, restaurantID: restaurant.id)
+                    } label: {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text(restaurant.name)
+                                Spacer()
+                                Text(restaurant.deliveryTime)
+                                    .font(.subheadline.weight(.semibold))
                             }
-                            .padding(.vertical, 4)
+                            Text("\(restaurant.cuisine) • \(restaurant.bestSeller)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
-                    }
-                }
-
-                Section("Cuisines") {
-                    ForEach(state.cuisines, id: \.self) { cuisine in
-                        Label(cuisine, systemImage: "fork.knife.circle")
+                        .padding(.vertical, 4)
                     }
                 }
             }
@@ -334,36 +417,95 @@ struct FoodDeliveryRestaurantsView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
+struct FoodDeliveryRestaurantDetailView: View {
+    @ObservedObject var store: FoodDeliveryOperationsStore
+    let restaurantID: UUID
+
+    var body: some View {
+        if let restaurant = store.restaurants.first(where: { $0.id == restaurantID }) {
+            List {
+                Section("Restaurant") {
+                    LabeledContent("Name", value: restaurant.name)
+                    LabeledContent("Cuisine", value: restaurant.cuisine)
+                    LabeledContent("Delivery Time", value: restaurant.deliveryTime)
+                    LabeledContent("Delivery Fee", value: restaurant.deliveryFee.currencyString)
+                }
+
+                Section("Menu") {
+                    ForEach(restaurant.menu) { item in
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text(item.name)
+                                Spacer()
+                                Text(item.price.currencyString)
+                            }
+                            Text(item.detail)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Button("Add to Cart") {
+                                store.selectRestaurant(restaurant.id)
+                                store.addMenuItem(item, from: restaurant)
+                            }
+                            .buttonStyle(.bordered)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+            }
+            .navigationTitle(restaurant.name)
+        }
+    }
+}
+
 struct FoodDeliveryCartView: View {
-    let state: FoodDeliveryWorkspaceState
+    @ObservedObject var store: FoodDeliveryOperationsStore
+    @State private var promoDraft = ""
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Cart Items") {
-                    ForEach(state.cartItems) { item in
-                        VStack(alignment: .leading, spacing: 6) {
+                    ForEach(store.cartItems) { item in
+                        VStack(alignment: .leading, spacing: 8) {
                             HStack {
                                 Text(item.name)
                                 Spacer()
-                                Text(item.price)
+                                Text(item.lineTotal.currencyString)
                                     .font(.headline.weight(.bold))
                             }
                             Text("\(item.quantity)x • \(item.restaurant)")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                            HStack {
+                                Button("-") { store.decrementCartItem(item.id) }
+                                Button("+") { store.incrementCartItem(item.id) }
+                            }
+                            .buttonStyle(.bordered)
                         }
                     }
                 }
 
+                Section("Promo") {
+                    TextField("Promo code", text: $promoDraft)
+                    Button("Apply Promo") {
+                        store.applyPromo(promoDraft)
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+
                 Section("Checkout") {
-                    LabeledContent("Subtotal", value: state.subtotal)
-                    LabeledContent("Delivery Fee", value: state.deliveryFee)
-                    LabeledContent("Service Fee", value: state.serviceFee)
-                    LabeledContent("Promo", value: state.promoSavings)
-                    LabeledContent("Total", value: state.cartTotal)
-                        .font(.headline)
+                    LabeledContent("Delivery Slot", value: store.selectedDeliverySlot)
+                    LabeledContent("Payment", value: store.paymentMethod)
+                    LabeledContent("Subtotal", value: store.subtotal.currencyString)
+                    LabeledContent("Delivery Fee", value: store.deliveryFee.currencyString)
+                    LabeledContent("Service Fee", value: store.serviceFee.currencyString)
+                    LabeledContent("Promo", value: "-\(store.promoSavings.currencyString)")
+                    LabeledContent("Total", value: store.total.currencyString)
+                    Button("Place Order") {
+                        store.placeOrder()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(store.cartItems.isEmpty)
                 }
             }
             .navigationTitle("Cart")
@@ -371,20 +513,19 @@ struct FoodDeliveryCartView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
 struct FoodDeliveryOrdersView: View {
-    let state: FoodDeliveryWorkspaceState
+    @ObservedObject var store: FoodDeliveryOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Live") {
                     NavigationLink {
-                        FoodDeliveryOrderDetailView(order: state.liveOrder)
+                        FoodDeliveryOrderDetailView(store: store, orderID: store.liveOrder.id)
                     } label: {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text(state.liveOrder.restaurantName)
-                            Text("\(state.liveOrder.status) • \(state.liveOrder.eta)")
+                            Text(store.liveOrder.restaurantName)
+                            Text("\(store.liveOrder.status) • \(store.liveOrder.eta)")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -392,16 +533,23 @@ struct FoodDeliveryOrdersView: View {
                 }
 
                 Section("Past Orders") {
-                    ForEach(state.pastOrders) { order in
-                        NavigationLink {
-                            FoodDeliveryOrderDetailView(order: order)
-                        } label: {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text(order.restaurantName)
-                                Text("\(order.status) • \(order.total)")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                    ForEach(store.pastOrders) { order in
+                        VStack(alignment: .leading, spacing: 8) {
+                            NavigationLink {
+                                FoodDeliveryOrderDetailView(store: store, orderID: order.id)
+                            } label: {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text(order.restaurantName)
+                                    Text("\(order.status) • \(order.total.currencyString)")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
                             }
+
+                            Button("Reorder") {
+                                store.reorder(order.id)
+                            }
+                            .buttonStyle(.bordered)
                         }
                     }
                 }
@@ -411,29 +559,52 @@ struct FoodDeliveryOrdersView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
+struct FoodDeliveryOrderDetailView: View {
+    @ObservedObject var store: FoodDeliveryOperationsStore
+    let orderID: UUID
+
+    var body: some View {
+        if let order = store.pastOrders.first(where: { $0.id == orderID }) {
+            List {
+                Section("Order") {
+                    LabeledContent("Restaurant", value: order.restaurantName)
+                    LabeledContent("Status", value: order.status)
+                    LabeledContent("ETA", value: order.eta)
+                    LabeledContent("Courier", value: order.courierName)
+                    LabeledContent("Total", value: order.total.currencyString)
+                }
+
+                Section("Timeline") {
+                    ForEach(order.timeline, id: \.self) { step in
+                        Label(step, systemImage: "clock.arrow.circlepath")
+                    }
+                }
+            }
+            .navigationTitle("Order")
+        }
+    }
+}
+
 struct FoodDeliveryProfileView: View {
-    let state: FoodDeliveryWorkspaceState
+    @ObservedObject var store: FoodDeliveryOperationsStore
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Membership") {
-                    LabeledContent("Tier", value: state.membershipTier)
-                    LabeledContent("Delivery Address", value: state.deliveryAddress)
-                    LabeledContent("Default Payment", value: state.defaultPaymentMethod)
+                    LabeledContent("Tier", value: store.membershipTier)
+                    LabeledContent("Delivery Address", value: store.deliveryAddress)
+                    LabeledContent("Default Payment", value: store.paymentMethod)
                 }
 
                 Section("Habits") {
-                    LabeledContent("Favorite Cuisine", value: state.favoriteCuisine)
-                    LabeledContent("Monthly Savings", value: state.monthlySavings)
-                    LabeledContent("Orders This Month", value: "\(state.ordersThisMonth)")
+                    LabeledContent("Favorite Cuisine", value: store.selectedRestaurant?.cuisine ?? "Mediterranean")
+                    LabeledContent("Monthly Savings", value: store.monthlySavings)
+                    LabeledContent("Orders This Month", value: "\(store.pastOrders.count)")
                 }
 
-                Section("Actions") {
-                    ForEach(state.profileActions, id: \.self) { action in
-                        Label(action, systemImage: "arrow.right.circle")
-                    }
+                Section("Operator Rule") {
+                    Text(store.operatorNote)
                 }
             }
             .navigationTitle("Profile")
@@ -441,183 +612,143 @@ struct FoodDeliveryProfileView: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct FoodDeliveryRestaurantDetailView: View {
-    let restaurant: FoodDeliveryRestaurant
-
-    var body: some View {
-        List {
-            Section("Restaurant") {
-                LabeledContent("Name", value: restaurant.name)
-                LabeledContent("Cuisine", value: restaurant.cuisine)
-                LabeledContent("Delivery Time", value: restaurant.deliveryTime)
-                LabeledContent("Delivery Fee", value: restaurant.deliveryFee)
-                LabeledContent("Best Seller", value: restaurant.bestSeller)
-            }
-
-            Section("Menu Highlights") {
-                ForEach(restaurant.menuHighlights, id: \.self) { item in
-                    Label(item, systemImage: "takeoutbag.and.cup.and.straw.fill")
-                }
-            }
-        }
-        .navigationTitle(restaurant.name)
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct FoodDeliveryOrderDetailView: View {
-    let order: FoodDeliveryOrder
-
-    var body: some View {
-        List {
-            Section("Order") {
-                LabeledContent("Restaurant", value: order.restaurantName)
-                LabeledContent("Status", value: order.status)
-                LabeledContent("ETA", value: order.eta)
-                LabeledContent("Courier", value: order.courierName)
-                LabeledContent("Total", value: order.total)
-            }
-
-            Section("Timeline") {
-                ForEach(order.timeline, id: \.self) { step in
-                    Label(step, systemImage: "clock.arrow.circlepath")
-                }
-            }
-        }
-        .navigationTitle("Order")
-    }
-}
-
-public struct FoodDeliveryQuickAction: Identifiable, Hashable, Sendable {
-    public let id: UUID
-    public let title: String
-    public let detail: String
-    public let systemImage: String
-
-    public init(
-        id: UUID = UUID(),
-        title: String,
-        detail: String,
-        systemImage: String
-    ) {
-        self.id = id
-        self.title = title
-        self.detail = detail
-        self.systemImage = systemImage
-    }
-
-    public static let defaultActions: [FoodDeliveryQuickAction] = [
-        FoodDeliveryQuickAction(title: "Browse Restaurants", detail: "Jump into the highest-rated places that can still deliver before the next hour.", systemImage: "fork.knife.circle.fill"),
-        FoodDeliveryQuickAction(title: "Open Cart", detail: "Review line items, fees, and promo savings before checkout.", systemImage: "cart.fill"),
-        FoodDeliveryQuickAction(title: "Track Order", detail: "Check courier progress and resolve delivery issues before arrival.", systemImage: "location.fill"),
-        FoodDeliveryQuickAction(title: "Reorder Favorites", detail: "Repeat the last high-rated meal flow with one tap.", systemImage: "arrow.clockwise.circle.fill")
-    ]
-}
-
-struct FoodDeliveryWorkspaceState: Hashable, Sendable {
-    let membershipTier: String
-    let deliveryAddress: String
-    let defaultPaymentMethod: String
-    let favoriteCuisine: String
-    let monthlySavings: String
-    let ordersThisMonth: Int
-    let subtotal: String
-    let deliveryFee: String
-    let serviceFee: String
-    let promoSavings: String
-    let cartTotal: String
-    let featuredRestaurants: [FoodDeliveryRestaurant]
-    let restaurants: [FoodDeliveryRestaurant]
-    let activeDeals: [FoodDeliveryDeal]
-    let liveOrder: FoodDeliveryOrder
-    let pastOrders: [FoodDeliveryOrder]
-    let cartItems: [FoodDeliveryCartItem]
-    let cuisines: [String]
-    let profileActions: [String]
-
-    static let sample = FoodDeliveryWorkspaceState(
-        membershipTier: "Plus",
-        deliveryAddress: "Moda, Kadikoy",
-        defaultPaymentMethod: "Visa •••• 4021",
-        favoriteCuisine: "Mediterranean",
-        monthlySavings: "$48",
-        ordersThisMonth: 11,
-        subtotal: "$38.90",
-        deliveryFee: "$2.99",
-        serviceFee: "$1.80",
-        promoSavings: "-$6.00",
-        cartTotal: "$37.69",
-        featuredRestaurants: [
-            FoodDeliveryRestaurant(name: "Levant Kitchen", cuisine: "Mediterranean", distance: "1.2 km", deliveryTime: "18-24 min", deliveryFee: "$1.99", rating: "4.8", bestSeller: "Chicken Shawarma Bowl", menuHighlights: ["Chicken Shawarma Bowl", "Hummus Trio", "Pita Fries"]),
-            FoodDeliveryRestaurant(name: "Zen Ramen Club", cuisine: "Japanese", distance: "2.4 km", deliveryTime: "22-30 min", deliveryFee: "$2.49", rating: "4.7", bestSeller: "Spicy Tonkotsu", menuHighlights: ["Spicy Tonkotsu", "Gyoza", "Miso Eggplant"]),
-            FoodDeliveryRestaurant(name: "Daily Greens", cuisine: "Healthy", distance: "0.9 km", deliveryTime: "16-22 min", deliveryFee: "$0.99", rating: "4.9", bestSeller: "Salmon Power Bowl", menuHighlights: ["Salmon Power Bowl", "Berry Protein Shake", "Avocado Crunch Salad"])
-        ],
-        restaurants: [
-            FoodDeliveryRestaurant(name: "Levant Kitchen", cuisine: "Mediterranean", distance: "1.2 km", deliveryTime: "18-24 min", deliveryFee: "$1.99", rating: "4.8", bestSeller: "Chicken Shawarma Bowl", menuHighlights: ["Chicken Shawarma Bowl", "Hummus Trio", "Pita Fries"]),
-            FoodDeliveryRestaurant(name: "Zen Ramen Club", cuisine: "Japanese", distance: "2.4 km", deliveryTime: "22-30 min", deliveryFee: "$2.49", rating: "4.7", bestSeller: "Spicy Tonkotsu", menuHighlights: ["Spicy Tonkotsu", "Gyoza", "Miso Eggplant"]),
-            FoodDeliveryRestaurant(name: "Daily Greens", cuisine: "Healthy", distance: "0.9 km", deliveryTime: "16-22 min", deliveryFee: "$0.99", rating: "4.9", bestSeller: "Salmon Power Bowl", menuHighlights: ["Salmon Power Bowl", "Berry Protein Shake", "Avocado Crunch Salad"]),
-            FoodDeliveryRestaurant(name: "Burger Works", cuisine: "American", distance: "1.8 km", deliveryTime: "20-28 min", deliveryFee: "$1.49", rating: "4.6", bestSeller: "Double Smash Burger", menuHighlights: ["Double Smash Burger", "Loaded Fries", "Strawberry Shake"])
-        ],
-        activeDeals: [
-            FoodDeliveryDeal(title: "Free delivery after 19:00", detail: "Use the evening window to remove delivery fees from selected partners.", systemImage: "scooter", accent: .orange),
-            FoodDeliveryDeal(title: "20% off healthy picks", detail: "Plus members keep the discount on bowls and salads until Friday.", systemImage: "leaf.fill", accent: .green),
-            FoodDeliveryDeal(title: "Reorder streak bonus", detail: "Complete one more order this week to unlock a $5 loyalty credit.", systemImage: "gift.fill", accent: .pink)
-        ],
-        liveOrder: FoodDeliveryOrder(restaurantName: "Levant Kitchen", status: "Courier arriving", eta: "8 min", courierName: "Mert", total: "$24.40", progress: 0.82, timeline: ["Order confirmed", "Kitchen preparing", "Courier picked up", "Courier arriving"]),
-        pastOrders: [
-            FoodDeliveryOrder(restaurantName: "Daily Greens", status: "Delivered", eta: "Delivered Apr 24", courierName: "Aylin", total: "$19.20", progress: 1.0, timeline: ["Order confirmed", "Delivered on time"]),
-            FoodDeliveryOrder(restaurantName: "Burger Works", status: "Delivered", eta: "Delivered Apr 21", courierName: "Can", total: "$27.60", progress: 1.0, timeline: ["Order confirmed", "Delivered with photo"])
-        ],
-        cartItems: [
-            FoodDeliveryCartItem(name: "Chicken Shawarma Bowl", restaurant: "Levant Kitchen", quantity: 2, price: "$16.80"),
-            FoodDeliveryCartItem(name: "Hummus Trio", restaurant: "Levant Kitchen", quantity: 1, price: "$8.10"),
-            FoodDeliveryCartItem(name: "Pita Fries", restaurant: "Levant Kitchen", quantity: 1, price: "$5.00")
-        ],
-        cuisines: ["Mediterranean", "Japanese", "Healthy", "Burgers", "Desserts"],
-        profileActions: [
-            "Update delivery instructions for the evening concierge window.",
-            "Review loyalty credit usage before the next checkout.",
-            "Manage saved payment methods and reorder preferences."
-        ]
-    )
-}
-
-struct FoodDeliveryRestaurant: Identifiable, Hashable, Sendable {
+struct DeliveryRestaurantRecord: Identifiable {
     let id = UUID()
     let name: String
     let cuisine: String
     let distance: String
     let deliveryTime: String
-    let deliveryFee: String
+    let deliveryFee: Double
     let rating: String
     let bestSeller: String
-    let menuHighlights: [String]
+    let menu: [DeliveryMenuItemRecord]
+
+    static let sampleRestaurants: [DeliveryRestaurantRecord] = [
+        DeliveryRestaurantRecord(
+            name: "Levant Kitchen",
+            cuisine: "Mediterranean",
+            distance: "1.2 km",
+            deliveryTime: "18-24 min",
+            deliveryFee: 1.99,
+            rating: "4.8",
+            bestSeller: "Chicken Shawarma Bowl",
+            menu: [
+                DeliveryMenuItemRecord(name: "Chicken Shawarma Bowl", price: 16.8, detail: "Rice, tahini, crunchy pickles, and warm pita."),
+                DeliveryMenuItemRecord(name: "Hummus Trio", price: 8.1, detail: "Classic, spicy beet, and roasted pepper hummus."),
+                DeliveryMenuItemRecord(name: "Pita Fries", price: 5.0, detail: "Za'atar fries with whipped feta dip.")
+            ]
+        ),
+        DeliveryRestaurantRecord(
+            name: "Zen Ramen Club",
+            cuisine: "Japanese",
+            distance: "2.4 km",
+            deliveryTime: "22-30 min",
+            deliveryFee: 2.49,
+            rating: "4.7",
+            bestSeller: "Spicy Tonkotsu",
+            menu: [
+                DeliveryMenuItemRecord(name: "Spicy Tonkotsu", price: 17.5, detail: "Rich broth, soft egg, pork belly, and chili oil."),
+                DeliveryMenuItemRecord(name: "Gyoza", price: 7.4, detail: "Pan-seared dumplings with citrus soy."),
+                DeliveryMenuItemRecord(name: "Miso Eggplant", price: 6.8, detail: "Roasted eggplant glazed in sweet miso.")
+            ]
+        ),
+        DeliveryRestaurantRecord(
+            name: "Daily Greens",
+            cuisine: "Healthy",
+            distance: "0.9 km",
+            deliveryTime: "16-22 min",
+            deliveryFee: 0.99,
+            rating: "4.9",
+            bestSeller: "Salmon Power Bowl",
+            menu: [
+                DeliveryMenuItemRecord(name: "Salmon Power Bowl", price: 15.9, detail: "Roasted salmon, quinoa, avocado, and lemon kale."),
+                DeliveryMenuItemRecord(name: "Berry Protein Shake", price: 6.2, detail: "Mixed berry whey shake with almond milk."),
+                DeliveryMenuItemRecord(name: "Avocado Crunch Salad", price: 11.5, detail: "Greens, seeds, feta, and crunchy chickpeas.")
+            ]
+        )
+    ]
 }
 
-struct FoodDeliveryDeal: Identifiable, Hashable, Sendable {
-    let id = UUID()
-    let title: String
-    let detail: String
-    let systemImage: String
-    let accent: Color
-}
-
-struct FoodDeliveryOrder: Identifiable, Hashable, Sendable {
-    let id = UUID()
-    let restaurantName: String
-    let status: String
-    let eta: String
-    let courierName: String
-    let total: String
-    let progress: Double
-    let timeline: [String]
-}
-
-struct FoodDeliveryCartItem: Identifiable, Hashable, Sendable {
+struct DeliveryMenuItemRecord: Identifiable {
     let id = UUID()
     let name: String
+    let price: Double
+    let detail: String
+}
+
+struct DeliveryCartItemRecord: Identifiable {
+    let id = UUID()
+    let menuItemID: UUID
+    let name: String
     let restaurant: String
-    let quantity: Int
-    let price: String
+    var quantity: Int
+    let unitPrice: Double
+
+    var lineTotal: Double { unitPrice * Double(quantity) }
+
+    static let sampleCart: [DeliveryCartItemRecord] = {
+        let restaurant = DeliveryRestaurantRecord.sampleRestaurants[0]
+        return [
+            DeliveryCartItemRecord(menuItemID: restaurant.menu[0].id, name: restaurant.menu[0].name, restaurant: restaurant.name, quantity: 2, unitPrice: restaurant.menu[0].price),
+            DeliveryCartItemRecord(menuItemID: restaurant.menu[1].id, name: restaurant.menu[1].name, restaurant: restaurant.name, quantity: 1, unitPrice: restaurant.menu[1].price)
+        ]
+    }()
+}
+
+struct DeliveryOrderRecord: Identifiable {
+    let id: UUID
+    let restaurantName: String
+    var status: String
+    var eta: String
+    var courierName: String
+    var total: Double
+    var progress: Double
+    var timeline: [String]
+
+    init(
+        id: UUID = UUID(),
+        restaurantName: String,
+        status: String,
+        eta: String,
+        courierName: String,
+        total: Double,
+        progress: Double,
+        timeline: [String]
+    ) {
+        self.id = id
+        self.restaurantName = restaurantName
+        self.status = status
+        self.eta = eta
+        self.courierName = courierName
+        self.total = total
+        self.progress = progress
+        self.timeline = timeline
+    }
+
+    static let sampleLive = DeliveryOrderRecord(
+        restaurantName: "Levant Kitchen",
+        status: "Courier arriving",
+        eta: "8 min",
+        courierName: "Mert",
+        total: 24.4,
+        progress: 0.82,
+        timeline: ["Order confirmed", "Kitchen preparing", "Courier picked up", "Courier arriving"]
+    )
+
+    static let samplePast: [DeliveryOrderRecord] = [
+        sampleLive,
+        DeliveryOrderRecord(restaurantName: "Daily Greens", status: "Delivered", eta: "Delivered Apr 24", courierName: "Aylin", total: 19.2, progress: 1.0, timeline: ["Order confirmed", "Delivered on time"]),
+        DeliveryOrderRecord(restaurantName: "Burger Works", status: "Delivered", eta: "Delivered Apr 21", courierName: "Can", total: 27.6, progress: 1.0, timeline: ["Order confirmed", "Delivered with photo"])
+    ]
+}
+
+private extension Double {
+    var currencyString: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = "USD"
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 2
+        return formatter.string(from: NSNumber(value: self)) ?? "$0.00"
+    }
 }
