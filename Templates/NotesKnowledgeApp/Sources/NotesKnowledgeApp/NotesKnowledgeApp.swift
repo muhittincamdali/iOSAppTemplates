@@ -7,58 +7,38 @@ public struct NotesKnowledgeAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            NotesKnowledgeWorkspaceRootView(
-                snapshot: .sample,
-                collections: NotesKnowledgeCollectionCard.sampleCards,
-                actions: NotesKnowledgeQuickAction.defaultActions,
-                health: .sample,
-                state: .sample
-            )
+            NotesKnowledgeRuntimeRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct NotesKnowledgeWorkspaceRootView: View {
-    let snapshot: NotesKnowledgeDashboardSnapshot
-    let collections: [NotesKnowledgeCollectionCard]
-    let actions: [NotesKnowledgeQuickAction]
-    let health: NotesKnowledgeOperationalHealth
-    let state: NotesKnowledgeWorkspaceState
+struct NotesKnowledgeRuntimeRootView: View {
+    @StateObject private var store = NotesKnowledgeOperationsStore()
 
     var body: some View {
         TabView {
-            NotesKnowledgeDashboardView(
-                snapshot: snapshot,
-                collections: collections,
-                actions: actions,
-                health: health,
-                state: state
-            )
-            .tabItem {
-                Image(systemName: "square.and.pencil")
-                Text("Capture")
-            }
-
-            NotesKnowledgeLibraryView(state: state)
+            NotesKnowledgeDashboardView(store: store)
+                .tabItem {
+                    Image(systemName: "square.and.pencil")
+                    Text("Capture")
+                }
+            NotesKnowledgeLibraryView(store: store)
                 .tabItem {
                     Image(systemName: "books.vertical.fill")
                     Text("Library")
                 }
-
-            NotesKnowledgeLinksView(state: state)
+            NotesKnowledgeLinksView(store: store)
                 .tabItem {
                     Image(systemName: "link.circle.fill")
                     Text("Links")
                 }
-
-            NotesKnowledgeSpacesView(state: state)
+            NotesKnowledgeSpacesView(store: store)
                 .tabItem {
                     Image(systemName: "person.2.wave.2.fill")
                     Text("Spaces")
                 }
-
-            NotesKnowledgeProfileView(snapshot: snapshot, health: health, state: state)
+            NotesKnowledgeProfileView(store: store)
                 .tabItem {
                     Image(systemName: "person.crop.circle.fill")
                     Text("Profile")
@@ -69,22 +49,163 @@ struct NotesKnowledgeWorkspaceRootView: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
+@MainActor
+final class NotesKnowledgeOperationsStore: ObservableObject {
+    @Published var captureDraft = "Customer onboarding interview synthesis and two trust friction quotes."
+    @Published var captures: [NotesCaptureRecord]
+    @Published var libraryNotes: [KnowledgeNoteRecord]
+    @Published var linkMaps: [KnowledgeLinkRecord]
+    @Published var spaces: [KnowledgeSpaceRecord]
+    @Published var operatorHeadline = "Knowledge inbox is under control and review drift is low."
+    @Published var reviewWindow = "Weekly review locks at 16:30"
+
+    init() {
+        self.captures = [
+            NotesCaptureRecord(title: "Pricing interview synthesis", summary: "Five quotes from buyer calls need conversion into one decision memo.", source: "Voice memo", owner: "Mila", isFiled: false),
+            NotesCaptureRecord(title: "API migration checklist", summary: "Scratchpad from incident retro still needs structure and tags.", source: "Quick note", owner: "Devon", isFiled: false),
+            NotesCaptureRecord(title: "Competitive launch screenshots", summary: "Twenty screenshots clipped for onboarding research review.", source: "Web clip", owner: "Sena", isFiled: false)
+        ]
+        self.libraryNotes = [
+            KnowledgeNoteRecord(title: "Retention playbook for onboarding", collection: "Team Handbook", updatedAt: "Updated 12 min ago", owner: "Mila", summary: "Maps onboarding friction to lifecycle interventions and measurement points.", highlightCount: 2, isPinned: true),
+            KnowledgeNoteRecord(title: "Q2 research themes", collection: "Research Notes", updatedAt: "Updated 48 min ago", owner: "Devon", summary: "Clusters user pain into trust, speed and admin-control themes.", highlightCount: 2, isPinned: false),
+            KnowledgeNoteRecord(title: "Personal reflection archive", collection: "Personal Capture", updatedAt: "Updated yesterday", owner: "Sena", summary: "Private reflections and journaling prompts linked to weekly reviews.", highlightCount: 2, isPinned: false)
+        ]
+        self.linkMaps = [
+            KnowledgeLinkRecord(title: "Onboarding > Activation > Retention", summary: "Core product chain linking setup friction to return behavior.", referenceCount: 18, owner: "Mila", isHealthy: true),
+            KnowledgeLinkRecord(title: "Support signals > Product fixes", summary: "Maps customer complaints into backlog-ready evidence.", referenceCount: 11, owner: "Devon", isHealthy: true),
+            KnowledgeLinkRecord(title: "Founder notes > Strategy memos", summary: "Connects raw founder captures to monthly operating decisions.", referenceCount: 9, owner: "Sena", isHealthy: false)
+        ]
+        self.spaces = [
+            KnowledgeSpaceRecord(name: "Growth Research", description: "Shared space for experiments, interviews and synthesis notes.", members: 7, syncStatus: .synced),
+            KnowledgeSpaceRecord(name: "Ops Handbook", description: "Operating procedures and incident response runbooks.", members: 12, syncStatus: .synced),
+            KnowledgeSpaceRecord(name: "Founder Journal", description: "Private strategy memos shared with the exec circle.", members: 3, syncStatus: .needsSync)
+        ]
+    }
+
+    var openCaptureCount: Int {
+        captures.filter { !$0.isFiled }.count
+    }
+
+    func addCapture() {
+        let trimmed = captureDraft.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        captures.insert(
+            NotesCaptureRecord(
+                title: "Operator capture",
+                summary: trimmed,
+                source: "Manual entry",
+                owner: "Mila",
+                isFiled: false
+            ),
+            at: 0
+        )
+        captureDraft = ""
+    }
+
+    func fileCapture(_ capture: NotesCaptureRecord) {
+        guard let index = captures.firstIndex(where: { $0.id == capture.id }) else { return }
+        captures[index].isFiled = true
+        libraryNotes.insert(
+            KnowledgeNoteRecord(
+                title: capture.title,
+                collection: "Inbox Filed",
+                updatedAt: "Just now",
+                owner: capture.owner,
+                summary: capture.summary,
+                highlightCount: 1,
+                isPinned: false
+            ),
+            at: 0
+        )
+        operatorHeadline = "\(capture.title) filed into the library and linked for review."
+    }
+
+    func pinNote(_ note: KnowledgeNoteRecord) {
+        guard let index = libraryNotes.firstIndex(where: { $0.id == note.id }) else { return }
+        libraryNotes[index].isPinned.toggle()
+    }
+
+    func promoteHighlight(_ note: KnowledgeNoteRecord) {
+        guard let index = libraryNotes.firstIndex(where: { $0.id == note.id }) else { return }
+        libraryNotes[index].highlightCount += 1
+        libraryNotes[index].updatedAt = "Updated just now"
+    }
+
+    func refreshLinkMap(_ map: KnowledgeLinkRecord) {
+        guard let index = linkMaps.firstIndex(where: { $0.id == map.id }) else { return }
+        linkMaps[index].referenceCount += 1
+        linkMaps[index].isHealthy = true
+    }
+
+    func syncSpace(_ space: KnowledgeSpaceRecord) {
+        guard let index = spaces.firstIndex(where: { $0.id == space.id }) else { return }
+        spaces[index].syncStatus = .synced
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
 struct NotesKnowledgeDashboardView: View {
-    let snapshot: NotesKnowledgeDashboardSnapshot
-    let collections: [NotesKnowledgeCollectionCard]
-    let actions: [NotesKnowledgeQuickAction]
-    let health: NotesKnowledgeOperationalHealth
-    let state: NotesKnowledgeWorkspaceState
+    @ObservedObject var store: NotesKnowledgeOperationsStore
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    NotesKnowledgeHeroCard(snapshot: snapshot, health: health, state: state)
-                    NotesKnowledgeQuickActionGrid(actions: actions)
-                    NotesKnowledgeCaptureInboxCard(state: state)
-                    NotesKnowledgeCollectionPulseCard(collections: collections)
-                    NotesKnowledgeRecentHighlightsCard(notes: state.recentHighlights)
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Knowledge Snapshot")
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                        Text(store.operatorHeadline)
+                            .font(.system(size: 28, weight: .bold, design: .rounded))
+                        Text(store.reviewWindow)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        HStack(spacing: 12) {
+                            NotesKnowledgeMetricChip(title: "Inbox", value: "\(store.openCaptureCount)")
+                            NotesKnowledgeMetricChip(title: "Notes", value: "\(store.libraryNotes.count)")
+                            NotesKnowledgeMetricChip(title: "Links", value: "\(store.linkMaps.count)")
+                        }
+                    }
+                    .padding(20)
+                    .background(LinearGradient(colors: [.purple.opacity(0.18), .indigo.opacity(0.10)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .clipShape(RoundedRectangle(cornerRadius: 22))
+
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Capture Inbox")
+                            .font(.title3.weight(.bold))
+                        TextField("Capture new note", text: $store.captureDraft, axis: .vertical)
+                            .textFieldStyle(.roundedBorder)
+                            .lineLimit(2...5)
+                        Button("Add Capture") {
+                            store.addCapture()
+                        }
+                        .buttonStyle(.borderedProminent)
+
+                        ForEach(store.captures) { capture in
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Text(capture.title)
+                                        .font(.headline)
+                                    Spacer()
+                                    Text(capture.isFiled ? "Filed" : "Inbox")
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(capture.isFiled ? .green : .orange)
+                                }
+                                Text(capture.summary)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                if !capture.isFiled {
+                                    Button("File To Library") {
+                                        store.fileCapture(capture)
+                                    }
+                                    .buttonStyle(.bordered)
+                                }
+                            }
+                            .padding()
+                            .background(Color(.secondarySystemBackground))
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                        }
+                    }
                 }
                 .padding(16)
             }
@@ -94,48 +215,140 @@ struct NotesKnowledgeDashboardView: View {
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct NotesKnowledgeHeroCard: View {
-    let snapshot: NotesKnowledgeDashboardSnapshot
-    let health: NotesKnowledgeOperationalHealth
-    let state: NotesKnowledgeWorkspaceState
+struct NotesKnowledgeLibraryView: View {
+    @ObservedObject var store: NotesKnowledgeOperationsStore
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Knowledge Snapshot")
-                .font(.headline)
-                .foregroundStyle(.secondary)
-
-            Text(state.operatorHeadline)
-                .font(.system(size: 30, weight: .bold, design: .rounded))
-            Text(snapshot.syncHealth)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-
-            HStack(spacing: 12) {
-                NotesKnowledgeMetricChip(title: "Notes", value: "\(snapshot.activeNotes)")
-                NotesKnowledgeMetricChip(title: "Spaces", value: "\(snapshot.sharedSpaces)")
-                NotesKnowledgeMetricChip(title: "Captured", value: "\(snapshot.capturedIdeasToday)")
+        NavigationStack {
+            List {
+                ForEach(store.libraryNotes) { note in
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text(note.title)
+                            Spacer()
+                            Text(note.collection)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                        }
+                        Text(note.summary)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        HStack {
+                            Button(note.isPinned ? "Unpin" : "Pin") {
+                                store.pinNote(note)
+                            }
+                            .buttonStyle(.bordered)
+                            Button("Promote Highlight") {
+                                store.promoteHighlight(note)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            Text("\(note.highlightCount) highlights")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
             }
-
-            HStack {
-                Label(state.reviewWindow, systemImage: "clock.fill")
-                Spacer()
-                Text("\(health.linkedReferencesToday) links today")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.purple)
-            }
-            .font(.caption)
-            .foregroundStyle(.secondary)
+            .navigationTitle("Library")
         }
-        .padding(20)
-        .background(
-            LinearGradient(
-                colors: [.purple.opacity(0.18), .indigo.opacity(0.10)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 22))
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+struct NotesKnowledgeLinksView: View {
+    @ObservedObject var store: NotesKnowledgeOperationsStore
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(store.linkMaps) { map in
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text(map.title)
+                            Spacer()
+                            Text(map.isHealthy ? "Healthy" : "Needs repair")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(map.isHealthy ? .green : .orange)
+                        }
+                        Text(map.summary)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        HStack {
+                            Text("\(map.referenceCount) refs")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Spacer()
+                            Button("Refresh Links") {
+                                store.refreshLinkMap(map)
+                            }
+                            .buttonStyle(.bordered)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
+            }
+            .navigationTitle("Links")
+        }
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+struct NotesKnowledgeSpacesView: View {
+    @ObservedObject var store: NotesKnowledgeOperationsStore
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(store.spaces) { space in
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text(space.name)
+                            Spacer()
+                            Text(space.syncStatus.label)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(space.syncStatus.color)
+                        }
+                        Text(space.description)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Button("Sync Space") {
+                            store.syncSpace(space)
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                    .padding(.vertical, 4)
+                }
+            }
+            .navigationTitle("Spaces")
+        }
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+struct NotesKnowledgeProfileView: View {
+    @ObservedObject var store: NotesKnowledgeOperationsStore
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section("Librarian") {
+                    Label("Mila Grant", systemImage: "person.crop.circle.fill")
+                    Label("Product research and operating notes", systemImage: "scope")
+                }
+                Section("Knowledge Metrics") {
+                    Label("\(store.libraryNotes.count) active notes", systemImage: "doc.text.fill")
+                    Label("\(store.spaces.count) shared spaces", systemImage: "person.2.wave.2.fill")
+                    Label("\(store.linkMaps.filter(\.isHealthy).count) healthy link maps", systemImage: "chart.line.uptrend.xyaxis")
+                }
+                Section("Operations") {
+                    Label("\(store.openCaptureCount) items in review", systemImage: "tray.full.fill")
+                    Label(store.reviewWindow, systemImage: "clock.fill")
+                    Label(store.operatorHeadline, systemImage: "link.circle.fill")
+                }
+            }
+            .navigationTitle("Profile")
+        }
     }
 }
 
@@ -159,397 +372,58 @@ struct NotesKnowledgeMetricChip: View {
     }
 }
 
-@available(iOS 18.0, macOS 15.0, *)
-struct NotesKnowledgeQuickActionGrid: View {
-    let actions: [NotesKnowledgeQuickAction]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Quick Actions")
-                .font(.title3.weight(.bold))
-
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                ForEach(actions) { action in
-                    VStack(alignment: .leading, spacing: 10) {
-                        Image(systemName: action.systemImage)
-                            .font(.title3)
-                            .foregroundStyle(.purple)
-                        Text(action.title)
-                            .font(.subheadline.weight(.semibold))
-                        Text(action.detail)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                }
-            }
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct NotesKnowledgeCaptureInboxCard: View {
-    let state: NotesKnowledgeWorkspaceState
-
-    var body: some View {
-        NavigationLink {
-            NotesKnowledgeCaptureDetailView(captures: state.captureInbox)
-        } label: {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Capture Inbox")
-                    .font(.title3.weight(.bold))
-                    .foregroundStyle(.primary)
-                Text(state.captureHeadline)
-                    .font(.headline)
-                Text(state.captureSummary)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                HStack {
-                    Label("\(state.captureInbox.count) items waiting", systemImage: "tray.and.arrow.down.fill")
-                    Spacer()
-                    Text(state.captureOwner)
-                }
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            }
-            .padding()
-            .background(Color(.secondarySystemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 18))
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct NotesKnowledgeCollectionPulseCard: View {
-    let collections: [NotesKnowledgeCollectionCard]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Collection Pulse")
-                .font(.title3.weight(.bold))
-
-            ForEach(collections) { collection in
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(collection.title)
-                            .font(.headline)
-                        Text("\(collection.documentCount) documents")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    Text(collection.ctaLabel)
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.purple)
-                }
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-            }
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct NotesKnowledgeRecentHighlightsCard: View {
-    let notes: [NotesKnowledgeNote]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Recent Highlights")
-                .font(.title3.weight(.bold))
-
-            ForEach(notes) { note in
-                NavigationLink {
-                    NotesKnowledgeNoteDetailView(note: note)
-                } label: {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(note.title)
-                            .font(.headline)
-                            .foregroundStyle(.primary)
-                        Text(note.summary)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
-                        Text("\(note.collection) • \(note.updatedAt)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                }
-                .buttonStyle(.plain)
-            }
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct NotesKnowledgeLibraryView: View {
-    let state: NotesKnowledgeWorkspaceState
-
-    var body: some View {
-        NavigationStack {
-            List(state.libraryNotes) { note in
-                NavigationLink {
-                    NotesKnowledgeNoteDetailView(note: note)
-                } label: {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(note.title)
-                        Text(note.collection)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text(note.summary)
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-            .navigationTitle("Library")
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct NotesKnowledgeLinksView: View {
-    let state: NotesKnowledgeWorkspaceState
-
-    var body: some View {
-        NavigationStack {
-            List {
-                ForEach(state.linkMaps) { map in
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(map.title)
-                        Text(map.summary)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text("\(map.referenceCount) references • \(map.owner)")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-            .navigationTitle("Links")
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct NotesKnowledgeSpacesView: View {
-    let state: NotesKnowledgeWorkspaceState
-
-    var body: some View {
-        NavigationStack {
-            List {
-                ForEach(state.sharedSpaces) { space in
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(space.name)
-                        Text(space.description)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text("\(space.members) members • \(space.syncStatus)")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-            .navigationTitle("Spaces")
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct NotesKnowledgeProfileView: View {
-    let snapshot: NotesKnowledgeDashboardSnapshot
-    let health: NotesKnowledgeOperationalHealth
-    let state: NotesKnowledgeWorkspaceState
-
-    var body: some View {
-        NavigationStack {
-            List {
-                Section("Librarian") {
-                    Label(state.librarianName, systemImage: "person.crop.circle.fill")
-                    Label(state.scope, systemImage: "scope")
-                }
-                Section("Knowledge Metrics") {
-                    Label("\(snapshot.activeNotes) active notes", systemImage: "doc.text.fill")
-                    Label("\(snapshot.sharedSpaces) shared spaces", systemImage: "person.2.wave.2.fill")
-                    Label("\(state.reviewRate) weekly review rate", systemImage: "chart.line.uptrend.xyaxis")
-                }
-                Section("Operations") {
-                    Label("\(health.reviewQueue) items in review", systemImage: "tray.full.fill")
-                    Label(health.offlineReady ? "Offline ready" : "Offline degraded", systemImage: health.offlineReady ? "icloud.and.arrow.down.fill" : "icloud.slash.fill")
-                    Label(state.backlinkPolicy, systemImage: "link.circle.fill")
-                }
-            }
-            .navigationTitle("Profile")
-        }
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct NotesKnowledgeCaptureDetailView: View {
-    let captures: [NotesKnowledgeCapture]
-
-    var body: some View {
-        List(captures) { capture in
-            VStack(alignment: .leading, spacing: 6) {
-                Text(capture.title)
-                    .font(.headline)
-                Text(capture.summary)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                Text("\(capture.source) • \(capture.owner)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .navigationTitle("Capture Inbox")
-    }
-}
-
-@available(iOS 18.0, macOS 15.0, *)
-struct NotesKnowledgeNoteDetailView: View {
-    let note: NotesKnowledgeNote
-
-    var body: some View {
-        List {
-            Section("Note") {
-                Text(note.title)
-                    .font(.title3.weight(.bold))
-                Text(note.summary)
-                    .foregroundStyle(.secondary)
-            }
-            Section("Metadata") {
-                Label(note.collection, systemImage: "folder.fill")
-                Label(note.updatedAt, systemImage: "clock.fill")
-                Label(note.owner, systemImage: "person.fill")
-            }
-            Section("Highlights") {
-                ForEach(note.highlights, id: \.self) { highlight in
-                    Text(highlight)
-                }
-            }
-        }
-        .navigationTitle("Note")
-    }
-}
-
-public struct NotesKnowledgeQuickAction: Identifiable, Hashable, Sendable {
-    public let id: UUID
-    public let title: String
-    public let detail: String
-    public let systemImage: String
-
-    public init(
-        id: UUID = UUID(),
-        title: String,
-        detail: String,
-        systemImage: String
-    ) {
-        self.id = id
-        self.title = title
-        self.detail = detail
-        self.systemImage = systemImage
-    }
-
-    public static let defaultActions: [NotesKnowledgeQuickAction] = [
-        NotesKnowledgeQuickAction(title: "Open Capture Inbox", detail: "Sort fresh notes, voice memos and clipped links before they drift.", systemImage: "tray.and.arrow.down.fill"),
-        NotesKnowledgeQuickAction(title: "Review Knowledge Links", detail: "Tighten backlinks, tags and source references across active notes.", systemImage: "link.circle.fill"),
-        NotesKnowledgeQuickAction(title: "Sync Shared Spaces", detail: "Verify shared docs and team spaces are aligned before review day.", systemImage: "person.2.wave.2.fill")
-    ]
-}
-
-struct NotesKnowledgeWorkspaceState {
-    let operatorHeadline: String
-    let reviewWindow: String
-    let captureHeadline: String
-    let captureSummary: String
-    let captureOwner: String
-    let librarianName: String
-    let scope: String
-    let reviewRate: String
-    let backlinkPolicy: String
-    let captureInbox: [NotesKnowledgeCapture]
-    let recentHighlights: [NotesKnowledgeNote]
-    let libraryNotes: [NotesKnowledgeNote]
-    let linkMaps: [NotesKnowledgeLinkMap]
-    let sharedSpaces: [NotesKnowledgeSpace]
-
-    static let sample = NotesKnowledgeWorkspaceState(
-        operatorHeadline: "Knowledge inbox is under control",
-        reviewWindow: "Weekly review locks at 16:30",
-        captureHeadline: "Thirteen new ideas need placement",
-        captureSummary: "Research clips, meeting notes and one voice memo are waiting for taxonomy cleanup.",
-        captureOwner: "Owned by Mila",
-        librarianName: "Mila Grant",
-        scope: "Product research and operating notes",
-        reviewRate: "91%",
-        backlinkPolicy: "Every durable note must carry one source and one backlink",
-        captureInbox: [
-            NotesKnowledgeCapture(title: "Pricing interview synthesis", summary: "Five quotes from buyer calls need conversion into one decision memo.", source: "Voice memo", owner: "Mila"),
-            NotesKnowledgeCapture(title: "API migration checklist", summary: "Scratchpad from incident retro still needs structure and tags.", source: "Quick note", owner: "Devon"),
-            NotesKnowledgeCapture(title: "Competitive launch screenshots", summary: "Twenty screenshots clipped for onboarding research review.", source: "Web clip", owner: "Sena")
-        ],
-        recentHighlights: [
-            NotesKnowledgeNote(title: "Retention playbook for onboarding", collection: "Team Handbook", updatedAt: "Updated 12 min ago", owner: "Mila", summary: "Maps onboarding friction to lifecycle interventions and measurement points.", highlights: ["Early activation triggers outperform discount prompts.", "Saved-state continuity reduces second-session churn."]),
-            NotesKnowledgeNote(title: "Q2 research themes", collection: "Research Notes", updatedAt: "Updated 48 min ago", owner: "Devon", summary: "Clusters user pain into trust, speed and admin-control themes.", highlights: ["Trust gaps appear before pricing objections.", "Admins want better export controls."])
-        ],
-        libraryNotes: [
-            NotesKnowledgeNote(title: "Retention playbook for onboarding", collection: "Team Handbook", updatedAt: "Updated 12 min ago", owner: "Mila", summary: "Maps onboarding friction to lifecycle interventions and measurement points.", highlights: ["Early activation triggers outperform discount prompts.", "Saved-state continuity reduces second-session churn."]),
-            NotesKnowledgeNote(title: "Q2 research themes", collection: "Research Notes", updatedAt: "Updated 48 min ago", owner: "Devon", summary: "Clusters user pain into trust, speed and admin-control themes.", highlights: ["Trust gaps appear before pricing objections.", "Admins want better export controls."]),
-            NotesKnowledgeNote(title: "Personal reflection archive", collection: "Personal Capture", updatedAt: "Updated yesterday", owner: "Sena", summary: "Private reflections and journaling prompts linked to weekly reviews.", highlights: ["Tag mood separately from decision notes.", "Keep one synthesis note per week."])
-        ],
-        linkMaps: [
-            NotesKnowledgeLinkMap(title: "Onboarding > Activation > Retention", summary: "Core product chain linking setup friction to return behavior.", referenceCount: 18, owner: "Mila"),
-            NotesKnowledgeLinkMap(title: "Support signals > Product fixes", summary: "Maps customer complaints into backlog-ready evidence.", referenceCount: 11, owner: "Devon"),
-            NotesKnowledgeLinkMap(title: "Founder notes > Strategy memos", summary: "Connects raw founder captures to monthly operating decisions.", referenceCount: 9, owner: "Sena")
-        ],
-        sharedSpaces: [
-            NotesKnowledgeSpace(name: "Growth Research", description: "Shared space for experiments, interviews and synthesis notes.", members: 7, syncStatus: "Synced 3 min ago"),
-            NotesKnowledgeSpace(name: "Ops Handbook", description: "Operating procedures and incident response runbooks.", members: 12, syncStatus: "Synced 9 min ago"),
-            NotesKnowledgeSpace(name: "Founder Journal", description: "Private strategy memos shared with the exec circle.", members: 3, syncStatus: "Synced 21 min ago")
-        ]
-    )
-}
-
-struct NotesKnowledgeCapture: Identifiable, Hashable {
+struct NotesCaptureRecord: Identifiable, Hashable, Sendable {
     let id = UUID()
     let title: String
     let summary: String
     let source: String
     let owner: String
+    var isFiled: Bool
 }
 
-struct NotesKnowledgeNote: Identifiable, Hashable {
+struct KnowledgeNoteRecord: Identifiable, Hashable, Sendable {
     let id = UUID()
     let title: String
     let collection: String
-    let updatedAt: String
+    var updatedAt: String
     let owner: String
     let summary: String
-    let highlights: [String]
+    var highlightCount: Int
+    var isPinned: Bool
 }
 
-struct NotesKnowledgeLinkMap: Identifiable, Hashable {
+struct KnowledgeLinkRecord: Identifiable, Hashable, Sendable {
     let id = UUID()
     let title: String
     let summary: String
-    let referenceCount: Int
+    var referenceCount: Int
     let owner: String
+    var isHealthy: Bool
 }
 
-struct NotesKnowledgeSpace: Identifiable, Hashable {
+enum KnowledgeSpaceSyncStatus: Hashable, Sendable {
+    case synced
+    case needsSync
+
+    var label: String {
+        switch self {
+        case .synced: return "Synced"
+        case .needsSync: return "Needs sync"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .synced: return .green
+        case .needsSync: return .orange
+        }
+    }
+}
+
+struct KnowledgeSpaceRecord: Identifiable, Hashable, Sendable {
     let id = UUID()
     let name: String
     let description: String
     let members: Int
-    let syncStatus: String
+    var syncStatus: KnowledgeSpaceSyncStatus
 }
