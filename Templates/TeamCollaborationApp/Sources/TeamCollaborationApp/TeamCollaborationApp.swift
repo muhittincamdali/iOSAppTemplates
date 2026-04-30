@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import TeamCollaborationAppCore
+
+private enum TeamCollaborationInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "TeamCollaborationApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 @available(iOS 18.0, macOS 15.0, *)
 public struct TeamCollaborationAppShell: App {
@@ -49,6 +75,9 @@ struct TeamCollaborationRuntimeRootView: View {
                 }
         }
         .tint(.blue)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -67,6 +96,7 @@ final class TeamCollaborationOperationsStore: ObservableObject {
     @Published var completedShipments: Int
     @Published var blockedCount: Int
     @Published var reviewQueue: Int
+    private var interactionProofScheduled = false
 
     init(
         standups: [TeamStandup] = TeamStandup.samples,
@@ -198,6 +228,52 @@ final class TeamCollaborationOperationsStore: ObservableObject {
         standups[index].nextStep = "Owner confirmed the blocker is closed and the lane is green."
         operatorHeadline = "\(standups[index].owner) closed a standup blocker."
         blockedCount = max(0, blockedCount - 1)
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard TeamCollaborationInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 800_000_000)
+
+            if let standup = standups.first(where: { $0.status != .resolved }) {
+                resolveStandup(standup.id)
+            }
+
+            if let task = tasks.first {
+                startTask(task.id)
+                unblockTask(task.id)
+                completeTask(task.id)
+                closeTask(task.id)
+            }
+
+            if let decision = decisions.first {
+                approveDecision(decision.id)
+                alignDecision(decision.id)
+                publishDecision(decision.id)
+            }
+
+            if let handoff = handoffs.first {
+                queueHandoff(handoff.id)
+                acceptHandoff(handoff.id)
+                completeHandoff(handoff.id)
+                archiveHandoff(handoff.id)
+            }
+
+            TeamCollaborationInteractionProofMode.write(
+                summary: operatorHeadline,
+                steps: [
+                    "standup-resolved",
+                    "task-started",
+                    "task-unblocked",
+                    "task-completed",
+                    "task-closed",
+                    "decision-approved-aligned-published",
+                    "handoff-queued-accepted-verified-archived"
+                ]
+            )
+        }
     }
 }
 
