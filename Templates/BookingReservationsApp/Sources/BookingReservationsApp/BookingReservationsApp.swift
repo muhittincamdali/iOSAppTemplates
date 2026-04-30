@@ -106,17 +106,52 @@ final class BookingOperationsStore: ObservableObject {
     func completeCheckout(_ stay: BookingStayRecord) {
         guard let index = stays.firstIndex(where: { $0.id == stay.id }) else { return }
         stays[index].status = .checkedOut
-        operatorHeadline = "\(stays[index].guestName) checked out and the room is ready for turnover."
+        stays[index].note = "Guest departed. Room is waiting for turnover confirmation."
+        operatorHeadline = "\(stays[index].guestName) checked out and the room is waiting for turnover sign-off."
+    }
+
+    func confirmTurnover(_ stay: BookingStayRecord) {
+        guard let index = stays.firstIndex(where: { $0.id == stay.id }) else { return }
+        stays[index].status = .turnoverReady
+        stays[index].note = "Turnover confirmed and inventory is back in the clean-ready pool."
+        operatorHeadline = "\(stays[index].property) is back in clean-ready inventory."
+    }
+
+    func settlePendingReview(_ stay: BookingStayRecord) {
+        guard let index = stays.firstIndex(where: { $0.id == stay.id }) else { return }
+        stays[index].status = .checkoutToday
+        stays[index].note = "Pending review cleared. Finance and housekeeping both signed off."
+        operatorHeadline = "\(stays[index].guestName) review cleared and checkout is back on track."
     }
 
     func approveRequest(_ request: BookingRequestRecord) {
         guard let index = guestRequests.firstIndex(where: { $0.id == request.id }) else { return }
         guestRequests[index].status = .approved
+        if request.title.contains("Late checkout"),
+           let stayIndex = stays.firstIndex(where: { $0.guestName == "Ava Collins" }) {
+            stays[stayIndex].note = "Late checkout approved and cleaning slot has been shifted."
+        }
+        if request.title.contains("Airport transfer"),
+           let stayIndex = stays.firstIndex(where: { $0.guestName == "Liam Carter" }) {
+            stays[stayIndex].note = "Driver contact and pickup window were sent to the guest."
+        }
+        if request.title.contains("Family crib"),
+           let stayIndex = stays.firstIndex(where: { $0.guestName == "Mila Harper" }) {
+            stays[stayIndex].note = "Crib setup approved and room prep is being completed before arrival."
+        }
+        operatorHeadline = "\(guestRequests[index].title) approved and routed into the stay workflow."
     }
 
     func resolveRequest(_ request: BookingRequestRecord) {
         guard let index = guestRequests.firstIndex(where: { $0.id == request.id }) else { return }
         guestRequests[index].status = .resolved
+        operatorHeadline = "\(guestRequests[index].title) resolved and removed from the live queue."
+    }
+
+    func escalateRequest(_ request: BookingRequestRecord) {
+        guard let index = guestRequests.firstIndex(where: { $0.id == request.id }) else { return }
+        guestRequests[index].status = .escalated
+        operatorHeadline = "\(guestRequests[index].title) escalated to the desk lead."
     }
 
     func lockDay(_ day: BookingCalendarRecord) {
@@ -170,8 +205,12 @@ struct BookingDashboardView: View {
                         Text("Checkout Watch")
                             .font(.title3.weight(.bold))
                         ForEach(store.checkouts) { stay in
-                            BookingStayCard(stay: stay, primaryActionTitle: "Complete Checkout", primaryAction: {
-                                store.completeCheckout(stay)
+                            BookingStayCard(stay: stay, primaryActionTitle: stay.status == .pendingReview ? "Settle Review" : "Complete Checkout", primaryAction: {
+                                if stay.status == .pendingReview {
+                                    store.settlePendingReview(stay)
+                                } else {
+                                    store.completeCheckout(stay)
+                                }
                             })
                         }
                     }
@@ -223,13 +262,15 @@ struct BookingGuestsView: View {
         NavigationStack {
             List {
                 ForEach(store.stays) { stay in
-                    BookingStayCard(stay: stay, primaryActionTitle: stay.status == .checkoutToday ? "Complete Checkout" : stay.checkedIn ? "Checked In" : "Check In", primaryAction: {
+                    BookingStayCard(stay: stay, primaryActionTitle: stay.status == .checkoutToday ? "Complete Checkout" : stay.status == .checkedOut ? "Confirm Turnover" : stay.checkedIn ? "Checked In" : "Check In", primaryAction: {
                         if stay.status == .checkoutToday {
                             store.completeCheckout(stay)
+                        } else if stay.status == .checkedOut {
+                            store.confirmTurnover(stay)
                         } else if !stay.checkedIn {
                             store.checkInGuest(stay)
                         }
-                    }, disablePrimary: stay.checkedIn && stay.status != .checkoutToday)
+                    }, disablePrimary: stay.checkedIn && stay.status != .checkoutToday && stay.status != .checkedOut)
                 }
             }
             .navigationTitle("Guests")
@@ -260,10 +301,16 @@ struct BookingRequestsView: View {
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                         HStack {
-                            Button("Approve") { store.approveRequest(request) }
-                                .buttonStyle(.bordered)
-                            Button("Resolve") { store.resolveRequest(request) }
-                                .buttonStyle(.borderedProminent)
+                            if request.status == .open {
+                                Button("Approve") { store.approveRequest(request) }
+                                    .buttonStyle(.bordered)
+                                Button("Escalate") { store.escalateRequest(request) }
+                                    .buttonStyle(.bordered)
+                            }
+                            if request.status == .approved || request.status == .escalated {
+                                Button("Resolve") { store.resolveRequest(request) }
+                                    .buttonStyle(.borderedProminent)
+                            }
                             Text(request.status.label)
                                 .font(.caption.weight(.semibold))
                                 .foregroundStyle(request.status.color)
@@ -368,6 +415,7 @@ enum BookingStayStatus: Hashable, Sendable {
     case checkoutToday
     case pendingReview
     case checkedOut
+    case turnoverReady
 
     var label: String {
         switch self {
@@ -377,12 +425,13 @@ enum BookingStayStatus: Hashable, Sendable {
         case .checkoutToday: return "Checkout Today"
         case .pendingReview: return "Pending Review"
         case .checkedOut: return "Checked Out"
+        case .turnoverReady: return "Turnover Ready"
         }
     }
 
     var color: Color {
         switch self {
-        case .arrivalReady, .inHouse, .checkedOut: return .green
+        case .arrivalReady, .inHouse, .checkedOut, .turnoverReady: return .green
         case .awaitingID, .pendingReview: return .orange
         case .checkoutToday: return .blue
         }
@@ -396,7 +445,7 @@ struct BookingStayRecord: Identifiable, Hashable, Sendable {
     let dateRange: String
     var status: BookingStayStatus
     let departureTime: String
-    let note: String
+    var note: String
     let preferences: [String]
     var identityVerified: Bool
     var checkedIn: Bool
@@ -427,12 +476,14 @@ enum BookingRequestPriority: Hashable, Sendable {
 enum BookingRequestStatus: Hashable, Sendable {
     case open
     case approved
+    case escalated
     case resolved
 
     var label: String {
         switch self {
         case .open: return "Open"
         case .approved: return "Approved"
+        case .escalated: return "Escalated"
         case .resolved: return "Resolved"
         }
     }
@@ -441,6 +492,7 @@ enum BookingRequestStatus: Hashable, Sendable {
         switch self {
         case .open: return .orange
         case .approved: return .mint
+        case .escalated: return .red
         case .resolved: return .green
         }
     }
