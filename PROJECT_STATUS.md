@@ -4,7 +4,7 @@ Last updated: 2026-04-30
 
 ## Repository Status
 
-`iOSAppTemplates` now carries `20` rebuilt standalone app roots with real runtime proof and chained consequence flows. `EcommerceApp`, `AIAssistantApp`, and `TeamCollaborationApp` now also carry automated multi-step interaction proof, but the repo is still short of that parity across every lane.
+`iOSAppTemplates` now carries `20` rebuilt standalone app roots with real runtime proof and chained consequence flows. `EcommerceApp`, `SocialMediaApp`, `ProductivityApp`, `AIAssistantApp`, `MarketplaceApp`, and `TeamCollaborationApp` now also carry automated multi-step interaction proof, but the repo is still short of that parity across every lane.
 
 ## What Is True Right Now
 
@@ -21,7 +21,7 @@ Last updated: 2026-04-30
 - published launch-to-ready scenario frames
 - chained runtime consequence flows across the tracked `20` standalone roots
 - rebuilt runtime flows for the tracked `20` standalone roots
-- automated multi-step interaction proof for `EcommerceApp`, `AIAssistantApp`, and `TeamCollaborationApp`
+- automated multi-step interaction proof for `EcommerceApp`, `SocialMediaApp`, `ProductivityApp`, `AIAssistantApp`, `MarketplaceApp`, and `TeamCollaborationApp`
 - canonical runtime scenario pages
 - local generic iOS `xcodebuild` proof is tracked for the standalone roots
 - local simulator runtime launch proof is tracked for the standalone roots
@@ -33,7 +33,7 @@ Last updated: 2026-04-30
 ## What Is Not Yet True
 
 - a stable green hosted standalone iOS baseline is not yet established for every app pack
-- automated multi-step interaction proof is not yet established for every app pack beyond `EcommerceApp`, `AIAssistantApp`, and `TeamCollaborationApp`
+- automated multi-step interaction proof is not yet established for every app pack beyond `EcommerceApp`, `SocialMediaApp`, `ProductivityApp`, `AIAssistantApp`, `MarketplaceApp`, and `TeamCollaborationApp`
 - the latest numbered release must stay aligned with the current proof surface and GitHub distribution policy
 
 ## Current Public Gaps

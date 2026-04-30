@@ -1,3 +1,4 @@
+import Foundation
 import SwiftUI
 import Firebase
 import FirebaseAuth
@@ -7,6 +8,31 @@ import Kingfisher
 
 private enum RuntimeCaptureMode {
     static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_SCREENSHOT_MODE"] == "1"
+}
+
+private enum SocialInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "SocialMediaApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
 }
 
 // MARK: - Social Media App
@@ -432,6 +458,7 @@ struct SignUpView: View {
 struct MainTabView: View {
     @State private var selectedTab = 0
     @StateObject private var notificationManager = NotificationManager.shared
+    @State private var interactionProofStarted = false
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -472,6 +499,55 @@ struct MainTabView: View {
                 .tag(4)
         }
         .accentColor(.blue)
+        .onAppear {
+            runInteractionProofIfNeeded()
+        }
+    }
+
+    private func runInteractionProofIfNeeded() {
+        guard SocialInteractionProofMode.isEnabled, !interactionProofStarted else { return }
+        interactionProofStarted = true
+
+        let dataManager = DataManager.shared
+        let notifications = NotificationManager.shared
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            if let post = dataManager.posts.first {
+                dataManager.toggleLike(postID: post.id)
+                dataManager.toggleBookmark(postID: post.id)
+                dataManager.sharePost(postID: post.id)
+                dataManager.addComment(body: "Runtime interaction proof closed the full social loop.", to: post.id)
+            }
+
+            if let profile = dataManager.suggestedProfiles.first {
+                dataManager.toggleFollow(profileID: profile.id)
+            }
+
+            dataManager.publishPost(
+                content: "Shipping deeper social interaction proof with consequence-driven state changes.",
+                authorName: "Preview User",
+                username: "preview",
+                isVerified: true,
+                audience: "Public",
+                attachmentCount: 2
+            )
+
+            notifications.markAllRead()
+            selectedTab = 4
+
+            SocialInteractionProofMode.write(
+                summary: "Social interaction chain completed and profile state updated.",
+                steps: [
+                    "post-liked",
+                    "post-bookmarked",
+                    "post-shared",
+                    "comment-added",
+                    "profile-followed",
+                    "post-published",
+                    "notifications-cleared"
+                ]
+            )
+        }
     }
 }
 

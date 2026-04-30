@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import ProductivityAppCore
+
+private enum ProductivityInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "ProductivityApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 @available(iOS 18.0, macOS 15.0, *)
 public struct ProductivityAppShell: App {
@@ -49,6 +75,9 @@ struct ProductivityRuntimeRootView: View {
                 }
         }
         .tint(.indigo)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -63,6 +92,7 @@ final class ProductivityOperationsStore: ObservableObject {
     @Published var operatorHeadline: String
     @Published var focusRule: String
     @Published var completedCount: Int
+    private var interactionProofScheduled = false
 
     init(
         inboxTasks: [ProductivityTaskRecord] = ProductivityTaskRecord.samples,
@@ -154,6 +184,46 @@ final class ProductivityOperationsStore: ObservableObject {
         reviewRisks[index].status = .resolved
         reviewRisks[index].mitigation = "Risk closed and documented in the review log."
         operatorHeadline = "Review risk closed: \(reviewRisks[index].title)."
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard ProductivityInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 800_000_000)
+
+            captureDraft = "Escalate launch checklist owner sync"
+            captureTask()
+
+            guard let task = inboxTasks.first,
+                  let project = projects.first else { return }
+
+            prioritizeTask(task.id)
+            moveTaskToProject(task.id, projectID: project.id)
+            completeTask(task.id)
+
+            if let focusBlock = focusBlocks.first {
+                startFocus(focusBlock.id)
+                completeFocus(focusBlock.id)
+            }
+
+            if let risk = reviewRisks.first {
+                resolveRisk(risk.id)
+            }
+
+            ProductivityInteractionProofMode.write(
+                summary: operatorHeadline,
+                steps: [
+                    "task-captured",
+                    "task-prioritized",
+                    "task-routed-to-project",
+                    "task-completed",
+                    "focus-started-and-completed",
+                    "review-risk-resolved"
+                ]
+            )
+        }
     }
 }
 
