@@ -24,6 +24,8 @@ jobs:
         run: bash Scripts/validate-generated-app-surfaces.sh
       - name: Validate standalone iOS proof surface
         run: bash Scripts/validate-standalone-ios-proof-surface.sh
+      - name: Validate runtime interaction proof surface
+        run: bash Scripts/validate-runtime-interaction-proof-surface.sh
       - name: Validate README visual assets
         run: bash Scripts/validate-readme-visual-assets.sh
       - name: Validate app proof surfaces
