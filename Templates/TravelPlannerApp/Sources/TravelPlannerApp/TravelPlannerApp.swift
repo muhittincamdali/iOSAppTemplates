@@ -126,10 +126,25 @@ final class TravelPlannerOperationsStore: ObservableObject {
         )
     }
 
+    func confirmRebook(_ flightID: UUID) {
+        guard let index = flights.firstIndex(where: { $0.id == flightID }) else { return }
+        flights[index].status = "Rebooked"
+        flights[index].departureTime = "\(flights[index].departureTime) • +45 min buffer"
+        if let alertIndex = alerts.firstIndex(where: { $0.linkedFlightID == flightID && !$0.isResolved }) {
+            alerts[alertIndex].detail = "Rebook accepted with a safer connection window."
+            alerts[alertIndex].isResolved = true
+        }
+    }
+
     func confirmStay(_ stayID: UUID) {
         guard let index = stays.firstIndex(where: { $0.id == stayID }) else { return }
         stays[index].confirmationState = "Confirmed"
         stays[index].checkInNote = "Late arrival shared with concierge and airport pickup vendor."
+    }
+
+    func sendArrivalNote(_ stayID: UUID) {
+        guard let index = stays.firstIndex(where: { $0.id == stayID }) else { return }
+        stays[index].checkInNote = "Arrival note, room preference, and concierge late check-in confirmed."
     }
 
     func moveActivityForward(_ activityID: UUID, from dayID: UUID) {
@@ -151,6 +166,12 @@ final class TravelPlannerOperationsStore: ObservableObject {
         timelineDays[dayIndex].summary = "Day plan locked with transport, reservations, and meeting windows confirmed."
     }
 
+    func unlockDayPlan(_ dayID: UUID) {
+        guard let dayIndex = timelineDays.firstIndex(where: { $0.id == dayID }) else { return }
+        timelineDays[dayIndex].isLocked = false
+        timelineDays[dayIndex].summary = "Day plan reopened to absorb a disruption and rebalance logistics."
+    }
+
     func togglePackingTask(_ taskID: UUID) {
         guard let index = packingTasks.firstIndex(where: { $0.id == taskID }) else { return }
         packingTasks[index].isPacked.toggle()
@@ -163,10 +184,20 @@ final class TravelPlannerOperationsStore: ObservableObject {
         alerts.removeAll { $0.linkedDocumentID == documentID }
     }
 
+    func downloadOfflineCopy(_ documentID: UUID) {
+        guard let index = documents.firstIndex(where: { $0.id == documentID }) else { return }
+        documents[index].status = "Offline copy saved"
+    }
+
     func resolveAlert(_ alertID: UUID) {
         guard let index = alerts.firstIndex(where: { $0.id == alertID }) else { return }
         alerts[index].isResolved = true
         alerts[index].detail = "Operator action completed and traveler brief synced."
+    }
+
+    func escalateAlert(_ alertID: UUID) {
+        guard let index = alerts.firstIndex(where: { $0.id == alertID }) else { return }
+        alerts[index].detail = "Escalated to airline or organizer desk with operator brief attached."
     }
 }
 
@@ -428,6 +459,13 @@ struct TravelPlannerDayDetailView: View {
                         }
                         .buttonStyle(.borderedProminent)
                     }
+                } else {
+                    Section {
+                        Button("Unlock For Rebalance") {
+                            store.unlockDayPlan(dayID)
+                        }
+                        .buttonStyle(.bordered)
+                    }
                 }
             }
             .navigationTitle(day.title)
@@ -509,6 +547,12 @@ struct TravelPlannerFlightDetailView: View {
                     Button("Request Rebook") {
                         store.requestRebook(flight.id)
                     }
+
+                    if flight.status == "Rebooking requested" {
+                        Button("Confirm Rebook") {
+                            store.confirmRebook(flight.id)
+                        }
+                    }
                 }
             }
             .navigationTitle("Flight")
@@ -539,6 +583,10 @@ struct TravelPlannerStayDetailView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .disabled(stay.confirmationState == "Confirmed")
+                    Button("Send Arrival Note") {
+                        store.sendArrivalNote(stay.id)
+                    }
+                    .buttonStyle(.bordered)
                 }
             }
             .navigationTitle(stay.name)
@@ -590,6 +638,32 @@ struct TravelPlannerEssentialsWorkspaceView: View {
                                 }
                                 .buttonStyle(.bordered)
                             }
+                            Button("Save Offline Copy") {
+                                store.downloadOfflineCopy(document.id)
+                            }
+                            .buttonStyle(.bordered)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+
+                Section("Alerts") {
+                    ForEach(store.alerts) { alert in
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text(alert.title)
+                                Spacer()
+                                Text(alert.type.label)
+                                    .font(.caption.weight(.semibold))
+                            }
+                            Text(alert.detail)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            HStack {
+                                Button("Escalate") { store.escalateAlert(alert.id) }
+                                Button("Resolve") { store.resolveAlert(alert.id) }
+                            }
+                            .buttonStyle(.bordered)
                         }
                         .padding(.vertical, 4)
                     }
@@ -680,7 +754,7 @@ struct TravelFlightRecord: Identifiable {
     let id = UUID()
     let route: String
     let departureCode: String
-    let departureTime: String
+    var departureTime: String
     var seat: String?
     var status: String
     var isCheckedIn: Bool
