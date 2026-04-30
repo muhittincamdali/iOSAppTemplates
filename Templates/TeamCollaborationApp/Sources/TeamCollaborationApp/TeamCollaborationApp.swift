@@ -127,11 +127,18 @@ final class TeamCollaborationOperationsStore: ObservableObject {
 
     func completeTask(_ taskID: UUID) {
         guard let index = tasks.firstIndex(where: { $0.id == taskID }) else { return }
-        tasks[index].status = .done
-        tasks[index].update = "Task shipped and downstream owners were notified."
-        operatorHeadline = "\(tasks[index].title) shipped to the next team."
-        completedShipments += 1
+        tasks[index].status = .handoff
+        tasks[index].update = "Task passed review and is now waiting for downstream handoff closure."
+        operatorHeadline = "\(tasks[index].title) is ready for downstream handoff."
         reviewQueue = max(0, reviewQueue - 1)
+    }
+
+    func closeTask(_ taskID: UUID) {
+        guard let index = tasks.firstIndex(where: { $0.id == taskID }) else { return }
+        tasks[index].status = .done
+        tasks[index].update = "Downstream team confirmed receipt and the task closed cleanly."
+        operatorHeadline = "\(tasks[index].title) closed after downstream confirmation."
+        completedShipments += 1
     }
 
     func approveDecision(_ decisionID: UUID) {
@@ -139,6 +146,13 @@ final class TeamCollaborationOperationsStore: ObservableObject {
         decisions[index].status = .approved
         decisions[index].note = "Decision approved by product, design and support."
         operatorHeadline = "\(decisions[index].title) is approved and ready for publication."
+    }
+
+    func alignDecision(_ decisionID: UUID) {
+        guard let index = decisions.firstIndex(where: { $0.id == decisionID }) else { return }
+        decisions[index].status = .aligned
+        decisions[index].note = "Receiving teams aligned on rollout timing and acknowledgement order."
+        operatorHeadline = "\(decisions[index].title) is aligned across receiving teams."
     }
 
     func publishDecision(_ decisionID: UUID) {
@@ -165,8 +179,15 @@ final class TeamCollaborationOperationsStore: ObservableObject {
 
     func completeHandoff(_ handoffID: UUID) {
         guard let index = handoffs.firstIndex(where: { $0.id == handoffID }) else { return }
+        handoffs[index].status = .verified
+        handoffs[index].note = "Receiving team verified assets, notes and SLA before final archive."
+        operatorHeadline = "\(handoffs[index].title) verified by the receiving team."
+    }
+
+    func archiveHandoff(_ handoffID: UUID) {
+        guard let index = handoffs.firstIndex(where: { $0.id == handoffID }) else { return }
         handoffs[index].status = .completed
-        handoffs[index].note = "Handoff completed with written verification from both teams."
+        handoffs[index].note = "Handoff archived after both teams signed the completion trail."
         operatorHeadline = "\(handoffs[index].title) closed cleanly."
         completedShipments += 1
     }
@@ -539,7 +560,9 @@ struct TeamTaskDetailView: View {
                     } else if task.status == .active {
                         Button("Send to Review") { store.unblockTask(task.id) }
                     } else if task.status == .review {
-                        Button("Complete Task") { store.completeTask(task.id) }
+                        Button("Route to Handoff") { store.completeTask(task.id) }
+                    } else if task.status == .handoff {
+                        Button("Close Task") { store.closeTask(task.id) }
                     }
                 }
             }
@@ -575,6 +598,9 @@ struct TeamDecisionDetailView: View {
                         Button("Approve Decision") { store.approveDecision(decision.id) }
                     }
                     if decision.status == .approved {
+                        Button("Align Receiving Teams") { store.alignDecision(decision.id) }
+                    }
+                    if decision.status == .aligned {
                         Button("Publish Decision") { store.publishDecision(decision.id) }
                     }
                 }
@@ -614,7 +640,10 @@ struct TeamHandoffDetailView: View {
                         Button("Accept Handoff") { store.acceptHandoff(handoff.id) }
                     }
                     if handoff.status == .accepted {
-                        Button("Complete Handoff") { store.completeHandoff(handoff.id) }
+                        Button("Verify Handoff") { store.completeHandoff(handoff.id) }
+                    }
+                    if handoff.status == .verified {
+                        Button("Archive Handoff") { store.archiveHandoff(handoff.id) }
                     }
                 }
             }
@@ -627,6 +656,7 @@ enum CollaborationTaskStatus: String, CaseIterable, Hashable {
     case blocked
     case active
     case review
+    case handoff
     case done
 
     var label: String { rawValue.capitalized }
@@ -636,6 +666,7 @@ enum CollaborationTaskStatus: String, CaseIterable, Hashable {
         case .blocked: return .red
         case .active: return .orange
         case .review: return .blue
+        case .handoff: return .indigo
         case .done: return .green
         }
     }
@@ -659,6 +690,7 @@ struct CollaborationTask: Identifiable, Hashable {
 enum CollaborationDecisionStatus: String, Hashable {
     case review
     case approved
+    case aligned
     case published
 
     var label: String { rawValue.capitalized }
@@ -667,6 +699,7 @@ enum CollaborationDecisionStatus: String, Hashable {
         switch self {
         case .review: return .red
         case .approved: return .orange
+        case .aligned: return .indigo
         case .published: return .green
         }
     }
@@ -690,6 +723,7 @@ enum CollaborationHandoffStatus: String, Hashable {
     case draft
     case queued
     case accepted
+    case verified
     case completed
 
     var label: String { rawValue.capitalized }
@@ -699,6 +733,7 @@ enum CollaborationHandoffStatus: String, Hashable {
         case .draft: return .secondary
         case .queued: return .orange
         case .accepted: return .blue
+        case .verified: return .indigo
         case .completed: return .green
         }
     }

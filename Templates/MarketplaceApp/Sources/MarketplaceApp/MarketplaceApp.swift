@@ -88,8 +88,8 @@ final class MarketplaceOperationsStore: ObservableObject {
             MarketplacePayoutRecord(seller: "Renew Point", amount: 0, window: "Held for compliance review", isHeld: true)
         ]
         self.orders = [
-            MarketplaceOrderRecord(title: "Mirrorless Creator Camera", seller: "North Studio", status: .packed, shippingWindow: "Arrives Apr 29", total: 1240, supportNotes: ["Buyer asked for signature delivery.", "Courier handoff scheduled at 17:00."]),
-            MarketplaceOrderRecord(title: "Refurbished Ultrabook", seller: "Renew Point", status: .manualReview, shippingWindow: "Needs manual review", total: 799, supportNotes: ["Protection hold until serial report is uploaded."])
+            MarketplaceOrderRecord(title: "Mirrorless Creator Camera", seller: "North Studio", status: .packed, shippingWindow: "Arrives Apr 29", total: 1240, supportNotes: ["Buyer asked for signature delivery.", "Courier handoff scheduled at 17:00."], supportStatus: "Packing"),
+            MarketplaceOrderRecord(title: "Refurbished Ultrabook", seller: "Renew Point", status: .manualReview, shippingWindow: "Needs manual review", total: 799, supportNotes: ["Protection hold until serial report is uploaded."], supportStatus: "Compliance hold")
         ]
         self.disputes = [
             MarketplaceDisputeRecord(title: "Missing accessory claim", detail: "Buyer reported the spare battery was missing from the camera bundle.", level: .medium, status: .open),
@@ -166,7 +166,8 @@ final class MarketplaceOperationsStore: ObservableObject {
                 status: .processing,
                 shippingWindow: "Processing for next courier window",
                 total: item.price * Double(item.quantity),
-                supportNotes: ["Buyer checkout completed.", "Seller confirmation required in 30 minutes."]
+                supportNotes: ["Buyer checkout completed.", "Seller confirmation required in 30 minutes."],
+                supportStatus: "Awaiting seller confirmation"
             ),
             at: 0
         )
@@ -180,12 +181,18 @@ final class MarketplaceOperationsStore: ObservableObject {
         case .processing:
             orders[index].status = .packed
             orders[index].shippingWindow = "Courier pickup locked"
+            orders[index].supportStatus = "Seller confirmed"
+            orders[index].supportNotes.append("Seller confirmation landed and the parcel moved into packing.")
         case .packed:
             orders[index].status = .shipped
             orders[index].shippingWindow = "In transit"
+            orders[index].supportStatus = "In transit"
+            orders[index].supportNotes.append("Courier accepted the parcel and started the transit scan.")
         case .shipped:
             orders[index].status = .delivered
             orders[index].shippingWindow = "Delivered"
+            orders[index].supportStatus = "Delivered cleanly"
+            orders[index].supportNotes.append("Buyer delivery promise closed without a breach.")
         case .manualReview, .delivered:
             break
         }
@@ -195,6 +202,13 @@ final class MarketplaceOperationsStore: ObservableObject {
         guard let index = sellerQueue.firstIndex(where: { $0.id == item.id }) else { return }
         sellerQueue[index].status = .ready
         operatorNotes.insert("Released queue item: \(sellerQueue[index].title).", at: 0)
+    }
+
+    func verifySellerQueue(_ item: MarketplaceSellerQueueRecord) {
+        guard let index = sellerQueue.firstIndex(where: { $0.id == item.id }) else { return }
+        sellerQueue[index].status = .needsReview
+        operatorNotes.insert("Verification pass started for: \(sellerQueue[index].title).", at: 0)
+        fulfillmentHeadline = "Seller verification route is active before payout or shelf release."
     }
 
     func holdPayout(_ payout: MarketplacePayoutRecord) {
@@ -213,6 +227,10 @@ final class MarketplaceOperationsStore: ObservableObject {
         guard let index = disputes.firstIndex(where: { $0.id == dispute.id }) else { return }
         disputes[index].status = .resolved
         operatorNotes.insert("Resolved dispute: \(disputes[index].title).", at: 0)
+        if let payoutIndex = payouts.firstIndex(where: \.isHeld) {
+            payouts[payoutIndex].isHeld = false
+            payouts[payoutIndex].window = "Released after trust resolution"
+        }
     }
 
     func escalateDispute(_ dispute: MarketplaceDisputeRecord) {
@@ -221,6 +239,41 @@ final class MarketplaceOperationsStore: ObservableObject {
         if let sellerIndex = sellerQueue.firstIndex(where: { $0.title.contains("Renew Point") || $0.title.contains("audio gear") }) {
             sellerQueue[sellerIndex].status = .blocked
         }
+    }
+
+    func clearManualReview(_ order: MarketplaceOrderRecord) {
+        guard let index = orders.firstIndex(where: { $0.id == order.id }) else { return }
+        orders[index].status = .processing
+        orders[index].shippingWindow = "Review cleared • seller confirmation requested"
+        orders[index].supportStatus = "Review cleared"
+        orders[index].supportNotes.append("Manual review cleared and routed back into the seller confirmation lane.")
+        fulfillmentHeadline = "Manual review cleared and the buyer order is moving again."
+    }
+
+    func requestBuyerProtection(_ order: MarketplaceOrderRecord) {
+        guard let index = orders.firstIndex(where: { $0.id == order.id }) else { return }
+        orders[index].status = .manualReview
+        orders[index].shippingWindow = "Buyer protection investigation active"
+        orders[index].supportStatus = "Protection hold"
+        orders[index].supportNotes.append("Buyer protection route opened after delivery and funds are held.")
+        payouts = payouts.map { payout in
+            var updated = payout
+            if updated.seller == orders[index].seller {
+                updated.isHeld = true
+                updated.window = "Held for buyer protection review"
+            }
+            return updated
+        }
+        disputes.insert(
+            MarketplaceDisputeRecord(
+                title: "Buyer protection for \(orders[index].title)",
+                detail: "Post-delivery issue routed into buyer protection with payout hold in place.",
+                level: .high,
+                status: .open
+            ),
+            at: 0
+        )
+        fulfillmentHeadline = "Buyer protection case opened and seller funds are held pending resolution."
     }
 }
 
@@ -385,7 +438,18 @@ struct MarketplaceSellerDeskView: View {
                             Text(item.detail)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            if item.status != .ready {
+                            if item.status == .blocked {
+                                HStack {
+                                    Button("Start Verification") {
+                                        store.verifySellerQueue(item)
+                                    }
+                                    .buttonStyle(.bordered)
+                                    Button("Release Queue Item") {
+                                        store.releaseSellerQueue(item)
+                                    }
+                                    .buttonStyle(.borderedProminent)
+                                }
+                            } else if item.status == .needsReview {
                                 Button("Release Queue Item") {
                                     store.releaseSellerQueue(item)
                                 }
@@ -476,10 +540,25 @@ struct MarketplaceOrdersView: View {
                             Text("\(order.status.label) • \(order.shippingWindow)")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            Button("Advance Order") {
-                                store.advanceOrder(order)
+                            Text(order.supportStatus)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                            if order.status == .manualReview {
+                                Button("Clear Manual Review") {
+                                    store.clearManualReview(order)
+                                }
+                                .buttonStyle(.borderedProminent)
+                            } else if order.status == .delivered {
+                                Button("Open Buyer Protection") {
+                                    store.requestBuyerProtection(order)
+                                }
+                                .buttonStyle(.bordered)
+                            } else {
+                                Button("Advance Order") {
+                                    store.advanceOrder(order)
+                                }
+                                .buttonStyle(.bordered)
                             }
-                            .buttonStyle(.bordered)
                         }
                         .padding(.vertical, 4)
                     }
@@ -670,7 +749,8 @@ struct MarketplaceOrderRecord: Identifiable, Hashable, Sendable {
     var status: MarketplaceOrderStatus
     var shippingWindow: String
     let total: Double
-    let supportNotes: [String]
+    var supportNotes: [String]
+    var supportStatus: String
 }
 
 enum MarketplaceDisputeLevel: Hashable, Sendable {

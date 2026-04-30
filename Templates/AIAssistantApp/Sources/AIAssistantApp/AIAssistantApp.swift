@@ -186,6 +186,30 @@ final class AIAssistantOperationsStore: ObservableObject {
         )
     }
 
+    func dispatchApprovedRequest(_ request: AIAssistantApprovalRecord) {
+        guard let index = approvalRequests.firstIndex(where: { $0.id == request.id }) else { return }
+        approvalRequests[index].status = .sent
+        workspaceStatus = "Outbound route sent safely"
+        currentGoal = "Closed the approval chain and logged the outbound send."
+        conversation.append(
+            AIAssistantConversationEntry(
+                role: .assistant,
+                title: "Outbound dispatched",
+                body: "\(approvalRequests[index].title) left the workspace after guardrail checks and approval.",
+                footnote: "Outbound • sent"
+            )
+        )
+        memoryItems.insert(
+            AIAssistantMemoryRecord(
+                title: "Outbound send pattern",
+                detail: "Approved recovery copy shipped after trust checks and preserved the redaction boundary.",
+                scope: "Workspace",
+                isPinned: false
+            ),
+            at: 0
+        )
+    }
+
     func denyRequest(_ request: AIAssistantApprovalRecord) {
         guard let index = approvalRequests.firstIndex(where: { $0.id == request.id }) else { return }
         approvalRequests[index].status = .denied
@@ -198,6 +222,21 @@ final class AIAssistantOperationsStore: ObservableObject {
                 status: .open
             ),
             at: 0
+        )
+    }
+
+    func rewriteDeniedRequest(_ request: AIAssistantApprovalRecord) {
+        guard let index = approvalRequests.firstIndex(where: { $0.id == request.id }) else { return }
+        draftPrompt = "Rewrite \(approvalRequests[index].title.lowercased()) with stricter redaction and a shorter customer-safe next step."
+        approvalRequests[index].status = .pending
+        workspaceStatus = "Denied draft returned to rewrite queue"
+        conversation.append(
+            AIAssistantConversationEntry(
+                role: .assistant,
+                title: "Rewrite queued",
+                body: "The denied outbound draft is back in review with a tighter redaction and trust-safe route.",
+                footnote: "Rewrite • pending"
+            )
         )
     }
 
@@ -222,6 +261,14 @@ final class AIAssistantOperationsStore: ObservableObject {
         memoryItems[index].isPinned.toggle()
     }
 
+    func promoteMemoryToGuardrail(_ item: AIAssistantMemoryRecord) {
+        guard let index = memoryItems.firstIndex(where: { $0.id == item.id }) else { return }
+        memoryItems[index].scope = "Guardrail"
+        memoryItems[index].isPinned = true
+        workspaceStatus = "Memory rule promoted into guardrail scope"
+        guardrailEvents.insert("Promoted \(memoryItems[index].title.lowercased()) into the active guardrail set.", at: 0)
+    }
+
     func toggleTool(_ tool: AIAssistantToolRecord) {
         guard let index = tools.firstIndex(where: { $0.id == tool.id }) else { return }
         switch tools[index].status {
@@ -238,6 +285,12 @@ final class AIAssistantOperationsStore: ObservableObject {
         guard let index = trustCases.firstIndex(where: { $0.id == trustCase.id }) else { return }
         trustCases[index].status = .resolved
         workspaceStatus = "Trust queue reduced"
+    }
+
+    func monitorTrustCase(_ trustCase: AIAssistantTrustCase) {
+        guard let index = trustCases.firstIndex(where: { $0.id == trustCase.id }) else { return }
+        trustCases[index].status = .monitoring
+        workspaceStatus = "Trust case moved into monitoring"
     }
 
     func escalateTrustCase(_ trustCase: AIAssistantTrustCase) {
@@ -351,6 +404,16 @@ struct AIAssistantWorkspaceView: View {
                                         }
                                         .buttonStyle(.bordered)
                                     }
+                                } else if request.status == .approved {
+                                    Button("Send Outbound") {
+                                        store.dispatchApprovedRequest(request)
+                                    }
+                                    .buttonStyle(.borderedProminent)
+                                } else if request.status == .denied {
+                                    Button("Rewrite") {
+                                        store.rewriteDeniedRequest(request)
+                                    }
+                                    .buttonStyle(.bordered)
                                 }
                             }
                             .padding()
@@ -427,6 +490,12 @@ struct AIAssistantMemoryView: View {
                                 store.togglePinnedMemory(item)
                             }
                             .buttonStyle(.bordered)
+                            if item.scope != "Guardrail" {
+                                Button("Promote to Guardrail") {
+                                    store.promoteMemoryToGuardrail(item)
+                                }
+                                .buttonStyle(.borderedProminent)
+                            }
                         }
                         .padding(.vertical, 4)
                     }
@@ -521,10 +590,27 @@ struct AIAssistantTrustView: View {
                                         store.resolveTrustCase(trustCase)
                                     }
                                     .buttonStyle(.borderedProminent)
+                                    if trustCase.status == .open {
+                                        Button("Monitor") {
+                                            store.monitorTrustCase(trustCase)
+                                        }
+                                        .buttonStyle(.bordered)
+                                    }
                                     Button("Escalate") {
                                         store.escalateTrustCase(trustCase)
                                     }
                                     .buttonStyle(.bordered)
+                                }
+                            } else if trustCase.status == .escalated {
+                                HStack {
+                                    Button("Move To Monitoring") {
+                                        store.monitorTrustCase(trustCase)
+                                    }
+                                    .buttonStyle(.bordered)
+                                    Button("Resolve") {
+                                        store.resolveTrustCase(trustCase)
+                                    }
+                                    .buttonStyle(.borderedProminent)
                                 }
                             }
                         }
@@ -589,7 +675,7 @@ struct AIAssistantMemoryRecord: Identifiable, Hashable, Sendable {
     let id = UUID()
     let title: String
     let detail: String
-    let scope: String
+    var scope: String
     var isPinned: Bool
 }
 
@@ -633,6 +719,7 @@ enum AIAssistantApprovalStatus: Hashable, Sendable {
     case pending
     case approved
     case denied
+    case sent
 
     var label: String {
         switch self {
@@ -642,6 +729,8 @@ enum AIAssistantApprovalStatus: Hashable, Sendable {
             return "Approved"
         case .denied:
             return "Denied"
+        case .sent:
+            return "Sent"
         }
     }
 
@@ -653,6 +742,8 @@ enum AIAssistantApprovalStatus: Hashable, Sendable {
             return .green
         case .denied:
             return .red
+        case .sent:
+            return .blue
         }
     }
 }
