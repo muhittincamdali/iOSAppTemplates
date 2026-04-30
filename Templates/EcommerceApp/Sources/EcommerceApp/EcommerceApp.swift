@@ -60,9 +60,11 @@ final class CommerceStore: ObservableObject {
     @Published var appliedCouponCode = ""
     @Published var checkoutNotice = "Orders placed before 21:00 ship same day from the Istanbul fulfillment lane."
     @Published var wishlistIDs: Set<UUID> = []
+    @Published var selectedDeliveryWindow = "Tomorrow • 18:00-21:00"
 
     let savedAddresses: [CommerceAddress] = CommerceAddress.sampleAddresses
     let paymentMethods: [CommercePaymentMethod] = CommercePaymentMethod.sampleMethods
+    let deliveryWindows = ["Tomorrow • 12:00-15:00", "Tomorrow • 18:00-21:00", "Friday • 10:00-13:00"]
 
     init() {
         selectedCategoryID = categories.first?.id
@@ -163,6 +165,11 @@ final class CommerceStore: ObservableObject {
         selectedPaymentID = paymentID
     }
 
+    func selectDeliveryWindow(_ window: String) {
+        selectedDeliveryWindow = window
+        checkoutNotice = "Delivery window updated to \(window). Fulfillment will lock after payment and address checks."
+    }
+
     func placeOrder() {
         guard !cartItems.isEmpty,
               let address = selectedAddress,
@@ -179,12 +186,14 @@ final class CommerceStore: ObservableObject {
 
         let order = CommerceOrder(
             title: "Order #\(1000 + placedOrders.count + 1)",
-            summary: "Placed \(cartItems.count) items for \(address.label) with \(payment.label).",
+            summary: "Placed \(cartItems.count) items for \(address.label) with \(payment.label) in the \(selectedDeliveryWindow) lane.",
             total: total,
+            statusHeadline: "Awaiting courier dispatch",
             timeline: statusTrail,
             items: cartItems,
-            shipmentETA: "Tomorrow before 19:00",
-            supportAction: "Open courier issue"
+            shipmentETA: selectedDeliveryWindow,
+            supportAction: "Open courier issue",
+            supportStatus: "Healthy"
         )
 
         placedOrders.insert(order, at: 0)
@@ -195,6 +204,47 @@ final class CommerceStore: ObservableObject {
     func reorder(_ orderID: UUID) {
         guard let order = placedOrders.first(where: { $0.id == orderID }) else { return }
         cartItems = order.items
+    }
+
+    func advanceOrder(_ orderID: UUID) {
+        guard let index = placedOrders.firstIndex(where: { $0.id == orderID }) else { return }
+        let activeIndex = placedOrders[index].timeline.firstIndex(where: { $0.state == .active })
+
+        if let activeIndex {
+            placedOrders[index].timeline[activeIndex].state = .completed
+            if activeIndex + 1 < placedOrders[index].timeline.count {
+                placedOrders[index].timeline[activeIndex + 1].state = .active
+                placedOrders[index].statusHeadline = placedOrders[index].timeline[activeIndex + 1].title
+                placedOrders[index].shipmentETA = activeIndex + 1 == placedOrders[index].timeline.count - 1 ? "Today before 21:00" : "Courier update pending"
+            } else {
+                placedOrders[index].statusHeadline = "Delivered"
+                placedOrders[index].shipmentETA = "Delivered"
+            }
+        }
+    }
+
+    func confirmDelivery(_ orderID: UUID) {
+        guard let index = placedOrders.firstIndex(where: { $0.id == orderID }) else { return }
+        for timelineIndex in placedOrders[index].timeline.indices {
+            placedOrders[index].timeline[timelineIndex].state = .completed
+        }
+        placedOrders[index].statusHeadline = "Delivered"
+        placedOrders[index].shipmentETA = "Delivered now"
+        placedOrders[index].supportStatus = "Post-purchase window active"
+    }
+
+    func openSupportIssue(_ orderID: UUID) {
+        guard let index = placedOrders.firstIndex(where: { $0.id == orderID }) else { return }
+        placedOrders[index].supportStatus = "Courier issue opened"
+        placedOrders[index].supportAction = "Resolve courier issue"
+        checkoutNotice = "Support case opened for \(placedOrders[index].title)."
+    }
+
+    func resolveSupportIssue(_ orderID: UUID) {
+        guard let index = placedOrders.firstIndex(where: { $0.id == orderID }) else { return }
+        placedOrders[index].supportStatus = "Support resolved"
+        placedOrders[index].supportAction = "Reorder Items"
+        checkoutNotice = "Support issue resolved and post-purchase state is healthy again."
     }
 
     private func seedCart() {
@@ -629,6 +679,14 @@ struct CommerceCheckoutView: View {
             }
 
             Section("Summary") {
+                Picker("Delivery Window", selection: $store.selectedDeliveryWindow) {
+                    ForEach(store.deliveryWindows, id: \.self) { window in
+                        Text(window).tag(window)
+                    }
+                }
+                .onChange(of: store.selectedDeliveryWindow) { _, newValue in
+                    store.selectDeliveryWindow(newValue)
+                }
                 CommerceSummaryRow(title: "Subtotal", value: store.subtotal.currencyString)
                 CommerceSummaryRow(title: "Savings", value: "-\(store.savings.currencyString)")
                 CommerceSummaryRow(title: "Shipping", value: store.shippingFee == 0 ? "Free" : store.shippingFee.currencyString)
@@ -712,8 +770,10 @@ struct CommerceOrderDetailView: View {
                             .font(.title3.weight(.bold))
                         Text(order.summary)
                             .foregroundStyle(.secondary)
+                        Label(order.statusHeadline, systemImage: "shippingbox.fill")
                         Label(order.total.currencyString, systemImage: "creditcard.fill")
                         Label(order.shipmentETA, systemImage: "clock.badge.checkmark.fill")
+                        Label(order.supportStatus, systemImage: "lifepreserver.fill")
                     }
 
                     Section("Timeline") {
@@ -749,10 +809,25 @@ struct CommerceOrderDetailView: View {
                     }
 
                     Section("Actions") {
-                        Button("Reorder Items") {
-                            store.reorder(order.id)
+                        Button("Advance Fulfillment") {
+                            store.advanceOrder(order.id)
                         }
-                        Button(order.supportAction) {}
+                        .disabled(order.statusHeadline == "Delivered")
+
+                        Button("Confirm Delivery") {
+                            store.confirmDelivery(order.id)
+                        }
+                        .disabled(order.statusHeadline == "Delivered")
+
+                        Button(order.supportAction) {
+                            if order.supportAction == "Open courier issue" {
+                                store.openSupportIssue(order.id)
+                            } else if order.supportAction == "Resolve courier issue" {
+                                store.resolveSupportIssue(order.id)
+                            } else {
+                                store.reorder(order.id)
+                            }
+                        }
                             .foregroundStyle(.orange)
                     }
                 }
@@ -1003,7 +1078,7 @@ struct CommerceOrderStatusEvent: Identifiable, Hashable {
     let id: UUID
     let title: String
     let detail: String
-    let state: CommerceTimelineState
+    var state: CommerceTimelineState
 
     init(id: UUID = UUID(), title: String, detail: String, state: CommerceTimelineState) {
         self.id = id
@@ -1018,29 +1093,35 @@ struct CommerceOrder: Identifiable, Hashable {
     let title: String
     let summary: String
     let total: Double
-    let timeline: [CommerceOrderStatusEvent]
+    var statusHeadline: String
+    var timeline: [CommerceOrderStatusEvent]
     let items: [CommerceCartItem]
-    let shipmentETA: String
-    let supportAction: String
+    var shipmentETA: String
+    var supportAction: String
+    var supportStatus: String
 
     init(
         id: UUID = UUID(),
         title: String,
         summary: String,
         total: Double,
+        statusHeadline: String,
         timeline: [CommerceOrderStatusEvent],
         items: [CommerceCartItem],
         shipmentETA: String,
-        supportAction: String
+        supportAction: String,
+        supportStatus: String
     ) {
         self.id = id
         self.title = title
         self.summary = summary
         self.total = total
+        self.statusHeadline = statusHeadline
         self.timeline = timeline
         self.items = items
         self.shipmentETA = shipmentETA
         self.supportAction = supportAction
+        self.supportStatus = supportStatus
     }
 
     static let sampleOrders: [CommerceOrder] = {
@@ -1055,6 +1136,7 @@ struct CommerceOrder: Identifiable, Hashable {
                 title: "Order #1001",
                 summary: "Two-item workstation upgrade currently moving through the courier lane.",
                 total: 213.0,
+                statusHeadline: "Shipped",
                 timeline: [
                     .init(title: "Confirmed", detail: "Payment cleared instantly with Visa.", state: .completed),
                     .init(title: "Packed", detail: "Warehouse packed both items with protection inserts.", state: .completed),
@@ -1063,7 +1145,8 @@ struct CommerceOrder: Identifiable, Hashable {
                 ],
                 items: items,
                 shipmentETA: "Tomorrow 18:30",
-                supportAction: "Open courier issue"
+                supportAction: "Open courier issue",
+                supportStatus: "Healthy"
             )
         ]
     }()
