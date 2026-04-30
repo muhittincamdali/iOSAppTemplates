@@ -11,7 +11,10 @@ interaction_flag="IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"
 
 default_apps=(
   "EcommerceApp"
+  "SocialMediaApp"
+  "ProductivityApp"
   "AIAssistantApp"
+  "MarketplaceApp"
   "TeamCollaborationApp"
 )
 
