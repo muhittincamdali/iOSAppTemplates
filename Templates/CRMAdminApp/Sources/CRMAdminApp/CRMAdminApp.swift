@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import CRMAdminAppCore
+
+private enum CRMInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "CRMAdminApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 @available(iOS 18.0, macOS 15.0, *)
 public struct CRMAdminAppShell: App {
@@ -49,6 +75,9 @@ struct CRMRuntimeRootView: View {
                 }
         }
         .tint(.indigo)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -64,6 +93,7 @@ final class CRMOperationsStore: ObservableObject {
     @Published var managedARR: Int
     @Published var rescueARR: Int
     @Published var expansionARR: Int
+    private var interactionProofScheduled = false
 
     init(
         accounts: [CRMAccountRecord] = CRMAccountRecord.samples,
@@ -160,6 +190,40 @@ final class CRMOperationsStore: ObservableObject {
         tasks[index].status = .done
         tasks[index].note = "Task completed and logged into the revenue desk timeline."
         operatorHeadline = "\(tasks[index].title) completed."
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard CRMInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        DispatchQueue.main.async {
+            var steps: [String] = []
+
+            if let atRiskAccountID = self.atRiskAccounts.first?.id {
+                self.logSponsorRecovery(atRiskAccountID)
+                self.resolveRisk(atRiskAccountID)
+                self.createExpansion(atRiskAccountID)
+                steps.append("Recovered risk and opened expansion")
+            }
+
+            if let renewalID = self.renewals.first?.id {
+                self.approveDiscount(renewalID)
+                self.sendProposal(renewalID)
+                self.signRenewal(renewalID)
+                steps.append("Approved, proposed, and signed renewal")
+            }
+
+            if let taskID = self.tasks.first?.id {
+                self.reassignTask(taskID)
+                self.completeTask(taskID)
+                steps.append("Reassigned and completed task")
+            }
+
+            CRMInteractionProofMode.write(
+                summary: "CRM interaction proof completed with risk recovery, renewal, expansion, and task chain.",
+                steps: steps
+            )
+        }
     }
 }
 

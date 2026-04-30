@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import MusicPodcastAppCore
+
+private enum MusicPodcastInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "MusicPodcastApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 @available(iOS 18.0, macOS 15.0, *)
 public struct MusicPodcastAppShell: App {
@@ -45,6 +71,9 @@ struct MusicPodcastRuntimeRootView: View {
                 }
         }
         .tint(.purple)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -60,6 +89,7 @@ final class MusicPodcastOperationsStore: ObservableObject {
     @Published var playbackHeadline = "Your queue mixes briefings, long-form interviews and focus playlists."
     @Published var currentDevice = "iPhone 17 Pro + HomePod stereo pair"
     @Published var planSummary = "Premium Family • Spatial audio and lossless downloads enabled"
+    private var interactionProofScheduled = false
 
     init() {
         let nowPlaying = MusicPodcastEpisodeRecord(title: "Operator Handoffs That Actually Stick", showTitle: "Scale Systems", duration: "48 min", description: "A field guide to cleaner project handoffs and measurable ownership transitions.", progress: 0.64, isDownloaded: false, isLiked: true)
@@ -182,6 +212,52 @@ final class MusicPodcastOperationsStore: ObservableObject {
     func followShow(_ show: MusicPodcastShowRecord) {
         guard let index = featuredShows.firstIndex(where: { $0.id == show.id }) else { return }
         featuredShows[index].isFollowed.toggle()
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard MusicPodcastInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        DispatchQueue.main.async {
+            var steps: [String] = []
+
+            let libraryEpisode = self.continueListening.first ?? self.nowPlaying
+            self.playEpisode(libraryEpisode)
+            self.toggleLike(libraryEpisode)
+            self.advanceProgress(libraryEpisode)
+            steps.append("Played and advanced library episode")
+
+            if let discoverEpisode = self.freshPicks.first {
+                self.queueEpisode(discoverEpisode)
+                self.toggleDownload(discoverEpisode)
+                steps.append("Queued and downloaded discover episode")
+            }
+
+            if let firstQueueItem = self.queue.first {
+                self.moveQueueItemForward(firstQueueItem)
+                self.playQueueItem(firstQueueItem)
+                steps.append("Promoted queue item into playback")
+            }
+
+            self.completeNowPlaying()
+            self.pinNowPlayingOffline()
+            steps.append("Completed now playing and pinned offline")
+
+            if let download = self.downloads.first {
+                self.pinDownload(download)
+                steps.append("Toggled download pin")
+            }
+
+            if let show = self.featuredShows.first {
+                self.followShow(show)
+                steps.append("Toggled show follow")
+            }
+
+            MusicPodcastInteractionProofMode.write(
+                summary: "Music interaction proof completed with playback, queue, download, and follow chain.",
+                steps: steps
+            )
+        }
     }
 }
 

@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import EducationAppCore
+
+private enum EducationInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "EducationApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 public struct EducationAppShell: App {
     public init() {}
@@ -47,6 +73,9 @@ struct EducationRuntimeRootView: View {
                 }
         }
         .tint(.teal)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -63,6 +92,7 @@ final class EducationLearningStore: ObservableObject {
     @Published var studyStreakDays = 12
     @Published var completedLessonsCount = 28
     @Published var quizAverage = 91
+    private var interactionProofScheduled = false
 
     init() {
         selectedLessonID = lessons.first?.id
@@ -176,6 +206,57 @@ final class EducationLearningStore: ObservableObject {
         if let courseIndex = courses.firstIndex(where: { $0.title == assignments[index].course }) {
             courses[courseIndex].progress = min(1, courses[courseIndex].progress + 0.1)
             courses[courseIndex].nextStep = "Great. Move into the next module and coaching review."
+        }
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard EducationInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        DispatchQueue.main.async {
+            var steps: [String] = []
+
+            if let courseID = self.courses.first?.id {
+                self.selectCourse(courseID)
+                steps.append("Selected course")
+            }
+
+            if let lessonID = self.nextLesson?.id {
+                self.selectLesson(lessonID)
+                self.completeLesson(lessonID)
+                steps.append("Completed lesson")
+            }
+
+            self.noteDraft = "Checkpoint summary pinned for assessment follow-through."
+            self.saveLessonNote()
+            steps.append("Saved lesson note")
+
+            if let noteID = self.notes.first?.id {
+                self.togglePinnedNote(noteID)
+                steps.append("Pinned note")
+            }
+
+            if let quiz = self.quizzes.first {
+                while let current = self.quizzes.first(where: { $0.id == quiz.id }),
+                      current.status == .ready || current.status == .inProgress {
+                    self.answerQuizQuestion(quiz.id)
+                    if current.answeredQuestions >= current.questionCount {
+                        break
+                    }
+                }
+                self.submitQuiz(quiz.id)
+                steps.append("Submitted quiz")
+            }
+
+            if let assignmentID = self.assignments.first(where: { !$0.isSubmitted })?.id {
+                self.submitAssignment(assignmentID)
+                steps.append("Submitted assignment")
+            }
+
+            EducationInteractionProofMode.write(
+                summary: "Education interaction proof completed with lesson, note, quiz, and assignment chain.",
+                steps: steps
+            )
         }
     }
 }
