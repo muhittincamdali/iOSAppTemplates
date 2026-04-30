@@ -60,6 +60,7 @@ final class NewsBlogOperationsStore: ObservableObject {
     @Published var editorNote = "Morning desk is leaning into AI infrastructure, labor policy and platform trust."
     @Published var digestStatus = "Digest draft open"
     @Published var newsletterSubscribers = 148_000
+    @Published var digestFrozen = false
 
     init() {
         let leadStory = NewsBlogArticleRecord(title: "AI infrastructure spending reshapes the cloud leaderboard", section: "Business", author: "Ava Chen", readTime: "6 min", summary: "Capital allocation is moving from experiments to long-term GPU and energy bets across hyperscalers.", takeaways: ["Cloud margins are under short-term pressure.", "Enterprise buyers want multi-model contracts.", "Power procurement is now a newsroom headline."], isSaved: false, isPublished: true, isInDigest: true)
@@ -121,6 +122,13 @@ final class NewsBlogOperationsStore: ObservableObject {
         digestStatus = "Story published and ready for digest consideration"
     }
 
+    func sendLeadAlert() {
+        leadStory.isPublished = true
+        leadStory.isInDigest = true
+        digestStatus = "Lead alert sent and digest lead locked"
+        editorNote = "Homepage alert shipped; the desk now needs to freeze the digest around the lead package."
+    }
+
     func toggleDigestInclusion(_ article: NewsBlogArticleRecord) {
         if leadStory.id == article.id {
             leadStory.isInDigest.toggle()
@@ -135,13 +143,24 @@ final class NewsBlogOperationsStore: ObservableObject {
         digestItems[index].isIncluded.toggle()
     }
 
+    func freezeDigest() {
+        digestFrozen = true
+        digestStatus = "Digest frozen and waiting for final send"
+    }
+
     func publishDigest() {
+        digestFrozen = false
         digestStatus = "Digest locked and queued for \(newsletterSubscribers.formatted()) readers"
     }
 
     func resolveModeration(_ item: NewsBlogModerationItem) {
         guard let index = moderationQueue.firstIndex(where: { $0.id == item.id }) else { return }
         moderationQueue[index].status = .resolved
+    }
+
+    func archiveModeration(_ item: NewsBlogModerationItem) {
+        moderationQueue.removeAll { $0.id == item.id }
+        editorNote = "Resolved moderation item archived and the active queue tightened."
     }
 
     func escalateModeration(_ item: NewsBlogModerationItem) {
@@ -186,6 +205,10 @@ struct NewsBlogTodayView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 22))
 
                     NewsBlogArticleCard(article: store.leadStory, primaryLabel: "Lead Story", onSave: { store.toggleSave(store.leadStory) }, onPrimaryAction: nil, primaryButtonTitle: nil)
+                    Button("Send Lead Alert") {
+                        store.sendLeadAlert()
+                    }
+                    .buttonStyle(.borderedProminent)
 
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Trending Now")
@@ -249,6 +272,9 @@ struct NewsBlogSectionsView: View {
                                     Button("Escalate") { store.escalateModeration(item) }
                                         .buttonStyle(.bordered)
                                 }
+                            } else {
+                                Button("Archive") { store.archiveModeration(item) }
+                                    .buttonStyle(.bordered)
                             }
                         }
                         .padding(.vertical, 4)
@@ -302,6 +328,9 @@ struct NewsBlogDigestView: View {
             List {
                 Section("Digest Status") {
                     Text(store.digestStatus)
+                    Text(store.digestFrozen ? "Frozen for send" : "Still editable")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
 
                 Section("Digest Stories") {
@@ -334,6 +363,12 @@ struct NewsBlogDigestView: View {
                 }
 
                 Section {
+                    if !store.digestFrozen {
+                        Button("Freeze Digest") {
+                            store.freezeDigest()
+                        }
+                        .buttonStyle(.bordered)
+                    }
                     Button("Publish Digest") {
                         store.publishDigest()
                     }

@@ -126,6 +126,12 @@ final class MusicPodcastOperationsStore: ObservableObject {
         playbackHeadline = "\(episode.title) moved into the up-next stack."
     }
 
+    func playQueueItem(_ item: MusicPodcastQueueRecord) {
+        nowPlaying = item.episode
+        queue.removeAll { $0.id == item.id }
+        playbackHeadline = "\(item.episode.title) moved from queue into active playback."
+    }
+
     func moveQueueItemForward(_ item: MusicPodcastQueueRecord) {
         guard let index = queue.firstIndex(where: { $0.id == item.id }), index > 0 else { return }
         queue.swapAt(index, index - 1)
@@ -140,6 +146,31 @@ final class MusicPodcastOperationsStore: ObservableObject {
             downloads.remove(at: index)
         } else {
             downloads.insert(MusicPodcastDownloadRecord(title: episode.title, detail: "\(episode.showTitle) offline pack created.", size: "118 MB", status: .ready), at: 0)
+        }
+    }
+
+    func pinNowPlayingOffline() {
+        if let index = downloads.firstIndex(where: { $0.title == nowPlaying.title }) {
+            downloads[index].status = .pinned
+        } else {
+            downloads.insert(
+                MusicPodcastDownloadRecord(
+                    title: nowPlaying.title,
+                    detail: "\(nowPlaying.showTitle) pinned from the active listening session.",
+                    size: "118 MB",
+                    status: .pinned
+                ),
+                at: 0
+            )
+        }
+        playbackHeadline = "\(nowPlaying.title) is pinned for offline travel playback."
+    }
+
+    func completeNowPlaying() {
+        nowPlaying.progress = 1
+        playbackHeadline = "Completed \(nowPlaying.title) and prepared the next listening block."
+        if !continueListening.contains(where: { $0.id == nowPlaying.id }) {
+            continueListening.insert(nowPlaying, at: 0)
         }
     }
 
@@ -186,6 +217,21 @@ struct MusicPodcastLibraryView: View {
                             .font(.title3.weight(.bold))
                         ForEach(store.continueListening) { episode in
                             MusicPodcastEpisodeCard(episode: episode, onPlay: { store.playEpisode(episode) }, onLike: { store.toggleLike(episode) }, onAction: { store.advanceProgress(episode) }, actionTitle: "Advance 20%")
+                        }
+                    }
+
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Playback Controls")
+                            .font(.title3.weight(.bold))
+                        HStack {
+                            Button("Complete Episode") {
+                                store.completeNowPlaying()
+                            }
+                            .buttonStyle(.borderedProminent)
+                            Button("Pin Offline") {
+                                store.pinNowPlayingOffline()
+                            }
+                            .buttonStyle(.bordered)
                         }
                     }
 
@@ -239,7 +285,7 @@ struct MusicPodcastQueueView: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             HStack {
-                                Button("Play") { store.playEpisode(item.episode) }
+                                Button("Play Now") { store.playQueueItem(item) }
                                     .buttonStyle(.borderedProminent)
                                 Button("Move Up") { store.moveQueueItemForward(item) }
                                     .buttonStyle(.bordered)
