@@ -22,26 +22,26 @@ These pages exist to:
 
 | App | Lane | Today | Proof Surface |
 | --- | --- | --- | --- |
-| EcommerceApp | Commerce | Standalone Root + richer example + rebuilt runtime flow | [EcommerceApp.md](./EcommerceApp.md) |
-| SocialMediaApp | Social | Standalone Root + richer example + rebuilt runtime flow | [SocialMediaApp.md](./SocialMediaApp.md) |
-| FitnessApp | Health / Fitness | Standalone Root + richer example + rebuilt runtime flow | [FitnessApp.md](./FitnessApp.md) |
-| ProductivityApp | Productivity | Standalone Root + richer example + rebuilt runtime flow | [ProductivityApp.md](./ProductivityApp.md) |
-| FinanceApp | Finance | Standalone Root + richer example + rebuilt runtime flow | [FinanceApp.md](./FinanceApp.md) |
-| EducationApp | Education | Standalone Root + richer example + rebuilt runtime flow | [EducationApp.md](./EducationApp.md) |
-| FoodDeliveryApp | Food Delivery | Standalone Root + richer example + rebuilt runtime flow | [FoodDeliveryApp.md](./FoodDeliveryApp.md) |
-| TravelPlannerApp | Travel | Standalone Root + richer example + rebuilt runtime flow | [TravelPlannerApp.md](./TravelPlannerApp.md) |
-| AIAssistantApp | AI | Standalone Root + richer example + rebuilt runtime flow | [AIAssistantApp.md](./AIAssistantApp.md) |
-| NewsBlogApp | News | Standalone Root + richer example + rebuilt runtime flow | [NewsBlogApp.md](./NewsBlogApp.md) |
-| MusicPodcastApp | Music / Podcast | Standalone Root + richer example + rebuilt runtime flow | [MusicPodcastApp.md](./MusicPodcastApp.md) |
-| MarketplaceApp | Marketplace | Standalone Root + richer example + rebuilt runtime flow | [MarketplaceApp.md](./MarketplaceApp.md) |
-| MessagingApp | Messaging / Community | Standalone Root + richer example + rebuilt runtime flow | [MessagingApp.md](./MessagingApp.md) |
-| BookingReservationsApp | Booking / Reservations | Standalone Root + richer example + rebuilt runtime flow | [BookingReservationsApp.md](./BookingReservationsApp.md) |
-| NotesKnowledgeApp | Notes / Knowledge | Standalone Root + richer example + rebuilt runtime flow | [NotesKnowledgeApp.md](./NotesKnowledgeApp.md) |
-| CreatorShortVideoApp | Creator / Short Video | Standalone Root + richer example + rebuilt runtime flow | [CreatorShortVideoApp.md](./CreatorShortVideoApp.md) |
-| TeamCollaborationApp | Team Collaboration | Standalone Root + richer example + rebuilt runtime flow | [TeamCollaborationApp.md](./TeamCollaborationApp.md) |
-| CRMAdminApp | CRM / Admin | Standalone Root + richer example + rebuilt runtime flow | [CRMAdminApp.md](./CRMAdminApp.md) |
-| SubscriptionLifestyleApp | Subscription Lifestyle | Standalone Root + richer example + rebuilt runtime flow | [SubscriptionLifestyleApp.md](./SubscriptionLifestyleApp.md) |
-| PrivacyVaultApp | Privacy / Secure Vault | Standalone Root + richer example + rebuilt runtime flow | [PrivacyVaultApp.md](./PrivacyVaultApp.md) |
+| EcommerceApp | Commerce | Standalone Root + richer example + chained runtime flow | [EcommerceApp.md](./EcommerceApp.md) |
+| SocialMediaApp | Social | Standalone Root + richer example + chained runtime flow | [SocialMediaApp.md](./SocialMediaApp.md) |
+| FitnessApp | Health / Fitness | Standalone Root + richer example + chained runtime flow | [FitnessApp.md](./FitnessApp.md) |
+| ProductivityApp | Productivity | Standalone Root + richer example + chained runtime flow | [ProductivityApp.md](./ProductivityApp.md) |
+| FinanceApp | Finance | Standalone Root + richer example + chained runtime flow | [FinanceApp.md](./FinanceApp.md) |
+| EducationApp | Education | Standalone Root + richer example + chained runtime flow | [EducationApp.md](./EducationApp.md) |
+| FoodDeliveryApp | Food Delivery | Standalone Root + richer example + chained runtime flow | [FoodDeliveryApp.md](./FoodDeliveryApp.md) |
+| TravelPlannerApp | Travel | Standalone Root + richer example + chained runtime flow | [TravelPlannerApp.md](./TravelPlannerApp.md) |
+| AIAssistantApp | AI | Standalone Root + richer example + chained runtime flow | [AIAssistantApp.md](./AIAssistantApp.md) |
+| NewsBlogApp | News | Standalone Root + richer example + chained runtime flow | [NewsBlogApp.md](./NewsBlogApp.md) |
+| MusicPodcastApp | Music / Podcast | Standalone Root + richer example + chained runtime flow | [MusicPodcastApp.md](./MusicPodcastApp.md) |
+| MarketplaceApp | Marketplace | Standalone Root + richer example + chained runtime flow | [MarketplaceApp.md](./MarketplaceApp.md) |
+| MessagingApp | Messaging / Community | Standalone Root + richer example + chained runtime flow | [MessagingApp.md](./MessagingApp.md) |
+| BookingReservationsApp | Booking / Reservations | Standalone Root + richer example + chained runtime flow | [BookingReservationsApp.md](./BookingReservationsApp.md) |
+| NotesKnowledgeApp | Notes / Knowledge | Standalone Root + richer example + chained runtime flow | [NotesKnowledgeApp.md](./NotesKnowledgeApp.md) |
+| CreatorShortVideoApp | Creator / Short Video | Standalone Root + richer example + chained runtime flow | [CreatorShortVideoApp.md](./CreatorShortVideoApp.md) |
+| TeamCollaborationApp | Team Collaboration | Standalone Root + richer example + chained runtime flow | [TeamCollaborationApp.md](./TeamCollaborationApp.md) |
+| CRMAdminApp | CRM / Admin | Standalone Root + richer example + chained runtime flow | [CRMAdminApp.md](./CRMAdminApp.md) |
+| SubscriptionLifestyleApp | Subscription Lifestyle | Standalone Root + richer example + chained runtime flow | [SubscriptionLifestyleApp.md](./SubscriptionLifestyleApp.md) |
+| PrivacyVaultApp | Privacy / Secure Vault | Standalone Root + richer example + chained runtime flow | [PrivacyVaultApp.md](./PrivacyVaultApp.md) |
 
 ## Rule
 

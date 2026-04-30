@@ -1,10 +1,10 @@
 # iOSAppTemplates Project Status
 
-Last updated: 2026-04-27
+Last updated: 2026-04-30
 
 ## Repository Status
 
-`iOSAppTemplates` now carries `20` rebuilt standalone app roots with real runtime proof. The repo is no longer just a generic template collection, but it is still short of full multi-step interaction proof parity across every lane.
+`iOSAppTemplates` now carries `20` rebuilt standalone app roots with real runtime proof and chained consequence flows. The repo is no longer just a generic template collection, but it is still short of fully automated multi-step interaction proof parity across every lane.
 
 ## What Is True Right Now
 
@@ -19,6 +19,7 @@ Last updated: 2026-04-27
 - a published runtime screenshot
 - a published runtime demo clip
 - published launch-to-ready scenario frames
+- chained runtime consequence flows across the tracked `20` standalone roots
 - rebuilt runtime flows for the tracked `20` standalone roots
 - canonical runtime scenario pages
 - local generic iOS `xcodebuild` proof is tracked for the standalone roots
@@ -39,7 +40,7 @@ Last updated: 2026-04-27
 2. keep GitHub metadata and release surfaces aligned with the versioned policy
 3. keep generated docs aligned with rebuilt runtime flows
 4. keep launch-proof, screenshot-proof, and demo-proof surfaces in sync with real runtime behavior
-5. deepen interaction proof beyond the current launch / ready / first-screen scenario set
+5. deepen automated interaction proof beyond the current screenshot / clip / scenario asset set
 
 ## Active Priorities
 
@@ -51,4 +52,4 @@ Last updated: 2026-04-27
 
 ## Status Summary
 
-The repo has crossed from starter collection into a tracked runtime-tested portfolio system. The next quality jump is not more naming or more promises; it is stable hosted standalone iOS proof, deeper multi-step interaction proof, and tighter public distribution discipline.
+The repo has crossed from starter collection into a tracked runtime-tested portfolio system. The next quality jump is not more naming or more promises; it is stable hosted standalone iOS proof, automated multi-step interaction proof, and tighter public distribution discipline.

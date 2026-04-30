@@ -6,7 +6,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Today
 
-- Label: `Standalone Root + richer example + rebuilt runtime flow`
+- Label: `Standalone Root + richer example + chained runtime flow`
 - Lane: `Notes / Knowledge`
 - Entry: `Package.swift`
 - Product target: `Notes / Knowledge Base`

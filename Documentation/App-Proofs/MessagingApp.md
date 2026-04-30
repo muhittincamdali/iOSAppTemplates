@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Messaging / Community`
-- Label today: `Standalone Root + richer example + rebuilt runtime flow`
+- Label today: `Standalone Root + richer example + chained runtime flow`
 - Entry path: `Templates/MessagingApp/Package.swift`
 - Extra route: `Examples/MessagingExample`
 - Product target: `Messaging / Community`

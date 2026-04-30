@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `CRM / Admin`
-- Label today: `Standalone Root + richer example + rebuilt runtime flow`
+- Label today: `Standalone Root + richer example + chained runtime flow`
 - Entry path: `Templates/CRMAdminApp/Package.swift`
 - Extra route: `Examples/CRMAdminExample`
 - Product target: `CRM / Admin Companion`

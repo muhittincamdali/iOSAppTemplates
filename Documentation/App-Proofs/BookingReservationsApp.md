@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Booking / Reservations`
-- Label today: `Standalone Root + richer example + rebuilt runtime flow`
+- Label today: `Standalone Root + richer example + chained runtime flow`
 - Entry path: `Templates/BookingReservationsApp/Package.swift`
 - Extra route: `Examples/BookingReservationsExample`
 - Product target: `Booking & Reservations`

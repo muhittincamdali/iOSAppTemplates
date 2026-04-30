@@ -3,7 +3,7 @@
     "app": "EcommerceApp",
     "lane": "Commerce",
     "product_target": "E-Commerce Store",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/EcommerceApp/Package.swift",
     "readme_path": "Templates/EcommerceApp/README.md",
     "example_path": "Examples/EcommerceExample/README.md",
@@ -19,10 +19,10 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "auth shell",
+      "auth flow",
       "catalog and featured-product surface",
       "cart flow",
-      "checkout shell",
+      "checkout flow",
       "order domain surface"
     ],
     "capture_targets": [
@@ -35,7 +35,7 @@
     "app": "SocialMediaApp",
     "lane": "Social",
     "product_target": "Social Media",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/SocialMediaApp/Package.swift",
     "readme_path": "Templates/SocialMediaApp/README.md",
     "example_path": "Examples/SocialMediaExample/README.md",
@@ -51,9 +51,9 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "auth shell",
+      "auth flow",
       "profile model surface",
-      "feed and community shell",
+      "feed and community flow",
       "notification manager surface",
       "richer social example route"
     ],
@@ -67,7 +67,7 @@
     "app": "FitnessApp",
     "lane": "Health / Fitness",
     "product_target": "Health / Fitness",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/FitnessApp/Package.swift",
     "readme_path": "Templates/FitnessApp/README.md",
     "example_path": "Examples/FitnessExample/README.md",
@@ -82,10 +82,10 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "dashboard shell",
+      "dashboard flow",
       "goal and workout surface",
       "health metric cards",
-      "progress summary shell",
+      "progress summary flow",
       "starter health domain model"
     ],
     "capture_targets": [
@@ -98,7 +98,7 @@
     "app": "ProductivityApp",
     "lane": "Productivity",
     "product_target": "Productivity / Tasks",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/ProductivityApp/Package.swift",
     "readme_path": "Templates/ProductivityApp/README.md",
     "example_path": "Examples/ProductivityExample/README.md",
@@ -130,7 +130,7 @@
     "app": "FinanceApp",
     "lane": "Finance",
     "product_target": "Finance / Budgeting",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/FinanceApp/Package.swift",
     "readme_path": "Templates/FinanceApp/README.md",
     "example_path": "Examples/FinanceExample/README.md",
@@ -146,7 +146,7 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "account summary shell",
+      "account summary flow",
       "transaction overview",
       "budget category surface",
       "spending insight cards",
@@ -162,7 +162,7 @@
     "app": "EducationApp",
     "lane": "Education",
     "product_target": "Education / Learning",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/EducationApp/Package.swift",
     "readme_path": "Templates/EducationApp/README.md",
     "example_path": "Examples/EducationExample/README.md",
@@ -178,7 +178,7 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "course overview shell",
+      "course overview flow",
       "lesson routing",
       "assignment and quiz models",
       "study-session summary",
@@ -194,7 +194,7 @@
     "app": "FoodDeliveryApp",
     "lane": "Food Delivery",
     "product_target": "Food Delivery",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/FoodDeliveryApp/Package.swift",
     "readme_path": "Templates/FoodDeliveryApp/README.md",
     "example_path": "Examples/FoodDeliveryExample/README.md",
@@ -210,10 +210,10 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "restaurant discovery shell",
+      "restaurant discovery flow",
       "menu and item cards",
       "cart flow",
-      "order tracking shell",
+      "order tracking flow",
       "starter delivery domain model"
     ],
     "capture_targets": [
@@ -226,7 +226,7 @@
     "app": "TravelPlannerApp",
     "lane": "Travel",
     "product_target": "Travel Planner",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/TravelPlannerApp/Package.swift",
     "readme_path": "Templates/TravelPlannerApp/README.md",
     "example_path": "Examples/TravelPlannerExample/README.md",
@@ -242,7 +242,7 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "trip overview shell",
+      "trip overview flow",
       "itinerary cards",
       "destination highlights",
       "booking-adjacent planning surface",
@@ -258,7 +258,7 @@
     "app": "AIAssistantApp",
     "lane": "AI",
     "product_target": "AI Assistant",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/AIAssistantApp/Package.swift",
     "readme_path": "Templates/AIAssistantApp/README.md",
     "example_path": "Examples/AIAssistantExample/README.md",
@@ -274,7 +274,7 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "conversation shell",
+      "conversation flow",
       "prompt and response surface",
       "assistant suggestion cards",
       "starter tool action surface",
@@ -290,7 +290,7 @@
     "app": "NewsBlogApp",
     "lane": "News",
     "product_target": "News / Editorial",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/NewsBlogApp/Package.swift",
     "readme_path": "Templates/NewsBlogApp/README.md",
     "example_path": "Examples/NewsBlogExample/README.md",
@@ -306,10 +306,10 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "headline list shell",
+      "headline list flow",
       "article detail surface",
       "category routing",
-      "saved or trending content shell",
+      "saved or trending content flow",
       "starter editorial model"
     ],
     "capture_targets": [
@@ -322,7 +322,7 @@
     "app": "MusicPodcastApp",
     "lane": "Music / Podcast",
     "product_target": "Music / Podcast",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/MusicPodcastApp/Package.swift",
     "readme_path": "Templates/MusicPodcastApp/README.md",
     "example_path": "Examples/MusicPodcastExample/README.md",
@@ -338,7 +338,7 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "library shell",
+      "library flow",
       "player surface",
       "episode or track cards",
       "queue starter flow",
@@ -354,7 +354,7 @@
     "app": "MarketplaceApp",
     "lane": "Marketplace",
     "product_target": "Marketplace",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/MarketplaceApp/Package.swift",
     "readme_path": "Templates/MarketplaceApp/README.md",
     "example_path": "Examples/MarketplaceExample/README.md",
@@ -370,7 +370,7 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "listing discovery shell",
+      "listing discovery flow",
       "seller highlight cards",
       "product detail starter flow",
       "saved or cart-adjacent surface",
@@ -386,7 +386,7 @@
     "app": "MessagingApp",
     "lane": "Messaging / Community",
     "product_target": "Messaging / Community",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/MessagingApp/Package.swift",
     "readme_path": "Templates/MessagingApp/README.md",
     "example_path": "Examples/MessagingExample/README.md",
@@ -402,7 +402,7 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "conversation list shell",
+      "conversation list flow",
       "chat thread surface",
       "contact or member routing",
       "composer starter flow",
@@ -418,7 +418,7 @@
     "app": "BookingReservationsApp",
     "lane": "Booking / Reservations",
     "product_target": "Booking & Reservations",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/BookingReservationsApp/Package.swift",
     "readme_path": "Templates/BookingReservationsApp/README.md",
     "example_path": "Examples/BookingReservationsExample/README.md",
@@ -434,7 +434,7 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "availability shell",
+      "availability flow",
       "reservation detail surface",
       "calendar or timeslot routing",
       "confirmation starter flow",
@@ -450,7 +450,7 @@
     "app": "NotesKnowledgeApp",
     "lane": "Notes / Knowledge",
     "product_target": "Notes / Knowledge Base",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/NotesKnowledgeApp/Package.swift",
     "readme_path": "Templates/NotesKnowledgeApp/README.md",
     "example_path": "Examples/NotesKnowledgeExample/README.md",
@@ -466,7 +466,7 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "notes list shell",
+      "notes list flow",
       "note detail surface",
       "tag or workspace routing",
       "search starter flow",
@@ -482,7 +482,7 @@
     "app": "CreatorShortVideoApp",
     "lane": "Creator / Short Video",
     "product_target": "Creator / Short Video",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/CreatorShortVideoApp/Package.swift",
     "readme_path": "Templates/CreatorShortVideoApp/README.md",
     "example_path": "Examples/CreatorShortVideoExample/README.md",
@@ -498,10 +498,10 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "creator feed shell",
+      "creator feed flow",
       "clip card surface",
       "engagement starter routing",
-      "publish or upload shell",
+      "publish or upload flow",
       "creator starter domain model"
     ],
     "capture_targets": [
@@ -514,7 +514,7 @@
     "app": "TeamCollaborationApp",
     "lane": "Team Collaboration",
     "product_target": "Team Collaboration",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/TeamCollaborationApp/Package.swift",
     "readme_path": "Templates/TeamCollaborationApp/README.md",
     "example_path": "Examples/TeamCollaborationExample/README.md",
@@ -530,7 +530,7 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "workspace shell",
+      "workspace flow",
       "team activity surface",
       "project board starter flow",
       "member cards",
@@ -546,7 +546,7 @@
     "app": "CRMAdminApp",
     "lane": "CRM / Admin",
     "product_target": "CRM / Admin Companion",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/CRMAdminApp/Package.swift",
     "readme_path": "Templates/CRMAdminApp/README.md",
     "example_path": "Examples/CRMAdminExample/README.md",
@@ -562,7 +562,7 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "admin dashboard shell",
+      "admin dashboard flow",
       "lead or client list surface",
       "pipeline starter cards",
       "operations summary",
@@ -578,7 +578,7 @@
     "app": "SubscriptionLifestyleApp",
     "lane": "Subscription Lifestyle",
     "product_target": "Subscription Lifestyle / Habit Tracker",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/SubscriptionLifestyleApp/Package.swift",
     "readme_path": "Templates/SubscriptionLifestyleApp/README.md",
     "example_path": "Examples/SubscriptionLifestyleExample/README.md",
@@ -594,7 +594,7 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "habit dashboard shell",
+      "habit dashboard flow",
       "streak and progress surface",
       "premium plan starter cards",
       "routine detail routing",
@@ -610,7 +610,7 @@
     "app": "PrivacyVaultApp",
     "lane": "Privacy / Secure Vault",
     "product_target": "Privacy / Secure Vault",
-    "label_today": "Standalone Root + richer example surface",
+    "label_today": "Standalone Root + richer example + chained runtime flow",
     "entry_path": "Templates/PrivacyVaultApp/Package.swift",
     "readme_path": "Templates/PrivacyVaultApp/README.md",
     "example_path": "Examples/PrivacyVaultExample/README.md",
@@ -626,10 +626,10 @@
       "teams that assume the hosted standalone iOS workflow is already green for this app pack"
     ],
     "product_shape": [
-      "vault overview shell",
+      "vault overview flow",
       "secure item list surface",
       "detail and reveal starter flow",
-      "privacy settings shell",
+      "privacy settings flow",
       "secure-vault starter model"
     ],
     "capture_targets": [

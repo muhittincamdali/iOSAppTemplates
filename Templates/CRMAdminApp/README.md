@@ -6,7 +6,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Today
 
-- Label: `Standalone Root + richer example + rebuilt runtime flow`
+- Label: `Standalone Root + richer example + chained runtime flow`
 - Lane: `CRM / Admin`
 - Entry: `Package.swift`
 - Product target: `CRM / Admin Companion`
