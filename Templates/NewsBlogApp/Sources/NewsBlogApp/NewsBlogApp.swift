@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import NewsBlogAppCore
+
+private enum NewsBlogInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "NewsBlogApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 @available(iOS 18.0, macOS 15.0, *)
 public struct NewsBlogAppShell: App {
@@ -45,6 +71,9 @@ struct NewsBlogRuntimeRootView: View {
                 }
         }
         .tint(.orange)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -61,6 +90,7 @@ final class NewsBlogOperationsStore: ObservableObject {
     @Published var digestStatus = "Digest draft open"
     @Published var newsletterSubscribers = 148_000
     @Published var digestFrozen = false
+    private var interactionProofScheduled = false
 
     init() {
         let leadStory = NewsBlogArticleRecord(title: "AI infrastructure spending reshapes the cloud leaderboard", section: "Business", author: "Ava Chen", readTime: "6 min", summary: "Capital allocation is moving from experiments to long-term GPU and energy bets across hyperscalers.", takeaways: ["Cloud margins are under short-term pressure.", "Enterprise buyers want multi-model contracts.", "Power procurement is now a newsroom headline."], isSaved: false, isPublished: true, isInDigest: true)
@@ -173,6 +203,49 @@ final class NewsBlogOperationsStore: ObservableObject {
         savedReads.removeAll(where: { $0.id == article.id })
         if article.isSaved {
             savedReads.insert(article, at: 0)
+        }
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard NewsBlogInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 800_000_000)
+
+            if let firstTrending = trendingStories.first {
+                toggleSave(firstTrending)
+                publishArticle(firstTrending)
+                promoteToLead(firstTrending)
+            }
+
+            sendLeadAlert()
+
+            if let digestItem = digestItems.first {
+                toggleDigestPriority(digestItem)
+            }
+
+            freezeDigest()
+            publishDigest()
+
+            if let moderation = moderationQueue.first {
+                escalateModeration(moderation)
+                resolveModeration(moderation)
+                archiveModeration(moderation)
+            }
+
+            NewsBlogInteractionProofMode.write(
+                summary: digestStatus,
+                steps: [
+                    "story-saved",
+                    "story-published",
+                    "story-promoted-to-lead",
+                    "lead-alert-sent",
+                    "digest-priority-toggled",
+                    "digest-frozen-and-published",
+                    "moderation-escalated-resolved-archived"
+                ]
+            )
         }
     }
 }

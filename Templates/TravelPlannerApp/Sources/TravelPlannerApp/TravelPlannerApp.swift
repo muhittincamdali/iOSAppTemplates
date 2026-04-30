@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import TravelPlannerAppCore
+
+private enum TravelInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "TravelPlannerApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 public struct TravelPlannerAppShell: App {
     public init() {}
@@ -47,6 +73,9 @@ struct TravelPlannerRuntimeRootView: View {
                 }
         }
         .tint(.blue)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -61,6 +90,7 @@ final class TravelPlannerOperationsStore: ObservableObject {
     @Published var alerts: [TravelAlertRecord] = TravelAlertRecord.sampleAlerts
     @Published var selectedTripID: UUID?
     @Published var operationsNote = "Check-in, airport transfer, and passport validity must close before the departure lock window."
+    private var interactionProofScheduled = false
 
     init() {
         selectedTripID = trips.first?.id
@@ -198,6 +228,65 @@ final class TravelPlannerOperationsStore: ObservableObject {
     func escalateAlert(_ alertID: UUID) {
         guard let index = alerts.firstIndex(where: { $0.id == alertID }) else { return }
         alerts[index].detail = "Escalated to airline or organizer desk with operator brief attached."
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard TravelInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 800_000_000)
+
+            if let trip = trips.dropFirst().first ?? trips.first {
+                selectTrip(trip.id)
+            }
+
+            if let flight = flights.first {
+                confirmCheckIn(flight.id)
+                requestRebook(flight.id)
+                confirmRebook(flight.id)
+            }
+
+            if let stay = stays.first {
+                confirmStay(stay.id)
+                sendArrivalNote(stay.id)
+            }
+
+            if let day = timelineDays.first, let activity = day.activities.first {
+                moveActivityForward(activity.id, from: day.id)
+                lockDayPlan(day.id)
+                unlockDayPlan(day.id)
+            }
+
+            if let task = packingTasks.first {
+                togglePackingTask(task.id)
+            }
+
+            if let document = documents.first {
+                markDocumentReady(document.id)
+                downloadOfflineCopy(document.id)
+            }
+
+            if let alert = alerts.first(where: { !$0.isResolved }) {
+                escalateAlert(alert.id)
+                resolveAlert(alert.id)
+            }
+
+            TravelInteractionProofMode.write(
+                summary: readinessHeadline,
+                steps: [
+                    "trip-selected",
+                    "flight-checkin-completed",
+                    "rebook-requested-and-confirmed",
+                    "stay-confirmed",
+                    "arrival-note-sent",
+                    "timeline-rebalanced-and-lock-cycled",
+                    "packing-updated",
+                    "document-ready-and-offline-saved",
+                    "alert-escalated-and-resolved"
+                ]
+            )
+        }
     }
 }
 

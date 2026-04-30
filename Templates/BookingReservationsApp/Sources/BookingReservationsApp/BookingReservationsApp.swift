@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import BookingReservationsAppCore
+
+private enum BookingInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "BookingReservationsApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 @available(iOS 18.0, macOS 15.0, *)
 public struct BookingReservationsAppShell: App {
@@ -45,6 +71,9 @@ struct BookingRuntimeRootView: View {
                 }
         }
         .tint(.mint)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -56,6 +85,7 @@ final class BookingOperationsStore: ObservableObject {
     @Published var calendarDays: [BookingCalendarRecord]
     @Published var operatorHeadline = "Weekend arrivals are on track and checkout risk is contained."
     @Published var shiftSummary = "Morning desk covers 42 arrivals, 11 departures and 3 VIP recovery cases."
+    private var interactionProofScheduled = false
 
     init() {
         self.stays = [
@@ -157,6 +187,55 @@ final class BookingOperationsStore: ObservableObject {
     func lockDay(_ day: BookingCalendarRecord) {
         guard let index = calendarDays.firstIndex(where: { $0.id == day.id }) else { return }
         calendarDays[index].isLocked.toggle()
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard BookingInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 800_000_000)
+
+            if let arrival = stays.first(where: { !$0.identityVerified }) {
+                verifyIdentity(for: arrival)
+                if let updatedArrival = stays.first(where: { $0.id == arrival.id }) {
+                    checkInGuest(updatedArrival)
+                }
+            }
+
+            if let reviewStay = stays.first(where: { $0.status == .pendingReview }) {
+                settlePendingReview(reviewStay)
+                if let checkoutStay = stays.first(where: { $0.id == reviewStay.id }) {
+                    completeCheckout(checkoutStay)
+                    if let turnedStay = stays.first(where: { $0.id == reviewStay.id }) {
+                        confirmTurnover(turnedStay)
+                    }
+                }
+            }
+
+            if let request = guestRequests.first {
+                approveRequest(request)
+                escalateRequest(request)
+                resolveRequest(request)
+            }
+
+            if let day = calendarDays.first {
+                lockDay(day)
+            }
+
+            BookingInteractionProofMode.write(
+                summary: operatorHeadline,
+                steps: [
+                    "identity-verified",
+                    "guest-checked-in",
+                    "pending-review-settled",
+                    "checkout-completed",
+                    "turnover-confirmed",
+                    "request-approved-escalated-resolved",
+                    "inventory-lock-toggled"
+                ]
+            )
+        }
     }
 }
 

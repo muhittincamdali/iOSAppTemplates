@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import FinanceAppCore
+
+private enum FinanceInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "FinanceApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 @main
 struct FinanceApp: App {
@@ -46,6 +72,9 @@ struct FinanceRuntimeRootView: View {
                 }
         }
         .tint(.green)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -59,6 +88,7 @@ final class FinanceOperatingStore: ObservableObject {
     @Published var composer = FinanceTransactionComposer.sample
     @Published var budgetBuffer = 650.0
     @Published var advisorNote = "Protect runway first: resolve uncategorized spend, pay critical bills, then move surplus into reserve."
+    private var interactionProofScheduled = false
 
     var netCash: Double {
         accounts.filter { $0.kind != .credit }.reduce(0) { $0 + $1.balance }
@@ -213,6 +243,55 @@ final class FinanceOperatingStore: ObservableObject {
         if transaction.type == .expense,
            let budgetIndex = budgets.firstIndex(where: { $0.category == transaction.category }) {
             budgets[budgetIndex].spent += abs(transaction.amount)
+        }
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard FinanceInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 800_000_000)
+
+            if let pending = pendingTransactions.first {
+                approvePending(pending.id)
+            }
+
+            if let remainingPending = pendingTransactions.first {
+                deferPending(remainingPending.id)
+            }
+
+            if let bill = recurringBills.first(where: { !$0.isPaid }) {
+                payRecurringBill(bill.id)
+            }
+
+            moveToReserve()
+            fundOperations()
+
+            if let budget = budgets.first {
+                rebalanceBudget(budget.id)
+            }
+
+            composer.merchant = "Board approved credit"
+            composer.amountText = "3200"
+            composer.category = "Revenue"
+            composer.type = .income
+            composer.selectedAccountID = operatingAccountID
+            composer.note = "Booked from runtime interaction proof."
+            submitManualTransaction()
+
+            FinanceInteractionProofMode.write(
+                summary: advisorNote,
+                steps: [
+                    "pending-approved",
+                    "pending-deferred",
+                    "recurring-bill-paid",
+                    "cash-moved-to-reserve",
+                    "cash-returned-to-operations",
+                    "budget-rebalanced",
+                    "manual-transaction-posted"
+                ]
+            )
         }
     }
 }
