@@ -13,8 +13,12 @@ default_apps=(
   "EcommerceApp"
   "SocialMediaApp"
   "ProductivityApp"
+  "FinanceApp"
+  "TravelPlannerApp"
   "AIAssistantApp"
+  "NewsBlogApp"
   "MarketplaceApp"
+  "BookingReservationsApp"
   "TeamCollaborationApp"
 )
 

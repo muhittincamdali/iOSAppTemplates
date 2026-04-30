@@ -7,7 +7,7 @@ grep -Fq "validate-runtime-app-interactions.sh" README.md || { echo "README miss
 grep -Fq "validate-runtime-app-interactions.sh" PROJECT_STATUS.md || { echo "PROJECT_STATUS missing automated interaction validator link" >&2; exit 1; }
 grep -Fq "validate-runtime-app-interactions.sh" Documentation/Proof-Matrix.md || { echo "Proof matrix missing automated interaction validator link" >&2; exit 1; }
 
-for app in EcommerceApp SocialMediaApp ProductivityApp AIAssistantApp MarketplaceApp TeamCollaborationApp; do
+for app in EcommerceApp SocialMediaApp ProductivityApp FinanceApp TravelPlannerApp AIAssistantApp NewsBlogApp MarketplaceApp BookingReservationsApp TeamCollaborationApp; do
   grep -Fq "$app" README.md || { echo "README missing $app automated interaction truth" >&2; exit 1; }
   grep -Fq "$app" PROJECT_STATUS.md || { echo "PROJECT_STATUS missing $app automated interaction truth" >&2; exit 1; }
   grep -Fq "$app" Documentation/Proof-Matrix.md || { echo "Proof matrix missing $app automated interaction truth" >&2; exit 1; }
