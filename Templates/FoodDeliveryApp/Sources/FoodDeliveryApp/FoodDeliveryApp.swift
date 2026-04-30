@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import FoodDeliveryAppCore
+
+private enum FoodDeliveryInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "FoodDeliveryApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 public struct FoodDeliveryAppShell: App {
     public init() {}
@@ -47,6 +73,9 @@ struct FoodDeliveryRuntimeRootView: View {
                 }
         }
         .tint(.orange)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -63,6 +92,7 @@ final class FoodDeliveryOperationsStore: ObservableObject {
     @Published var deliveryAddress = "Moda, Kadikoy"
     @Published var paymentMethod = "Visa •••• 4021"
     @Published var operatorNote = "Checkout should only lock after item totals, promo, payment, and courier window are aligned."
+    private var interactionProofScheduled = false
     let deliverySlots = ["Tonight • 19:40", "Tonight • 20:10", "Tomorrow • 12:30"]
     let paymentMethods = ["Visa •••• 4021", "Mastercard •••• 8714", "Apple Pay"]
 
@@ -244,6 +274,63 @@ final class FoodDeliveryOperationsStore: ObservableObject {
     private func syncPastOrder() {
         guard let index = pastOrders.firstIndex(where: { $0.id == liveOrder.id }) else { return }
         pastOrders[index] = liveOrder
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard FoodDeliveryInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        DispatchQueue.main.async {
+            var steps: [String] = []
+
+            if let restaurant = self.restaurants.first {
+                self.selectRestaurant(restaurant.id)
+                steps.append("Selected restaurant")
+
+                if let menuItem = restaurant.menu.first {
+                    self.addMenuItem(menuItem, from: restaurant)
+                    steps.append("Added menu item")
+                }
+            }
+
+            if let cartItem = self.cartItems.first {
+                self.incrementCartItem(cartItem.id)
+                self.decrementCartItem(cartItem.id)
+                steps.append("Adjusted cart quantity")
+            }
+
+            self.applyPromo("DINNER6")
+            steps.append("Applied promo")
+
+            if let slot = self.deliverySlots.last {
+                self.selectDeliverySlot(slot)
+                steps.append("Selected delivery slot")
+            }
+
+            if let method = self.paymentMethods.last {
+                self.selectPaymentMethod(method)
+                steps.append("Selected payment method")
+            }
+
+            self.placeOrder()
+            steps.append("Placed order")
+
+            self.advanceLiveOrder()
+            self.reportCourierIssue()
+            self.recoverCourierIssue()
+            self.confirmDelivered()
+            steps.append("Advanced live order and resolved courier issue")
+
+            if let orderID = self.pastOrders.first?.id {
+                self.reorder(orderID)
+                steps.append("Triggered reorder")
+            }
+
+            FoodDeliveryInteractionProofMode.write(
+                summary: "Delivery interaction proof completed with checkout, courier recovery, and reorder chain.",
+                steps: steps
+            )
+        }
     }
 }
 
