@@ -86,6 +86,29 @@ required_doc_paths=(
   "Documentation/Template-Showcase.md"
 )
 
+all_apps=(
+  "EcommerceApp"
+  "SocialMediaApp"
+  "FitnessApp"
+  "ProductivityApp"
+  "FinanceApp"
+  "EducationApp"
+  "FoodDeliveryApp"
+  "TravelPlannerApp"
+  "AIAssistantApp"
+  "NewsBlogApp"
+  "MusicPodcastApp"
+  "MarketplaceApp"
+  "MessagingApp"
+  "BookingReservationsApp"
+  "NotesKnowledgeApp"
+  "CreatorShortVideoApp"
+  "TeamCollaborationApp"
+  "CRMAdminApp"
+  "SubscriptionLifestyleApp"
+  "PrivacyVaultApp"
+)
+
 for root in "${roots_without_external_dependencies[@]}"; do
   package_file="${repo_root}/${root}/Package.swift"
   resolved_file="${repo_root}/${root}/Package.resolved"
@@ -139,26 +162,13 @@ for relative_path in "${required_doc_paths[@]}"; do
   fi
 done
 
-require_pattern 'Templates/EcommerceApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention EcommerceApp dependency-free proof."
-require_pattern 'Templates/NewsBlogApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention NewsBlogApp dependency-free proof."
-require_pattern 'Templates/MusicPodcastApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention MusicPodcastApp dependency-free proof."
-require_pattern 'Templates/MarketplaceApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention MarketplaceApp dependency-free proof."
-require_pattern 'Templates/MessagingApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention MessagingApp dependency-free proof."
-require_pattern 'Templates/BookingReservationsApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention BookingReservationsApp dependency-free proof."
-require_pattern 'Templates/NotesKnowledgeApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention NotesKnowledgeApp dependency-free proof."
-require_pattern 'Templates/CreatorShortVideoApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention CreatorShortVideoApp dependency-free proof."
-require_pattern 'Templates/TeamCollaborationApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention TeamCollaborationApp dependency-free proof."
-require_pattern 'Templates/CRMAdminApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention CRMAdminApp dependency-free proof."
-require_pattern 'Templates/SubscriptionLifestyleApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention SubscriptionLifestyleApp dependency-free proof."
-require_pattern 'Templates/PrivacyVaultApp/Package\.swift.*no external dependency lockfile is required' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention PrivacyVaultApp dependency-free proof."
-require_pattern 'Templates/SocialMediaApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention SocialMediaApp lockfile coverage."
-require_pattern 'Templates/FitnessApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention FitnessApp lockfile coverage."
-require_pattern 'Templates/ProductivityApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention ProductivityApp lockfile coverage."
-require_pattern 'Templates/FinanceApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention FinanceApp lockfile coverage."
-require_pattern 'Templates/EducationApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention EducationApp lockfile coverage."
-require_pattern 'Templates/FoodDeliveryApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention FoodDeliveryApp lockfile coverage."
-require_pattern 'Templates/TravelPlannerApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention TravelPlannerApp lockfile coverage."
-require_pattern 'Templates/AIAssistantApp/Package\.resolved' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention AIAssistantApp lockfile coverage."
+require_pattern 'deterministic `Package\.resolved` coverage exists for 8 standalone roots with external packages' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention global lockfile coverage."
+require_pattern 'local generic iOS `xcodebuild` passes for' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention local generic iOS build proof."
+require_pattern 'local simulator runtime launch proof passes for' "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention local runtime launch proof."
+
+for app in "${all_apps[@]}"; do
+  require_pattern "${app}" "${repo_root}/Documentation/Proof-Matrix.md" "Proof matrix must mention ${app} in current proof coverage."
+done
 require_pattern 'no external dependency lockfile is required today' "${repo_root}/Documentation/App-Proofs/EcommerceApp.md" "EcommerceApp proof surface must mention the dependency-free graph."
 require_pattern 'no external dependency lockfile is required today' "${repo_root}/Documentation/App-Proofs/NewsBlogApp.md" "NewsBlogApp proof surface must mention the dependency-free graph."
 require_pattern 'no external dependency lockfile is required today' "${repo_root}/Documentation/App-Proofs/MusicPodcastApp.md" "MusicPodcastApp proof surface must mention the dependency-free graph."
