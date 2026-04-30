@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Team Collaboration`
-- Label today: `Standalone Root + richer example + rebuilt runtime flow`
+- Label today: `Standalone Root + richer example + chained runtime flow`
 - Entry path: `Templates/TeamCollaborationApp/Package.swift`
 - Extra route: `Examples/TeamCollaborationExample`
 - Product target: `Team Collaboration`

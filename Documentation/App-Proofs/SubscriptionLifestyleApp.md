@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Subscription Lifestyle`
-- Label today: `Standalone Root + richer example + rebuilt runtime flow`
+- Label today: `Standalone Root + richer example + chained runtime flow`
 - Entry path: `Templates/SubscriptionLifestyleApp/Package.swift`
 - Extra route: `Examples/SubscriptionLifestyleExample`
 - Product target: `Subscription Lifestyle / Habit Tracker`

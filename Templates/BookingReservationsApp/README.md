@@ -6,7 +6,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 
 ## Today
 
-- Label: `Standalone Root + richer example + rebuilt runtime flow`
+- Label: `Standalone Root + richer example + chained runtime flow`
 - Lane: `Booking / Reservations`
 - Entry: `Package.swift`
 - Product target: `Booking & Reservations`

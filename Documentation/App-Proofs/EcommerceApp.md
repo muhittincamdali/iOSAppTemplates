@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Commerce`
-- Label today: `Standalone Root + richer example + rebuilt runtime flow`
+- Label today: `Standalone Root + richer example + chained runtime flow`
 - Entry path: `Templates/EcommerceApp/Package.swift`
 - Extra route: `Examples/EcommerceExample`
 - Product target: `E-Commerce Store`

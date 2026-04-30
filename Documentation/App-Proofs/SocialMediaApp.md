@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Social`
-- Label today: `Standalone Root + richer example + rebuilt runtime flow`
+- Label today: `Standalone Root + richer example + chained runtime flow`
 - Entry path: `Templates/SocialMediaApp/Package.swift`
 - Extra route: `Examples/SocialMediaExample`
 - Product target: `Social Media`

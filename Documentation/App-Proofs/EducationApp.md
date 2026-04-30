@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Education`
-- Label today: `Standalone Root + richer example + rebuilt runtime flow`
+- Label today: `Standalone Root + richer example + chained runtime flow`
 - Entry path: `Templates/EducationApp/Package.swift`
 - Extra route: `Examples/EducationExample`
 - Product target: `Education / Learning`

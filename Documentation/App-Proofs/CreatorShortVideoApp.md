@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Creator / Short Video`
-- Label today: `Standalone Root + richer example + rebuilt runtime flow`
+- Label today: `Standalone Root + richer example + chained runtime flow`
 - Entry path: `Templates/CreatorShortVideoApp/Package.swift`
 - Extra route: `Examples/CreatorShortVideoExample`
 - Product target: `Creator / Short Video`

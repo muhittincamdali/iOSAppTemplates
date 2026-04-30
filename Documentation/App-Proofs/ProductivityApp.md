@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Productivity`
-- Label today: `Standalone Root + richer example + rebuilt runtime flow`
+- Label today: `Standalone Root + richer example + chained runtime flow`
 - Entry path: `Templates/ProductivityApp/Package.swift`
 - Extra route: `Examples/ProductivityExample`
 - Product target: `Productivity / Tasks`

@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Music / Podcast`
-- Label today: `Standalone Root + richer example + rebuilt runtime flow`
+- Label today: `Standalone Root + richer example + chained runtime flow`
 - Entry path: `Templates/MusicPodcastApp/Package.swift`
 - Extra route: `Examples/MusicPodcastExample`
 - Product target: `Music / Podcast`

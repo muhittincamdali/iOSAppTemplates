@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Marketplace`
-- Label today: `Standalone Root + richer example + rebuilt runtime flow`
+- Label today: `Standalone Root + richer example + chained runtime flow`
 - Entry path: `Templates/MarketplaceApp/Package.swift`
 - Extra route: `Examples/MarketplaceExample`
 - Product target: `Marketplace`

@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Health / Fitness`
-- Label today: `Standalone Root + richer example + rebuilt runtime flow`
+- Label today: `Standalone Root + richer example + chained runtime flow`
 - Entry path: `Templates/FitnessApp/Package.swift`
 - Extra route: `Examples/FitnessExample`
 - Product target: `Health / Fitness`

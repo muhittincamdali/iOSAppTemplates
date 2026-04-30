@@ -15,7 +15,7 @@ Production-grade SwiftUI app starter system for Apple platforms.
 | Runtime proof | local simulator launch proof plus runtime screenshots, demo clips, and scenario frames tracked for `20` roots |
 | Public proof | per-app proof and media pages exist for `20` roots |
 | Visual layer | gallery cards, preview boards, runtime screenshots, demo clips, and scenario frames published for `20` roots |
-| Remaining gap | stable green hosted standalone iOS baseline, equal depth across all lanes |
+| Remaining gap | stable green hosted standalone iOS baseline, deeper automated interaction proof, equal polish across all lanes |
 
 ## First Decision
 
@@ -30,7 +30,7 @@ This repository is not yet a full fit if you expect:
 
 - `20 complete apps` already shipping at equal maturity
 - the same proof depth for every lane today
-- automated multi-step interaction proof beyond the current first-screen runtime proof set
+- automated interaction proof that reliably traverses second-screen and third-screen consequence chains
 
 ![Portfolio Board](Documentation/Assets/Readme/iosapptemplates-portfolio-board.svg)
 
@@ -196,6 +196,7 @@ This proves today:
 - published launch-to-ready scenario frames for the same `20` standalone roots:
   - `Documentation/Assets/AppScenarioShots/*-launch.png`
   - `Documentation/Assets/AppScenarioShots/*-ready.png`
+- chained runtime consequence flows now exist across the same `20` standalone roots
 
 This does not yet prove today:
 

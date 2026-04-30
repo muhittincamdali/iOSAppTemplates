@@ -5,7 +5,7 @@ Generated from `Documentation/app-surface-catalog.json`.
 ## Product Summary
 
 - Lane: `Notes / Knowledge`
-- Label today: `Standalone Root + richer example + rebuilt runtime flow`
+- Label today: `Standalone Root + richer example + chained runtime flow`
 - Entry path: `Templates/NotesKnowledgeApp/Package.swift`
 - Extra route: `Examples/NotesKnowledgeExample`
 - Product target: `Notes / Knowledge Base`
