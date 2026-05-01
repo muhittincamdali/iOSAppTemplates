@@ -120,6 +120,14 @@ final class TravelPlannerOperationsStore: ObservableObject {
         documents.filter(\.isReady).count
     }
 
+    var rescuePackCount: Int {
+        documents.filter(\.rescuePackIncluded).count
+    }
+
+    var incidentRecoveredCount: Int {
+        alerts.filter { $0.incidentState == "Recovered" }.count
+    }
+
     var readinessHeadline: String {
         if unresolvedAlerts > 0 {
             return "\(unresolvedAlerts) trip alerts still need rerouting or traveler action."
@@ -139,18 +147,28 @@ final class TravelPlannerOperationsStore: ObservableObject {
         flights[index].isCheckedIn = true
         flights[index].seat = flights[index].seat == nil ? "12A" : flights[index].seat
         flights[index].status = "Checked in"
+        flights[index].protectionState = "Check-in secured"
         alerts.removeAll { $0.linkedFlightID == flightID && $0.type == .checkIn }
+    }
+
+    func assignRecoveryOwner(_ flightID: UUID, owner: String) {
+        guard let index = flights.firstIndex(where: { $0.id == flightID }) else { return }
+        flights[index].recoveryOwner = owner
+        flights[index].protectionState = "Recovery owner assigned"
     }
 
     func requestRebook(_ flightID: UUID) {
         guard let index = flights.firstIndex(where: { $0.id == flightID }) else { return }
         flights[index].status = "Rebooking requested"
+        flights[index].protectionState = "Connection buffer under review"
         alerts.append(
             TravelAlertRecord(
                 title: "Rebook \(flights[index].route)",
                 detail: "Operations requested a safer connection window with extra buffer before hotel transfer.",
                 type: .disruption,
                 linkedFlightID: flightID,
+                escalationOwner: flights[index].recoveryOwner,
+                incidentState: "Open",
                 isResolved: false
             )
         )
@@ -160,9 +178,12 @@ final class TravelPlannerOperationsStore: ObservableObject {
         guard let index = flights.firstIndex(where: { $0.id == flightID }) else { return }
         flights[index].status = "Rebooked"
         flights[index].departureTime = "\(flights[index].departureTime) • +45 min buffer"
+        flights[index].alternateRoute = "Protected via same carrier with extra 45-minute arrival buffer."
+        flights[index].protectionState = "Protected itinerary confirmed"
         if let alertIndex = alerts.firstIndex(where: { $0.linkedFlightID == flightID && !$0.isResolved }) {
             alerts[alertIndex].detail = "Rebook accepted with a safer connection window."
             alerts[alertIndex].isResolved = true
+            alerts[alertIndex].incidentState = "Recovered"
         }
     }
 
@@ -170,11 +191,18 @@ final class TravelPlannerOperationsStore: ObservableObject {
         guard let index = stays.firstIndex(where: { $0.id == stayID }) else { return }
         stays[index].confirmationState = "Confirmed"
         stays[index].checkInNote = "Late arrival shared with concierge and airport pickup vendor."
+        stays[index].transportLocked = true
     }
 
     func sendArrivalNote(_ stayID: UUID) {
         guard let index = stays.firstIndex(where: { $0.id == stayID }) else { return }
         stays[index].checkInNote = "Arrival note, room preference, and concierge late check-in confirmed."
+    }
+
+    func lockAirportTransfer(_ stayID: UUID) {
+        guard let index = stays.firstIndex(where: { $0.id == stayID }) else { return }
+        stays[index].transportLocked = true
+        stays[index].checkInNote = "Airport transfer, concierge handoff, and late arrival protocol are locked."
     }
 
     func moveActivityForward(_ activityID: UUID, from dayID: UUID) {
@@ -188,6 +216,7 @@ final class TravelPlannerOperationsStore: ObservableObject {
         timelineDays[dayIndex + 1].activities.insert(activity, at: 0)
         timelineDays[dayIndex].summary = "Agenda rebalanced after shifting a lower-priority item."
         timelineDays[dayIndex + 1].summary = "Buffer block absorbed one moved activity from the previous day."
+        timelineDays[dayIndex + 1].recoveryPlan = "Next-day buffer absorbed a moved activity to protect critical travel and meeting windows."
     }
 
     func lockDayPlan(_ dayID: UUID) {
@@ -200,6 +229,11 @@ final class TravelPlannerOperationsStore: ObservableObject {
         guard let dayIndex = timelineDays.firstIndex(where: { $0.id == dayID }) else { return }
         timelineDays[dayIndex].isLocked = false
         timelineDays[dayIndex].summary = "Day plan reopened to absorb a disruption and rebalance logistics."
+    }
+
+    func publishRecoveryPlan(_ dayID: UUID) {
+        guard let dayIndex = timelineDays.firstIndex(where: { $0.id == dayID }) else { return }
+        timelineDays[dayIndex].recoveryPlan = "Recovery plan published with backup transport, meal window buffer, and owner-assigned incident steps."
     }
 
     func togglePackingTask(_ taskID: UUID) {
@@ -219,15 +253,35 @@ final class TravelPlannerOperationsStore: ObservableObject {
         documents[index].status = "Offline copy saved"
     }
 
+    func createRescuePack(_ documentID: UUID) {
+        guard let index = documents.firstIndex(where: { $0.id == documentID }) else { return }
+        documents[index].rescuePackIncluded = true
+        documents[index].status = "Rescue pack saved"
+    }
+
     func resolveAlert(_ alertID: UUID) {
         guard let index = alerts.firstIndex(where: { $0.id == alertID }) else { return }
         alerts[index].isResolved = true
         alerts[index].detail = "Operator action completed and traveler brief synced."
+        alerts[index].incidentState = "Recovered"
     }
 
     func escalateAlert(_ alertID: UUID) {
         guard let index = alerts.firstIndex(where: { $0.id == alertID }) else { return }
         alerts[index].detail = "Escalated to airline or organizer desk with operator brief attached."
+        alerts[index].incidentState = "Escalated"
+    }
+
+    func assignAlertOwner(_ alertID: UUID, owner: String) {
+        guard let index = alerts.firstIndex(where: { $0.id == alertID }) else { return }
+        alerts[index].escalationOwner = owner
+    }
+
+    func clearIncident(_ alertID: UUID) {
+        guard let index = alerts.firstIndex(where: { $0.id == alertID }) else { return }
+        alerts[index].isResolved = true
+        alerts[index].incidentState = "Recovered"
+        alerts[index].detail = "Incident closed with traveler brief, owner handoff, and recovery plan synced."
     }
 
     func runInteractionProofIfNeeded() {
@@ -242,6 +296,7 @@ final class TravelPlannerOperationsStore: ObservableObject {
             }
 
             if let flight = flights.first {
+                assignRecoveryOwner(flight.id, owner: "Travel Ops - Elena")
                 confirmCheckIn(flight.id)
                 requestRebook(flight.id)
                 confirmRebook(flight.id)
@@ -250,10 +305,12 @@ final class TravelPlannerOperationsStore: ObservableObject {
             if let stay = stays.first {
                 confirmStay(stay.id)
                 sendArrivalNote(stay.id)
+                lockAirportTransfer(stay.id)
             }
 
             if let day = timelineDays.first, let activity = day.activities.first {
                 moveActivityForward(activity.id, from: day.id)
+                publishRecoveryPlan(day.id)
                 lockDayPlan(day.id)
                 unlockDayPlan(day.id)
             }
@@ -265,25 +322,28 @@ final class TravelPlannerOperationsStore: ObservableObject {
             if let document = documents.first {
                 markDocumentReady(document.id)
                 downloadOfflineCopy(document.id)
+                createRescuePack(document.id)
             }
 
             if let alert = alerts.first(where: { !$0.isResolved }) {
+                assignAlertOwner(alert.id, owner: "Travel Ops - Elena")
                 escalateAlert(alert.id)
-                resolveAlert(alert.id)
+                clearIncident(alert.id)
             }
 
             TravelInteractionProofMode.write(
                 summary: readinessHeadline,
                 steps: [
                     "trip-selected",
+                    "recovery-owner-assigned",
                     "flight-checkin-completed",
                     "rebook-requested-and-confirmed",
                     "stay-confirmed",
-                    "arrival-note-sent",
-                    "timeline-rebalanced-and-lock-cycled",
+                    "arrival-note-and-transfer-locked",
+                    "timeline-rebalanced-recovery-plan-published-and-lock-cycled",
                     "packing-updated",
-                    "document-ready-and-offline-saved",
-                    "alert-escalated-and-resolved"
+                    "document-ready-offline-saved-and-rescue-packed",
+                    "alert-owned-escalated-and-recovered"
                 ]
             )
         }
@@ -330,7 +390,8 @@ struct TravelPlannerHeroCard: View {
             HStack(spacing: 12) {
                 TravelMetricChip(title: "Trips", value: "\(store.trips.count)")
                 TravelMetricChip(title: "Checked In", value: "\(store.checkedInFlights)")
-                TravelMetricChip(title: "Docs", value: "\(store.verifiedDocuments)")
+                TravelMetricChip(title: "Rescue Packs", value: "\(store.rescuePackCount)")
+                TravelMetricChip(title: "Recovered", value: "\(store.incidentRecoveredCount)")
             }
         }
         .padding(20)
@@ -428,6 +489,10 @@ struct TravelPlannerTripOverviewCard: View {
                     }
                     .buttonStyle(.bordered)
                 }
+
+                Text(flight.protectionState)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
         .padding()
@@ -457,6 +522,10 @@ struct TravelPlannerAlertLane: View {
                     Text(alert.detail)
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                    Label(alert.escalationOwner, systemImage: "person.text.rectangle.fill")
+                        .font(.caption)
+                    Label(alert.incidentState, systemImage: "bolt.shield.fill")
+                        .font(.caption)
                     if !alert.isResolved {
                         Button("Resolve Alert") {
                             store.resolveAlert(alert.id)
@@ -512,6 +581,9 @@ struct TravelPlannerDayDetailView: View {
                     Text(day.summary)
                     Label(day.weather, systemImage: "cloud.sun.fill")
                     Label(day.isLocked ? "Locked" : "Open for changes", systemImage: day.isLocked ? "lock.fill" : "lock.open.fill")
+                    Text(day.recoveryPlan)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
 
                 Section("Activities") {
@@ -543,6 +615,11 @@ struct TravelPlannerDayDetailView: View {
 
                 if !day.isLocked {
                     Section {
+                        Button("Publish Recovery Plan") {
+                            store.publishRecoveryPlan(dayID)
+                        }
+                        .buttonStyle(.bordered)
+
                         Button("Lock Day Plan") {
                             store.lockDayPlan(dayID)
                         }
@@ -625,6 +702,13 @@ struct TravelPlannerFlightDetailView: View {
                     LabeledContent("Departure", value: flight.departureTime)
                     LabeledContent("Seat", value: flight.seat ?? "Not assigned")
                     LabeledContent("Status", value: flight.status)
+                    LabeledContent("Recovery owner", value: flight.recoveryOwner)
+                    LabeledContent("Protection", value: flight.protectionState)
+                    if let alternateRoute = flight.alternateRoute {
+                        Text(alternateRoute)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
 
                 Section("Actions") {
@@ -632,6 +716,10 @@ struct TravelPlannerFlightDetailView: View {
                         store.confirmCheckIn(flight.id)
                     }
                     .disabled(flight.isCheckedIn)
+
+                    Button("Assign Recovery Owner") {
+                        store.assignRecoveryOwner(flight.id, owner: "Travel Ops - Elena")
+                    }
 
                     Button("Request Rebook") {
                         store.requestRebook(flight.id)
@@ -660,6 +748,10 @@ struct TravelPlannerStayDetailView: View {
                     LabeledContent("Hotel", value: stay.name)
                     LabeledContent("Dates", value: stay.dateRange)
                     LabeledContent("State", value: stay.confirmationState)
+                    if let contingencyHotel = stay.contingencyHotel {
+                        LabeledContent("Backup hotel", value: contingencyHotel)
+                    }
+                    LabeledContent("Transfer", value: stay.transportLocked ? "Locked" : "Needs lock")
                 }
 
                 Section("Check-In Notes") {
@@ -674,6 +766,11 @@ struct TravelPlannerStayDetailView: View {
                     .disabled(stay.confirmationState == "Confirmed")
                     Button("Send Arrival Note") {
                         store.sendArrivalNote(stay.id)
+                    }
+                    .buttonStyle(.bordered)
+
+                    Button("Lock Airport Transfer") {
+                        store.lockAirportTransfer(stay.id)
                     }
                     .buttonStyle(.bordered)
                 }
@@ -721,6 +818,8 @@ struct TravelPlannerEssentialsWorkspaceView: View {
                             Text(document.note)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                            Label(document.rescuePackIncluded ? "Rescue pack saved" : "Rescue pack pending", systemImage: "externaldrive.badge.plus")
+                                .font(.caption)
                             if !document.isReady {
                                 Button("Mark Ready") {
                                     store.markDocumentReady(document.id)
@@ -729,6 +828,10 @@ struct TravelPlannerEssentialsWorkspaceView: View {
                             }
                             Button("Save Offline Copy") {
                                 store.downloadOfflineCopy(document.id)
+                            }
+                            .buttonStyle(.bordered)
+                            Button("Create Rescue Pack") {
+                                store.createRescuePack(document.id)
                             }
                             .buttonStyle(.bordered)
                         }
@@ -748,9 +851,15 @@ struct TravelPlannerEssentialsWorkspaceView: View {
                             Text(alert.detail)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                            Label(alert.escalationOwner, systemImage: "person.text.rectangle.fill")
+                                .font(.caption)
+                            Label(alert.incidentState, systemImage: "bolt.shield.fill")
+                                .font(.caption)
                             HStack {
+                                Button("Assign Owner") { store.assignAlertOwner(alert.id, owner: "Travel Ops - Elena") }
                                 Button("Escalate") { store.escalateAlert(alert.id) }
                                 Button("Resolve") { store.resolveAlert(alert.id) }
+                                Button("Clear Incident") { store.clearIncident(alert.id) }
                             }
                             .buttonStyle(.bordered)
                         }
@@ -773,6 +882,8 @@ struct TravelPlannerProfileWorkspaceView: View {
                     Label("Checked-in flights: \(store.checkedInFlights)", systemImage: "airplane.circle.fill")
                     Label("Packed tasks: \(store.packedTasks)", systemImage: "suitcase.rolling.fill")
                     Label("Ready documents: \(store.verifiedDocuments)", systemImage: "doc.text.fill")
+                    Label("Rescue packs: \(store.rescuePackCount)", systemImage: "externaldrive.badge.plus")
+                    Label("Recovered incidents: \(store.incidentRecoveredCount)", systemImage: "checkmark.shield.fill")
                 }
 
                 Section("Policy") {
@@ -804,6 +915,7 @@ struct TravelTimelineDayRecord: Identifiable {
     let weather: String
     var summary: String
     var isLocked: Bool
+    var recoveryPlan: String
     var activities: [TravelActivityRecord]
 
     static let sampleDays: [TravelTimelineDayRecord] = [
@@ -812,6 +924,7 @@ struct TravelTimelineDayRecord: Identifiable {
             weather: "21°C",
             summary: "Arrival, hotel check-in, and first partner dinner are still adjustable.",
             isLocked: false,
+            recoveryPlan: "Keep airport pickup, hotel arrival, and dinner buffer flexible until flight stability is confirmed.",
             activities: [
                 TravelActivityRecord(timeLabel: "09:20", title: "Arrive BCN", detail: "Airport pickup meets terminal 1 baggage claim.", priority: "Critical"),
                 TravelActivityRecord(timeLabel: "13:30", title: "Hotel check-in", detail: "Drop bags, test Wi-Fi, confirm concierge late-night key support.", priority: "High"),
@@ -823,6 +936,7 @@ struct TravelTimelineDayRecord: Identifiable {
             weather: "24°C",
             summary: "Full summit day with extra buffer for customer breakout sessions.",
             isLocked: false,
+            recoveryPlan: "Protect keynote and breakout blocks with one movable customer session and backup transit window.",
             activities: [
                 TravelActivityRecord(timeLabel: "08:30", title: "Keynote prep", detail: "Check slides, audio, and badge logistics before doors open.", priority: "Critical"),
                 TravelActivityRecord(timeLabel: "15:00", title: "Customer breakout", detail: "Run operator notes and success stories with CS leads.", priority: "High")
@@ -847,10 +961,13 @@ struct TravelFlightRecord: Identifiable {
     var seat: String?
     var status: String
     var isCheckedIn: Bool
+    var recoveryOwner: String
+    var alternateRoute: String?
+    var protectionState: String
 
     static let sampleFlights: [TravelFlightRecord] = [
-        TravelFlightRecord(route: "IST → BCN", departureCode: "TK1853", departureTime: "May 3 • 06:40", seat: nil, status: "Awaiting check-in", isCheckedIn: false),
-        TravelFlightRecord(route: "BCN → IST", departureCode: "TK1856", departureTime: "May 7 • 18:15", seat: "10C", status: "Confirmed", isCheckedIn: true)
+        TravelFlightRecord(route: "IST → BCN", departureCode: "TK1853", departureTime: "May 3 • 06:40", seat: nil, status: "Awaiting check-in", isCheckedIn: false, recoveryOwner: "Unassigned", alternateRoute: nil, protectionState: "Awaiting protection review"),
+        TravelFlightRecord(route: "BCN → IST", departureCode: "TK1856", departureTime: "May 7 • 18:15", seat: "10C", status: "Confirmed", isCheckedIn: true, recoveryOwner: "Travel Ops - Elena", alternateRoute: nil, protectionState: "Return segment protected")
     ]
 }
 
@@ -860,9 +977,11 @@ struct TravelStayRecord: Identifiable {
     let dateRange: String
     var confirmationState: String
     var checkInNote: String
+    var contingencyHotel: String?
+    var transportLocked: Bool
 
     static let sampleStays: [TravelStayRecord] = [
-        TravelStayRecord(name: "Grand Central Barcelona", dateRange: "May 3-7", confirmationState: "Pending operator reconfirmation", checkInNote: "Late arrival note still needs concierge confirmation.")
+        TravelStayRecord(name: "Grand Central Barcelona", dateRange: "May 3-7", confirmationState: "Pending operator reconfirmation", checkInNote: "Late arrival note still needs concierge confirmation.", contingencyHotel: "Hotel Rec Barcelona", transportLocked: false)
     ]
 }
 
@@ -885,11 +1004,12 @@ struct TravelDocumentRecord: Identifiable {
     var status: String
     let note: String
     var isReady: Bool
+    var rescuePackIncluded: Bool
 
     static let sampleDocuments: [TravelDocumentRecord] = [
-        TravelDocumentRecord(title: "Passport validity", status: "Ready", note: "All travelers above 6-month validity window.", isReady: true),
-        TravelDocumentRecord(title: "Hotel confirmation PDF", status: "Missing backup copy", note: "Export offline copy for concierge and pickup vendor.", isReady: false),
-        TravelDocumentRecord(title: "Customer summit badge QR", status: "Pending organizer resend", note: "Organizer promised reissue before departure.", isReady: false)
+        TravelDocumentRecord(title: "Passport validity", status: "Ready", note: "All travelers above 6-month validity window.", isReady: true, rescuePackIncluded: true),
+        TravelDocumentRecord(title: "Hotel confirmation PDF", status: "Missing backup copy", note: "Export offline copy for concierge and pickup vendor.", isReady: false, rescuePackIncluded: false),
+        TravelDocumentRecord(title: "Customer summit badge QR", status: "Pending organizer resend", note: "Organizer promised reissue before departure.", isReady: false, rescuePackIncluded: false)
     ]
 }
 
@@ -914,6 +1034,8 @@ struct TravelAlertRecord: Identifiable {
     let type: TravelAlertType
     let linkedFlightID: UUID?
     let linkedDocumentID: UUID?
+    var escalationOwner: String
+    var incidentState: String
     var isResolved: Bool
 
     init(
@@ -922,6 +1044,8 @@ struct TravelAlertRecord: Identifiable {
         type: TravelAlertType,
         linkedFlightID: UUID? = nil,
         linkedDocumentID: UUID? = nil,
+        escalationOwner: String = "Unassigned",
+        incidentState: String = "Open",
         isResolved: Bool
     ) {
         self.title = title
@@ -929,6 +1053,8 @@ struct TravelAlertRecord: Identifiable {
         self.type = type
         self.linkedFlightID = linkedFlightID
         self.linkedDocumentID = linkedDocumentID
+        self.escalationOwner = escalationOwner
+        self.incidentState = incidentState
         self.isResolved = isResolved
     }
 
@@ -936,8 +1062,8 @@ struct TravelAlertRecord: Identifiable {
         let flights = TravelFlightRecord.sampleFlights
         let documents = TravelDocumentRecord.sampleDocuments
         return [
-            TravelAlertRecord(title: "Open airline check-in", detail: "Check-in opens tonight for IST → BCN. Seat assignment still missing.", type: .checkIn, linkedFlightID: flights[0].id, isResolved: false),
-            TravelAlertRecord(title: "Badge QR missing", detail: "Organizer has not resent the summit badge pack yet.", type: .document, linkedDocumentID: documents[2].id, isResolved: false)
+            TravelAlertRecord(title: "Open airline check-in", detail: "Check-in opens tonight for IST → BCN. Seat assignment still missing.", type: .checkIn, linkedFlightID: flights[0].id, escalationOwner: "Travel Ops - Elena", incidentState: "Open", isResolved: false),
+            TravelAlertRecord(title: "Badge QR missing", detail: "Organizer has not resent the summit badge pack yet.", type: .document, linkedDocumentID: documents[2].id, escalationOwner: "Event Desk", incidentState: "Open", isResolved: false)
         ]
     }()
 }
