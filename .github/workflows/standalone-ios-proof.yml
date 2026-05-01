@@ -49,5 +49,4 @@ jobs:
         run: bash Scripts/validate-runtime-app-launches.sh ${{ matrix.shard.apps }}
 
       - name: Validate automated interaction proof
-        if: matrix.shard.name == 'wave1-core'
-        run: bash Scripts/validate-runtime-app-interactions.sh
+        run: bash Scripts/validate-runtime-app-interactions.sh ${{ matrix.shard.apps }}
