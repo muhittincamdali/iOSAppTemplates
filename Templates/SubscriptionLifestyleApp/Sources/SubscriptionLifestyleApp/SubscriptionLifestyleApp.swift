@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import SubscriptionLifestyleAppCore
+
+private enum SubscriptionLifestyleInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "SubscriptionLifestyleApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 @available(iOS 18.0, macOS 15.0, *)
 public struct SubscriptionLifestyleAppShell: App {
@@ -49,6 +75,9 @@ struct SubscriptionLifestyleRuntimeRootView: View {
                 }
         }
         .tint(.pink)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -63,6 +92,7 @@ final class SubscriptionLifestyleOperationsStore: ObservableObject {
     @Published var operatorHeadline: String
     @Published var paywallTrack: String
     @Published var totalMembers: Int
+    private var interactionProofScheduled = false
 
     init(
         programs: [SubscriptionProgramRecord] = SubscriptionProgramRecord.samples,
@@ -142,6 +172,48 @@ final class SubscriptionLifestyleOperationsStore: ObservableObject {
         guard let index = experiments.firstIndex(where: { $0.id == experimentID }) else { return }
         experiments[index].status = .won
         operatorHeadline = "\(experiments[index].title) experiment closed as winner."
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard SubscriptionLifestyleInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        DispatchQueue.main.async {
+            var steps: [String] = []
+
+            if let programID = self.programs.first?.id {
+                self.enroll(programID)
+                self.completeSession(programID)
+                steps.append("Enrolled and completed program session")
+            }
+
+            if let riskID = self.risks.first?.id {
+                self.recoverRisk(riskID)
+                self.resolveRisk(riskID)
+                steps.append("Recovered and resolved churn risk")
+            }
+
+            if let streakID = self.streaks.first?.id {
+                self.recoverStreak(streakID)
+                steps.append("Recovered streak")
+            }
+
+            if let alternativePlanID = self.plans.first(where: { !$0.isCurrent })?.id {
+                self.switchPlan(alternativePlanID)
+                steps.append("Switched plan")
+            }
+
+            if let experimentID = self.experiments.first?.id {
+                self.launchExperiment(experimentID)
+                self.closeExperiment(experimentID)
+                steps.append("Launched and closed experiment")
+            }
+
+            SubscriptionLifestyleInteractionProofMode.write(
+                summary: "Subscription interaction proof completed with enrollment, recovery, plan, and experiment chain.",
+                steps: steps
+            )
+        }
     }
 }
 

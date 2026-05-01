@@ -21,9 +21,13 @@ default_apps=(
   "NewsBlogApp"
   "MusicPodcastApp"
   "MarketplaceApp"
+  "MessagingApp"
   "BookingReservationsApp"
+  "NotesKnowledgeApp"
+  "CreatorShortVideoApp"
   "TeamCollaborationApp"
   "CRMAdminApp"
+  "SubscriptionLifestyleApp"
 )
 
 apps_to_validate=("$@")
