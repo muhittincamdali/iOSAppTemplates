@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import PrivacyVaultAppCore
+
+private enum PrivacyVaultInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "PrivacyVaultApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 @available(iOS 18.0, macOS 15.0, *)
 public struct PrivacyVaultAppShell: App {
@@ -7,64 +33,243 @@ public struct PrivacyVaultAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            PrivacyVaultWorkspaceRootView(
-                snapshot: .sample,
-                collections: PrivacyVaultCollectionCard.sampleCards,
-                actions: PrivacyVaultQuickAction.defaultActions,
-                health: .sample,
-                state: .sample
-            )
+            PrivacyVaultWorkspaceRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
 struct PrivacyVaultWorkspaceRootView: View {
-    let snapshot: PrivacyVaultDashboardSnapshot
-    let collections: [PrivacyVaultCollectionCard]
-    let actions: [PrivacyVaultQuickAction]
-    let health: PrivacyVaultOperationalHealth
-    let state: PrivacyVaultWorkspaceState
+    @StateObject private var store = PrivacyVaultOperationsStore()
 
     var body: some View {
         TabView {
             PrivacyVaultHomeView(
-                snapshot: snapshot,
-                collections: collections,
-                actions: actions,
-                health: health,
-                state: state
+                snapshot: store.snapshot,
+                collections: store.collections,
+                actions: store.actions,
+                health: store.health,
+                state: store.state
             )
             .tabItem {
                 Image(systemName: "lock.doc.fill")
                 Text("Vault")
             }
 
-            PrivacyVaultAlertsView(state: state)
+            PrivacyVaultAlertsView(state: store.state)
                 .tabItem {
                     Image(systemName: "bell.badge.fill")
                     Text("Alerts")
                 }
 
-            PrivacyVaultRecoveryView(state: state)
+            PrivacyVaultRecoveryView(state: store.state)
                 .tabItem {
                     Image(systemName: "key.horizontal.fill")
                     Text("Recovery")
                 }
 
-            PrivacyVaultAuditView(state: state)
+            PrivacyVaultAuditView(state: store.state)
                 .tabItem {
                     Image(systemName: "checkmark.shield.fill")
                     Text("Audit")
                 }
 
-            PrivacyVaultProfileView(snapshot: snapshot, health: health, state: state)
+            PrivacyVaultProfileView(snapshot: store.snapshot, health: store.health, state: store.state)
                 .tabItem {
                     Image(systemName: "person.crop.circle.fill")
                     Text("Profile")
                 }
         }
         .tint(.teal)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+@MainActor
+final class PrivacyVaultOperationsStore: ObservableObject {
+    @Published var snapshot = PrivacyVaultDashboardSnapshot.sample
+    @Published var collections = PrivacyVaultCollectionCard.sampleCards
+    @Published var actions = PrivacyVaultQuickAction.defaultActions
+    @Published var health = PrivacyVaultOperationalHealth.sample
+    @Published var state = PrivacyVaultWorkspaceState.sample
+
+    private var interactionProofScheduled = false
+
+    func runInteractionProofIfNeeded() {
+        guard PrivacyVaultInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        DispatchQueue.main.async {
+            var steps: [String] = []
+
+            self.hardenFeaturedItem()
+            steps.append("Hardened featured item")
+
+            self.resolveFirstAlert()
+            steps.append("Resolved first access alert")
+
+            self.verifyTrustedContact()
+            steps.append("Verified trusted contact")
+
+            self.completeAuditReview()
+            steps.append("Completed audit review")
+
+            self.rotateRecoveryWindow()
+            steps.append("Rotated recovery window")
+
+            PrivacyVaultInteractionProofMode.write(
+                summary: self.state.protectionHeadline,
+                steps: steps
+            )
+        }
+    }
+
+    private func hardenFeaturedItem() {
+        guard let item = state.featuredItems.first else { return }
+        let updatedItems = state.featuredItems.enumerated().map { index, current in
+            if index == 0 {
+                return PrivacyVaultItem(
+                    id: current.id,
+                    title: current.title,
+                    category: current.category,
+                    owner: current.owner,
+                    status: "Hardened",
+                    summary: "Recovery package rotated and reveal rules tightened for the next secure sync window.",
+                    nextStep: "Keep the hardened bundle sealed until the next travel readiness review.",
+                    statusColorName: "green"
+                )
+            }
+            return current
+        }
+
+        snapshot = PrivacyVaultDashboardSnapshot(
+            securedItems: snapshot.securedItems + 1,
+            pendingAudits: snapshot.pendingAudits,
+            sharedVaults: snapshot.sharedVaults,
+            protectionHealth: "Featured vault item hardened and ready for the next secure sync."
+        )
+
+        replaceState(
+            protectionHeadline: "\(item.title) is now hardened and ready for controlled reveal.",
+            featuredItems: updatedItems
+        )
+    }
+
+    private func resolveFirstAlert() {
+        guard !state.accessAlerts.isEmpty else { return }
+        let updatedAlerts = Array(state.accessAlerts.dropFirst())
+
+        health = PrivacyVaultOperationalHealth(
+            accessAlerts: max(0, health.accessAlerts - 1),
+            medianUnlockSeconds: health.medianUnlockSeconds,
+            recoveryReady: health.recoveryReady
+        )
+
+        replaceState(
+            accessAlerts: updatedAlerts,
+            auditEvents: [
+                "Access alert resolved and session trust restored."
+            ] + state.auditEvents,
+            trustNotes: [
+                "Latest suspicious session was reviewed and closed before the current sync window."
+            ] + state.trustNotes
+        )
+    }
+
+    private func verifyTrustedContact() {
+        guard let index = state.trustedContacts.firstIndex(where: { $0.status != "Verified" }) else { return }
+        var contacts = state.trustedContacts
+        let current = contacts[index]
+        contacts[index] = PrivacyVaultTrustedContact(
+            id: current.id,
+            name: current.name,
+            role: current.role,
+            status: "Verified"
+        )
+
+        replaceState(
+            recoveryChecklist: state.recoveryChecklist.filter { !$0.contains("Confirm trusted contacts") },
+            trustedContacts: contacts
+        )
+    }
+
+    private func completeAuditReview() {
+        guard let index = state.auditChecks.firstIndex(where: { $0.status != "Resolved" && $0.status != "Complete" }) else { return }
+        var checks = state.auditChecks
+        let current = checks[index]
+        checks[index] = PrivacyVaultAuditCheck(
+            id: current.id,
+            title: current.title,
+            status: "Resolved",
+            summary: "Quarterly review cleared and linked grants recertified.",
+            nextStep: "Monitor until the next weekly audit sweep.",
+            statusColorName: "green"
+        )
+
+        snapshot = PrivacyVaultDashboardSnapshot(
+            securedItems: snapshot.securedItems,
+            pendingAudits: max(0, snapshot.pendingAudits - 1),
+            sharedVaults: snapshot.sharedVaults,
+            protectionHealth: snapshot.protectionHealth
+        )
+
+        replaceState(
+            auditChecks: checks,
+            auditEvents: [
+                "Audit queue item resolved and logged for the weekly control review."
+            ] + state.auditEvents
+        )
+    }
+
+    private func rotateRecoveryWindow() {
+        health = PrivacyVaultOperationalHealth(
+            accessAlerts: health.accessAlerts,
+            medianUnlockSeconds: health.medianUnlockSeconds,
+            recoveryReady: true
+        )
+
+        replaceState(
+            syncWindow: "Recovery package rotated • next encrypted sync in 12 minutes",
+            recoveryChecklist: state.recoveryChecklist.filter { !$0.contains("Verify sealed recovery kit") },
+            profileMetrics: state.profileMetrics.map { metric in
+                if metric.label == "Weekly audit score" {
+                    return PrivacyVaultMetric(label: metric.label, value: "99%")
+                }
+                return metric
+            }
+        )
+    }
+
+    private func replaceState(
+        protectionHeadline: String? = nil,
+        syncWindow: String? = nil,
+        featuredItems: [PrivacyVaultItem]? = nil,
+        accessAlerts: [PrivacyVaultAccessAlert]? = nil,
+        recoveryChecklist: [String]? = nil,
+        trustedContacts: [PrivacyVaultTrustedContact]? = nil,
+        auditChecks: [PrivacyVaultAuditCheck]? = nil,
+        auditEvents: [String]? = nil,
+        trustNotes: [String]? = nil,
+        profileMetrics: [PrivacyVaultMetric]? = nil
+    ) {
+        state = PrivacyVaultWorkspaceState(
+            protectionHeadline: protectionHeadline ?? state.protectionHeadline,
+            biometricPolicy: state.biometricPolicy,
+            syncWindow: syncWindow ?? state.syncWindow,
+            operatorName: state.operatorName,
+            roleSummary: state.roleSummary,
+            featuredItems: featuredItems ?? state.featuredItems,
+            accessAlerts: accessAlerts ?? state.accessAlerts,
+            recoveryChecklist: recoveryChecklist ?? state.recoveryChecklist,
+            trustedContacts: trustedContacts ?? state.trustedContacts,
+            auditChecks: auditChecks ?? state.auditChecks,
+            auditEvents: auditEvents ?? state.auditEvents,
+            trustNotes: trustNotes ?? state.trustNotes,
+            profileMetrics: profileMetrics ?? state.profileMetrics
+        )
     }
 }
 

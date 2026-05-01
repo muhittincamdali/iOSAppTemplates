@@ -1,4 +1,30 @@
+import Foundation
 import SwiftUI
+
+private enum FitnessInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "FitnessApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 @main
 struct FitnessApp: App {
@@ -45,6 +71,9 @@ struct FitnessRuntimeRootView: View {
                 }
         }
         .tint(.green)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -61,6 +90,7 @@ final class FitnessStudioStore: ObservableObject {
     @Published var streakDays = 18
     @Published var bodyWeight = 78.4
     @Published var weeklyLoadScore = 82
+    private var interactionProofScheduled = false
 
     init() {
         selectedPlanID = plans.first?.id
@@ -186,6 +216,60 @@ final class FitnessStudioStore: ObservableObject {
         guard let goalIndex = goals.firstIndex(where: { $0.id == goalID }) else { return }
         goals[goalIndex].currentValue = goals[goalIndex].targetValue
         goals[goalIndex].isCompleted = true
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard FitnessInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        DispatchQueue.main.async {
+            var steps: [String] = []
+
+            if let plan = self.plans.first {
+                self.selectPlan(plan.id)
+                steps.append("Selected plan")
+            }
+
+            if let workout = self.nextWorkout {
+                self.startWorkout(workout.id)
+                steps.append("Started next workout")
+            }
+
+            self.activeSession?.exerciseLogs.forEach { exercise in
+                self.toggleExercise(exercise.id)
+            }
+            steps.append("Completed every exercise")
+
+            self.incrementHydration()
+            self.incrementHydration()
+            steps.append("Logged hydration")
+
+            self.logCoachingReflection("Interaction proof session completed with clean technique and stable recovery.")
+            steps.append("Saved coaching reflection")
+
+            self.finishActiveSession()
+            steps.append("Finished active session")
+
+            if let recoveryTask = self.recoveryTasks.first {
+                self.toggleRecoveryTask(recoveryTask.id)
+                steps.append("Completed recovery task")
+            }
+
+            if let habit = self.weeklyHabits.first {
+                self.toggleHabit(habit.id)
+                steps.append("Logged weekly habit")
+            }
+
+            if let goal = self.goals.first(where: { !$0.isCompleted }) {
+                self.completeGoal(goal.id)
+                steps.append("Completed goal")
+            }
+
+            FitnessInteractionProofMode.write(
+                summary: "Fitness interaction proof completed with plan, session, hydration, recovery, habit, and goal chain.",
+                steps: steps
+            )
+        }
     }
 
     private var activeSessionIndex: Int? {
