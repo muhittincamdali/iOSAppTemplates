@@ -85,6 +85,8 @@ final class FitnessStudioStore: ObservableObject {
     @Published var goals: [FitnessGoal] = FitnessGoal.sampleGoals
     @Published var recoveryTasks: [FitnessRecoveryTask] = FitnessRecoveryTask.sampleTasks
     @Published var weeklyHabits: [FitnessHabit] = FitnessHabit.sampleHabits
+    @Published var readinessChecks: [FitnessReadinessCheck] = FitnessReadinessCheck.sampleChecks
+    @Published var coachAlerts: [FitnessCoachAlert] = FitnessCoachAlert.sampleAlerts
     @Published var selectedPlanID: UUID?
     @Published var readinessNote = "Sleep quality improved, but lower-body soreness still needs mobility before the next sprint block."
     @Published var streakDays = 18
@@ -120,11 +122,44 @@ final class FitnessStudioStore: ObservableObject {
         recoveryTasks.filter(\.isComplete).count
     }
 
+    var readinessCompletionCount: Int {
+        readinessChecks.filter(\.isComplete).count
+    }
+
+    var readinessScore: Double {
+        guard !readinessChecks.isEmpty else { return 1 }
+        return Double(readinessCompletionCount) / Double(readinessChecks.count)
+    }
+
+    var isReadyForTraining: Bool {
+        readinessChecks.allSatisfy(\.isComplete)
+    }
+
+    var activeCoachAlertCount: Int {
+        coachAlerts.filter { !$0.isResolved }.count
+    }
+
     func selectPlan(_ planID: UUID) {
         selectedPlanID = planID
     }
 
     func startWorkout(_ workoutID: UUID) {
+        guard isReadyForTraining else {
+            readinessNote = "Training block is held until readiness checks are cleared. Resolve mobility and soreness gates before loading the next session."
+            if !coachAlerts.contains(where: { $0.title == "Readiness gate is blocking the next workout" && !$0.isResolved }) {
+                coachAlerts.insert(
+                    FitnessCoachAlert(
+                        title: "Readiness gate is blocking the next workout",
+                        detail: "Lower-body soreness and recovery checks must clear before the next loading block starts.",
+                        severity: .high,
+                        nextStep: "Complete the mobility reset and mark every readiness check green."
+                    ),
+                    at: 0
+                )
+            }
+            return
+        }
+
         guard activeSession == nil,
               let plan = selectedPlan,
               let workout = plan.workouts.first(where: { $0.id == workoutID }) else {
@@ -135,6 +170,7 @@ final class FitnessStudioStore: ObservableObject {
             workoutTitle: workout.title,
             trainingFocus: workout.trainingFocus,
             estimatedMinutes: workout.estimatedMinutes,
+            readinessSummary: readinessHeadline,
             exerciseLogs: workout.exercises.map { exercise in
                 FitnessExerciseLog(
                     title: exercise.title,
@@ -159,9 +195,39 @@ final class FitnessStudioStore: ObservableObject {
         updatePlanStatus(for: sessionIndex)
     }
 
+    func toggleReadinessCheck(_ checkID: UUID) {
+        guard let index = readinessChecks.firstIndex(where: { $0.id == checkID }) else {
+            return
+        }
+
+        readinessChecks[index].isComplete.toggle()
+        readinessNote = readinessHeadline
+    }
+
     func incrementHydration() {
         guard var session = activeSession else { return }
         session.hydrationCups += 1
+        activeSession = session
+    }
+
+    func advanceActiveSessionBlock() {
+        guard var session = activeSession, !session.isPaused else { return }
+        session.elapsedMinutes = min(session.estimatedMinutes, session.elapsedMinutes + 8)
+        session.exertionHeadline = session.elapsedMinutes >= session.estimatedMinutes / 2 ? "Work block is on pace and fatigue is controlled." : "Warm-up and main set are still ramping."
+        activeSession = session
+    }
+
+    func pauseActiveSession() {
+        guard var session = activeSession, !session.isPaused else { return }
+        session.isPaused = true
+        session.exertionHeadline = "Session paused for readiness reset and breathing control."
+        activeSession = session
+    }
+
+    func resumeActiveSession() {
+        guard var session = activeSession, session.isPaused else { return }
+        session.isPaused = false
+        session.exertionHeadline = "Session resumed after readiness reset."
         activeSession = session
     }
 
@@ -178,13 +244,20 @@ final class FitnessStudioStore: ObservableObject {
             return
         }
 
+        if let workoutIndex = activeSessionIndex, var plan = selectedPlan {
+            plan.workouts[workoutIndex].status = .completed
+            replacePlan(plan)
+        }
+
         completedSessions.insert(
             FitnessCompletedSession(
                 title: session.workoutTitle,
                 trainingFocus: session.trainingFocus,
                 durationMinutes: session.estimatedMinutes,
                 effort: session.hydrationCups >= 3 ? "High quality session" : "Solid session, hydration follow-up needed",
-                summary: session.coachReflection.isEmpty ? "Finished every block and held technique under fatigue." : session.coachReflection
+                summary: session.coachReflection.isEmpty ? "Finished every block and held technique under fatigue." : session.coachReflection,
+                readinessSnapshot: session.readinessSummary,
+                recoveryDirective: recoveryTasks.first(where: { !$0.isComplete })?.title ?? "Recovery lane is clear for the next heavy block."
             ),
             at: 0
         )
@@ -193,6 +266,14 @@ final class FitnessStudioStore: ObservableObject {
         weeklyLoadScore = min(100, weeklyLoadScore + 4)
         bodyWeight = max(70, bodyWeight - 0.1)
         completeFirstOpenGoal()
+        readinessChecks = readinessChecks.map { check in
+            var updated = check
+            if updated.autoResetsAfterSession {
+                updated.isComplete = false
+            }
+            return updated
+        }
+        readinessNote = "Session closed. Recovery checks reset for the next loading day."
         activeSession = nil
     }
 
@@ -202,6 +283,9 @@ final class FitnessStudioStore: ObservableObject {
         }
 
         recoveryTasks[taskIndex].isComplete.toggle()
+        if recoveryTasks[taskIndex].isComplete {
+            readinessNote = "Recovery lane improved after \(recoveryTasks[taskIndex].title.lowercased())."
+        }
     }
 
     func toggleHabit(_ habitID: UUID) {
@@ -218,12 +302,29 @@ final class FitnessStudioStore: ObservableObject {
         goals[goalIndex].isCompleted = true
     }
 
+    func resolveCoachAlert(_ alertID: UUID) {
+        guard let index = coachAlerts.firstIndex(where: { $0.id == alertID }) else { return }
+        coachAlerts[index].isResolved = true
+    }
+
+    var readinessHeadline: String {
+        if isReadyForTraining {
+            return "Readiness gate is green. Heavy loading can start without a coach override."
+        }
+        return "Readiness gate is still amber. Clear every protocol item before the next heavy block."
+    }
+
     func runInteractionProofIfNeeded() {
         guard FitnessInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
         interactionProofScheduled = true
 
         DispatchQueue.main.async {
             var steps: [String] = []
+
+            self.readinessChecks
+                .filter { !$0.isComplete }
+                .forEach { self.toggleReadinessCheck($0.id) }
+            steps.append("Cleared readiness protocol")
 
             if let plan = self.plans.first {
                 self.selectPlan(plan.id)
@@ -234,6 +335,12 @@ final class FitnessStudioStore: ObservableObject {
                 self.startWorkout(workout.id)
                 steps.append("Started next workout")
             }
+
+            self.advanceActiveSessionBlock()
+            self.pauseActiveSession()
+            self.resumeActiveSession()
+            self.advanceActiveSessionBlock()
+            steps.append("Advanced and resumed live session")
 
             self.activeSession?.exerciseLogs.forEach { exercise in
                 self.toggleExercise(exercise.id)
@@ -265,8 +372,13 @@ final class FitnessStudioStore: ObservableObject {
                 steps.append("Completed goal")
             }
 
+            if let alert = self.coachAlerts.first(where: { !$0.isResolved }) {
+                self.resolveCoachAlert(alert.id)
+                steps.append("Resolved coach alert")
+            }
+
             FitnessInteractionProofMode.write(
-                summary: "Fitness interaction proof completed with plan, session, hydration, recovery, habit, and goal chain.",
+                summary: "Fitness interaction proof completed with readiness, session, recovery, habit, and alert chain.",
                 steps: steps
             )
         }
@@ -315,6 +427,7 @@ struct FitnessDashboardView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     FitnessHeroCard(store: store)
+                    FitnessReadinessSection(store: store)
                     FitnessPlanPickerSection(store: store)
                     FitnessNextWorkoutSection(store: store)
                     FitnessGoalSection(store: store)
@@ -376,6 +489,30 @@ struct FitnessMetricChip: View {
         .padding()
         .background(Color(.secondarySystemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 14))
+    }
+}
+
+struct FitnessReadinessSection: View {
+    @ObservedObject var store: FitnessStudioStore
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Readiness Gate")
+                .font(.title3.weight(.bold))
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text(store.readinessHeadline)
+                    .font(.headline)
+                ProgressView(value: store.readinessScore)
+                    .tint(store.isReadyForTraining ? .green : .orange)
+                Text("\(store.readinessCompletionCount)/\(store.readinessChecks.count) checks passed")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+        }
     }
 }
 
@@ -540,7 +677,13 @@ struct FitnessWorkoutDetailView: View {
                         Button("Start Session") {
                             store.startWorkout(workout.id)
                         }
-                        .disabled(store.activeSession != nil)
+                        .disabled(store.activeSession != nil || !store.isReadyForTraining)
+
+                        if !store.isReadyForTraining {
+                            Label("Recovery tab must clear readiness before the session can start.", systemImage: "exclamationmark.triangle.fill")
+                                .font(.caption)
+                                .foregroundStyle(.orange)
+                        }
                     }
                 }
                 .navigationTitle("Workout Detail")
@@ -566,7 +709,10 @@ struct FitnessSessionWorkspaceView: View {
                             Text(session.trainingFocus)
                                 .foregroundStyle(.secondary)
                             Label("\(session.estimatedMinutes) minutes", systemImage: "clock.fill")
+                            Label("\(session.elapsedMinutes) minutes completed", systemImage: "stopwatch.fill")
                             Label("\(session.hydrationCups) hydration checks", systemImage: "drop.fill")
+                            Label(session.readinessSummary, systemImage: "shield.checkered")
+                            Label(session.exertionHeadline, systemImage: session.isPaused ? "pause.circle.fill" : "figure.run")
                         }
 
                         Section("Exercise Log") {
@@ -606,6 +752,15 @@ struct FitnessSessionWorkspaceView: View {
                         }
 
                         Section("Actions") {
+                            Button(session.isPaused ? "Resume Session" : "Pause Session") {
+                                session.isPaused ? store.resumeActiveSession() : store.pauseActiveSession()
+                            }
+
+                            Button("Advance Work Block") {
+                                store.advanceActiveSessionBlock()
+                            }
+                            .disabled(session.isPaused)
+
                             Button("Log Hydration Check") {
                                 store.incrementHydration()
                             }
@@ -613,7 +768,7 @@ struct FitnessSessionWorkspaceView: View {
                             Button("Finish Session") {
                                 store.finishActiveSession()
                             }
-                            .disabled(!session.exerciseLogs.allSatisfy(\.isComplete))
+                            .disabled(!session.exerciseLogs.allSatisfy(\.isComplete) || session.isPaused)
                             .foregroundStyle(.green)
                         }
                     }
@@ -644,17 +799,22 @@ struct FitnessProgressWorkspaceView: View {
 
                 Section("Completed Sessions") {
                     ForEach(store.completedSessions) { session in
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(session.title)
-                                .font(.headline)
-                            Text(session.summary)
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                            Text("\(session.trainingFocus) • \(session.durationMinutes) min • \(session.effort)")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                        NavigationLink {
+                            FitnessCompletedSessionDetailView(session: session)
+                        } label: {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text(session.title)
+                                    .font(.headline)
+                                    .foregroundStyle(.primary)
+                                Text(session.summary)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                Text("\(session.trainingFocus) • \(session.durationMinutes) min • \(session.effort)")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            .padding(.vertical, 4)
                         }
-                        .padding(.vertical, 4)
                     }
                 }
 
@@ -691,6 +851,29 @@ struct FitnessRecoveryWorkspaceView: View {
                     Text(store.readinessNote)
                         .foregroundStyle(.secondary)
                     Label("\(store.recoveryCompletionCount) tasks completed", systemImage: "heart.circle.fill")
+                    Label("\(store.readinessCompletionCount)/\(store.readinessChecks.count) readiness checks cleared", systemImage: "checkmark.shield.fill")
+                }
+
+                Section("Readiness Checklist") {
+                    ForEach(store.readinessChecks) { check in
+                        Button {
+                            store.toggleReadinessCheck(check.id)
+                        } label: {
+                            HStack(alignment: .top, spacing: 12) {
+                                Image(systemName: check.isComplete ? "checkmark.circle.fill" : "circle")
+                                    .foregroundStyle(check.isComplete ? .green : .orange)
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(check.title)
+                                        .foregroundStyle(.primary)
+                                    Text(check.summary)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
 
                 Section("Today") {
@@ -712,6 +895,36 @@ struct FitnessRecoveryWorkspaceView: View {
                             }
                         }
                         .buttonStyle(.plain)
+                    }
+                }
+
+                if !store.coachAlerts.isEmpty {
+                    Section("Coach Alerts") {
+                        ForEach(store.coachAlerts) { alert in
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Text(alert.title)
+                                        .font(.headline)
+                                    Spacer()
+                                    Text(alert.severity.label)
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(alert.severity.tint)
+                                }
+                                Text(alert.detail)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                Text(alert.nextStep)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                if !alert.isResolved {
+                                    Button("Resolve Alert") {
+                                        store.resolveCoachAlert(alert.id)
+                                    }
+                                    .buttonStyle(.bordered)
+                                }
+                            }
+                            .padding(.vertical, 4)
+                        }
                     }
                 }
             }
@@ -741,9 +954,42 @@ struct FitnessProfileView: View {
                     Label("Finish hydration and reflection before closing sessions", systemImage: "drop.fill")
                     Label("Progress goals close only after validated session logs", systemImage: "chart.line.uptrend.xyaxis")
                 }
+
+                Section("Operating Pulse") {
+                    Label("\(store.activeCoachAlertCount) active coach alerts", systemImage: "exclamationmark.bubble.fill")
+                    Label("\(store.readinessCompletionCount)/\(store.readinessChecks.count) readiness checks green", systemImage: "waveform.path.ecg")
+                }
             }
             .navigationTitle("Profile")
         }
+    }
+}
+
+struct FitnessCompletedSessionDetailView: View {
+    let session: FitnessCompletedSession
+
+    var body: some View {
+        List {
+            Section("Session") {
+                Text(session.title)
+                    .font(.title3.weight(.bold))
+                Text(session.summary)
+                    .foregroundStyle(.secondary)
+                Label("\(session.durationMinutes) minutes", systemImage: "clock.fill")
+                Label(session.effort, systemImage: "bolt.heart.fill")
+            }
+
+            Section("Readiness Snapshot") {
+                Text(session.readinessSnapshot)
+                    .foregroundStyle(.secondary)
+            }
+
+            Section("Recovery Directive") {
+                Text(session.recoveryDirective)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .navigationTitle("Session Detail")
     }
 }
 
@@ -895,9 +1141,13 @@ struct FitnessActiveSession: Hashable {
     let workoutTitle: String
     let trainingFocus: String
     let estimatedMinutes: Int
+    let readinessSummary: String
     var exerciseLogs: [FitnessExerciseLog]
+    var elapsedMinutes = 0
+    var isPaused = false
     var hydrationCups = 0
     var coachReflection = ""
+    var exertionHeadline = "Warm-up lane is open. Progress through the block before closing the session."
 }
 
 struct FitnessCompletedSession: Identifiable, Hashable {
@@ -907,14 +1157,27 @@ struct FitnessCompletedSession: Identifiable, Hashable {
     let durationMinutes: Int
     let effort: String
     let summary: String
+    let readinessSnapshot: String
+    let recoveryDirective: String
 
-    init(id: UUID = UUID(), title: String, trainingFocus: String, durationMinutes: Int, effort: String, summary: String) {
+    init(
+        id: UUID = UUID(),
+        title: String,
+        trainingFocus: String,
+        durationMinutes: Int,
+        effort: String,
+        summary: String,
+        readinessSnapshot: String,
+        recoveryDirective: String
+    ) {
         self.id = id
         self.title = title
         self.trainingFocus = trainingFocus
         self.durationMinutes = durationMinutes
         self.effort = effort
         self.summary = summary
+        self.readinessSnapshot = readinessSnapshot
+        self.recoveryDirective = recoveryDirective
     }
 
     static let sampleSessions: [FitnessCompletedSession] = [
@@ -923,14 +1186,18 @@ struct FitnessCompletedSession: Identifiable, Hashable {
             trainingFocus: "Row and pull-up density with grip endurance.",
             durationMinutes: 47,
             effort: "Strong technical execution",
-            summary: "Held pacing under fatigue and finished every set with full range."
+            summary: "Held pacing under fatigue and finished every set with full range.",
+            readinessSnapshot: "Sleep, hydration, and soreness checks were green before the session opened.",
+            recoveryDirective: "Keep grip and thoracic mobility in the next recovery window."
         ),
         .init(
             title: "Tempo Run Builder",
             trainingFocus: "Aerobic threshold run with cadence discipline.",
             durationMinutes: 34,
             effort: "Moderate, stable effort",
-            summary: "Stayed inside target zone and finished with clean cooldown."
+            summary: "Stayed inside target zone and finished with clean cooldown.",
+            readinessSnapshot: "Aerobic block cleared after mobility and hydration checks.",
+            recoveryDirective: "Protect sleep and hold the next day’s lower-body load."
         )
     ]
 }
@@ -1027,4 +1294,88 @@ struct FitnessHabit: Identifiable, Hashable {
         .init(title: "Protein target", completedDays: 4),
         .init(title: "Mobility cooldown", completedDays: 3)
     ]
+}
+
+struct FitnessReadinessCheck: Identifiable, Hashable {
+    let id: UUID
+    let title: String
+    let summary: String
+    let autoResetsAfterSession: Bool
+    var isComplete: Bool
+
+    init(id: UUID = UUID(), title: String, summary: String, autoResetsAfterSession: Bool, isComplete: Bool) {
+        self.id = id
+        self.title = title
+        self.summary = summary
+        self.autoResetsAfterSession = autoResetsAfterSession
+        self.isComplete = isComplete
+    }
+
+    static let sampleChecks: [FitnessReadinessCheck] = [
+        .init(title: "Sleep score cleared", summary: "Protect the heavy day only if sleep debt is under the threshold.", autoResetsAfterSession: true, isComplete: true),
+        .init(title: "Lower-body soreness cleared", summary: "Finish mobility and soreness check before loading the next squat block.", autoResetsAfterSession: true, isComplete: false),
+        .init(title: "Hydration plan confirmed", summary: "Carry the hydration target into the live session before the first main set.", autoResetsAfterSession: true, isComplete: true)
+    ]
+}
+
+struct FitnessCoachAlert: Identifiable, Hashable {
+    let id: UUID
+    let title: String
+    let detail: String
+    let severity: FitnessCoachAlertSeverity
+    let nextStep: String
+    var isResolved: Bool
+
+    init(
+        id: UUID = UUID(),
+        title: String,
+        detail: String,
+        severity: FitnessCoachAlertSeverity,
+        nextStep: String,
+        isResolved: Bool = false
+    ) {
+        self.id = id
+        self.title = title
+        self.detail = detail
+        self.severity = severity
+        self.nextStep = nextStep
+        self.isResolved = isResolved
+    }
+
+    static let sampleAlerts: [FitnessCoachAlert] = [
+        .init(
+            title: "Recovery debt is building for the next lower-body block",
+            detail: "Mobility cooldown completion dropped below target and the next heavy slot is at risk.",
+            severity: .medium,
+            nextStep: "Close the mobility task and keep the next loading block under review."
+        )
+    ]
+}
+
+enum FitnessCoachAlertSeverity: Hashable {
+    case low
+    case medium
+    case high
+
+    var label: String {
+        switch self {
+        case .low:
+            return "Watch"
+        case .medium:
+            return "Review"
+        case .high:
+            return "Blocker"
+        }
+    }
+
+    var tint: Color {
+        switch self {
+        case .low:
+            return .yellow
+        case .medium:
+            return .orange
+        case .high:
+            return .red
+        }
+    }
 }
