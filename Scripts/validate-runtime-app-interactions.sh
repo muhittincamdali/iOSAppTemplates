@@ -28,6 +28,8 @@ default_apps=(
   "TeamCollaborationApp"
   "CRMAdminApp"
   "SubscriptionLifestyleApp"
+  "FitnessApp"
+  "PrivacyVaultApp"
 )
 
 apps_to_validate=("$@")

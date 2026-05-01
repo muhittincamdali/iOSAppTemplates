@@ -12,10 +12,10 @@ Production-grade SwiftUI app starter system for Apple platforms.
 | --- | --- |
 | Root coverage | `20` standalone app roots under `Templates/` |
 | Build proof | local generic iOS `xcodebuild` tracked for `20` roots; hosted standalone iOS workflow is versioned |
-| Runtime proof | local simulator launch proof plus runtime screenshots, demo clips, and scenario frames tracked for `20` roots; automated multi-step interaction proof tracked for `EcommerceApp`, `SocialMediaApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, and `SubscriptionLifestyleApp` |
+| Runtime proof | local simulator launch proof plus runtime screenshots, demo clips, and scenario frames tracked for `20` roots; automated multi-step interaction proof tracked for all `20` standalone roots |
 | Public proof | per-app proof and media pages exist for `20` roots |
 | Visual layer | gallery cards, preview boards, runtime screenshots, demo clips, and scenario frames published for `20` roots |
-| Remaining gap | stable green hosted standalone iOS baseline, automated interaction proof parity across all lanes, equal polish across all lanes |
+| Remaining gap | stable green hosted standalone iOS baseline, deeper automated interaction depth across all lanes, equal polish across all lanes |
 
 ## First Decision
 
@@ -29,7 +29,7 @@ This repository is a strong fit if you want to:
 This repository is not yet a full fit if you expect:
 
 - `20 complete apps` already shipping at equal maturity
-- the same proof depth for every lane today
+- the same deeper interaction-proof depth for every lane today
 - automated interaction proof that reliably traverses second-screen and third-screen consequence chains for all `20` apps
 
 ![Portfolio Board](Documentation/Assets/Readme/iosapptemplates-portfolio-board.svg)
@@ -189,7 +189,7 @@ This proves today:
   - `PrivacyVaultApp`
 - local simulator runtime launch proof for the same `20` standalone roots:
   - `bash Scripts/validate-runtime-app-launches.sh`
-- automated multi-step interaction proof for `EcommerceApp`, `SocialMediaApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, and `SubscriptionLifestyleApp`:
+- automated multi-step interaction proof for all `20` standalone roots:
   - `bash Scripts/validate-runtime-app-interactions.sh`
 - published runtime screenshots for the same `20` standalone roots:
   - `Documentation/Assets/AppScreenshots/*.png`

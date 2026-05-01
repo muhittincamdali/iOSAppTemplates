@@ -4,7 +4,7 @@ Last updated: 2026-04-30
 
 ## Repository Status
 
-`iOSAppTemplates` now carries `20` rebuilt standalone app roots with real runtime proof and chained consequence flows. `EcommerceApp`, `SocialMediaApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, and `SubscriptionLifestyleApp` now also carry automated multi-step interaction proof, but the repo is still short of that parity across every lane.
+`iOSAppTemplates` now carries `20` rebuilt standalone app roots with real runtime proof, chained consequence flows, and automated multi-step interaction proof across the full set. The remaining gap is stable hosted standalone iOS proof plus deeper interaction depth beyond the current baseline.
 
 ## What Is True Right Now
 
@@ -21,7 +21,9 @@ Last updated: 2026-04-30
 - published launch-to-ready scenario frames
 - chained runtime consequence flows across the tracked `20` standalone roots
 - rebuilt runtime flows for the tracked `20` standalone roots
-- automated multi-step interaction proof for `EcommerceApp`, `SocialMediaApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, and `SubscriptionLifestyleApp`
+- automated multi-step interaction proof for all `20` standalone roots
+- automated interaction coverage set:
+  - `EcommerceApp`, `SocialMediaApp`, `FitnessApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, `SubscriptionLifestyleApp`, `PrivacyVaultApp`
 - canonical runtime scenario pages
 - local generic iOS `xcodebuild` proof is tracked for the standalone roots
 - local simulator runtime launch proof is tracked for the standalone roots
@@ -33,7 +35,6 @@ Last updated: 2026-04-30
 ## What Is Not Yet True
 
 - a stable green hosted standalone iOS baseline is not yet established for every app pack
-- automated multi-step interaction proof is not yet established for every app pack beyond `EcommerceApp`, `SocialMediaApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, and `SubscriptionLifestyleApp`
 - the latest numbered release must stay aligned with the current proof surface and GitHub distribution policy
 
 ## Current Public Gaps
@@ -42,7 +43,7 @@ Last updated: 2026-04-30
 2. keep GitHub metadata and release surfaces aligned with the versioned policy
 3. keep generated docs aligned with rebuilt runtime flows
 4. keep launch-proof, screenshot-proof, and demo-proof surfaces in sync with real runtime behavior
-5. extend automated interaction proof from the current `18` covered apps to the full `20`-app set
+5. deepen automated interaction proof beyond the current first full-set baseline
 
 ## Active Priorities
 
@@ -54,4 +55,4 @@ Last updated: 2026-04-30
 
 ## Status Summary
 
-The repo has crossed from starter collection into a tracked runtime-tested portfolio system. The next quality jump is not more naming or more promises; it is stable hosted standalone iOS proof, automated multi-step interaction proof parity across all lanes, and tighter public distribution discipline.
+The repo has crossed from starter collection into a tracked runtime-tested portfolio system. The next quality jump is not more naming or more promises; it is stable hosted standalone iOS proof, deeper chained interaction automation across all lanes, and tighter public distribution discipline.
