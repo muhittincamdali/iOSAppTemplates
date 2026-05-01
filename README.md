@@ -11,11 +11,11 @@ Production-grade SwiftUI app starter system for Apple platforms.
 | Signal | Current truth |
 | --- | --- |
 | Root coverage | `20` standalone app roots under `Templates/` |
-| Build proof | local generic iOS `xcodebuild` tracked for `20` roots; hosted standalone iOS workflow is versioned |
+| Build proof | local generic iOS `xcodebuild` tracked for `20` roots; hosted standalone iOS workflow is versioned and green on `master` |
 | Runtime proof | local simulator launch proof plus runtime screenshots, demo clips, and scenario frames tracked for `20` roots; automated multi-step interaction proof tracked for all `20` standalone roots |
 | Public proof | per-app proof and media pages exist for `20` roots |
 | Visual layer | gallery cards, preview boards, runtime screenshots, demo clips, and scenario frames published for `20` roots |
-| Remaining gap | stable green hosted standalone iOS baseline, deeper automated interaction depth across all lanes, equal polish across all lanes |
+| Remaining gap | deeper automated interaction depth across all lanes, equal polish across all lanes |
 
 ## First Decision
 
@@ -202,7 +202,6 @@ This proves today:
 
 This does not yet prove today:
 
-- stable green hosted standalone iOS proof baseline for the tracked roots
 - automated second-screen and third-screen interaction proof parity for all lanes
 
 ### 3. Use the generator
