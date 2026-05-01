@@ -53,6 +53,7 @@ This repository is not yet a full fit if you expect:
 | See GitHub distribution rules | [Documentation/GitHub-Distribution.md](Documentation/GitHub-Distribution.md) |
 | See release rules | [Documentation/Release-Process.md](Documentation/Release-Process.md) |
 | Read the 20-app market strategy | [Documentation/World-Class-20-App-Strategy-2026-04-19.md](Documentation/World-Class-20-App-Strategy-2026-04-19.md) |
+| Read the world-class benchmark matrix | [Documentation/World-Class-20-App-Benchmark-Matrix-2026-05-01.md](Documentation/World-Class-20-App-Benchmark-Matrix-2026-05-01.md) |
 | Read the brutal 20-app rebuild audit | [Documentation/Brutal-20-App-Rebuild-Audit-2026-04-27.md](Documentation/Brutal-20-App-Rebuild-Audit-2026-04-27.md) |
 | See the Wave 1 execution plan | [Documentation/Wave-1-Implementation-Plan.md](Documentation/Wave-1-Implementation-Plan.md) |
 | Inspect template families | [Documentation/TemplateGuide.md](Documentation/TemplateGuide.md) |
@@ -122,6 +123,7 @@ For the stronger current-vs-target view, use:
 - [Documentation/App-Proofs/README.md](Documentation/App-Proofs/README.md)
 - [Documentation/Wave-1-Implementation-Plan.md](Documentation/Wave-1-Implementation-Plan.md)
 - [Documentation/World-Class-20-App-Strategy-2026-04-19.md](Documentation/World-Class-20-App-Strategy-2026-04-19.md)
+- [Documentation/World-Class-20-App-Benchmark-Matrix-2026-05-01.md](Documentation/World-Class-20-App-Benchmark-Matrix-2026-05-01.md)
 - [Documentation/Brutal-20-App-Rebuild-Audit-2026-04-27.md](Documentation/Brutal-20-App-Rebuild-Audit-2026-04-27.md)
 
 ## Fastest Working Paths
