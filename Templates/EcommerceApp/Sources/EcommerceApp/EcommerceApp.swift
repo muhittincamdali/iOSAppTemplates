@@ -146,6 +146,18 @@ final class CommerceStore: ObservableObject {
         paymentMethods.first(where: { $0.id == selectedPaymentID }) ?? paymentMethods.first
     }
 
+    var reviewLockedOrdersCount: Int {
+        placedOrders.filter { $0.fulfillmentLane == .reviewLocked }.count
+    }
+
+    var activeSupportCaseCount: Int {
+        placedOrders.filter { $0.fulfillmentLane == .supportEscalated }.count
+    }
+
+    var activeReturnCaseCount: Int {
+        placedOrders.filter { $0.returnStatus == .inspectionPending || $0.returnStatus == .exchangeApproved }.count
+    }
+
     func selectCategory(_ categoryID: UUID) {
         selectedCategoryID = categoryID
     }
@@ -223,12 +235,15 @@ final class CommerceStore: ObservableObject {
             items: cartItems,
             shipmentETA: selectedDeliveryWindow,
             supportAction: "Open courier issue",
-            supportStatus: "Healthy"
+            supportStatus: "Healthy",
+            fulfillmentLane: .dispatchReady,
+            returnStatus: .locked
         )
 
         placedOrders.insert(order, at: 0)
         cartItems.removeAll()
         appliedCouponCode = ""
+        checkoutNotice = "Order locked into \(selectedDeliveryWindow). Dispatch stays green unless fulfillment review or courier support opens."
     }
 
     func reorder(_ orderID: UUID) {
@@ -238,6 +253,11 @@ final class CommerceStore: ObservableObject {
 
     func advanceOrder(_ orderID: UUID) {
         guard let index = placedOrders.firstIndex(where: { $0.id == orderID }) else { return }
+        guard placedOrders[index].fulfillmentLane != .reviewLocked else {
+            checkoutNotice = "Fulfillment review is holding \(placedOrders[index].title). Clear the review before dispatch can advance."
+            return
+        }
+
         let activeIndex = placedOrders[index].timeline.firstIndex(where: { $0.state == .active })
 
         if let activeIndex {
@@ -251,6 +271,8 @@ final class CommerceStore: ObservableObject {
                 placedOrders[index].shipmentETA = "Delivered"
             }
         }
+
+        placedOrders[index].fulfillmentLane = placedOrders[index].statusHeadline == "Delivered" ? .delivered : .dispatchReady
     }
 
     func confirmDelivery(_ orderID: UUID) {
@@ -261,12 +283,32 @@ final class CommerceStore: ObservableObject {
         placedOrders[index].statusHeadline = "Delivered"
         placedOrders[index].shipmentETA = "Delivered now"
         placedOrders[index].supportStatus = "Post-purchase window active"
+        placedOrders[index].fulfillmentLane = .delivered
+        placedOrders[index].returnStatus = .reviewEligible
+        checkoutNotice = "\(placedOrders[index].title) delivered. Return inspection and exchange tools are now unlocked."
+    }
+
+    func lockFulfillmentReview(_ orderID: UUID) {
+        guard let index = placedOrders.firstIndex(where: { $0.id == orderID }) else { return }
+        guard placedOrders[index].statusHeadline != "Delivered" else { return }
+        placedOrders[index].fulfillmentLane = .reviewLocked
+        placedOrders[index].supportStatus = "Fulfillment review active"
+        checkoutNotice = "Fulfillment review opened for \(placedOrders[index].title). Dispatch is paused until the review clears."
+    }
+
+    func clearFulfillmentReview(_ orderID: UUID) {
+        guard let index = placedOrders.firstIndex(where: { $0.id == orderID }) else { return }
+        guard placedOrders[index].fulfillmentLane == .reviewLocked else { return }
+        placedOrders[index].fulfillmentLane = .dispatchReady
+        placedOrders[index].supportStatus = "Review cleared"
+        checkoutNotice = "Fulfillment review cleared for \(placedOrders[index].title). Dispatch lane is live again."
     }
 
     func openSupportIssue(_ orderID: UUID) {
         guard let index = placedOrders.firstIndex(where: { $0.id == orderID }) else { return }
         placedOrders[index].supportStatus = "Courier issue opened"
         placedOrders[index].supportAction = "Resolve courier issue"
+        placedOrders[index].fulfillmentLane = .supportEscalated
         checkoutNotice = "Support case opened for \(placedOrders[index].title)."
     }
 
@@ -274,7 +316,38 @@ final class CommerceStore: ObservableObject {
         guard let index = placedOrders.firstIndex(where: { $0.id == orderID }) else { return }
         placedOrders[index].supportStatus = "Support resolved"
         placedOrders[index].supportAction = "Reorder Items"
+        if placedOrders[index].statusHeadline == "Delivered" {
+            placedOrders[index].fulfillmentLane = .delivered
+        } else {
+            placedOrders[index].fulfillmentLane = .dispatchReady
+        }
         checkoutNotice = "Support issue resolved and post-purchase state is healthy again."
+    }
+
+    func openReturnInspection(_ orderID: UUID) {
+        guard let index = placedOrders.firstIndex(where: { $0.id == orderID }) else { return }
+        guard placedOrders[index].returnStatus == .reviewEligible else { return }
+        placedOrders[index].returnStatus = .inspectionPending
+        placedOrders[index].supportStatus = "Return inspection active"
+        checkoutNotice = "Return inspection opened for \(placedOrders[index].title). Buyer proof, packaging, and delivery trace are under review."
+    }
+
+    func approveExchange(_ orderID: UUID) {
+        guard let index = placedOrders.firstIndex(where: { $0.id == orderID }) else { return }
+        guard placedOrders[index].returnStatus == .inspectionPending else { return }
+        placedOrders[index].returnStatus = .exchangeApproved
+        placedOrders[index].statusHeadline = "Replacement queued"
+        placedOrders[index].shipmentETA = "Replacement ships tomorrow"
+        placedOrders[index].supportStatus = "Exchange approved"
+        checkoutNotice = "Exchange approved for \(placedOrders[index].title). Replacement fulfillment lane is now active."
+    }
+
+    func closeReturnCase(_ orderID: UUID) {
+        guard let index = placedOrders.firstIndex(where: { $0.id == orderID }) else { return }
+        guard placedOrders[index].returnStatus == .exchangeApproved else { return }
+        placedOrders[index].returnStatus = .closed
+        placedOrders[index].supportStatus = "Return case closed"
+        checkoutNotice = "Return case closed for \(placedOrders[index].title). Buyer can reorder or keep the replacement lane."
     }
 
     func runInteractionProofIfNeeded() {
@@ -302,10 +375,15 @@ final class CommerceStore: ObservableObject {
             placeOrder()
 
             guard let orderID = placedOrders.first?.id else { return }
+            lockFulfillmentReview(orderID)
+            clearFulfillmentReview(orderID)
             advanceOrder(orderID)
             openSupportIssue(orderID)
             resolveSupportIssue(orderID)
             confirmDelivery(orderID)
+            openReturnInspection(orderID)
+            approveExchange(orderID)
+            closeReturnCase(orderID)
 
             EcommerceInteractionProofMode.write(
                 summary: placedOrders.first?.statusHeadline ?? checkoutNotice,
@@ -315,8 +393,11 @@ final class CommerceStore: ObservableObject {
                     "coupon-applied",
                     "delivery-window-selected",
                     "order-placed",
+                    "fulfillment-review-locked-and-cleared",
                     "support-opened-and-resolved",
-                    "delivery-confirmed"
+                    "delivery-confirmed",
+                    "return-inspection-opened",
+                    "exchange-approved-and-closed"
                 ]
             )
         }
@@ -369,8 +450,9 @@ struct CommerceHeroCard: View {
 
             HStack(spacing: 12) {
                 CommerceMetricChip(title: "Items", value: "\(store.cartItems.count)")
-                CommerceMetricChip(title: "Wishlist", value: "\(store.wishlistIDs.count)")
-                CommerceMetricChip(title: "Orders", value: "\(store.placedOrders.count)")
+                CommerceMetricChip(title: "Reviews", value: "\(store.reviewLockedOrdersCount)")
+                CommerceMetricChip(title: "Support", value: "\(store.activeSupportCaseCount)")
+                CommerceMetricChip(title: "Returns", value: "\(store.activeReturnCaseCount)")
             }
         }
         .padding(20)
@@ -849,6 +931,8 @@ struct CommerceOrderDetailView: View {
                         Label(order.total.currencyString, systemImage: "creditcard.fill")
                         Label(order.shipmentETA, systemImage: "clock.badge.checkmark.fill")
                         Label(order.supportStatus, systemImage: "lifepreserver.fill")
+                        Label(order.fulfillmentLane.label, systemImage: "shippingbox.and.arrow.backward.fill")
+                        Label(order.returnStatus.label, systemImage: "arrow.uturn.backward.circle.fill")
                     }
 
                     Section("Timeline") {
@@ -884,10 +968,19 @@ struct CommerceOrderDetailView: View {
                     }
 
                     Section("Actions") {
+                        Button(order.fulfillmentLane == .reviewLocked ? "Clear Fulfillment Review" : "Open Fulfillment Review") {
+                            if order.fulfillmentLane == .reviewLocked {
+                                store.clearFulfillmentReview(order.id)
+                            } else {
+                                store.lockFulfillmentReview(order.id)
+                            }
+                        }
+                        .disabled(order.statusHeadline == "Delivered" || order.returnStatus != .locked)
+
                         Button("Advance Fulfillment") {
                             store.advanceOrder(order.id)
                         }
-                        .disabled(order.statusHeadline == "Delivered")
+                        .disabled(order.statusHeadline == "Delivered" || order.fulfillmentLane == .reviewLocked)
 
                         Button("Confirm Delivery") {
                             store.confirmDelivery(order.id)
@@ -903,7 +996,22 @@ struct CommerceOrderDetailView: View {
                                 store.reorder(order.id)
                             }
                         }
-                            .foregroundStyle(.orange)
+                        .foregroundStyle(.orange)
+
+                        Button("Open Return Inspection") {
+                            store.openReturnInspection(order.id)
+                        }
+                        .disabled(order.returnStatus != .reviewEligible)
+
+                        Button("Approve Exchange") {
+                            store.approveExchange(order.id)
+                        }
+                        .disabled(order.returnStatus != .inspectionPending)
+
+                        Button("Close Return Case") {
+                            store.closeReturnCase(order.id)
+                        }
+                        .disabled(order.returnStatus != .exchangeApproved)
                     }
                 }
                 .navigationTitle("Order Detail")
@@ -1174,6 +1282,8 @@ struct CommerceOrder: Identifiable, Hashable {
     var shipmentETA: String
     var supportAction: String
     var supportStatus: String
+    var fulfillmentLane: CommerceFulfillmentLane
+    var returnStatus: CommerceReturnStatus
 
     init(
         id: UUID = UUID(),
@@ -1185,7 +1295,9 @@ struct CommerceOrder: Identifiable, Hashable {
         items: [CommerceCartItem],
         shipmentETA: String,
         supportAction: String,
-        supportStatus: String
+        supportStatus: String,
+        fulfillmentLane: CommerceFulfillmentLane,
+        returnStatus: CommerceReturnStatus
     ) {
         self.id = id
         self.title = title
@@ -1197,6 +1309,8 @@ struct CommerceOrder: Identifiable, Hashable {
         self.shipmentETA = shipmentETA
         self.supportAction = supportAction
         self.supportStatus = supportStatus
+        self.fulfillmentLane = fulfillmentLane
+        self.returnStatus = returnStatus
     }
 
     static let sampleOrders: [CommerceOrder] = {
@@ -1221,10 +1335,55 @@ struct CommerceOrder: Identifiable, Hashable {
                 items: items,
                 shipmentETA: "Tomorrow 18:30",
                 supportAction: "Open courier issue",
-                supportStatus: "Healthy"
+                supportStatus: "Healthy",
+                fulfillmentLane: .dispatchReady,
+                returnStatus: .locked
             )
         ]
     }()
+}
+
+enum CommerceFulfillmentLane: Hashable {
+    case reviewLocked
+    case dispatchReady
+    case supportEscalated
+    case delivered
+
+    var label: String {
+        switch self {
+        case .reviewLocked:
+            return "Fulfillment review locked"
+        case .dispatchReady:
+            return "Dispatch lane active"
+        case .supportEscalated:
+            return "Courier support escalated"
+        case .delivered:
+            return "Delivery lane closed"
+        }
+    }
+}
+
+enum CommerceReturnStatus: Hashable {
+    case locked
+    case reviewEligible
+    case inspectionPending
+    case exchangeApproved
+    case closed
+
+    var label: String {
+        switch self {
+        case .locked:
+            return "Return tools locked until delivery"
+        case .reviewEligible:
+            return "Return inspection can be opened"
+        case .inspectionPending:
+            return "Return inspection in progress"
+        case .exchangeApproved:
+            return "Exchange approved"
+        case .closed:
+            return "Return case closed"
+        }
+    }
 }
 
 struct CommerceTrustSignal: Identifiable, Hashable {
