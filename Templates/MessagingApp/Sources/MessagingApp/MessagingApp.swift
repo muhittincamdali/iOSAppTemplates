@@ -108,6 +108,14 @@ final class MessagingCommandCenterStore: ObservableObject {
         rooms.reduce(0) { $0 + $1.pendingRequests }
     }
 
+    var containedThreadCount: Int {
+        threads.filter { $0.containmentStatus != "Open lane" }.count
+    }
+
+    var legalHoldCount: Int {
+        safetyCases.filter(\.legalHoldActive).count
+    }
+
     var controlCenterHeadline: String {
         if escalatedCaseCount > 0 {
             return "\(escalatedCaseCount) trust escalations need active coverage."
@@ -132,6 +140,12 @@ final class MessagingCommandCenterStore: ObservableObject {
         threads[index].isPinned.toggle()
     }
 
+    func assignThreadOwner(_ threadID: UUID, owner: String) {
+        guard let index = threads.firstIndex(where: { $0.id == threadID }) else { return }
+        threads[index].owner = owner
+        threads[index].lastActive = "Owner updated"
+    }
+
     func sendReply(to threadID: UUID) {
         guard let index = threads.firstIndex(where: { $0.id == threadID }) else { return }
         let draft = threads[index].draftReply.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -145,6 +159,7 @@ final class MessagingCommandCenterStore: ObservableObject {
         threads[index].lastActive = "Now"
         threads[index].unreadCount = 0
         threads[index].status = .awaitingCustomer
+        threads[index].containmentStatus = "Customer follow-up sent"
         threads[index].draftReply = ""
     }
 
@@ -154,9 +169,29 @@ final class MessagingCommandCenterStore: ObservableObject {
         threads[index].unreadCount = 0
         threads[index].lastActive = "Resolved"
         threads[index].latestMessage = "Resolution sent with final policy and next-step summary."
+        threads[index].containmentStatus = "Resolution delivered"
+        threads[index].recoveryPlan = "Monitor for follow-up and keep trust artifacts attached for 24 hours."
         threads[index].messages.append(
             MessagingThreadMessage(author: operatorName, timestamp: "Now", body: "Resolution sent with final policy and next-step summary.")
         )
+    }
+
+    func freezeThread(_ threadID: UUID) {
+        guard let index = threads.firstIndex(where: { $0.id == threadID }) else { return }
+        threads[index].status = .escalated
+        threads[index].isPinned = true
+        threads[index].unreadCount = 0
+        threads[index].lastActive = "Containment active"
+        threads[index].containmentStatus = "Thread frozen"
+        threads[index].recoveryPlan = "Wait for trust lead sign-off before reopening customer contact."
+    }
+
+    func releaseThreadContainment(_ threadID: UUID) {
+        guard let index = threads.firstIndex(where: { $0.id == threadID }) else { return }
+        threads[index].status = .monitoring
+        threads[index].lastActive = "Containment released"
+        threads[index].containmentStatus = "Containment released"
+        threads[index].recoveryPlan = "Room and support updates can resume under monitored mode."
     }
 
     func postRoomUpdate(_ roomID: UUID) {
@@ -188,9 +223,59 @@ final class MessagingCommandCenterStore: ObservableObject {
         rooms[index].activity = "Extra moderator assigned"
     }
 
+    func enableSlowMode(_ roomID: UUID) {
+        guard let index = rooms.firstIndex(where: { $0.id == roomID }) else { return }
+        rooms[index].slowModeEnabled = true
+        rooms[index].activity = "Slow mode enabled"
+        rooms[index].recoveryPlan = "Posting cadence is throttled while moderators clear abuse spikes."
+    }
+
+    func lockRoomInvites(_ roomID: UUID) {
+        guard let index = rooms.firstIndex(where: { $0.id == roomID }) else { return }
+        rooms[index].inviteGateLocked = true
+        rooms[index].activity = "Invite gate locked"
+        rooms[index].recoveryPlan = "New joins are paused until trust confirms the room is stable."
+    }
+
+    func publishRoomRecoveryPlan(_ roomID: UUID) {
+        guard let index = rooms.firstIndex(where: { $0.id == roomID }) else { return }
+        rooms[index].recoveryPlan = "Pinned recovery plan published with FAQ, moderator routing, and appeal intake lane."
+        rooms[index].lastUpdate = "Recovery plan posted now"
+        rooms[index].announcements.insert(rooms[index].recoveryPlan, at: 0)
+    }
+
+    func clearRoomContainment(_ roomID: UUID) {
+        guard let index = rooms.firstIndex(where: { $0.id == roomID }) else { return }
+        rooms[index].slowModeEnabled = false
+        rooms[index].inviteGateLocked = false
+        rooms[index].activity = "Containment cleared"
+        rooms[index].recoveryPlan = "Room returned to normal operations under moderator watch."
+    }
+
+    func assignSafetyLead(_ caseID: UUID, lead: String) {
+        guard let index = safetyCases.firstIndex(where: { $0.id == caseID }) else { return }
+        safetyCases[index].assignedLead = lead
+        safetyCases[index].nextAction = "Lead \(lead) owns the trust path and final customer-safe language."
+    }
+
+    func exportEvidence(_ caseID: UUID) {
+        guard let index = safetyCases.firstIndex(where: { $0.id == caseID }) else { return }
+        safetyCases[index].evidenceExported = true
+        safetyCases[index].nextAction = "Transcript, attachments, and room actions exported for trust review."
+    }
+
+    func placeLegalHold(_ caseID: UUID) {
+        guard let index = safetyCases.firstIndex(where: { $0.id == caseID }) else { return }
+        safetyCases[index].legalHoldActive = true
+        safetyCases[index].status = .escalated
+        safetyCases[index].nextAction = "Legal hold is active. Preserve all actor history before any external response."
+        syncThreadStatus(for: safetyCases[index].threadTitle, to: .escalated)
+    }
+
     func resolveSafetyCase(_ caseID: UUID) {
         guard let index = safetyCases.firstIndex(where: { $0.id == caseID }) else { return }
         safetyCases[index].status = .resolved
+        safetyCases[index].legalHoldActive = false
         safetyCases[index].nextAction = "User warned, evidence archived, and linked thread returned to monitored state."
         syncThreadStatus(for: safetyCases[index].threadTitle, to: .monitoring)
     }
@@ -207,6 +292,7 @@ final class MessagingCommandCenterStore: ObservableObject {
         threads[index].status = status
         threads[index].isPinned = true
         threads[index].lastActive = "Escalated"
+        threads[index].containmentStatus = status == .escalated ? "Trust escalation active" : "Monitoring restored"
     }
 
     func runInteractionProofIfNeeded() {
@@ -217,29 +303,38 @@ final class MessagingCommandCenterStore: ObservableObject {
             var steps: [String] = []
 
             if let thread = self.threads.first {
+                self.assignThreadOwner(thread.id, owner: "Trust Lead - Nora")
                 self.updateDraft(thread.id, text: "Refund policy summary sent with next-step checklist.")
+                self.freezeThread(thread.id)
                 self.sendReply(to: thread.id)
-                self.togglePin(thread.id)
+                self.releaseThreadContainment(thread.id)
                 self.resolveThread(thread.id)
-                steps.append("Replied to thread and resolved it")
+                steps.append("Assigned thread owner, contained it, replied, and resolved it")
             }
 
             if let roomIndex = self.rooms.indices.first {
                 let roomID = self.rooms[roomIndex].id
+                self.enableSlowMode(roomID)
+                self.lockRoomInvites(roomID)
                 self.rooms[roomIndex].operatorDraft = "Moderator broadcast posted for abuse containment and appeal routing."
                 self.postRoomUpdate(roomID)
                 self.assignModerator(roomID)
-                steps.append("Posted room update and assigned moderator")
+                self.publishRoomRecoveryPlan(roomID)
+                self.clearRoomContainment(roomID)
+                steps.append("Contained room, published recovery plan, and restored it")
             }
 
             if let firstCase = self.safetyCases.first {
+                self.assignSafetyLead(firstCase.id, lead: "Trust Lead - Nora")
+                self.exportEvidence(firstCase.id)
+                self.placeLegalHold(firstCase.id)
                 self.escalateSafetyCase(firstCase.id)
                 self.resolveSafetyCase(firstCase.id)
-                steps.append("Escalated and resolved safety case")
+                steps.append("Assigned safety lead, exported evidence, placed legal hold, and resolved case")
             }
 
             MessagingInteractionProofMode.write(
-                summary: "Messaging interaction proof completed with thread, room, and safety resolution chain.",
+                summary: "Messaging interaction proof completed with containment, trust escalation, and recovery chain.",
                 steps: steps
             )
         }
@@ -287,7 +382,8 @@ struct MessagingHeroCard: View {
 
             HStack(spacing: 12) {
                 MessagingMetricChip(title: "Unread", value: "\(store.unreadCount)")
-                MessagingMetricChip(title: "Cases", value: "\(store.escalatedCaseCount)")
+                MessagingMetricChip(title: "Contained", value: "\(store.containedThreadCount)")
+                MessagingMetricChip(title: "Legal Holds", value: "\(store.legalHoldCount)")
                 MessagingMetricChip(title: "Room Requests", value: "\(store.activeRoomRequests)")
             }
         }
@@ -479,6 +575,11 @@ struct MessagingRoomDetailView: View {
                     Label("\(room.members) members", systemImage: "person.3.fill")
                     Label(room.activity, systemImage: "waveform.path.ecg")
                     Label(room.lastUpdate, systemImage: "clock.fill")
+                    Label(room.slowModeEnabled ? "Slow mode active" : "Slow mode cleared", systemImage: "timer")
+                    Label(room.inviteGateLocked ? "Invite gate locked" : "Invite gate open", systemImage: "person.badge.key.fill")
+                    Text(room.recoveryPlan)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
 
                 Section("Operator Actions") {
@@ -487,6 +588,23 @@ struct MessagingRoomDetailView: View {
                     }
                     Button("Assign Extra Moderator") {
                         store.assignModerator(roomID)
+                    }
+                    Button(room.slowModeEnabled ? "Clear Slow Mode" : "Enable Slow Mode") {
+                        if room.slowModeEnabled {
+                            store.clearRoomContainment(roomID)
+                        } else {
+                            store.enableSlowMode(roomID)
+                        }
+                    }
+                    Button(room.inviteGateLocked ? "Unlock Invite Gate" : "Lock Invite Gate") {
+                        if room.inviteGateLocked {
+                            store.clearRoomContainment(roomID)
+                        } else {
+                            store.lockRoomInvites(roomID)
+                        }
+                    }
+                    Button("Publish Recovery Plan") {
+                        store.publishRoomRecoveryPlan(roomID)
                     }
                 }
 
@@ -536,6 +654,12 @@ struct MessagingSafetyWorkspaceView: View {
                             Text(safetyCase.nextAction)
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
+                            Label(safetyCase.assignedLead, systemImage: "person.text.rectangle.fill")
+                                .font(.caption)
+                            Label(safetyCase.evidenceExported ? "Evidence exported" : "Evidence export pending", systemImage: "doc.on.doc.fill")
+                                .font(.caption)
+                            Label(safetyCase.legalHoldActive ? "Legal hold active" : "Legal hold clear", systemImage: "lock.doc.fill")
+                                .font(.caption)
                             HStack {
                                 Button("Resolve") {
                                     store.resolveSafetyCase(safetyCase.id)
@@ -544,6 +668,11 @@ struct MessagingSafetyWorkspaceView: View {
 
                                 Button("Escalate") {
                                     store.escalateSafetyCase(safetyCase.id)
+                                }
+                                .buttonStyle(.bordered)
+
+                                Button("Legal Hold") {
+                                    store.placeLegalHold(safetyCase.id)
                                 }
                                 .buttonStyle(.bordered)
                             }
@@ -555,6 +684,7 @@ struct MessagingSafetyWorkspaceView: View {
                 Section("Coverage") {
                     Label("\(store.resolvedCaseCount) resolved today", systemImage: "checkmark.shield.fill")
                     Label("\(store.escalatedCaseCount) escalated cases", systemImage: "exclamationmark.shield.fill")
+                    Label("\(store.legalHoldCount) legal holds active", systemImage: "lock.doc.fill")
                     Label(store.operatorNote, systemImage: "text.bubble.fill")
                 }
             }
@@ -578,6 +708,7 @@ struct MessagingProfileWorkspaceView: View {
                     Label("\(store.unreadCount) unread messages", systemImage: "tray.full.fill")
                     Label("\(store.activeRoomRequests) room requests", systemImage: "person.3.fill")
                     Label("\(store.resolvedCaseCount) trust cases resolved", systemImage: "shield.checkered")
+                    Label("\(store.containedThreadCount) contained threads", systemImage: "lock.shield.fill")
                 }
 
                 Section("Operating Rules") {
@@ -603,6 +734,11 @@ struct MessagingThreadDetailView: View {
                         .foregroundStyle(.secondary)
                     Label(thread.status.label, systemImage: thread.status.systemImage)
                         .foregroundStyle(thread.status.tint)
+                    Label(thread.owner, systemImage: "person.text.rectangle.fill")
+                    Label(thread.containmentStatus, systemImage: "lock.shield.fill")
+                    Text(thread.recoveryPlan)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
 
                 Section("Recent Messages") {
@@ -639,6 +775,15 @@ struct MessagingThreadDetailView: View {
 
                     Button("Resolve Thread") {
                         store.resolveThread(threadID)
+                    }
+                    .buttonStyle(.bordered)
+
+                    Button(thread.containmentStatus == "Thread frozen" ? "Release Containment" : "Freeze Thread") {
+                        if thread.containmentStatus == "Thread frozen" {
+                            store.releaseThreadContainment(threadID)
+                        } else {
+                            store.freezeThread(threadID)
+                        }
                     }
                     .buttonStyle(.bordered)
 
@@ -763,6 +908,9 @@ struct MessagingThreadRecord: Identifiable {
     var draftReply: String
     var status: MessagingThreadStatus
     var isPinned: Bool
+    var owner: String
+    var containmentStatus: String
+    var recoveryPlan: String
     var messages: [MessagingThreadMessage]
 
     static let sampleThreads: [MessagingThreadRecord] = [
@@ -778,6 +926,9 @@ struct MessagingThreadRecord: Identifiable {
             draftReply: "Finance reversal is complete. Sending the receipt trail and dispute-safe wording now.",
             status: .awaitingReply,
             isPinned: true,
+            owner: "Ivy Bennett",
+            containmentStatus: "Open lane",
+            recoveryPlan: "Send refund proof, then keep thread under watch until chargeback timer closes.",
             messages: [
                 .init(author: "Maya", timestamp: "17:18", body: "Customer needs refund confirmation before the chargeback deadline."),
                 .init(author: "Owen", timestamp: "17:14", body: "Finance already reversed the charge, we only need the receipt trail."),
@@ -796,6 +947,9 @@ struct MessagingThreadRecord: Identifiable {
             draftReply: "Posting the payout FAQ, SLA, and incident recap now.",
             status: .monitoring,
             isPinned: false,
+            owner: "Trust rotation",
+            containmentStatus: "Open lane",
+            recoveryPlan: "Broadcast the payout FAQ and throttle abuse if links spike again.",
             messages: [
                 .init(author: "Tara", timestamp: "16:58", body: "Creators are asking for clearer payout timing after yesterday’s incident."),
                 .init(author: "Ivy", timestamp: "16:51", body: "Preparing a broadcast with the payout FAQ and support lane.")
@@ -813,6 +967,9 @@ struct MessagingThreadRecord: Identifiable {
             draftReply: "Approving copy after analytics review and rollback note update.",
             status: .awaitingReply,
             isPinned: false,
+            owner: "Release ops",
+            containmentStatus: "Open lane",
+            recoveryPlan: "Close the blocker only after rollback criteria are mirrored into the launch room.",
             messages: [
                 .init(author: "Eli", timestamp: "17:12", body: "Need final copy approval for the new onboarding checkpoint before rollout."),
                 .init(author: "Ivy", timestamp: "17:03", body: "Reviewing rollout note, metrics guardrail, and incident fallback.")
@@ -837,6 +994,9 @@ struct MessagingRoomRecord: Identifiable {
     var pendingRequests: Int
     var lastUpdate: String
     var operatorDraft: String
+    var slowModeEnabled: Bool
+    var inviteGateLocked: Bool
+    var recoveryPlan: String
     var announcements: [String]
 
     static let sampleRooms: [MessagingRoomRecord] = [
@@ -848,6 +1008,9 @@ struct MessagingRoomRecord: Identifiable {
             pendingRequests: 5,
             lastUpdate: "FAQ posted 42 min ago",
             operatorDraft: "Posting updated payout FAQ with precise settlement windows and escalation form.",
+            slowModeEnabled: false,
+            inviteGateLocked: false,
+            recoveryPlan: "Room is open, but payout incidents still require fast moderator routing.",
             announcements: [
                 "Reminder: route threats and payment fraud into the trust escalation lane immediately.",
                 "Pinning the revised payout timing note until the incident closes."
@@ -861,6 +1024,9 @@ struct MessagingRoomRecord: Identifiable {
             pendingRequests: 2,
             lastUpdate: "Rollback guardrail synced 19 min ago",
             operatorDraft: "Approving the onboarding rollout note and attaching rollback thresholds.",
+            slowModeEnabled: false,
+            inviteGateLocked: false,
+            recoveryPlan: "Keep one owner per blocker and hold rollout until rollback notes are mirrored.",
             announcements: [
                 "One owner per blocker. Close every thread with rollback status.",
                 "Keep updates timestamped once the release window opens."
@@ -877,6 +1043,9 @@ struct MessagingSafetyCaseRecord: Identifiable {
     let threadTitle: String
     var status: MessagingSafetyCaseStatus
     var nextAction: String
+    var assignedLead: String
+    var evidenceExported: Bool
+    var legalHoldActive: Bool
 
     static let sampleCases: [MessagingSafetyCaseRecord] = [
         MessagingSafetyCaseRecord(
@@ -885,7 +1054,10 @@ struct MessagingSafetyCaseRecord: Identifiable {
             severity: "High",
             threadTitle: "Creator Community",
             status: .open,
-            nextAction: "Mute new accounts, remove links, and issue a room-wide trust notice."
+            nextAction: "Mute new accounts, remove links, and issue a room-wide trust notice.",
+            assignedLead: "Unassigned",
+            evidenceExported: false,
+            legalHoldActive: false
         ),
         MessagingSafetyCaseRecord(
             title: "Harassment report in VIP support lane",
@@ -893,7 +1065,10 @@ struct MessagingSafetyCaseRecord: Identifiable {
             severity: "Critical",
             threadTitle: "Support Escalations",
             status: .open,
-            nextAction: "Freeze the thread, export transcript, and page the trust lead."
+            nextAction: "Freeze the thread, export transcript, and page the trust lead.",
+            assignedLead: "Unassigned",
+            evidenceExported: false,
+            legalHoldActive: false
         )
     ]
 }
