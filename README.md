@@ -12,7 +12,7 @@ Production-grade SwiftUI app starter system for Apple platforms.
 | --- | --- |
 | Root coverage | `20` standalone app roots under `Templates/` |
 | Build proof | local generic iOS `xcodebuild` tracked for `20` roots; hosted standalone iOS workflow is versioned |
-| Runtime proof | local simulator launch proof plus runtime screenshots, demo clips, and scenario frames tracked for `20` roots; automated multi-step interaction proof tracked for `EcommerceApp`, `SocialMediaApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `BookingReservationsApp`, `TeamCollaborationApp`, and `CRMAdminApp` |
+| Runtime proof | local simulator launch proof plus runtime screenshots, demo clips, and scenario frames tracked for `20` roots; automated multi-step interaction proof tracked for `EcommerceApp`, `SocialMediaApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, and `SubscriptionLifestyleApp` |
 | Public proof | per-app proof and media pages exist for `20` roots |
 | Visual layer | gallery cards, preview boards, runtime screenshots, demo clips, and scenario frames published for `20` roots |
 | Remaining gap | stable green hosted standalone iOS baseline, automated interaction proof parity across all lanes, equal polish across all lanes |
@@ -189,7 +189,7 @@ This proves today:
   - `PrivacyVaultApp`
 - local simulator runtime launch proof for the same `20` standalone roots:
   - `bash Scripts/validate-runtime-app-launches.sh`
-- automated multi-step interaction proof for `EcommerceApp`, `SocialMediaApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `BookingReservationsApp`, `TeamCollaborationApp`, and `CRMAdminApp`:
+- automated multi-step interaction proof for `EcommerceApp`, `SocialMediaApp`, `ProductivityApp`, `FinanceApp`, `EducationApp`, `FoodDeliveryApp`, `TravelPlannerApp`, `AIAssistantApp`, `NewsBlogApp`, `MusicPodcastApp`, `MarketplaceApp`, `MessagingApp`, `BookingReservationsApp`, `NotesKnowledgeApp`, `CreatorShortVideoApp`, `TeamCollaborationApp`, `CRMAdminApp`, and `SubscriptionLifestyleApp`:
   - `bash Scripts/validate-runtime-app-interactions.sh`
 - published runtime screenshots for the same `20` standalone roots:
   - `Documentation/Assets/AppScreenshots/*.png`

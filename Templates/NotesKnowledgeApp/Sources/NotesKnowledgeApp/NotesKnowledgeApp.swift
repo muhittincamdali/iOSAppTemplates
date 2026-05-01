@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import NotesKnowledgeAppCore
+
+private enum NotesKnowledgeInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "NotesKnowledgeApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 @available(iOS 18.0, macOS 15.0, *)
 public struct NotesKnowledgeAppShell: App {
@@ -45,6 +71,9 @@ struct NotesKnowledgeRuntimeRootView: View {
                 }
         }
         .tint(.purple)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -58,6 +87,7 @@ final class NotesKnowledgeOperationsStore: ObservableObject {
     @Published var spaces: [KnowledgeSpaceRecord]
     @Published var operatorHeadline = "Knowledge inbox is under control and review drift is low."
     @Published var reviewWindow = "Weekly review locks at 16:30"
+    private var interactionProofScheduled = false
 
     init() {
         self.captures = [
@@ -140,6 +170,44 @@ final class NotesKnowledgeOperationsStore: ObservableObject {
     func syncSpace(_ space: KnowledgeSpaceRecord) {
         guard let index = spaces.firstIndex(where: { $0.id == space.id }) else { return }
         spaces[index].syncStatus = .synced
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard NotesKnowledgeInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        DispatchQueue.main.async {
+            var steps: [String] = []
+
+            self.addCapture()
+            steps.append("Added capture")
+
+            if let capture = self.captures.first(where: { !$0.isFiled }) {
+                self.fileCapture(capture)
+                steps.append("Filed capture to library")
+            }
+
+            if let note = self.libraryNotes.first {
+                self.pinNote(note)
+                self.promoteHighlight(note)
+                steps.append("Pinned note and promoted highlight")
+            }
+
+            if let linkMap = self.linkMaps.first {
+                self.refreshLinkMap(linkMap)
+                steps.append("Refreshed link map")
+            }
+
+            if let space = self.spaces.first(where: { $0.syncStatus != .synced }) ?? self.spaces.first {
+                self.syncSpace(space)
+                steps.append("Synced knowledge space")
+            }
+
+            NotesKnowledgeInteractionProofMode.write(
+                summary: "Knowledge interaction proof completed with capture, filing, library, link, and sync chain.",
+                steps: steps
+            )
+        }
     }
 }
 

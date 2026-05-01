@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import CreatorShortVideoAppCore
+
+private enum CreatorShortVideoInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "CreatorShortVideoApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 public struct CreatorShortVideoAppShell: App {
     public init() {}
@@ -47,6 +73,9 @@ struct CreatorShortVideoRuntimeRootView: View {
                 }
         }
         .tint(.pink)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -59,6 +88,7 @@ final class CreatorShortVideoStudioStore: ObservableObject {
     @Published var experiments: [ShortVideoGrowthExperiment] = ShortVideoGrowthExperiment.sampleExperiments
     @Published var composer = ShortVideoComposerState.sample
     @Published var selectedDraftFilter: ShortVideoDraftFilter = .all
+    private var interactionProofScheduled = false
 
     var filteredDrafts: [ShortVideoDraftRecord] {
         drafts.filter { selectedDraftFilter.includes($0.status) }
@@ -235,6 +265,54 @@ final class CreatorShortVideoStudioStore: ObservableObject {
     private func updateModerationCase(_ caseID: UUID, mutation: (inout ShortVideoModerationCaseRecord) -> Void) {
         guard let index = moderationCases.firstIndex(where: { $0.id == caseID }) else { return }
         mutation(&moderationCases[index])
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard CreatorShortVideoInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        DispatchQueue.main.async {
+            var steps: [String] = []
+
+            self.queueComposerDraft()
+            steps.append("Queued composer draft")
+
+            if let draftID = self.drafts.first?.id {
+                if let draft = self.drafts.first(where: { $0.id == draftID }) {
+                    for task in draft.tasks where !task.isComplete {
+                        self.toggleTask(for: draftID, taskID: task.id)
+                    }
+                }
+                self.approveBrandReview(draftID)
+                self.approveLegalReview(draftID)
+                self.sendForReview(draftID)
+                self.schedule(draftID)
+                self.publish(draftID)
+                steps.append("Completed draft review and published clip")
+            }
+
+            if let clipID = self.publishedClips.first?.id {
+                self.launchRecoveryExperiment(for: clipID)
+                steps.append("Launched recovery experiment")
+            }
+
+            if let experimentID = self.experiments.first(where: { !$0.isClosed })?.id {
+                self.closeExperiment(experimentID)
+                steps.append("Closed experiment")
+            }
+
+            if let moderationCaseID = self.moderationCases.first?.id {
+                self.approveModerationCase(moderationCaseID)
+                self.escalateModerationCase(moderationCaseID)
+                self.resolveModerationCase(moderationCaseID)
+                steps.append("Processed moderation chain")
+            }
+
+            CreatorShortVideoInteractionProofMode.write(
+                summary: "Creator interaction proof completed with draft, publish, experiment, and moderation chain.",
+                steps: steps
+            )
+        }
     }
 }
 

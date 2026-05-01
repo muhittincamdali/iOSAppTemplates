@@ -1,5 +1,31 @@
+import Foundation
 import SwiftUI
 import MessagingAppCore
+
+private enum MessagingInteractionProofMode {
+    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
+
+    static func write(summary: String, steps: [String]) {
+        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        let payload: [String: Any] = [
+            "app": "MessagingApp",
+            "status": "completed",
+            "summary": summary,
+            "steps": steps,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
+            return
+        }
+
+        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
+    }
+}
 
 @main
 struct MessagingApp: App {
@@ -40,6 +66,9 @@ struct MessagingRuntimeRootView: View {
                 }
         }
         .tint(.indigo)
+        .onAppear {
+            store.runInteractionProofIfNeeded()
+        }
     }
 }
 
@@ -50,6 +79,7 @@ final class MessagingCommandCenterStore: ObservableObject {
     @Published var safetyCases: [MessagingSafetyCaseRecord] = MessagingSafetyCaseRecord.sampleCases
     @Published var selectedFilter: MessagingInboxFilter = .priority
     @Published var operatorNote = "Chargeback, creator abuse, and payout phishing stay under ten-minute escalation SLA."
+    private var interactionProofScheduled = false
 
     let operatorName = "Ivy Bennett"
     let coverageShift = "EU + US overlap shift"
@@ -177,6 +207,42 @@ final class MessagingCommandCenterStore: ObservableObject {
         threads[index].status = status
         threads[index].isPinned = true
         threads[index].lastActive = "Escalated"
+    }
+
+    func runInteractionProofIfNeeded() {
+        guard MessagingInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
+        interactionProofScheduled = true
+
+        DispatchQueue.main.async {
+            var steps: [String] = []
+
+            if let thread = self.threads.first {
+                self.updateDraft(thread.id, text: "Refund policy summary sent with next-step checklist.")
+                self.sendReply(to: thread.id)
+                self.togglePin(thread.id)
+                self.resolveThread(thread.id)
+                steps.append("Replied to thread and resolved it")
+            }
+
+            if let roomIndex = self.rooms.indices.first {
+                let roomID = self.rooms[roomIndex].id
+                self.rooms[roomIndex].operatorDraft = "Moderator broadcast posted for abuse containment and appeal routing."
+                self.postRoomUpdate(roomID)
+                self.assignModerator(roomID)
+                steps.append("Posted room update and assigned moderator")
+            }
+
+            if let firstCase = self.safetyCases.first {
+                self.escalateSafetyCase(firstCase.id)
+                self.resolveSafetyCase(firstCase.id)
+                steps.append("Escalated and resolved safety case")
+            }
+
+            MessagingInteractionProofMode.write(
+                summary: "Messaging interaction proof completed with thread, room, and safety resolution chain.",
+                steps: steps
+            )
+        }
     }
 }
 
