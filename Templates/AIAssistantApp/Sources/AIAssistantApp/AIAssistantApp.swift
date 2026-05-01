@@ -122,12 +122,12 @@ final class AIAssistantOperationsStore: ObservableObject {
             AIAssistantToolRecord(name: "Knowledge Recall", summary: "Pulls scoped memory and prior decisions into context.", status: .scoped, boundaries: ["Time-boxed retention", "Workspace-only"])
         ]
         self.approvalRequests = [
-            AIAssistantApprovalRecord(title: "Customer delay message", route: "External email", status: .pending, summary: "Customer-safe recovery draft queued for manual approval."),
-            AIAssistantApprovalRecord(title: "Vendor escalation brief", route: "Internal escalation", status: .approved, summary: "Operations team recap already approved for internal send.")
+            AIAssistantApprovalRecord(title: "Customer delay message", route: "External email", status: .pending, summary: "Customer-safe recovery draft queued for manual approval.", approvalOwner: "Ops Reviewer - Mira", rollbackState: "Rollback not prepared"),
+            AIAssistantApprovalRecord(title: "Vendor escalation brief", route: "Internal escalation", status: .approved, summary: "Operations team recap already approved for internal send.", approvalOwner: "Ops Reviewer - Mira", rollbackState: "Rollback ready")
         ]
         self.trustCases = [
-            AIAssistantTrustCase(title: "PII redaction audit", detail: "A recovery draft touched protected customer fields and needs a trust pass.", severity: .high, status: .open),
-            AIAssistantTrustCase(title: "Cloud route request", detail: "One long-form transcript asked for a cloud summarize path beyond local budget.", severity: .medium, status: .monitoring)
+            AIAssistantTrustCase(title: "PII redaction audit", detail: "A recovery draft touched protected customer fields and needs a trust pass.", severity: .high, status: .open, assignedOwner: "Trust Lead - Nora", legalHoldActive: false, recoveryPlan: "Keep outbound blocked until the redaction audit and rollback note are both complete."),
+            AIAssistantTrustCase(title: "Cloud route request", detail: "One long-form transcript asked for a cloud summarize path beyond local budget.", severity: .medium, status: .monitoring, assignedOwner: "Platform Review", legalHoldActive: false, recoveryPlan: "Monitor demand and keep the route local until a scoped cloud trust review clears.")
         ]
         self.guardrailEvents = [
             "Outbound sends stay blocked until an approval request is cleared.",
@@ -152,6 +152,14 @@ final class AIAssistantOperationsStore: ObservableObject {
         approvalRequests.filter { $0.status == .pending }.count
     }
 
+    var legalHoldCount: Int {
+        trustCases.filter(\.legalHoldActive).count
+    }
+
+    var rollbackReadyCount: Int {
+        approvalRequests.filter { $0.rollbackState == "Rollback ready" }.count
+    }
+
     func runPreset(_ preset: AIAssistantPresetRecord) {
         guard let index = presets.firstIndex(where: { $0.id == preset.id }) else { return }
         presets[index].lastRunStatus = preset.mode == "Approval required" ? "Queued for approval" : "Completed locally"
@@ -172,7 +180,9 @@ final class AIAssistantOperationsStore: ObservableObject {
                     title: "\(preset.title) outbound draft",
                     route: "External draft",
                     status: .pending,
-                    summary: "A new outbound draft is waiting for operator approval."
+                    summary: "A new outbound draft is waiting for operator approval.",
+                    approvalOwner: "Unassigned",
+                    rollbackState: "Rollback not prepared"
                 ),
                 at: 0
             )
@@ -194,12 +204,26 @@ final class AIAssistantOperationsStore: ObservableObject {
                 title: "Workspace outbound draft",
                 route: "External send",
                 status: .pending,
-                summary: "Draft prepared from the workspace prompt and held for manual approval."
+                summary: "Draft prepared from the workspace prompt and held for manual approval.",
+                approvalOwner: "Unassigned",
+                rollbackState: "Rollback not prepared"
             ),
             at: 0
         )
         workspaceStatus = "Approval gate waiting"
         draftPrompt = ""
+    }
+
+    func assignApprovalOwner(_ request: AIAssistantApprovalRecord, owner: String) {
+        guard let index = approvalRequests.firstIndex(where: { $0.id == request.id }) else { return }
+        approvalRequests[index].approvalOwner = owner
+        workspaceStatus = "Approval owner assigned"
+    }
+
+    func prepareRollback(_ request: AIAssistantApprovalRecord) {
+        guard let index = approvalRequests.firstIndex(where: { $0.id == request.id }) else { return }
+        approvalRequests[index].rollbackState = "Rollback ready"
+        workspaceStatus = "Rollback route prepared"
     }
 
     func approveRequest(_ request: AIAssistantApprovalRecord) {
@@ -219,6 +243,7 @@ final class AIAssistantOperationsStore: ObservableObject {
     func dispatchApprovedRequest(_ request: AIAssistantApprovalRecord) {
         guard let index = approvalRequests.firstIndex(where: { $0.id == request.id }) else { return }
         approvalRequests[index].status = .sent
+        approvalRequests[index].rollbackState = "Rollback ready"
         workspaceStatus = "Outbound route sent safely"
         currentGoal = "Closed the approval chain and logged the outbound send."
         conversation.append(
@@ -249,7 +274,10 @@ final class AIAssistantOperationsStore: ObservableObject {
                 title: "Denied outbound draft",
                 detail: "\(approvalRequests[index].title) was denied and requires a safer rewrite.",
                 severity: .medium,
-                status: .open
+                status: .open,
+                assignedOwner: "Trust Lead - Nora",
+                legalHoldActive: false,
+                recoveryPlan: "Rewrite with stricter redaction and validate rollback language before retry."
             ),
             at: 0
         )
@@ -299,6 +327,18 @@ final class AIAssistantOperationsStore: ObservableObject {
         guardrailEvents.insert("Promoted \(memoryItems[index].title.lowercased()) into the active guardrail set.", at: 0)
     }
 
+    func quarantineTool(_ tool: AIAssistantToolRecord) {
+        guard let index = tools.firstIndex(where: { $0.id == tool.id }) else { return }
+        tools[index].status = .quarantined
+        workspaceStatus = "Tool quarantined pending trust clearance"
+    }
+
+    func restoreTool(_ tool: AIAssistantToolRecord) {
+        guard let index = tools.firstIndex(where: { $0.id == tool.id }) else { return }
+        tools[index].status = .scoped
+        workspaceStatus = "Tool restored under scoped trust controls"
+    }
+
     func toggleTool(_ tool: AIAssistantToolRecord) {
         guard let index = tools.firstIndex(where: { $0.id == tool.id }) else { return }
         switch tools[index].status {
@@ -308,25 +348,45 @@ final class AIAssistantOperationsStore: ObservableObject {
             tools[index].status = .enabled
         case .approvalRequired:
             workspaceStatus = "Approval gate unchanged"
+        case .quarantined:
+            tools[index].status = .scoped
+            workspaceStatus = "Tool restored under scoped trust controls"
         }
     }
 
     func resolveTrustCase(_ trustCase: AIAssistantTrustCase) {
         guard let index = trustCases.firstIndex(where: { $0.id == trustCase.id }) else { return }
         trustCases[index].status = .resolved
+        trustCases[index].legalHoldActive = false
+        trustCases[index].recoveryPlan = "Case closed. Guardrails and outbound rollback remain documented."
         workspaceStatus = "Trust queue reduced"
     }
 
     func monitorTrustCase(_ trustCase: AIAssistantTrustCase) {
         guard let index = trustCases.firstIndex(where: { $0.id == trustCase.id }) else { return }
         trustCases[index].status = .monitoring
+        trustCases[index].recoveryPlan = "Monitoring after guardrail breach review. Keep outbound route scoped."
         workspaceStatus = "Trust case moved into monitoring"
     }
 
     func escalateTrustCase(_ trustCase: AIAssistantTrustCase) {
         guard let index = trustCases.firstIndex(where: { $0.id == trustCase.id }) else { return }
         trustCases[index].status = .escalated
+        trustCases[index].recoveryPlan = "Escalated for trust lead review and outbound freeze."
         workspaceStatus = "Escalated to operator review"
+    }
+
+    func assignTrustOwner(_ trustCase: AIAssistantTrustCase, owner: String) {
+        guard let index = trustCases.firstIndex(where: { $0.id == trustCase.id }) else { return }
+        trustCases[index].assignedOwner = owner
+    }
+
+    func placeLegalHold(_ trustCase: AIAssistantTrustCase) {
+        guard let index = trustCases.firstIndex(where: { $0.id == trustCase.id }) else { return }
+        trustCases[index].legalHoldActive = true
+        trustCases[index].status = .escalated
+        trustCases[index].recoveryPlan = "Legal hold active. Preserve prompt, approval, and outbound artifacts before retry."
+        workspaceStatus = "Legal hold active"
     }
 
     func runInteractionProofIfNeeded() {
@@ -343,6 +403,8 @@ final class AIAssistantOperationsStore: ObservableObject {
             sendDraftForApproval()
 
             if let pending = approvalRequests.first(where: { $0.status == .pending }) {
+                assignApprovalOwner(pending, owner: "Ops Reviewer - Mira")
+                prepareRollback(pending)
                 approveRequest(pending)
             }
 
@@ -356,8 +418,15 @@ final class AIAssistantOperationsStore: ObservableObject {
                 promoteMemoryToGuardrail(memory)
             }
 
+            if let tool = tools.first(where: { $0.status == .enabled }) {
+                quarantineTool(tool)
+                restoreTool(tool)
+            }
+
             if let trustCase = trustCases.first(where: { $0.status == .open }) {
+                assignTrustOwner(trustCase, owner: "Trust Lead - Nora")
                 monitorTrustCase(trustCase)
+                placeLegalHold(trustCase)
                 escalateTrustCase(trustCase)
                 resolveTrustCase(trustCase)
             }
@@ -367,11 +436,15 @@ final class AIAssistantOperationsStore: ObservableObject {
                 steps: [
                     "preset-run",
                     "draft-sent-for-approval",
+                    "approval-owner-assigned",
+                    "rollback-prepared",
                     "approval-granted",
                     "outbound-dispatched",
                     "memory-saved",
                     "memory-promoted-to-guardrail",
-                    "trust-case-monitored-escalated-resolved"
+                    "tool-quarantined-and-restored",
+                    "trust-owner-assigned",
+                    "trust-case-monitored-legal-hold-escalated-resolved"
                 ]
             )
         }
@@ -398,8 +471,9 @@ struct AIAssistantWorkspaceView: View {
 
                         HStack(spacing: 12) {
                             AIAssistantMetricChip(title: "Tools", value: "\(store.enabledToolCount)")
+                            AIAssistantMetricChip(title: "Rollback", value: "\(store.rollbackReadyCount)")
                             AIAssistantMetricChip(title: "Pending", value: "\(store.pendingApprovalCount)")
-                            AIAssistantMetricChip(title: "Trust", value: "\(store.openTrustCaseCount)")
+                            AIAssistantMetricChip(title: "Legal Holds", value: "\(store.legalHoldCount)")
                         }
                     }
                     .padding(20)
@@ -471,8 +545,20 @@ struct AIAssistantWorkspaceView: View {
                                 Text(request.summary)
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
+                                Label(request.approvalOwner, systemImage: "person.text.rectangle.fill")
+                                    .font(.caption)
+                                Label(request.rollbackState, systemImage: "arrow.uturn.backward.circle.fill")
+                                    .font(.caption)
                                 if request.status == .pending {
                                     HStack {
+                                        Button("Assign Owner") {
+                                            store.assignApprovalOwner(request, owner: "Ops Reviewer - Mira")
+                                        }
+                                        .buttonStyle(.bordered)
+                                        Button("Prep Rollback") {
+                                            store.prepareRollback(request)
+                                        }
+                                        .buttonStyle(.bordered)
                                         Button("Approve") {
                                             store.approveRequest(request)
                                         }
@@ -617,11 +703,22 @@ struct AIAssistantToolsView: View {
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
-                            if tool.status != .approvalRequired {
+                            if tool.status == .quarantined {
+                                Button("Restore Scoped Tool") {
+                                    store.restoreTool(tool)
+                                }
+                                .buttonStyle(.borderedProminent)
+                            } else if tool.status != .approvalRequired {
                                 Button(tool.status == .enabled ? "Scope Tool" : "Enable Fully") {
                                     store.toggleTool(tool)
                                 }
                                 .buttonStyle(.bordered)
+                                if tool.status == .enabled {
+                                    Button("Quarantine Tool") {
+                                        store.quarantineTool(tool)
+                                    }
+                                    .buttonStyle(.bordered)
+                                }
                             }
                         }
                         .padding(.vertical, 4)
@@ -644,6 +741,7 @@ struct AIAssistantTrustView: View {
                     LabeledContent("Pending approvals", value: "\(store.pendingApprovalCount)")
                     LabeledContent("Pinned memory", value: "\(store.pinnedMemoryCount)")
                     LabeledContent("Open trust cases", value: "\(store.openTrustCaseCount)")
+                    LabeledContent("Legal holds", value: "\(store.legalHoldCount)")
                 }
 
                 Section("Trust Cases") {
@@ -662,8 +760,19 @@ struct AIAssistantTrustView: View {
                             Text(trustCase.severity.label)
                                 .font(.caption.weight(.semibold))
                                 .foregroundStyle(trustCase.severity.color)
+                            Label(trustCase.assignedOwner, systemImage: "person.text.rectangle.fill")
+                                .font(.caption)
+                            Label(trustCase.legalHoldActive ? "Legal hold active" : "Legal hold clear", systemImage: "lock.doc.fill")
+                                .font(.caption)
+                            Text(trustCase.recoveryPlan)
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
                             if trustCase.status == .open || trustCase.status == .monitoring {
                                 HStack {
+                                    Button("Assign Owner") {
+                                        store.assignTrustOwner(trustCase, owner: "Trust Lead - Nora")
+                                    }
+                                    .buttonStyle(.bordered)
                                     Button("Resolve") {
                                         store.resolveTrustCase(trustCase)
                                     }
@@ -676,6 +785,10 @@ struct AIAssistantTrustView: View {
                                     }
                                     Button("Escalate") {
                                         store.escalateTrustCase(trustCase)
+                                    }
+                                    .buttonStyle(.bordered)
+                                    Button("Legal Hold") {
+                                        store.placeLegalHold(trustCase)
                                     }
                                     .buttonStyle(.bordered)
                                 }
@@ -761,6 +874,7 @@ enum AIAssistantToolStatus: String, Hashable, Sendable {
     case enabled
     case approvalRequired
     case scoped
+    case quarantined
 
     var label: String {
         switch self {
@@ -770,6 +884,8 @@ enum AIAssistantToolStatus: String, Hashable, Sendable {
             return "Approval gate"
         case .scoped:
             return "Scoped"
+        case .quarantined:
+            return "Quarantined"
         }
     }
 
@@ -781,6 +897,8 @@ enum AIAssistantToolStatus: String, Hashable, Sendable {
             return .orange
         case .scoped:
             return .blue
+        case .quarantined:
+            return .red
         }
     }
 }
@@ -832,6 +950,8 @@ struct AIAssistantApprovalRecord: Identifiable, Hashable, Sendable {
     let route: String
     var status: AIAssistantApprovalStatus
     let summary: String
+    var approvalOwner: String
+    var rollbackState: String
 }
 
 enum AIAssistantTrustSeverity: Hashable, Sendable {
@@ -896,4 +1016,7 @@ struct AIAssistantTrustCase: Identifiable, Hashable, Sendable {
     let detail: String
     let severity: AIAssistantTrustSeverity
     var status: AIAssistantTrustStatus
+    var assignedOwner: String
+    var legalHoldActive: Bool
+    var recoveryPlan: String
 }
