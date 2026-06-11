@@ -1,8 +1,6 @@
 import SwiftUI
 import LocalAuthentication
 import CryptoKit
-import Alamofire
-import FirebaseAuth
 import Foundation
 import Security
 
@@ -216,7 +214,7 @@ public class EncryptionManager {
 public class SecureNetworkManager {
     public static let shared = SecureNetworkManager()
     
-    private let session: Session
+    private let session: URLSession
     private let trustedHosts: Set<String>
     
     private init() {
@@ -226,63 +224,42 @@ public class SecureNetworkManager {
         configuration.timeoutIntervalForRequest = 30
         configuration.timeoutIntervalForResource = 60
         
-        // Certificate pinning
-        let evaluator = PinnedCertificatesTrustEvaluator(
-            certificates: [],
-            acceptSelfSignedCertificates: false,
-            performDefaultValidation: true,
-            validateHost: true
-        )
-        
-        let serverTrustManager = ServerTrustManager(evaluators: [
-            "api.example.com": evaluator
-        ])
-        
-        self.session = Session(
-            configuration: configuration,
-            serverTrustManager: serverTrustManager
-        )
-        
+        self.session = URLSession(configuration: configuration)
         self.trustedHosts = ["api.example.com", "secure.example.com"]
     }
     
     public func secureRequest<T: Decodable & Sendable>(
-        _ url: URLConvertible,
-        method: HTTPMethod = .get,
-        parameters: Parameters? = nil,
-        headers: HTTPHeaders? = nil,
+        _ url: URL,
+        method: String = "GET",
+        parameters: [String: Any]? = nil,
+        headers: [String: String]? = nil,
         responseType: T.Type
     ) async throws -> T {
         // Validate URL
-        guard let urlString = try? url.asURL().absoluteString,
-              let host = URL(string: urlString)?.host,
+        guard let host = url.host(),
               trustedHosts.contains(host) else {
             throw NetworkError.untrustedHost
         }
         
-        // Add security headers
-        var secureHeaders = headers ?? HTTPHeaders()
-        secureHeaders["X-Requested-With"] = "XMLHttpRequest"
-        secureHeaders["X-Content-Type-Options"] = "nosniff"
-        secureHeaders["X-Frame-Options"] = "DENY"
+        var request = URLRequest(url: url)
+        request.httpMethod = method
         
-        return try await withCheckedThrowingContinuation { continuation in
-            session.request(
-                url,
-                method: method,
-                parameters: parameters,
-                headers: secureHeaders
-            )
-            .validate()
-            .responseDecodable(of: T.self) { response in
-                switch response.result {
-                case .success(let value):
-                    continuation.resume(returning: value)
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            }
+        // Add security headers
+        var allHeaders = headers ?? [:]
+        allHeaders["X-Requested-With"] = "XMLHttpRequest"
+        allHeaders["X-Content-Type-Options"] = "nosniff"
+        allHeaders["X-Frame-Options"] = "DENY"
+        
+        allHeaders.forEach { request.addValue($0.value, forHTTPHeaderField: $0.key) }
+        
+        let (data, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw NetworkError.invalidResponse
         }
+        
+        return try JSONDecoder().decode(T.self, from: data)
     }
 }
 
