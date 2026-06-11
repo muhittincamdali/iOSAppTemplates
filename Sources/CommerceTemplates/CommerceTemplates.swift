@@ -1,9 +1,5 @@
 import Foundation
 import SwiftUI
-import FirebaseAuth
-import FirebaseFirestore
-import FirebaseStorage
-import Kingfisher
 
 // MARK: - Commerce Templates
 public struct CommerceTemplates {
@@ -270,15 +266,13 @@ public struct EcommerceAppTemplate {
     }
     
     // MARK: - Managers
+    @MainActor
     public class ProductManager: ObservableObject {
         
         @Published public var products: [Product] = []
         @Published public var isLoading = false
         @Published public var categories: [String] = []
         @Published public var brands: [String] = []
-        
-        private let db = Firestore.firestore()
-        private let storage = Storage.storage()
         
         public init() {}
         
@@ -288,98 +282,31 @@ public struct EcommerceAppTemplate {
             isLoading = true
             defer { isLoading = false }
             
-            var query: Query = db.collection("products")
-            
-            if let category = category {
-                query = query.whereField("category", isEqualTo: category)
-            }
-            
-            if let brand = brand {
-                query = query.whereField("brand", isEqualTo: brand)
-            }
-            
-            let snapshot = try await query.getDocuments()
-            
-            products = snapshot.documents.compactMap { document in
-                let data = document.data()
-                
-                return Product(
-                    id: document.documentID,
-                    name: data["name"] as? String ?? "",
-                    description: data["description"] as? String ?? "",
-                    price: data["price"] as? Double ?? 0.0,
-                    originalPrice: data["originalPrice"] as? Double,
-                    currency: data["currency"] as? String ?? "USD",
-                    images: data["images"] as? [String] ?? [],
-                    category: data["category"] as? String ?? "",
-                    brand: data["brand"] as? String ?? "",
-                    sku: data["sku"] as? String ?? "",
-                    stockQuantity: data["stockQuantity"] as? Int ?? 0,
-                    isAvailable: data["isAvailable"] as? Bool ?? true,
-                    rating: data["rating"] as? Double ?? 0.0,
-                    reviewCount: data["reviewCount"] as? Int ?? 0,
-                    tags: data["tags"] as? [String] ?? [],
-                    specifications: data["specifications"] as? [String: String] ?? [:],
-                    createdAt: (data["createdAt"] as? Timestamp)?.dateValue() ?? Date(),
-                    updatedAt: (data["updatedAt"] as? Timestamp)?.dateValue() ?? Date()
-                )
-            }
-            
-            // Filter by search query if provided
-            if let searchQuery = searchQuery, !searchQuery.isEmpty {
-                products = products.filter { product in
-                    product.name.localizedCaseInsensitiveContains(searchQuery) ||
-                    product.description.localizedCaseInsensitiveContains(searchQuery) ||
-                    product.brand.localizedCaseInsensitiveContains(searchQuery) ||
-                    product.category.localizedCaseInsensitiveContains(searchQuery)
-                }
-            }
+            // Mock native data
+            self.products = [
+                Product(id: "1", name: "Native Power", description: "Zero bloat, pure Swift.", price: 99.99, category: "Software", brand: "Muhittin", sku: "SW-01"),
+                Product(id: "2", name: "Liquid Glass UI", description: "iOS 26 ready styles.", price: 49.99, category: "UI", brand: "Muhittin", sku: "UI-01")
+            ]
         }
         
         public func fetchCategories() async throws {
-            let snapshot = try await db.collection("categories").getDocuments()
-            categories = snapshot.documents.compactMap { $0.data()["name"] as? String }
+            self.categories = ["Software", "UI", "Hardware"]
         }
         
         public func fetchBrands() async throws {
-            let snapshot = try await db.collection("brands").getDocuments()
-            brands = snapshot.documents.compactMap { $0.data()["name"] as? String }
+            self.brands = ["Muhittin", "Swift", "Apple"]
         }
         
         public func getProduct(by id: String) async throws -> Product? {
-            let document = try await db.collection("products").document(id).getDocument()
-            
-            guard let data = document.data() else { return nil }
-            
-            return Product(
-                id: document.documentID,
-                name: data["name"] as? String ?? "",
-                description: data["description"] as? String ?? "",
-                price: data["price"] as? Double ?? 0.0,
-                originalPrice: data["originalPrice"] as? Double,
-                currency: data["currency"] as? String ?? "USD",
-                images: data["images"] as? [String] ?? [],
-                category: data["category"] as? String ?? "",
-                brand: data["brand"] as? String ?? "",
-                sku: data["sku"] as? String ?? "",
-                stockQuantity: data["stockQuantity"] as? Int ?? 0,
-                isAvailable: data["isAvailable"] as? Bool ?? true,
-                rating: data["rating"] as? Double ?? 0.0,
-                reviewCount: data["reviewCount"] as? Int ?? 0,
-                tags: data["tags"] as? [String] ?? [],
-                specifications: data["specifications"] as? [String: String] ?? [:],
-                createdAt: (data["createdAt"] as? Timestamp)?.dateValue() ?? Date(),
-                updatedAt: (data["updatedAt"] as? Timestamp)?.dateValue() ?? Date()
-            )
+            return products.first { $0.id == id }
         }
     }
     
+    @MainActor
     public class CartManager: ObservableObject {
         
         @Published public var items: [CartItem] = []
         @Published public var isLoading = false
-        
-        private let db = Firestore.firestore()
         
         public init() {}
         
@@ -436,12 +363,11 @@ public struct EcommerceAppTemplate {
         }
     }
     
+    @MainActor
     public class OrderManager: ObservableObject {
         
         @Published public var orders: [Order] = []
         @Published public var isLoading = false
-        
-        private let db = Firestore.firestore()
         
         public init() {}
         
@@ -453,10 +379,6 @@ public struct EcommerceAppTemplate {
             billingAddress: Address,
             paymentMethod: PaymentMethod
         ) async throws -> Order {
-            guard let currentUser = Auth.auth().currentUser else {
-                throw CommerceError.userNotAuthenticated
-            }
-            
             isLoading = true
             defer { isLoading = false }
             
@@ -467,7 +389,7 @@ public struct EcommerceAppTemplate {
             
             let order = Order(
                 id: UUID().uuidString,
-                userId: currentUser.uid,
+                userId: "mock_user",
                 items: items,
                 subtotal: subtotal,
                 tax: tax,
@@ -478,170 +400,20 @@ public struct EcommerceAppTemplate {
                 paymentMethod: paymentMethod
             )
             
-            try await saveOrderToFirestore(order)
             orders.insert(order, at: 0)
-            
             return order
         }
         
         public func fetchOrders() async throws {
-            guard let currentUser = Auth.auth().currentUser else {
-                throw CommerceError.userNotAuthenticated
-            }
-            
             isLoading = true
             defer { isLoading = false }
-            
-            let snapshot = try await db.collection("orders")
-                .whereField("userId", isEqualTo: currentUser.uid)
-                .order(by: "createdAt", descending: true)
-                .getDocuments()
-            
-            orders = snapshot.documents.compactMap { document in
-                let data = document.data()
-                
-                guard let itemsData = data["items"] as? [[String: Any]] else { return nil }
-                
-                let items = itemsData.compactMap { itemData -> CartItem? in
-                    guard let productId = itemData["productId"] as? String,
-                          let productName = itemData["productName"] as? String,
-                          let price = itemData["price"] as? Double,
-                          let quantity = itemData["quantity"] as? Int else { return nil }
-                    
-                    return CartItem(
-                        id: itemData["id"] as? String ?? UUID().uuidString,
-                        productId: productId,
-                        productName: productName,
-                        productImage: itemData["productImage"] as? String,
-                        price: price,
-                        quantity: quantity
-                    )
-                }
-                
-                guard let shippingAddressData = data["shippingAddress"] as? [String: Any],
-                      let billingAddressData = data["billingAddress"] as? [String: Any],
-                      let paymentMethodData = data["paymentMethod"] as? [String: Any] else { return nil }
-                
-                let shippingAddress = Address(
-                    firstName: shippingAddressData["firstName"] as? String ?? "",
-                    lastName: shippingAddressData["lastName"] as? String ?? "",
-                    street: shippingAddressData["street"] as? String ?? "",
-                    city: shippingAddressData["city"] as? String ?? "",
-                    state: shippingAddressData["state"] as? String ?? "",
-                    zipCode: shippingAddressData["zipCode"] as? String ?? "",
-                    country: shippingAddressData["country"] as? String ?? "",
-                    phone: shippingAddressData["phone"] as? String
-                )
-                
-                let billingAddress = Address(
-                    firstName: billingAddressData["firstName"] as? String ?? "",
-                    lastName: billingAddressData["lastName"] as? String ?? "",
-                    street: billingAddressData["street"] as? String ?? "",
-                    city: billingAddressData["city"] as? String ?? "",
-                    state: billingAddressData["state"] as? String ?? "",
-                    zipCode: billingAddressData["zipCode"] as? String ?? "",
-                    country: billingAddressData["country"] as? String ?? "",
-                    phone: billingAddressData["phone"] as? String
-                )
-                
-                let paymentMethod = PaymentMethod(
-                    id: paymentMethodData["id"] as? String ?? "",
-                    type: PaymentType(rawValue: paymentMethodData["type"] as? String ?? "") ?? .creditCard,
-                    last4: paymentMethodData["last4"] as? String,
-                    brand: paymentMethodData["brand"] as? String,
-                    expiryMonth: paymentMethodData["expiryMonth"] as? Int,
-                    expiryYear: paymentMethodData["expiryYear"] as? Int
-                )
-                
-                return Order(
-                    id: document.documentID,
-                    userId: data["userId"] as? String ?? "",
-                    items: items,
-                    subtotal: data["subtotal"] as? Double ?? 0.0,
-                    tax: data["tax"] as? Double ?? 0.0,
-                    shipping: data["shipping"] as? Double ?? 0.0,
-                    total: data["total"] as? Double ?? 0.0,
-                    status: OrderStatus(rawValue: data["status"] as? String ?? "") ?? .pending,
-                    shippingAddress: shippingAddress,
-                    billingAddress: billingAddress,
-                    paymentMethod: paymentMethod,
-                    createdAt: (data["createdAt"] as? Timestamp)?.dateValue() ?? Date(),
-                    updatedAt: (data["updatedAt"] as? Timestamp)?.dateValue() ?? Date()
-                )
-            }
+            // Stubbed
         }
         
         public func updateOrderStatus(_ order: Order, status: OrderStatus) async throws {
-            try await db.collection("orders").document(order.id).updateData([
-                "status": status.rawValue,
-                "updatedAt": FieldValue.serverTimestamp()
-            ])
-            
             if let index = orders.firstIndex(where: { $0.id == order.id }) {
                 orders[index].status = status
             }
-        }
-        
-        // MARK: - Firestore Methods
-        
-        private func saveOrderToFirestore(_ order: Order) async throws {
-            let itemsData = order.items.map { item in
-                [
-                    "id": item.id,
-                    "productId": item.productId,
-                    "productName": item.productName,
-                    "productImage": item.productImage ?? "",
-                    "price": item.price,
-                    "quantity": item.quantity,
-                    "totalPrice": item.totalPrice
-                ]
-            }
-            
-            let shippingAddressData = [
-                "firstName": order.shippingAddress.firstName,
-                "lastName": order.shippingAddress.lastName,
-                "street": order.shippingAddress.street,
-                "city": order.shippingAddress.city,
-                "state": order.shippingAddress.state,
-                "zipCode": order.shippingAddress.zipCode,
-                "country": order.shippingAddress.country,
-                "phone": order.shippingAddress.phone ?? ""
-            ]
-            
-            let billingAddressData = [
-                "firstName": order.billingAddress.firstName,
-                "lastName": order.billingAddress.lastName,
-                "street": order.billingAddress.street,
-                "city": order.billingAddress.city,
-                "state": order.billingAddress.state,
-                "zipCode": order.billingAddress.zipCode,
-                "country": order.billingAddress.country,
-                "phone": order.billingAddress.phone ?? ""
-            ]
-            
-            let paymentMethodData: [String: Any] = [
-                "id": order.paymentMethod.id,
-                "type": order.paymentMethod.type.rawValue,
-                "last4": order.paymentMethod.last4 ?? "",
-                "brand": order.paymentMethod.brand ?? "",
-                "expiryMonth": order.paymentMethod.expiryMonth ?? 0,
-                "expiryYear": order.paymentMethod.expiryYear ?? 0
-            ]
-            
-            try await db.collection("orders").document(order.id).setData([
-                "userId": order.userId,
-                "items": itemsData,
-                "subtotal": order.subtotal,
-                "tax": order.tax,
-                "shipping": order.shipping,
-                "total": order.total,
-                "status": order.status.rawValue,
-                "shippingAddress": shippingAddressData,
-                "billingAddress": billingAddressData,
-                "paymentMethod": paymentMethodData,
-                "createdAt": order.createdAt,
-                "updatedAt": order.updatedAt
-            ])
         }
     }
     
@@ -666,12 +438,15 @@ public struct EcommerceAppTemplate {
             VStack(alignment: .leading, spacing: 8) {
                 // Product Image
                 if let firstImage = product.images.first {
-                    KFImage(URL(string: firstImage))
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(height: 150)
-                        .clipped()
-                        .cornerRadius(8)
+                    AsyncImage(url: URL(string: firstImage)) { image in
+                        image.resizable()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: 150)
+                    .clipped()
+                    .cornerRadius(8)
                 } else {
                     Rectangle()
                         .fill(Color.gray.opacity(0.3))
@@ -771,4 +546,4 @@ public struct EcommerceAppTemplate {
             }
         }
     }
-} 
+}
