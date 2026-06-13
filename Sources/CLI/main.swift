@@ -79,6 +79,7 @@ struct CreateIOSApp: AsyncParsableCommand {
         try generateVisualSignature(at: projectPath)
         try generateCoreImplementation(at: projectPath)
         try generateREADME(at: projectPath)
+        try generateAppStoreMetadata(at: projectPath)
 
         print("\n✅  SUCCESS: '\(name)' has been assembled using World-Class components.")
         print("📍  Path: \(projectPath.path)")
@@ -240,6 +241,28 @@ struct FeatureRow: View {
 """
         try appCode.write(to: path.appendingPathComponent("Sources/\(name).swift"), atomically: true, encoding: .utf8)
         print("📜  Synthesizing core logic and feature switches...")
+    }
+
+    private func generateAppStoreMetadata(at path: URL) throws {
+        let metadata = """
+        {
+            "version": "1.0.0",
+            "locales": {
+                "en-US": {
+                    "title": "\(name)",
+                    "subtitle": "World-Class \(template.rawValue.capitalized) Experience",
+                    "description": "Experience the ultimate \(template.rawValue) application, built with zero-bloat native Swift technology.",
+                    "keywords": ["ios", "native", "swift", "\(template.rawValue)", "pro", "high-performance"],
+                    "release_notes": "Initial global launch."
+                }
+            },
+            "pricing_tier": 0,
+            "category": "\(template.rawValue)",
+            "privacy_policy_url": "https://\(name.lowercased()).app/privacy"
+        }
+        """
+        try metadata.write(to: path.appendingPathComponent("Resources/app-store-metadata.json"), atomically: true, encoding: .utf8)
+        print("📊  Generating App Store metadata...")
     }
 
     private func generateREADME(at path: URL) throws {
