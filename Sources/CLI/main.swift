@@ -34,20 +34,20 @@ struct CreateIOSApp: AsyncParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "create-ios-app",
         abstract: "The ultimate production engine for world-class iOS applications.",
-        version: "1.2.0"
+        version: "2.0.0"
     )
 
-    @Argument(help: "The name of your new world-class application.")
-    var name: String
+    @Argument(help: "The name of your new world-class application. Omit to enter interactive mode.")
+    var name: String?
 
     @Option(name: .shortAndLong, help: "The template to use.")
-    var template: AppTemplate = .social
+    var template: AppTemplate?
 
     @Option(name: [.customShort("a"), .long], help: "Authentication method (biometric, social, enterprise, none).")
-    var auth: AuthType = .biometric
+    var auth: AuthType?
 
     @Option(name: [.customShort("d"), .long], help: "Persistence layer (swiftData, coreData, sqlite, none).")
-    var db: PersistenceType = .swiftData
+    var db: PersistenceType?
 
     @Flag(name: [.customShort("y"), .long], help: "Enable Offline-First synchronization.")
     var sync: Bool = false
@@ -59,33 +59,97 @@ struct CreateIOSApp: AsyncParsableCommand {
     var strict: Bool = false
 
     func run() async throws {
+        var finalName = name ?? ""
+        var finalTemplate = template ?? .social
+        var finalAuth = auth ?? .biometric
+        var finalDb = db ?? .swiftData
+        var finalSync = sync
+        var finalLiquidGlass = liquidGlass
+        var finalStrict = strict
+        
+        // Interactive Mode Trigger
+        if name == nil {
+            print("\n" + String(repeating: "━", count: 60))
+            print("🚀 WELCOME TO PRO FORGE: WORLD-CLASS iOS APP GENERATOR")
+            print(String(repeating: "━", count: 60) + "\n")
+            
+            finalName = prompt("👉 Enter Project Name", defaultValue: "MyAwesomeApp")
+            
+            print("\nSelect Template:")
+            let allTemplates = AppTemplate.allCases
+            for (i, t) in allTemplates.enumerated() {
+                print("  [\(i + 1)] \(t.rawValue.capitalized) - \(t.description)")
+            }
+            let templateIndex = Int(prompt("Choose (1-\(allTemplates.count))", defaultValue: "1")) ?? 1
+            finalTemplate = allTemplates[max(0, min(allTemplates.count - 1, templateIndex - 1))]
+            
+            print("\nSelect Authentication:")
+            let allAuths = AuthType.allCases
+            for (i, a) in allAuths.enumerated() {
+                print("  [\(i + 1)] \(a.rawValue.capitalized)")
+            }
+            let authIndex = Int(prompt("Choose (1-\(allAuths.count))", defaultValue: "2")) ?? 2
+            finalAuth = allAuths[max(0, min(allAuths.count - 1, authIndex - 1))]
+            
+            print("\nSelect Persistence:")
+            let allDbs = PersistenceType.allCases
+            for (i, d) in allDbs.enumerated() {
+                print("  [\(i + 1)] \(d.rawValue.capitalized)")
+            }
+            let dbIndex = Int(prompt("Choose (1-\(allDbs.count))", defaultValue: "2")) ?? 2
+            finalDb = allDbs[max(0, min(allDbs.count - 1, dbIndex - 1))]
+            
+            finalSync = promptBool("Enable Offline-First Synchronization? (y/n)", defaultValue: true)
+            finalLiquidGlass = promptBool("Enable Liquid Glass UI Signature? (y/n)", defaultValue: true)
+            finalStrict = promptBool("Enable Swift 6 Strict Concurrency? (y/n)", defaultValue: true)
+        }
+        
         print("\n" + String(repeating: "═", count: 70))
-        print("🏛️  PRO FORGE: ASSEMBLING '\(name.uppercased())'")
-        print("📂  Base: \(template.rawValue.capitalized) | 🔑 Auth: \(auth) | 💿 DB: \(db)")
-        print("✨  Sync: \(sync ? "YES" : "NO") | 🧊 Liquid Glass: \(liquidGlass ? "YES" : "NO")")
+        print("🏛️  PRO FORGE: ASSEMBLING '\(finalName.uppercased())'")
+        print("📂  Base: \(finalTemplate.rawValue.capitalized) | 🔑 Auth: \(finalAuth.rawValue) | 💿 DB: \(finalDb.rawValue)")
+        print("✨  Sync: \(finalSync ? "YES" : "NO") | 🧊 Liquid Glass: \(finalLiquidGlass ? "YES" : "NO")")
         print(String(repeating: "═", count: 70) + "\n")
         
         let fileManager = FileManager.default
         let currentPath = fileManager.currentDirectoryPath
-        let projectPath = URL(fileURLWithPath: currentPath).appendingPathComponent(name)
+        let projectPath = URL(fileURLWithPath: currentPath).appendingPathComponent(finalName)
         
         if fileManager.fileExists(atPath: projectPath.path) {
-            print("❌ Error: Directory '\(name)' already exists.")
+            print("❌ Error: Directory '\(finalName)' already exists.")
             return
         }
 
         try createDirectoryStructure(at: projectPath)
-        try generatePackageSwift(at: projectPath)
-        try generateVisualSignature(at: projectPath)
-        try generateCoreImplementation(at: projectPath)
-        try generateREADME(at: projectPath)
-        try generateAppStoreMetadata(at: projectPath)
+        try generatePackageSwift(at: projectPath, name: finalName, template: finalTemplate, auth: finalAuth, db: finalDb, sync: finalSync, strict: finalStrict)
+        if finalLiquidGlass {
+            try generateVisualSignature(at: projectPath)
+        }
+        try generateCoreImplementation(at: projectPath, name: finalName, template: finalTemplate, auth: finalAuth, db: finalDb, sync: finalSync, liquidGlass: finalLiquidGlass)
+        try generateREADME(at: projectPath, name: finalName, template: finalTemplate, auth: finalAuth, db: finalDb)
+        try generateAppStoreMetadata(at: projectPath, name: finalName, template: finalTemplate)
 
-        print("\n✅  SUCCESS: '\(name)' has been assembled using World-Class components.")
+        print("\n✅  SUCCESS: '\(finalName)' has been assembled using World-Class components.")
         print("📍  Path: \(projectPath.path)")
         print("\nReady to dominate? Run:")
-        print("cd \(name) && swift build")
+        print("cd \(finalName) && swift build")
         print("\n'Mükemmellik bir eylem değil, bir alışkanlıktır.' - Muhittin Camdali\n")
+    }
+
+    private func prompt(_ message: String, defaultValue: String) -> String {
+        print("\(message) [\(defaultValue)]: ", terminator: "")
+        guard let input = readLine(), !input.trimmingCharacters(in: .whitespaces).isEmpty else {
+            return defaultValue
+        }
+        return input.trimmingCharacters(in: .whitespaces)
+    }
+    
+    private func promptBool(_ message: String, defaultValue: Bool) -> Bool {
+        let defStr = defaultValue ? "Y/n" : "y/N"
+        print("\(message) [\(defStr)]: ", terminator: "")
+        guard let input = readLine()?.trimmingCharacters(in: .whitespaces).lowercased(), !input.isEmpty else {
+            return defaultValue
+        }
+        return input.starts(with: "y")
     }
 
     private func createDirectoryStructure(at path: URL) throws {
@@ -100,7 +164,7 @@ struct CreateIOSApp: AsyncParsableCommand {
         print("🛠️  Architecting folder structure...")
     }
 
-    private func generatePackageSwift(at path: URL) throws {
+    private func generatePackageSwift(at path: URL, name: String, template: AppTemplate, auth: AuthType, db: PersistenceType, sync: Bool, strict: Bool) throws {
         var dependencies = [
             ".package(url: \"https://github.com/muhittincamdali/SwiftNetwork\", from: \"1.1.0\")",
             ".package(url: \"https://github.com/muhittincamdali/SwiftCache\", from: \"1.0.0\")",
@@ -124,6 +188,8 @@ struct CreateIOSApp: AsyncParsableCommand {
             targetDeps.append("\"iOSSecurityTools\"")
         }
 
+        let strictFlag = strict ? ".enableExperimentalFeature(\"StrictConcurrency\")" : ""
+
         let content = """
 // swift-tools-version: 6.0
 import PackageDescription
@@ -142,7 +208,7 @@ let package = Package(
                 \(targetDeps.joined(separator: ",\n                "))
             ],
             path: "Sources",
-            swiftSettings: [\(strict ? ".enableExperimentalFeature(\"StrictConcurrency\")" : "")]
+            swiftSettings: [\(strictFlag)]
         )
     ]
 )
@@ -172,7 +238,8 @@ public extension View {
         print("🎨  Injecting Liquid Glass visual signature...")
     }
 
-    private func generateCoreImplementation(at path: URL) throws {
+    private func generateCoreImplementation(at path: URL, name: String, template: AppTemplate, auth: AuthType, db: PersistenceType, sync: Bool, liquidGlass: Bool) throws {
+        let glassModifier = liquidGlass ? ".applyWorldClassStyle()" : ""
         let appCode = """
 import SwiftUI
 import SwiftNetwork
@@ -220,7 +287,7 @@ struct MainView: View {
                     FeatureRow(icon: "database.fill", text: "Storage: \(db.rawValue.capitalized)")
                     FeatureRow(icon: "bolt.horizontal.circle.fill", text: "Sync: \(sync ? "Real-time" : "Local")")
                 }
-                .applyWorldClassStyle()
+                \(glassModifier)
             }
         }
     }
@@ -243,7 +310,7 @@ struct FeatureRow: View {
         print("📜  Synthesizing core logic and feature switches...")
     }
 
-    private func generateAppStoreMetadata(at path: URL) throws {
+    private func generateAppStoreMetadata(at path: URL, name: String, template: AppTemplate) throws {
         let metadata = """
         {
             "version": "1.0.0",
@@ -265,7 +332,7 @@ struct FeatureRow: View {
         print("📊  Generating App Store metadata...")
     }
 
-    private func generateREADME(at path: URL) throws {
+    private func generateREADME(at path: URL, name: String, template: AppTemplate, auth: AuthType, db: PersistenceType) throws {
         let readme = """
 # \(name)
 **Forged by the 'create-ios-app' Pro Engine**
