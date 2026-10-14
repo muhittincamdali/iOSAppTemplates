@@ -2,9 +2,11 @@ import Foundation
 import SwiftUI
 import MessagingAppCore
 
-@main
-struct MessagingApp: App {
-    var body: some Scene {
+@available(iOS 18.0, macOS 15.0, *)
+public struct MessagingAppShell: App {
+    public init() {}
+
+    public var body: some Scene {
         WindowGroup {
             MessagingRuntimeRootView()
         }

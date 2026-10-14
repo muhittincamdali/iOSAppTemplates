@@ -2,18 +2,18 @@ import Foundation
 import SwiftUI
 
 // MARK: - Social Media App
-@main
-struct SocialMediaApp: App {
+@available(iOS 18.0, macOS 15.0, *)
+public struct SocialMediaAppShell: App {
     
     @StateObject private var authManager = AuthManager.shared
     @StateObject private var dataManager = DataManager.shared
     @StateObject private var notificationManager = NotificationManager.shared
     
-    init() {
+    public init() {
         setupAppearance()
     }
     
-    var body: some Scene {
+    public var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(authManager)

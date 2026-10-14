@@ -1,9 +1,11 @@
 import Foundation
 import SwiftUI
 
-@main
-struct EcommerceApp: App {
-    var body: some Scene {
+@available(iOS 18.0, macOS 15.0, *)
+public struct EcommerceAppShell: App {
+    public init() {}
+
+    public var body: some Scene {
         WindowGroup {
             EcommerceRuntimeRootView()
         }

@@ -2,9 +2,11 @@ import Foundation
 import SwiftUI
 import FinanceAppCore
 
-@main
-struct FinanceApp: App {
-    var body: some Scene {
+@available(iOS 18.0, macOS 15.0, *)
+public struct FinanceAppShell: App {
+    public init() {}
+
+    public var body: some Scene {
         WindowGroup {
             FinanceRuntimeRootView()
         }
