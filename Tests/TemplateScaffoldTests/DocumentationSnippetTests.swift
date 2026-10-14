@@ -32,4 +32,12 @@ struct DocumentationSnippetTests {
             #expect(text.contains("func makeShop" + snippet + "\n}"), "\(document) is out of date")
         }
     }
+
+    @Test func quickStartInDocsMatchesTheExampleApp() throws {
+        let example = try TestSupport.read("Examples/QuickStart/QuickStart/QuickStartApp.swift", in: TestSupport.repositoryRoot)
+        for document in ["Sources/TemplateScaffold/TemplateScaffold.docc/AddingATemplateToAnApp.md"] {
+            let text = try TestSupport.read(document, in: TestSupport.repositoryRoot)
+            #expect(text.contains("```swift\n" + example + "```"), "\(document) is out of date")
+        }
+    }
 }

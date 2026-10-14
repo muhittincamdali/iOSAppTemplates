@@ -37,6 +37,7 @@ func makeShop(templates: URL, output: URL) throws -> ScaffoldResult {
 ### Essentials
 
 - <doc:GettingStarted>
+- <doc:AddingATemplateToAnApp>
 - <doc:HowRenamingWorks>
 
 ### Choosing a template

@@ -4,7 +4,8 @@ Generate a project, run its tests and open it in Xcode.
 
 ## Overview
 
-You need macOS 14 or later, Xcode 16 or later and, to open the app in Xcode,
+You need macOS 14 or later, Xcode with a Swift 6 toolchain (the repository is built and
+tested with Xcode 27) and, to generate the host app project,
 [XcodeGen](https://github.com/yonaskolb/XcodeGen).
 
 ### List the templates
@@ -51,5 +52,5 @@ open MyShop.xcodeproj
 ```
 
 The host target contains a single file that calls `MyShopShell.main()`. All screens and
-state live in the `MyShop` package, so you can also add the package to an existing app
-and present `MyShopShell` from there.
+state live in the `MyShop` package, so you can also add the package to an app project of
+your own instead; see <doc:AddingATemplateToAnApp>.
