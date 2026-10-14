@@ -37,7 +37,10 @@ for template in "${templates[@]}"; do
         -scheme "$template" \
         -destination "$destination" \
         -derivedDataPath "$derived_data/$template" > "$log" 2>&1); then
-    echo "$template: $(grep -E 'Test run with' "$log" | tail -1 | sed -E 's/^[^A-Za-z]*//')"
+    # A package with several test targets runs one bundle per target; add them up.
+    tests="$(grep -oE 'Test run with [0-9]+ tests' "$log" | awk '{ total += $4 } END { print total + 0 }')"
+    bundles="$(grep -cE 'Test run with [0-9]+ tests' "$log" || true)"
+    echo "$template: $tests tests in $bundles test bundle(s) passed."
   else
     echo "$template: FAILED (full log: $log)" >&2
     grep -E 'error:|recorded an issue|failed after' "$log" | head -40 >&2 || true

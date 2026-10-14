@@ -91,6 +91,7 @@ jobs:
           - AIAssistantApp
           - BookingReservationsApp
           - CRMAdminApp
+          - CleanArchitectureApp
           - CreatorShortVideoApp
           - EcommerceApp
           - EducationApp
