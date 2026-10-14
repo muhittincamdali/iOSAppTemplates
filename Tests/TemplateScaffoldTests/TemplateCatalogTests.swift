@@ -18,10 +18,13 @@ struct TemplateCatalogTests {
 
     @Test(arguments: TemplateCatalog.all)
     func listedTabsExistInTemplateSource(_ template: TemplateDescriptor) throws {
-        let source = try TestSupport.read(
-            "Templates/\(template.directoryName)/Sources/\(template.directoryName)/\(template.directoryName).swift",
-            in: TestSupport.repositoryRoot
-        )
+        let sourceDirectory = TestSupport.templatesDirectory
+            .appendingPathComponent("\(template.directoryName)/Sources/\(template.directoryName)")
+        let source = try FileManager.default
+            .contentsOfDirectory(atPath: sourceDirectory.path)
+            .filter { $0.hasSuffix(".swift") }
+            .map { try String(contentsOf: sourceDirectory.appendingPathComponent($0), encoding: .utf8) }
+            .joined(separator: "\n")
         for tab in template.tabs {
             #expect(source.contains("Text(\"\(tab)\")"), "\(template.directoryName) has no tab labelled \(tab)")
         }

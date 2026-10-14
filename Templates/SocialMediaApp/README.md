@@ -12,7 +12,10 @@ Conform another type to `AuthService` to use Firebase, Sign in with Apple or you
 
 | Path | Contents |
 | --- | --- |
-| `Sources/SocialMediaApp/SocialMediaApp.swift` | `SocialMediaAppShell` (the public `App`), the screens, and `AuthManager`, `DataManager` and `NotificationManager` |
+| `Sources/SocialMediaApp/SocialMediaApp.swift` | `SocialMediaAppShell` (the public `App`) and the view that switches between the splash screen, sign-in and the main tabs |
+| `Sources/SocialMediaApp/AuthManager.swift`, `DataManager.swift`, `NotificationManager.swift` | The `@MainActor` `ObservableObject` types that own the session, the feed data and the notifications |
+| `Sources/SocialMediaApp/Models.swift`, `FeedViewModel.swift` | Value types for users, suggested profiles, posts, comments and notifications, and the feed's view model |
+| `Sources/SocialMediaApp/*View.swift`, `*Views.swift`, `Components.swift` | Sign-in, feed, explore, post creation, notifications, profile and comment screens, and shared controls |
 | `Sources/SocialMediaApp/AuthService.swift` | `AuthService` protocol and `LocalAuthService` |
 | `Tests/SocialMediaAppTests/` | Swift Testing suite for the app's state and actions |
 | `App/` | XcodeGen spec and a host file that calls `SocialMediaAppShell.main()` |
