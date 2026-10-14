@@ -58,16 +58,18 @@ final class BookingOperationsStore: ObservableObject {
     @Published var shiftSummary = "Morning desk covers 42 arrivals, 11 departures and 3 VIP recovery cases."
 
     init() {
-        self.stays = [
+        let stays = [
             BookingStayRecord(guestName: "Liam Carter", property: "City Loft", dateRange: "Apr 27 - Apr 30", status: .arrivalReady, departureTime: "Checkout 11:00", note: "Needs early key handoff and parking code.", preferences: ["Quiet room", "Late dinner recommendations"], identityVerified: true, checkedIn: false),
             BookingStayRecord(guestName: "Mila Harper", property: "Coastal Retreat", dateRange: "Apr 27 - May 1", status: .awaitingID, departureTime: "Checkout 10:00", note: "Passport upload pending before self check-in.", preferences: ["Crib in room", "Ocean-view request"], identityVerified: false, checkedIn: false),
             BookingStayRecord(guestName: "Oliver Reed", property: "Business Suites", dateRange: "Apr 24 - Apr 27", status: .checkoutToday, departureTime: "Departs 09:30", note: "Invoice copy requested before departure.", preferences: ["Invoice PDF", "Airport taxi"], identityVerified: true, checkedIn: true),
             BookingStayRecord(guestName: "Ava Collins", property: "City Loft", dateRange: "Apr 25 - Apr 27", status: .pendingReview, departureTime: "Departs 12:00", note: "Housekeeping flagged minibar reconciliation.", preferences: ["Late checkout", "Digital receipt"], identityVerified: true, checkedIn: true)
         ]
+        self.stays = stays
+        let staysByGuest = Dictionary(uniqueKeysWithValues: stays.map { ($0.guestName, $0.id) })
         self.guestRequests = [
-            BookingRequestRecord(title: "Late checkout approval", guest: "Ava Collins • City Loft", priority: .high, nextAction: "Confirm cleaning slot before 18:00 arrival.", status: .open),
-            BookingRequestRecord(title: "Airport transfer update", guest: "Liam Carter • City Loft", priority: .medium, nextAction: "Send driver contact and pickup window.", status: .open),
-            BookingRequestRecord(title: "Family crib setup", guest: "Mila Harper • Coastal Retreat", priority: .high, nextAction: "Housekeeping to confirm room setup before 14:00.", status: .open)
+            BookingRequestRecord(title: "Late checkout approval", guest: "Ava Collins • City Loft", stayID: staysByGuest["Ava Collins"], priority: .high, nextAction: "Confirm cleaning slot before 18:00 arrival.", approvalNote: "Late checkout approved and cleaning slot has been shifted.", status: .open),
+            BookingRequestRecord(title: "Airport transfer update", guest: "Liam Carter • City Loft", stayID: staysByGuest["Liam Carter"], priority: .medium, nextAction: "Send driver contact and pickup window.", approvalNote: "Driver contact and pickup window were sent to the guest.", status: .open),
+            BookingRequestRecord(title: "Family crib setup", guest: "Mila Harper • Coastal Retreat", stayID: staysByGuest["Mila Harper"], priority: .high, nextAction: "Housekeeping to confirm room setup before 14:00.", approvalNote: "Crib setup approved and room prep is being completed before arrival.", status: .open)
         ]
         self.calendarDays = [
             BookingCalendarRecord(label: "Today", occupancy: 92, summary: "42 arrivals, 11 departures, 3 VIP stays.", isLocked: false),
@@ -127,17 +129,8 @@ final class BookingOperationsStore: ObservableObject {
     func approveRequest(_ request: BookingRequestRecord) {
         guard let index = guestRequests.firstIndex(where: { $0.id == request.id }) else { return }
         guestRequests[index].status = .approved
-        if request.title.contains("Late checkout"),
-           let stayIndex = stays.firstIndex(where: { $0.guestName == "Ava Collins" }) {
-            stays[stayIndex].note = "Late checkout approved and cleaning slot has been shifted."
-        }
-        if request.title.contains("Airport transfer"),
-           let stayIndex = stays.firstIndex(where: { $0.guestName == "Liam Carter" }) {
-            stays[stayIndex].note = "Driver contact and pickup window were sent to the guest."
-        }
-        if request.title.contains("Family crib"),
-           let stayIndex = stays.firstIndex(where: { $0.guestName == "Mila Harper" }) {
-            stays[stayIndex].note = "Crib setup approved and room prep is being completed before arrival."
+        if let stayIndex = stays.firstIndex(where: { $0.id == request.stayID }) {
+            stays[stayIndex].note = request.approvalNote
         }
         operatorHeadline = "\(guestRequests[index].title) approved and routed into the stay workflow."
     }
@@ -502,8 +495,11 @@ struct BookingRequestRecord: Identifiable, Hashable, Sendable {
     let id = UUID()
     let title: String
     let guest: String
+    /// The stay whose note changes when the request is approved, if any.
+    let stayID: UUID?
     let priority: BookingRequestPriority
     let nextAction: String
+    let approvalNote: String
     var status: BookingRequestStatus
 }
 

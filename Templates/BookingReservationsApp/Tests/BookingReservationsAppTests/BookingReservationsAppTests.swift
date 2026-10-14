@@ -76,6 +76,38 @@ struct BookingOperationsStoreTests {
         #expect(store.openRequestCount == 3, "approved requests still count as open work")
     }
 
+    @Test func approvingARequestChangesOnlyTheLinkedStay() throws {
+        let store = BookingOperationsStore()
+        let request = try #require(store.guestRequests.first { $0.title.contains("Airport transfer") })
+        let linkedStay = try #require(store.stays.first { $0.id == request.stayID })
+        let otherNotes = store.stays.filter { $0.id != linkedStay.id }.map(\.note)
+
+        store.approveRequest(request)
+
+        #expect(store.stays.first { $0.id == linkedStay.id }?.note == request.approvalNote)
+        #expect(store.stays.filter { $0.id != linkedStay.id }.map(\.note) == otherNotes)
+    }
+
+    @Test func approvingARequestWithoutAStayLeavesStaysUnchanged() {
+        let store = BookingOperationsStore()
+        let notesBefore = store.stays.map(\.note)
+        let walkIn = BookingRequestRecord(
+            title: "Walk-in upgrade",
+            guest: "Walk-in guest",
+            stayID: nil,
+            priority: .medium,
+            nextAction: "Check suite availability.",
+            approvalNote: "Upgrade approved.",
+            status: .open
+        )
+        store.guestRequests.append(walkIn)
+
+        store.approveRequest(walkIn)
+
+        #expect(store.guestRequests.last?.status == .approved)
+        #expect(store.stays.map(\.note) == notesBefore)
+    }
+
     @Test func resolvingAndEscalatingChangeOpenCount() {
         let store = BookingOperationsStore()
 
