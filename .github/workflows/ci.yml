@@ -2,43 +2,75 @@ name: CI
 
 on:
   push:
-    branches: [master, main]
+    branches: [master]
   pull_request:
-    branches: [master, main]
+  workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: macos-15
+  scaffold-tool:
+    name: create-ios-app
+    runs-on: macos-26
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Select Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
-
-      - name: Reset SwiftPM artifact caches
+      - name: Show toolchain
         run: |
-          rm -rf ~/Library/Caches/org.swift.swiftpm/artifacts
-          rm -rf .build/artifacts
-      
+          xcodebuild -version
+          swift --version
+
       - name: Build
         run: swift build
-      
+
       - name: Test
         run: swift test
 
-      - name: Template generator smoke
-        run: bash Scripts/validate-template-generator-smoke.sh
-
-      - name: Standalone root manifest smoke
-        run: bash Scripts/validate-standalone-template-roots.sh
-      
-      - name: SwiftLint smoke
+      - name: Scaffold a project and test it in the simulator
         run: |
-          brew install swiftlint
-          ruby -e 'require "yaml"; YAML.load_file(".swiftlint.yml")'
-          swiftlint version
+          swift run create-ios-app new SmokeShop --template ecommerce --output "$RUNNER_TEMP"
+          udid="$(xcrun simctl list devices available | grep -E '^\s+iPhone' | head -1 | grep -oE '[0-9A-F-]{36}')"
+          cd "$RUNNER_TEMP/SmokeShop"
+          xcodebuild test -scheme SmokeShop-Package -destination "platform=iOS Simulator,id=$udid" -quiet
+
+  templates:
+    name: ${{ matrix.template }}
+    runs-on: macos-26
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        template:
+          - AIAssistantApp
+          - BookingReservationsApp
+          - CRMAdminApp
+          - CreatorShortVideoApp
+          - EcommerceApp
+          - EducationApp
+          - FinanceApp
+          - FitnessApp
+          - FoodDeliveryApp
+          - MarketplaceApp
+          - MessagingApp
+          - MusicPodcastApp
+          - NewsBlogApp
+          - NotesKnowledgeApp
+          - PrivacyVaultApp
+          - ProductivityApp
+          - SocialMediaApp
+          - SubscriptionLifestyleApp
+          - TeamCollaborationApp
+          - TravelPlannerApp
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Build and test
+        env:
+          TEMPLATE: ${{ matrix.template }}
+        run: scripts/test-templates.sh "$TEMPLATE"
