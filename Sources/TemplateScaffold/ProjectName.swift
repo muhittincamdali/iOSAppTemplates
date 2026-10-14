@@ -8,13 +8,27 @@ import Foundation
 public struct ProjectName: Hashable, Sendable, CustomStringConvertible {
     public static let maximumLength = 64
 
-    /// Names that would collide with Swift keywords or with modules and types the templates import.
-    static let reservedNames: Set<String> = [
-        "App", "Scene", "View", "SwiftUI", "Foundation", "Combine", "Observation", "UIKit",
-        "XCTest", "Testing", "Swift", "Self", "Type", "Protocol", "Any",
-        "class", "struct", "enum", "protocol", "extension", "func", "import", "let", "var",
-        "init", "deinit", "return", "self", "super", "true", "false", "nil"
+    /// Swift keywords that cannot be used as an identifier without backticks, so `import <Name>` would not parse.
+    static let swiftKeywords: Set<String> = [
+        // Declarations
+        "associatedtype", "class", "deinit", "enum", "extension", "fileprivate", "func", "import", "init",
+        "inout", "internal", "let", "operator", "precedencegroup", "private", "protocol", "public",
+        "rethrows", "static", "struct", "subscript", "typealias", "var",
+        // Statements
+        "break", "case", "catch", "continue", "default", "defer", "do", "else", "fallthrough", "for",
+        "guard", "if", "in", "repeat", "return", "switch", "throw", "where", "while",
+        // Expressions and types
+        "Any", "as", "false", "is", "nil", "self", "Self", "super", "throws", "true", "try"
     ]
+
+    /// Modules and types the templates import, which a module of the same name would shadow,
+    /// plus `Type` and `Protocol`, which have a special meaning after a dot.
+    static let shadowedNames: Set<String> = [
+        "App", "Scene", "View", "SwiftUI", "Foundation", "Combine", "Observation", "UIKit",
+        "XCTest", "Testing", "Swift", "Type", "Protocol"
+    ]
+
+    static let reservedNames = swiftKeywords.union(shadowedNames)
 
     public let rawValue: String
 
