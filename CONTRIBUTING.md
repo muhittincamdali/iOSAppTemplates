@@ -43,7 +43,8 @@ open FinanceApp.xcodeproj
 
 1. Create `Templates/<Name>App/` with the same layout as the existing templates:
    `Package.swift`, `Sources/<Name>App/`, `Tests/<Name>AppTests/`, `App/project.yml` and
-   `App/<Name>AppHost.swift`.
+   `App/<Name>AppHost.swift`. Further targets must also start with `<Name>App`, as the
+   layers of `CleanArchitectureApp` do, so that `create-ios-app` renames them.
 2. Expose a public `<Name>AppShell: App`.
 3. Add a `TemplateDescriptor` to `TemplateCatalog` and the template to the matrix in
    `.github/workflows/templates.yml`.
