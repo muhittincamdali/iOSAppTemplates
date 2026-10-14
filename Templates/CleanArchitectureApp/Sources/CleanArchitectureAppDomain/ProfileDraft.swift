@@ -46,7 +46,11 @@ public struct ProfileDraft: Hashable, Sendable {
         var issues: [ValidationIssue] = []
         let name = normalizedName
         if name.unicodeScalars.count > Self.maximumNameScalarCount {
-            issues.append(.nameTooLong(maximum: Self.nameLength.upperBound))
+            // Within the character limit, only many scalars per character exceed this bound,
+            // and asking for fewer characters would not tell the user what to change.
+            issues.append(name.count > Self.nameLength.upperBound
+                ? .nameTooLong(maximum: Self.nameLength.upperBound)
+                : .nameTooComplex)
         } else if name.unicodeScalars.contains(where: Self.isUnsafe) {
             issues.append(.nameInvalidCharacters)
         } else if name.count(where: Self.isVisible) < Self.nameLength.lowerBound {
@@ -139,6 +143,9 @@ public enum ValidationIssue: Hashable, Sendable {
     case nameInvalidCharacters
     case nameTooShort(minimum: Int)
     case nameTooLong(maximum: Int)
+    /// The name fits the character limit but exceeds `ProfileDraft.maximumNameScalarCount`,
+    /// for example sixty family emoji of seven scalars each.
+    case nameTooComplex
     case emailMissing
     case emailInvalid
     case emailTooLong(maximum: Int)
@@ -150,7 +157,7 @@ public enum ValidationIssue: Hashable, Sendable {
 
     public var field: Field {
         switch self {
-        case .nameInvalidCharacters, .nameTooShort, .nameTooLong: .name
+        case .nameInvalidCharacters, .nameTooShort, .nameTooLong, .nameTooComplex: .name
         case .emailMissing, .emailInvalid, .emailTooLong: .email
         }
     }

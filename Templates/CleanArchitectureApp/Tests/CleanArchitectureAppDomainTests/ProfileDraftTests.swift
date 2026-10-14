@@ -69,7 +69,7 @@ struct ProfileDraftTests {
         // Two characters, but a million and two scalars (about 2 MB of UTF-8).
         let zalgo = "Ab" + String(repeating: "\u{0301}", count: 1_000_000)
         #expect(zalgo.count == 2)
-        #expect(draft(name: zalgo).issues == [.nameTooLong(maximum: 60)])
+        #expect(draft(name: zalgo).issues == [.nameTooComplex])
     }
 
     @Test func scalarLimitLeavesRoomForDecomposedAccents() {
@@ -78,9 +78,20 @@ struct ProfileDraftTests {
         let accented = String(repeating: "e\u{0301}\u{0323}\u{0302}", count: limit / 4)
         #expect(accented.unicodeScalars.count == limit)
         #expect(draft(name: accented).issues.isEmpty)
-        #expect(draft(name: accented + "\u{0301}").issues == [.nameTooLong(maximum: 60)])
+        #expect(draft(name: accented + "\u{0301}").issues == [.nameTooComplex])
         // Decomposed Vietnamese: "Nguyễn" typed as base letters and combining marks.
         #expect(draft(name: "Nguye\u{0302}\u{0303}n Va\u{0306}n A").issues.isEmpty)
+    }
+
+    @Test func scalarLimitIsReportedApartFromTheCharacterLimit() {
+        // A family emoji is one character of seven scalars: four people and three joiners.
+        let family = "\u{1F468}\u{200D}\u{1F469}\u{200D}\u{1F467}\u{200D}\u{1F466}"
+        #expect(family.count == 1)
+        #expect(family.unicodeScalars.count == 7)
+        #expect(draft(name: String(repeating: family, count: 34)).issues.isEmpty)
+        // Sixty characters are allowed, so "use at most 60 characters" would not help here.
+        #expect(draft(name: String(repeating: family, count: 60)).issues == [.nameTooComplex])
+        #expect(draft(name: String(repeating: family, count: 61)).issues == [.nameTooLong(maximum: 60)])
     }
 
     @Test func emptyEmailIsMissingNotInvalid() {

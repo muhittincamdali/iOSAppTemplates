@@ -40,6 +40,8 @@ extension ValidationIssue {
             "Enter a name of at least \(minimum) characters."
         case .nameTooLong(let maximum):
             "Use at most \(maximum) characters for the name."
+        case .nameTooComplex:
+            "Use fewer accents or emoji in the name."
         case .emailMissing:
             "Enter an email address."
         case .emailInvalid:
