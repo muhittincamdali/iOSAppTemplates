@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  # Pinned so a runner image update cannot change the toolchain silently.
+  # Installed versions: https://github.com/actions/runner-images/blob/main/images/macos/macos-26-arm64-Readme.md
+  DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
   SWIFTLINT_VERSION: 0.63.2
   SWIFTLINT_SHA256: c59a405c85f95b92ced677a500804e081596a4cae4a6a485af76065557d6ed29
 
@@ -90,6 +93,9 @@ jobs:
           - TravelPlannerApp
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Show toolchain
+        run: xcodebuild -version
 
       - name: Build and test
         env:
