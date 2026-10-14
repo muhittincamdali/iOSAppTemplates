@@ -507,8 +507,8 @@ struct ProductivityTaskRecord: Identifiable, Hashable {
 
     static let samples: [ProductivityTaskRecord] = [
         ProductivityTaskRecord(id: UUID(), title: "Finalize launch review narrative", detail: "Go/no-go review still needs the final risk table.", project: "Release Ops", priority: .critical, dueLabel: "Today 16:00", status: .prioritized),
-        ProductivityTaskRecord(id: UUID(), title: "Review screenshot host collisions", detail: "Parallel runtime capture still needs one clean regression pass.", project: "Proof System", priority: .high, dueLabel: "Today 18:30", status: .planned),
-        ProductivityTaskRecord(id: UUID(), title: "Prepare next flagship backlog", detail: "Map the next rebuild wave into the portfolio board.", project: "Template Portfolio", priority: .medium, dueLabel: "Tomorrow", status: .captured)
+        ProductivityTaskRecord(id: UUID(), title: "Review onboarding analytics", detail: "Signup completion dropped after the last release and needs one clean regression pass.", project: "Growth Experiments", priority: .high, dueLabel: "Today 18:30", status: .planned),
+        ProductivityTaskRecord(id: UUID(), title: "Prepare next quarter backlog", detail: "Map the next feature wave onto the planning board.", project: "Roadmap", priority: .medium, dueLabel: "Tomorrow", status: .captured)
     ]
 }
 
@@ -520,9 +520,9 @@ struct ProductivityProjectRecord: Identifiable, Hashable {
     var status: String
 
     static let samples: [ProductivityProjectRecord] = [
-        ProductivityProjectRecord(id: UUID(), name: "Release Ops", owner: "Muhittin", progress: 0.72, status: "At Risk"),
-        ProductivityProjectRecord(id: UUID(), name: "Proof System", owner: "Muhittin", progress: 0.84, status: "Healthy"),
-        ProductivityProjectRecord(id: UUID(), name: "Template Portfolio", owner: "Muhittin", progress: 0.58, status: "Needs Focus")
+        ProductivityProjectRecord(id: UUID(), name: "Release Ops", owner: "Dana Wright", progress: 0.72, status: "At Risk"),
+        ProductivityProjectRecord(id: UUID(), name: "Growth Experiments", owner: "Leo Park", progress: 0.84, status: "Healthy"),
+        ProductivityProjectRecord(id: UUID(), name: "Roadmap", owner: "Dana Wright", progress: 0.58, status: "Needs Focus")
     ]
 
     var statusColor: Color {

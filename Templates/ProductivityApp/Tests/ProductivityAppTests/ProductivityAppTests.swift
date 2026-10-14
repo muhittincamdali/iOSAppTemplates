@@ -57,21 +57,21 @@ struct ProductivityOperationsStoreTests {
 
     @Test func completingTaskBelowThresholdKeepsProjectStatus() {
         let store = ProductivityOperationsStore()
-        let task = store.inboxTasks.first { $0.project == "Template Portfolio" }!
+        let task = store.inboxTasks.first { $0.project == "Roadmap" }!
 
         store.completeTask(task.id)
 
-        #expect(project("Template Portfolio", in: store).status == "Needs Focus")
+        #expect(project("Roadmap", in: store).status == "Needs Focus")
     }
 
     @Test func projectProgressIsCappedAtOne() {
         let store = ProductivityOperationsStore()
         let task = store.inboxTasks[0]
-        let target = project("Proof System", in: store)
+        let target = project("Growth Experiments", in: store)
 
         for _ in 0..<5 { store.moveTaskToProject(task.id, projectID: target.id) }
 
-        #expect(project("Proof System", in: store).progress == 1.0)
+        #expect(project("Growth Experiments", in: store).progress == 1.0)
     }
 
     @Test func focusBlockLifecycle() {

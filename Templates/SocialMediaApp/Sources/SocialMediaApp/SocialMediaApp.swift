@@ -943,7 +943,7 @@ struct CreatePostView: View {
             }
             .onAppear {
                 if caption.isEmpty {
-                    caption = "Shipping a sharper runtime proof system today. The goal is simple: less template theater, more product truth."
+                    caption = "Shipped a shorter onboarding flow today: three screens instead of five, and clearer copy."
                 }
             }
         }
@@ -1536,7 +1536,7 @@ class DataManager: ObservableObject {
                     authorDisplayName: currentUser.displayName,
                     authorAvatarURL: currentUser.avatarURL,
                     authorIsVerified: currentUser.isVerified,
-                    content: "Proof should reflect product reality. Shipping deeper runtime flows next.",
+                    content: "Small releases every week. The new profile screen is next.",
                     images: ["https://picsum.photos/411/311"],
                     videoURL: nil,
                     likesCount: 64,
@@ -1576,7 +1576,7 @@ class DataManager: ObservableObject {
                 id: "p3",
                 username: "opsforapps",
                 displayName: "Ops For Apps",
-                bio: "Shipping notes on release hygiene, runtime proof, and product operations.",
+                bio: "Notes on release hygiene and product operations.",
                 avatarURL: "https://picsum.photos/222",
                 isVerified: true,
                 followersCount: 18300
@@ -1595,7 +1595,7 @@ class DataManager: ObservableObject {
                 PostComment(id: "c4", authorName: "Aria", authorUsername: "ariareads", body: "Drop the reading list when you can.", likesCount: 4, createdAt: Date().addingTimeInterval(-9000))
             ],
             "preview-post": [
-                PostComment(id: "c5", authorName: "Sam", authorUsername: "samship", body: "Good. Proof without flows is still theater.", likesCount: 10, createdAt: Date().addingTimeInterval(-1200))
+                PostComment(id: "c5", authorName: "Sam", authorUsername: "samship", body: "Agreed. Small steps add up.", likesCount: 10, createdAt: Date().addingTimeInterval(-1200))
             ]
         ]
         likedPostIDs = ["2"]
@@ -1620,7 +1620,7 @@ class NotificationManager: ObservableObject {
     
     func seedPreviewState() {
         notifications = [
-            SocialNotificationItem(id: "n1", actorName: "Amber Design", message: "liked your runtime proof update.", systemImage: "heart.fill", isUnread: true, createdAt: Date().addingTimeInterval(-900)),
+            SocialNotificationItem(id: "n1", actorName: "Amber Design", message: "liked your release update.", systemImage: "heart.fill", isUnread: true, createdAt: Date().addingTimeInterval(-900)),
             SocialNotificationItem(id: "n2", actorName: "Swift Foundry", message: "mentioned you in a thread about app templates.", systemImage: "at", isUnread: true, createdAt: Date().addingTimeInterval(-2400)),
             SocialNotificationItem(id: "n3", actorName: "Ops For Apps", message: "shared your post with their release engineering circle.", systemImage: "arrowshape.turn.up.right.fill", isUnread: false, createdAt: Date().addingTimeInterval(-7200)),
             SocialNotificationItem(id: "n4", actorName: "Maya Studio", message: "started following you.", systemImage: "person.badge.plus", isUnread: false, createdAt: Date().addingTimeInterval(-14400))
