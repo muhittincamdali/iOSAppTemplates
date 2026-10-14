@@ -108,7 +108,7 @@ final class MarketplaceOperationsStore: ObservableObject {
     }
 
     var featuredListings: [MarketplaceListingRecord] {
-        listings.filter { $0.category == selectedCategory || ($0.category == "Featured Tech" && selectedCategory == "Featured Tech") }
+        listings.filter { $0.category == selectedCategory }
     }
 
     var subtotal: Double {
