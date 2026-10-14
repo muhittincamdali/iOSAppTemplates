@@ -17,6 +17,8 @@ extension DirectoryError {
             "The server could not complete the request (HTTP \(statusCode))."
         case .invalidResponse:
             "The server sent a response the app could not read."
+        case .invalidRequest:
+            "The change could not be prepared for the server, so nothing was sent."
         case .permissionDenied(.editOwnProfile):
             "Your account is not allowed to edit its profile."
         case .permissionDenied:

@@ -29,9 +29,19 @@ public struct UsersAPI: Sendable {
         request.httpMethod = "PUT"
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try? JSONCoding.makeEncoder().encode(user)
+        request.httpBody = try Self.encode(user)
         let data = try await send(request)
         return try decode(UserDTO.self, from: data)
+    }
+
+    /// A body that cannot be encoded stops the request; sending the PUT without it would
+    /// ask the server to store nothing.
+    static func encode(_ value: some Encodable) throws(DirectoryError) -> Data {
+        do {
+            return try JSONCoding.makeEncoder().encode(value)
+        } catch {
+            throw .invalidRequest
+        }
     }
 
     private func send(_ request: URLRequest) async throws(DirectoryError) -> Data {

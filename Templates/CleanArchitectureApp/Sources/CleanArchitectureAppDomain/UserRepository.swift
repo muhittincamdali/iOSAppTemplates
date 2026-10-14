@@ -40,6 +40,8 @@ public enum DirectoryError: Error, Equatable, Sendable {
     case server(statusCode: Int)
     /// The response could not be read.
     case invalidResponse
+    /// The change could not be encoded for the server, so nothing was sent.
+    case invalidRequest
     /// The acting user lacks the permission.
     case permissionDenied(Permission)
     /// The edited profile breaks one or more rules.

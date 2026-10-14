@@ -72,6 +72,11 @@ struct UsersAPITests {
         #expect(try JSONCoding.makeDecoder().decode(UserDTO.self, from: body) == user)
     }
 
+    @Test func aBodyThatCannotBeEncodedStopsTheRequest() {
+        // JSONEncoder rejects non-finite numbers by default, so nothing would be sent.
+        #expect(throws: DirectoryError.invalidRequest) { try UsersAPI.encode(Double.nan) }
+    }
+
     @Test(arguments: [
         (401, "", DirectoryError.unauthorized),
         (403, "", .unauthorized),
