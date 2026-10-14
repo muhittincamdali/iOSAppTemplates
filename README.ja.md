@@ -1,7 +1,7 @@
-<!-- i18n-source: README.md@930ecae6c52c696ce79171172268185a0dc74d4e status=reviewed -->
+<!-- i18n-source: README.md@a152ec6369400e028598e5491520d5303a39f33b status=reviewed -->
 <!-- brand:start -->
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-light.svg" alt="iOSAppTemplates: iOS 18 向け SwiftUI アプリテンプレート 20 種。どれもテスト付きの Swift パッケージで、自分の名前で複製できます。"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-light.svg" alt="iOSAppTemplates: iOS 18 向け SwiftUI アプリテンプレート 21 種。テスト付きで、自分の名前で複製できます。"></picture></p>
 
 <!-- lang-selector:start -->
 <p align="center"><a href="README.md">English</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a> · <a href="README.es.md">Español</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a> · <a href="README.pt-BR.md">Português (Brasil)</a> · <a href="README.ru.md">Русский</a></p>
@@ -26,13 +26,14 @@
 
 <!-- brand:end -->
 
-EC、家計管理、メッセージング、旅行など、iOS 18 向けの SwiftUI アプリテンプレートが 20 種類あります。各テンプレートは独立した Swift パッケージで、タブ構成のアプリ、サンプルデータ、テスト付きの store を含みます。Xcode でアプリプロジェクトに追加してそのまま動かすことも、`create-ios-app` で自分の名前に複製してアプリ開発の土台にすることもできます。
+EC、家計管理、メッセージング、旅行など、iOS 18 向けの SwiftUI アプリテンプレートが 21 種類あります。各テンプレートは独立した Swift パッケージで、タブ構成のアプリ、サンプルデータ、テストを含みます。Xcode でアプリプロジェクトに追加してそのまま動かすことも、`create-ios-app` で自分の名前に複製してアプリ開発の土台にすることもできます。
 
-テンプレートは完成品ではなく出発点です。すべての画面はメモリ上のサンプルデータで動き、ネットワーク層やデータベースはありません。提供するのは、動作するタブ構成とナビゲーション、そして自分のサービスにつなぎ込めるテスト付きの store です。
+テンプレートは完成品ではなく出発点です。そのうち 20 種類はメモリ上のサンプルデータで動作し、動作するタブ構成とナビゲーション、自分のサービスにつなぎ込めるテスト付きの store を提供します。Clean Architecture テンプレートはさらに一歩進み、Domain・Data・Presentation の各ターゲット、プロセス内のサンプルサーバーを使う HTTP 層、オフラインキャッシュを備えています。
 
 ## 主な特長
 
 - **20 種類のアプリ**：AI アシスタント、予約、クリエイター向けショート動画、CRM、EC、教育、家計管理、フィットネス、フードデリバリー、マーケットプレイス、メッセージング、音楽とポッドキャスト、ニュース、ノート、プライバシー保管庫、生産性、SNS、サブスクリプション、チームコラボレーション、旅行。
+- **レイヤー構成のリファレンスアプリ**：`CleanArchitectureApp` はチームのディレクトリアプリで、各レイヤーが別々のターゲットなので、依存関係のルールはコンパイラが強制します。人物一覧を HTTP で読み込み、オフライン時は保存済みのコピーに切り替え、ロールと権限を use case で検証します。4 つのターゲットに 108 件のテストがあり、アクセシビリティ監査を含む UI テストもあります。
 - **アプリごとにテスト付きの store**：状態とアクションは Swift Testing のテストスイートを持つ `@MainActor` の store にまとまっているため、画面はシンプルなまま、振る舞いを UI なしで検証できます。
 - **サードパーティ依存なし**：テンプレートは SwiftUI と Foundation だけを使い、アカウントや API キー、ネットワーク接続なしで動作します。
 - **自分の名前で**：`create-ios-app` はパッケージ、モジュール、型、ホストプロジェクト、bundle identifier の名前を変更し、テンプレート内の既存の名前と衝突する名前は受け付けません。
@@ -107,6 +108,7 @@ targets: [
 | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------ |
 | `ai-assistant`           | [AI Assistant](Templates/AIAssistantApp)                     | Workspace, Presets, Memory, Tools, Trust         |
 | `booking`                | [Booking & Reservations](Templates/BookingReservationsApp)   | Home, Calendar, Guests, Requests, Profile        |
+| `clean-architecture`     | [Clean Architecture](Templates/CleanArchitectureApp)         | Directory, Summary, Settings                     |
 | `creator-video`          | [Creator Short Video](Templates/CreatorShortVideoApp)        | Studio, Pipeline, Analytics, Moderation, Profile |
 | `crm`                    | [CRM Admin](Templates/CRMAdminApp)                           | Pipeline, Accounts, Renewals, Tasks, Profile     |
 | `ecommerce`              | [E-commerce](Templates/EcommerceApp)                         | Shop, Browse, Cart, Orders, Profile              |
@@ -127,6 +129,8 @@ targets: [
 | `travel`                 | [Travel Planner](Templates/TravelPlannerApp)                 | Trips, Timeline, Bookings, Essentials, Profile   |
 
 `SocialMediaApp` では、ID プロバイダの手前に境界を置く方法も示しています。サインインは `AuthService` プロトコルを通して行われ、同梱の `LocalAuthService` はデモアカウント（`demo@example.com` / `password123`）とともにアカウントをメモリ上に保持します。
+
+`CleanArchitectureApp` では、実際のバックエンドへの接続方法を示しています。プロセス内のサンプルサーバーを `URLSessionHTTPClient` と自分のベース URL に置き換えてください。新しいコードをどこに置くかは、[Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md) ガイドで説明しています。
 
 ### 自分の名前でプロジェクトを作成する
 
@@ -194,6 +198,10 @@ func makeShop(templates: URL, output: URL) throws -> ScaffoldResult {
 | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | <img src="docs/images/ProductivityApp-dark.jpg" width="160" alt="Productivity テンプレート（ダークモード）"> | <img src="docs/images/SocialMediaApp-dark.jpg" width="160" alt="Social Media テンプレート（ダークモード）"> | <img src="docs/images/SubscriptionLifestyleApp-dark.jpg" width="160" alt="Subscription Lifestyle テンプレート（ダークモード）"> | <img src="docs/images/TeamCollaborationApp-dark.jpg" width="160" alt="Team Collaboration テンプレート（ダークモード）"> | <img src="docs/images/TravelPlannerApp-dark.jpg" width="160" alt="Travel Planner テンプレート（ダークモード）"> |
 
+| Clean Architecture                                                                                 | Clean Architecture（ダーク）                                                                                   |
+| -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| <img src="docs/images/CleanArchitectureApp-light.jpg" width="160" alt="Clean Architecture テンプレート"> | <img src="docs/images/CleanArchitectureApp-dark.jpg" width="160" alt="Clean Architecture テンプレート（ダークモード）"> |
+
 スクリーンショットは [scripts/capture-screenshots.sh](scripts/capture-screenshots.sh) で iPhone 17 Pro シミュレータから撮影しています。自分でテンプレートを動かすには、 [Examples/QuickStart](Examples/QuickStart) を Xcode で開いて **Run** を押してください。
 
 ## ドキュメント
@@ -214,6 +222,7 @@ swift package generate-documentation --target TemplateScaffold
 - [Getting Started](Sources/TemplateScaffold/TemplateScaffold.docc/GettingStarted.md)： `create-ios-app` でプロジェクトを作成し、テストを実行して Xcode で開く手順。
 - [Adding a Template to an App](Sources/TemplateScaffold/TemplateScaffold.docc/AddingATemplateToAnApp.md)：クイックスタートの詳しい説明と、その次に変更する箇所。
 - [How Renaming Works](Sources/TemplateScaffold/TemplateScaffold.docc/HowRenamingWorks.md)：変更される名前、変更されない名前、受け付けられない名前。
+- [Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md)：依存関係のルール、機能をレイヤーごとに追加する方法、自分のサーバーへの接続。
 - [Examples](Examples)：QuickStart アプリ。
 
 ガイドは英語です。
@@ -235,7 +244,7 @@ Package.swift                 create-ios-app + TemplateScaffold (macOS)
 Sources/CLI/                  argument parsing (swift-argument-parser)
 Sources/TemplateScaffold/     catalog, name validation, renaming, copying
 Tests/TemplateScaffoldTests/  Swift Testing, including a scaffold of every template
-Templates/<Name>/             20 independent iOS 18 packages with tests and an App/ host
+Templates/<Name>/             21 independent iOS 18 packages with tests and an App/ host
 Examples/QuickStart/          an app project that runs a template as a local package
 scripts/                      test-templates.sh, capture-screenshots.sh
 ```
@@ -245,6 +254,8 @@ scripts/                      test-templates.sh, capture-screenshots.sh
 - `Sources/<Name>/`：公開の `<Name>Shell` アプリシーン、各画面、そしてサンプルデータと画面から呼ばれるすべてのアクション（カートの合計、注文や予約の状態遷移、承認キューなど）を持つ `@MainActor` の `ObservableObject` store。多くのテンプレートはこれを `<Name>.swift` にまとめていますが、 `EcommerceApp`、`FitnessApp`、`SocialMediaApp` は store、モデル、画面を別ファイルに分けています。
 - `Tests/<Name>Tests/`：その store の Swift Testing スイート。派生値、状態遷移、不正な入力や未知の識別子に対する guard、超えてはならない上限を検証します。
 - `App/`：XcodeGen の定義と、`<Name>Shell.main()` を呼ぶホストファイル。
+
+`CleanArchitectureApp` は単一の store の代わりに 4 つのターゲットで構成されます。`CleanArchitectureAppDomain`（エンティティ、ルール、use case）、`CleanArchitectureAppData`（HTTP、JSON、キャッシュ、repository）、`CleanArchitectureAppPresentation`（`@Observable` モデルと画面）、そしてコンポジションルートである `CleanArchitectureApp` で、それぞれに専用のテストターゲットがあります。
 
 テンプレートはルートパッケージにも互いにも依存しません。名前の変更はテンプレートのディレクトリ名のテキスト置換なので、変更が必要な名前はすべてその名前で始まります（`EcommerceApp`、 `EcommerceAppShell`、`EcommerceAppTests`）。
 

@@ -1,11 +1,12 @@
 # ``TemplateScaffold``
 
-Create a new SwiftUI app package from one of the twenty templates in this repository.
+Create a new SwiftUI app package from one of the twenty-one templates in this repository.
 
 ## Overview
 
-The repository ships twenty iOS app templates under `Templates/`. Each one is a Swift
-package with a SwiftUI app module, a Swift Testing target and an XcodeGen host project.
+The repository ships twenty-one iOS app templates under `Templates/`. Each one is a Swift
+package with a SwiftUI app module, Swift Testing tests and an XcodeGen host project;
+`CleanArchitectureApp` splits its module into Domain, Data and Presentation targets.
 This library copies one of those packages to a new location and renames it, so that
 `EcommerceApp`, `EcommerceAppTests`, `EcommerceAppShell` and `com.example.EcommerceApp`
 become `MyShop`, `MyShopTests`, `MyShopShell` and `com.example.MyShop`.
@@ -39,6 +40,7 @@ func makeShop(templates: URL, output: URL) throws -> ScaffoldResult {
 - <doc:GettingStarted>
 - <doc:AddingATemplateToAnApp>
 - <doc:HowRenamingWorks>
+- <doc:WorkingWithTheCleanArchitectureTemplate>
 
 ### Choosing a template
 

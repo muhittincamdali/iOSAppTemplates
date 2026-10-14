@@ -17,6 +17,8 @@ concurrency:
 env:
   SWIFTLINT_VERSION: 0.63.2
   SWIFTLINT_SHA256: c59a405c85f95b92ced677a500804e081596a4cae4a6a485af76065557d6ed29
+  XCODEGEN_VERSION: 2.45.3
+  XCODEGEN_SHA256: 0c90f4d28ca57335f9fa78cf5bf6dabfe20a232036dabe36de2eef79cb7c0878
 
 jobs:
   lint:
@@ -80,6 +82,42 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             -quiet
 
+  ui-tests:
+    name: CleanArchitectureApp UI tests
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Toolchain
+        run: xcodebuild -version
+
+      - name: Install XcodeGen
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/xcodegen.zip" \
+            "https://github.com/yonaskolb/XcodeGen/releases/download/$XCODEGEN_VERSION/xcodegen.zip"
+          echo "$XCODEGEN_SHA256  $RUNNER_TEMP/xcodegen.zip" | shasum -a 256 -c -
+          unzip -q "$RUNNER_TEMP/xcodegen.zip" -d "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/xcodegen/bin" >> "$GITHUB_PATH"
+
+      - name: Generate the host project
+        working-directory: Templates/CleanArchitectureApp/App
+        run: xcodegen generate
+
+      - name: Run the UI tests and the accessibility audit
+        working-directory: Templates/CleanArchitectureApp/App
+        run: |
+          udid="$(xcrun simctl list devices available | grep -E '^\s+iPhone' | head -1 | grep -oE '[0-9A-F-]{36}')"
+          xcodebuild test \
+            -project CleanArchitectureApp.xcodeproj \
+            -scheme CleanArchitectureAppHost \
+            -destination "platform=iOS Simulator,id=$udid" \
+            -test-timeouts-enabled YES \
+            -maximum-test-execution-time-allowance 120 \
+            -quiet
+
   templates:
     name: ${{ matrix.template }}
     runs-on: macos-26
@@ -91,6 +129,7 @@ jobs:
           - AIAssistantApp
           - BookingReservationsApp
           - CRMAdminApp
+          - CleanArchitectureApp
           - CreatorShortVideoApp
           - EcommerceApp
           - EducationApp

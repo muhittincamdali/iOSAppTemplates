@@ -3,76 +3,76 @@
   "repository": "muhittincamdali/iOSAppTemplates",
   "branch": "master",
   "tagline": {
-    "en": "Twenty SwiftUI app templates for iOS 18, each a tested Swift package you can copy under your own name.",
-    "tr": "iOS 18 için yirmi SwiftUI uygulama şablonu; her biri kendi adınızla kopyalayabileceğiniz testli bir Swift paketi.",
-    "zh-CN": "面向 iOS 18 的二十个 SwiftUI 应用模板，每个都是带测试的 Swift 包，可用你自己的名称复制。",
-    "ja": "iOS 18 向け SwiftUI アプリテンプレート 20 種。どれもテスト付きの Swift パッケージで、自分の名前で複製できます。",
-    "ko": "iOS 18용 SwiftUI 앱 템플릿 20종. 각각 테스트가 포함된 Swift 패키지이며 원하는 이름으로 복사할 수 있습니다.",
-    "es": "Veinte plantillas de apps SwiftUI para iOS 18, cada una un paquete Swift con tests que puedes copiar con tu propio nombre.",
-    "de": "Zwanzig SwiftUI-App-Vorlagen für iOS 18, jede ein getestetes Swift-Paket, das Sie unter eigenem Namen kopieren können.",
-    "fr": "Vingt modèles d'apps SwiftUI pour iOS 18, chacun un package Swift testé que vous pouvez copier sous votre propre nom.",
-    "pt-BR": "Vinte templates de apps SwiftUI para iOS 18, cada um um pacote Swift testado que você copia com o seu nome.",
-    "ru": "Двадцать шаблонов SwiftUI-приложений для iOS 18: Swift-пакеты с тестами, которые копируются под вашим именем."
+    "en": "21 SwiftUI app templates for iOS 18, each a tested Swift package you can copy under your own name.",
+    "tr": "iOS 18 için 21 SwiftUI uygulama şablonu; her biri kendi adınızla kopyalayabileceğiniz testli bir Swift paketi.",
+    "zh-CN": "面向 iOS 18 的 21 个 SwiftUI 应用模板，每个都是带测试的 Swift 包，可用你自己的名称复制。",
+    "ja": "iOS 18 向け SwiftUI アプリテンプレート 21 種。テスト付きで、自分の名前で複製できます。",
+    "ko": "iOS 18용 SwiftUI 앱 템플릿 21종. 각각 테스트가 포함된 Swift 패키지이며 원하는 이름으로 복사할 수 있습니다.",
+    "es": "21 plantillas de apps SwiftUI para iOS 18, cada una un paquete Swift con tests que puedes copiar con tu propio nombre.",
+    "de": "21 SwiftUI-App-Vorlagen für iOS 18, jede ein getestetes Swift-Paket, das Sie unter eigenem Namen kopieren können.",
+    "fr": "21 modèles d'apps SwiftUI pour iOS 18, chacun un package Swift testé que vous pouvez copier sous votre propre nom.",
+    "pt-BR": "21 templates de apps SwiftUI para iOS 18, cada um um pacote Swift testado que você copia com o seu nome.",
+    "ru": "21 шаблон SwiftUI-приложений для iOS 18: Swift-пакеты с тестами, которые копируются под вашим именем."
   },
   "tags": {
     "en": [
       "SwiftUI",
       "iOS 18",
-      "20 templates",
+      "21 templates",
       "Swift Testing"
     ],
     "tr": [
       "SwiftUI",
       "iOS 18",
-      "20 şablon",
+      "21 şablon",
       "Swift Testing"
     ],
     "zh-CN": [
       "SwiftUI",
       "iOS 18",
-      "20 个模板",
+      "21 个模板",
       "Swift Testing"
     ],
     "ja": [
       "SwiftUI",
       "iOS 18",
-      "テンプレート 20 種",
+      "テンプレート 21 種",
       "Swift Testing"
     ],
     "ko": [
       "SwiftUI",
       "iOS 18",
-      "템플릿 20종",
+      "템플릿 21종",
       "Swift Testing"
     ],
     "es": [
       "SwiftUI",
       "iOS 18",
-      "20 plantillas",
+      "21 plantillas",
       "Swift Testing"
     ],
     "de": [
       "SwiftUI",
       "iOS 18",
-      "20 Vorlagen",
+      "21 Vorlagen",
       "Swift Testing"
     ],
     "fr": [
       "SwiftUI",
       "iOS 18",
-      "20 modèles",
+      "21 modèles",
       "Swift Testing"
     ],
     "pt-BR": [
       "SwiftUI",
       "iOS 18",
-      "20 templates",
+      "21 templates",
       "Swift Testing"
     ],
     "ru": [
       "SwiftUI",
       "iOS 18",
-      "20 шаблонов",
+      "21 шаблон",
       "Swift Testing"
     ]
   },

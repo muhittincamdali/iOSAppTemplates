@@ -7,6 +7,27 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- `CleanArchitectureApp` template (`--template clean-architecture`), merged from
+  `ios-clean-architecture-template`: a team directory split into Domain, Data and Presentation
+  targets plus a composition root, with an HTTP layer, an in-process sample server, an offline
+  file cache, role-based permissions enforced in use cases and 108 tests in four test targets.
+- UI tests for the `CleanArchitectureApp` host app (search, offline fallback and an
+  accessibility audit), run by a new job in `templates.yml`.
+- DocC article "Working with the Clean Architecture Template".
+
+### Changed
+
+- `scripts/test-templates.sh` reports the total number of tests across all test bundles of a
+  template instead of the count of the last bundle.
+
+### Fixed
+
+- EducationApp: course percentages no longer trap on NaN or infinite progress values, clamp
+  progress to the 0...1 range and are rounded instead of truncated, so the dashboard shows a
+  completion rate of 65% instead of 64% for the sample data.
+
 ## [3.0.0] - 2026-10-14
 
 This release narrows the repository to what builds and is tested: the twenty app templates

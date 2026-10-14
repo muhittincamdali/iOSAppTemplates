@@ -86,8 +86,8 @@ final class EducationLearningStore: ObservableObject {
     }
 
     var completionRateText: String {
-        let average = Int((courses.map(\.progress).reduce(0, +) / Double(max(courses.count, 1))) * 100)
-        return "\(average)%"
+        let average = courses.map(\.progress).reduce(0, +) / Double(max(courses.count, 1))
+        return EducationCourseRecord.percentText(average)
     }
 
     var dashboardHeadline: String {
@@ -334,7 +334,7 @@ struct EducationCourseMomentumCard: View {
                         Text(course.title)
                             .font(.headline)
                         Spacer()
-                        Text("\(Int(course.progress * 100))%")
+                        Text(course.percentText)
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(course.paceColor)
                     }
@@ -366,7 +366,7 @@ struct EducationCoursesView: View {
                             HStack {
                                 Text(course.title)
                                 Spacer()
-                                Text("\(Int(course.progress * 100))%")
+                                Text(course.percentText)
                                     .font(.subheadline.weight(.bold))
                             }
                             ProgressView(value: course.progress)
@@ -393,7 +393,7 @@ struct EducationCourseDetailView: View {
             List {
                 Section("Course") {
                     LabeledContent("Title", value: course.title)
-                    LabeledContent("Progress", value: "\(Int(course.progress * 100))%")
+                    LabeledContent("Progress", value: course.percentText)
                     LabeledContent("Next Step", value: course.nextStep)
                 }
 
@@ -612,6 +612,16 @@ struct EducationCourseRecord: Identifiable {
     var progress: Double
     var nextStep: String
     let paceColor: Color
+
+    var percentText: String { Self.percentText(progress) }
+
+    /// Formats a 0...1 fraction as a whole percentage. `Int(_:)` traps on NaN and infinity, and
+    /// progress may come from a server once the sample data is replaced, so the value is clamped
+    /// to 0...1 and a non-finite value counts as 0.
+    static func percentText(_ fraction: Double) -> String {
+        let clamped = fraction.isFinite ? min(max(fraction, 0), 1) : 0
+        return "\(Int((clamped * 100).rounded()))%"
+    }
 
     static let sampleCourses: [EducationCourseRecord] = [
         EducationCourseRecord(title: "Design Systems", progress: 0.78, nextStep: "Ship the token exercise and pass Quiz 4.", paceColor: .green),

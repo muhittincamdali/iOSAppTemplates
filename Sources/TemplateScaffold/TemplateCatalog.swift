@@ -27,6 +27,8 @@ public enum TemplateCatalog {
               tabs: ["Workspace", "Presets", "Memory", "Tools", "Trust"]),
         .init(id: "booking", directoryName: "BookingReservationsApp", displayName: "Booking & Reservations",
               tabs: ["Home", "Calendar", "Guests", "Requests", "Profile"]),
+        .init(id: "clean-architecture", directoryName: "CleanArchitectureApp", displayName: "Clean Architecture",
+              tabs: ["Directory", "Summary", "Settings"]),
         .init(id: "creator-video", directoryName: "CreatorShortVideoApp", displayName: "Creator Short Video",
               tabs: ["Studio", "Pipeline", "Analytics", "Moderation", "Profile"]),
         .init(id: "crm", directoryName: "CRMAdminApp", displayName: "CRM Admin",

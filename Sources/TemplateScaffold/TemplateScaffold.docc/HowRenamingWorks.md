@@ -5,7 +5,7 @@ The rules ``Scaffolder`` follows when it copies a template.
 ## Overview
 
 Every template uses its directory name as a prefix for everything that has to change:
-the package name, the module name, the test target, the `AppShell` type, the
+the package name, the module and test target names, the `AppShell` type, the
 XcodeGen project and the bundle identifier. Renaming is therefore a single text
 substitution, applied to file contents and to every path component.
 

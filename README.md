@@ -1,6 +1,6 @@
 <!-- brand:start -->
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-light.svg" alt="iOSAppTemplates: Twenty SwiftUI app templates for iOS 18, each a tested Swift package you can copy under your own name."></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-light.svg" alt="iOSAppTemplates: 21 SwiftUI app templates for iOS 18, each a tested Swift package you can copy under your own name."></picture></p>
 
 <!-- lang-selector:start -->
 <p align="center"><a href="README.md">English</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a> · <a href="README.es.md">Español</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a> · <a href="README.pt-BR.md">Português (Brasil)</a> · <a href="README.ru.md">Русский</a></p>
@@ -23,20 +23,25 @@
 
 <!-- brand:end -->
 
-Twenty SwiftUI app templates for iOS 18, from e-commerce and finance to messaging and travel.
-Each template is a standalone Swift package with a tab-based app, sample data and a tested store.
+Twenty-one SwiftUI app templates for iOS 18, from e-commerce and finance to messaging and travel.
+Each template is a standalone Swift package with a tab-based app, sample data and tests.
 Add one to an app project in Xcode to see it run, or copy it under your own name with
 `create-ios-app` and build your app from there.
 
-The templates are starting points, not finished products: every screen runs on in-memory sample
-data, and there is no networking layer or database. What they give you is a working tab
-structure, navigation and a tested store per app that you can wire to your own services.
+The templates are starting points, not finished products. Twenty of them run on in-memory
+sample data and give you a working tab structure, navigation and a tested store that you can
+wire to your own services. The Clean Architecture template goes one step further: Domain, Data
+and Presentation targets, an HTTP layer with an in-process sample server, and an offline cache.
 
 ## Highlights
 
 - **Twenty app types**: AI assistant, booking, creator video, CRM, e-commerce, education,
   finance, fitness, food delivery, marketplace, messaging, music and podcasts, news, notes,
   privacy vault, productivity, social media, subscriptions, team collaboration and travel.
+- **A layered reference app**: `CleanArchitectureApp` is a team directory whose layers are
+  separate targets, so the compiler enforces the dependency rule. It loads people over HTTP,
+  falls back to a saved copy offline and checks roles and permissions in use cases, with 108
+  tests across the four targets and UI tests that include an accessibility audit.
 - **A tested store per app**: state and actions live in a `@MainActor` store with a Swift
   Testing suite, so the screens stay thin and the behaviour is checked without UI.
 - **No third-party dependencies**: the templates use SwiftUI and Foundation only, and run
@@ -121,6 +126,7 @@ targets: [
 | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------ |
 | `ai-assistant`           | [AI Assistant](Templates/AIAssistantApp)                     | Workspace, Presets, Memory, Tools, Trust         |
 | `booking`                | [Booking & Reservations](Templates/BookingReservationsApp)   | Home, Calendar, Guests, Requests, Profile        |
+| `clean-architecture`     | [Clean Architecture](Templates/CleanArchitectureApp)         | Directory, Summary, Settings                     |
 | `creator-video`          | [Creator Short Video](Templates/CreatorShortVideoApp)        | Studio, Pipeline, Analytics, Moderation, Profile |
 | `crm`                    | [CRM Admin](Templates/CRMAdminApp)                           | Pipeline, Accounts, Renewals, Tasks, Profile     |
 | `ecommerce`              | [E-commerce](Templates/EcommerceApp)                         | Shop, Browse, Cart, Orders, Profile              |
@@ -143,6 +149,11 @@ targets: [
 `SocialMediaApp` also shows how to put a boundary in front of an identity provider: sign-in goes
 through an `AuthService` protocol, and the bundled `LocalAuthService` keeps accounts in memory
 with a demo account (`demo@example.com` / `password123`).
+
+`CleanArchitectureApp` shows how to connect a real backend: replace its in-process sample
+server with `URLSessionHTTPClient` and your base URL. The
+[Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md)
+guide explains where new code goes.
 
 ### Create a project under your own name
 
@@ -219,6 +230,10 @@ The first screen of every template, light and dark versions in [docs/images](doc
 | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | <img src="docs/images/ProductivityApp-dark.jpg" width="160" alt="Productivity template, dark appearance"> | <img src="docs/images/SocialMediaApp-dark.jpg" width="160" alt="Social Media template, dark appearance"> | <img src="docs/images/SubscriptionLifestyleApp-dark.jpg" width="160" alt="Subscription Lifestyle template, dark appearance"> | <img src="docs/images/TeamCollaborationApp-dark.jpg" width="160" alt="Team Collaboration template, dark appearance"> | <img src="docs/images/TravelPlannerApp-dark.jpg" width="160" alt="Travel Planner template, dark appearance"> |
 
+| Clean Architecture                                                                                   | Clean Architecture, dark                                                                                             |
+| ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| <img src="docs/images/CleanArchitectureApp-light.jpg" width="160" alt="Clean Architecture template"> | <img src="docs/images/CleanArchitectureApp-dark.jpg" width="160" alt="Clean Architecture template, dark appearance"> |
+
 Screenshots are taken on an iPhone 17 Pro simulator by
 [scripts/capture-screenshots.sh](scripts/capture-screenshots.sh). To run a template yourself,
 open [Examples/QuickStart](Examples/QuickStart) in Xcode and press **Run**.
@@ -246,6 +261,8 @@ swift package generate-documentation --target TemplateScaffold
   the quick start in detail, and what to change next.
 - [How Renaming Works](Sources/TemplateScaffold/TemplateScaffold.docc/HowRenamingWorks.md):
   which names change, which do not, and which names are refused.
+- [Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md):
+  the dependency rule, adding a feature layer by layer, and connecting your own server.
 - [Examples](Examples): the QuickStart app.
 
 ## Requirements
@@ -266,7 +283,7 @@ Package.swift                 create-ios-app + TemplateScaffold (macOS)
 Sources/CLI/                  argument parsing (swift-argument-parser)
 Sources/TemplateScaffold/     catalog, name validation, renaming, copying
 Tests/TemplateScaffoldTests/  Swift Testing, including a scaffold of every template
-Templates/<Name>/             20 independent iOS 18 packages with tests and an App/ host
+Templates/<Name>/             21 independent iOS 18 packages with tests and an App/ host
 Examples/QuickStart/          an app project that runs a template as a local package
 scripts/                      test-templates.sh, capture-screenshots.sh
 ```
@@ -282,6 +299,11 @@ Each template contains:
   transitions, guard clauses for invalid input and unknown identifiers, and limits that must
   not be exceeded.
 - `App/`: an XcodeGen spec and a host file that calls `<Name>Shell.main()`.
+
+`CleanArchitectureApp` replaces the single store with four targets:
+`CleanArchitectureAppDomain` (entities, rules, use cases), `CleanArchitectureAppData` (HTTP,
+JSON, cache, repository), `CleanArchitectureAppPresentation` (`@Observable` models and screens)
+and `CleanArchitectureApp`, the composition root, each with its own test target.
 
 The templates do not depend on the root package or on each other. Renaming is a text
 substitution of the template's directory name, which is why every name that has to change
