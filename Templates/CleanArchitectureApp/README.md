@@ -61,6 +61,19 @@ The four test targets cover the domain rules and validation edge cases, HTTP sta
 the cache fallback, the screen models (including a slow response that arrives after a newer one)
 and the whole object graph end to end, including an edit that survives an offline relaunch.
 
+`App/UITests` drives the built app with XCUITest: diacritic-insensitive search, the offline
+fallback after the server is switched off on the Settings tab, and an accessibility audit
+(`performAccessibilityAudit`) of the Directory tab. The audit skips the contrast check, which
+reports the system's secondary label colour as "nearly passed", and the clipping report for the
+system-drawn search field. Run them from the host project:
+
+```bash
+cd App
+xcodegen generate
+xcodebuild test -project CleanArchitectureApp.xcodeproj -scheme CleanArchitectureAppHost \
+  -destination 'platform=iOS Simulator,name=iPhone 17'
+```
+
 ## Run
 
 ```bash
@@ -69,8 +82,8 @@ xcodegen generate
 open CleanArchitectureApp.xcodeproj
 ```
 
-In the app, open **Settings** and turn off **Server reachable**, then pull to refresh the
-directory to see the offline fallback. Pick another person under **Signed in as** to see what a
+In the app, open **Settings** and turn off **Server reachable**; the directory reloads and the
+Directory tab shows the saved copy with the time it was saved. Pick another person under **Signed in as** to see what a
 member or a moderator may do.
 
 ## Use your own server

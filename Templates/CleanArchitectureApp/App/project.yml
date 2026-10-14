@@ -28,4 +28,20 @@ targets:
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "1"
         SWIFT_VERSION: "6.0"
-    scheme: {}
+    scheme:
+      testTargets:
+        - CleanArchitectureAppUITests
+  CleanArchitectureAppUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: UITests
+    dependencies:
+      - target: CleanArchitectureAppHost
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.CleanArchitectureAppUITests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: CleanArchitectureAppHost
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_VERSION: "6.0"
