@@ -43,6 +43,9 @@ protocol AuthService: Sendable {
 }
 
 /// In-memory accounts with the signed-in email remembered in `UserDefaults`.
+///
+/// Pass `defaultsSuiteName` to keep the remembered session out of the standard defaults,
+/// for example in tests.
 actor LocalAuthService: AuthService {
     struct Account: Sendable {
         let userID: String
@@ -63,12 +66,12 @@ actor LocalAuthService: AuthService {
     private var accountsByEmail: [String: Account]
     private let defaults: UserDefaults
 
-    init(accounts: [Account] = [LocalAuthService.demoAccount], defaults: UserDefaults = .standard) {
+    init(accounts: [Account] = [LocalAuthService.demoAccount], defaultsSuiteName: String? = nil) {
         self.accountsByEmail = Dictionary(
             accounts.map { (Self.normalized($0.email), $0) },
             uniquingKeysWith: { first, _ in first }
         )
-        self.defaults = defaults
+        self.defaults = defaultsSuiteName.flatMap(UserDefaults.init(suiteName:)) ?? .standard
     }
 
     func currentSession() async -> AuthSession? {

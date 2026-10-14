@@ -1367,7 +1367,7 @@ class DataManager: ObservableObject {
     @Published var bookmarkedPostIDs: Set<String> = []
     @Published var followedProfileIDs: Set<String> = []
     
-    private init() {}
+    init() {}
     
     func initialize() async {
         if posts.isEmpty {
@@ -1610,7 +1610,7 @@ class NotificationManager: ObservableObject {
     
     @Published var notifications: [SocialNotificationItem] = []
     
-    private init() {}
+    init() {}
     
     func requestPermission() async {
         if notifications.isEmpty {
