@@ -95,6 +95,8 @@ in `Sources/CleanArchitectureApp/CleanArchitectureApp.swift`. Replace that call 
 `URLSessionHTTPClient()`, your server's base URL, a `FileUserCache` at
 `CleanArchitectureAppContainer.defaultCacheURL` and the id of the signed-in user. Your server
 needs the two endpoints above with the same JSON (snake_case keys, ISO 8601 dates).
+`URLSessionHTTPClient` stops reading a response body at 4 MiB and reports it as unreadable;
+pass `maximumResponseSize:` if your directory is larger.
 
 `BackendControls` drives the switches on the Settings tab. Implement it for your backend, or
 remove the Sample server section and pass a type that does nothing.

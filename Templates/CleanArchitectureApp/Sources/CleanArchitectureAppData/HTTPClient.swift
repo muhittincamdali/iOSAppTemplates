@@ -7,16 +7,41 @@ public protocol HTTPClient: Sendable {
 }
 
 public struct URLSessionHTTPClient: HTTPClient {
-    private let session: URLSession
+    /// 4 MiB, far more than a directory of a few thousand people needs.
+    public static let defaultMaximumResponseSize = 4 * 1024 * 1024
 
-    public init(session: URLSession = .shared) {
+    private let session: URLSession
+    private let maximumResponseSize: Int
+
+    /// - Parameter maximumResponseSize: The largest body, in bytes, the client reads. A
+    ///   larger body, announced or not, ends the request with `URLError(.dataLengthExceedsMaximum)`
+    ///   instead of filling memory with whatever the server sends.
+    public init(session: URLSession = .shared, maximumResponseSize: Int = defaultMaximumResponseSize) {
         self.session = session
+        self.maximumResponseSize = maximumResponseSize
     }
 
     public func send(_ request: URLRequest) async throws -> (Data, HTTPURLResponse) {
-        let (data, response) = try await session.data(for: request)
+        let (bytes, response) = try await session.bytes(for: request)
         guard let http = response as? HTTPURLResponse else {
+            bytes.task.cancel()
             throw URLError(.badServerResponse)
+        }
+        let expectedLength = http.expectedContentLength
+        guard expectedLength <= Int64(maximumResponseSize) else {
+            bytes.task.cancel()
+            throw URLError(.dataLengthExceedsMaximum)
+        }
+        var data = Data()
+        if expectedLength > 0 {
+            data.reserveCapacity(Int(expectedLength))
+        }
+        for try await byte in bytes {
+            guard data.count < maximumResponseSize else {
+                bytes.task.cancel()
+                throw URLError(.dataLengthExceedsMaximum)
+            }
+            data.append(byte)
         }
         return (data, http)
     }
