@@ -8,41 +8,14 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(
-            name: "AIAssistantApp",
-            targets: ["AIAssistantApp"]
-        ),
-        .library(
-            name: "AIAssistantAppUI",
-            targets: ["AIAssistantAppUI"]
-        ),
-        .library(
-            name: "AIAssistantAppCore",
-            targets: ["AIAssistantAppCore"]
-        )
+        .library(name: "AIAssistantApp", targets: ["AIAssistantApp"]),
+        .library(name: "AIAssistantAppUI", targets: ["AIAssistantAppUI"]),
+        .library(name: "AIAssistantAppCore", targets: ["AIAssistantAppCore"])
     ],
-    dependencies: [],
     targets: [
-        .target(
-            name: "AIAssistantApp",
-            dependencies: [
-                "AIAssistantAppUI",
-                "AIAssistantAppCore"
-            ]
-        ),
-        .target(
-            name: "AIAssistantAppUI",
-            dependencies: [
-                "AIAssistantAppCore"
-            ]
-        ),
-        .target(
-            name: "AIAssistantAppCore",
-            dependencies: []
-        ),
-        .testTarget(
-            name: "AIAssistantAppTests",
-            dependencies: ["AIAssistantApp"]
-        )
+        .target(name: "AIAssistantApp", dependencies: ["AIAssistantAppUI", "AIAssistantAppCore"]),
+        .target(name: "AIAssistantAppUI", dependencies: ["AIAssistantAppCore"]),
+        .target(name: "AIAssistantAppCore"),
+        .testTarget(name: "AIAssistantAppTests", dependencies: ["AIAssistantApp"])
     ]
 )

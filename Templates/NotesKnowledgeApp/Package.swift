@@ -8,41 +8,14 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(
-            name: "NotesKnowledgeApp",
-            targets: ["NotesKnowledgeApp"]
-        ),
-        .library(
-            name: "NotesKnowledgeAppUI",
-            targets: ["NotesKnowledgeAppUI"]
-        ),
-        .library(
-            name: "NotesKnowledgeAppCore",
-            targets: ["NotesKnowledgeAppCore"]
-        )
+        .library(name: "NotesKnowledgeApp", targets: ["NotesKnowledgeApp"]),
+        .library(name: "NotesKnowledgeAppUI", targets: ["NotesKnowledgeAppUI"]),
+        .library(name: "NotesKnowledgeAppCore", targets: ["NotesKnowledgeAppCore"])
     ],
-    dependencies: [],
     targets: [
-        .target(
-            name: "NotesKnowledgeApp",
-            dependencies: [
-                "NotesKnowledgeAppUI",
-                "NotesKnowledgeAppCore"
-            ]
-        ),
-        .target(
-            name: "NotesKnowledgeAppUI",
-            dependencies: [
-                "NotesKnowledgeAppCore"
-            ]
-        ),
-        .target(
-            name: "NotesKnowledgeAppCore",
-            dependencies: []
-        ),
-        .testTarget(
-            name: "NotesKnowledgeAppTests",
-            dependencies: ["NotesKnowledgeApp"]
-        )
+        .target(name: "NotesKnowledgeApp", dependencies: ["NotesKnowledgeAppUI", "NotesKnowledgeAppCore"]),
+        .target(name: "NotesKnowledgeAppUI", dependencies: ["NotesKnowledgeAppCore"]),
+        .target(name: "NotesKnowledgeAppCore"),
+        .testTarget(name: "NotesKnowledgeAppTests", dependencies: ["NotesKnowledgeApp"])
     ]
 )

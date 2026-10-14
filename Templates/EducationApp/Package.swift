@@ -8,41 +8,14 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(
-            name: "EducationApp",
-            targets: ["EducationApp"]
-        ),
-        .library(
-            name: "EducationAppUI",
-            targets: ["EducationAppUI"]
-        ),
-        .library(
-            name: "EducationAppCore",
-            targets: ["EducationAppCore"]
-        )
+        .library(name: "EducationApp", targets: ["EducationApp"]),
+        .library(name: "EducationAppUI", targets: ["EducationAppUI"]),
+        .library(name: "EducationAppCore", targets: ["EducationAppCore"])
     ],
-    dependencies: [],
     targets: [
-        .target(
-            name: "EducationApp",
-            dependencies: [
-                "EducationAppUI",
-                "EducationAppCore"
-            ]
-        ),
-        .target(
-            name: "EducationAppUI",
-            dependencies: [
-                "EducationAppCore"
-            ]
-        ),
-        .target(
-            name: "EducationAppCore",
-            dependencies: []
-        ),
-        .testTarget(
-            name: "EducationAppTests",
-            dependencies: ["EducationApp"]
-        )
+        .target(name: "EducationApp", dependencies: ["EducationAppUI", "EducationAppCore"]),
+        .target(name: "EducationAppUI", dependencies: ["EducationAppCore"]),
+        .target(name: "EducationAppCore"),
+        .testTarget(name: "EducationAppTests", dependencies: ["EducationApp"])
     ]
 )
