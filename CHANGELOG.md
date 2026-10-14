@@ -25,6 +25,12 @@ template libraries it shipped before, so the next version is a major release.
   recovery kit rotation and audit review; previously the store had no reachable actions.
 - `AuthService` protocol and in-memory `LocalAuthService` with a demo account in
   SocialMediaApp.
+- `Examples/QuickStart`, an iOS app project that adds a template as a local package and
+  starts its scene; CI builds it.
+- DocC article "Adding a Template to an App".
+- README translations in Turkish, Simplified Chinese, Japanese, Korean, Spanish, German,
+  French, Brazilian Portuguese and Russian, and a generated banner, badges, buttons and
+  social preview (`.github/brand/`, `docs/social-preview.png`).
 
 ### Changed
 
@@ -37,12 +43,21 @@ template libraries it shipped before, so the next version is a major release.
   library target.
 - Each template is a single app module; the `<Name>Core` and `<Name>UI` modules, which the
   apps did not use, are gone.
-- One CI workflow on macOS with SHA-pinned actions replaces nine workflows. It pins
-  Xcode 26.6 and runs SwiftLint in strict mode.
+- CI replaces nine workflows: `ci.yml`, `docs.yml` and `quality.yml` call the shared
+  workflows of `muhittincamdali/.github` (SwiftPM build and test, DocC on GitHub Pages,
+  link check, wording check, README translation check), and `templates.yml` runs SwiftLint
+  in strict mode, a scaffold-and-test of a generated project, the example build and a test
+  job per template. Actions are pinned to commit SHAs; jobs use the default Xcode of the
+  `macos-26` image.
 - EcommerceApp, FitnessApp and SocialMediaApp are split into store, model and screen
   files.
-- PrivacyVaultApp, FoodDeliveryApp and TravelPlannerApp use enums instead of strings for
-  the statuses their logic compares.
+- PrivacyVaultApp (vault items, alerts, contacts, audit checks), FoodDeliveryApp (order
+  status) and TravelPlannerApp (flight and document status) use enums instead of strings
+  for those states. Other states in several templates are still compared as strings.
+- BookingReservationsApp links each guest request to its stay by id instead of matching
+  sample guest names.
+- The README follows the shared layout with a three-step quick start; the code of conduct
+  is inherited from `muhittincamdali/.github`.
 - README, CONTRIBUTING, SECURITY and the template READMEs describe the current layout.
 
 ### Removed
@@ -65,6 +80,14 @@ template libraries it shipped before, so the next version is a major release.
 - The old `create-ios-app` generated projects that depended on packages that do not exist.
 - `create-ios-app` rejects every Swift keyword that cannot follow `import`, such as `guard`
   or `public`, as a project name; such names produced packages that did not compile.
+- `create-ios-app` refuses names that would collide with names in the template
+  (`ScaffoldError.nameConflict`). `new CommerceStore --template ecommerce` used to overwrite
+  `CommerceStore.swift` and report success for a project that did not compile.
+- SocialMediaApp's sample data loaded random photos from picsum.photos; sample media is now
+  drawn locally and the template makes no network requests.
+- `scripts/capture-screenshots.sh` creates an iPhone 17 Pro simulator instead of whichever
+  device type `simctl` listed last.
+- The LICENSE copyright year is 2025, when the repository started.
 
 ## [2.1.0] - 2026-04-26
 
