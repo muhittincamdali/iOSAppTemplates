@@ -38,6 +38,40 @@ struct ProfileDraftTests {
         #expect(draft(name: "می\u{200C}خواهم").issues.isEmpty)
     }
 
+    @Test(arguments: ["Ada\u{200E}", "\u{200F}Ada", "Ada\u{061C}Lovelace"])
+    func rejectsBidirectionalMarksInName(_ name: String) {
+        #expect(draft(name: name).issues == [.nameInvalidCharacters])
+    }
+
+    @Test(arguments: [
+        "\u{200B}\u{200B}", // zero-width spaces
+        "\u{FEFF}\u{2060}", // byte order mark and word joiner
+        "\u{200C}\u{200C}\u{200C}", // zero-width non-joiners
+        "\u{3164}\u{3164}", // Hangul fillers
+        "A\u{200B}" // one visible letter
+    ])
+    func namesWithoutTwoVisibleCharactersAreTooShort(_ name: String) {
+        #expect(draft(name: name).issues == [.nameTooShort(minimum: 2)])
+    }
+
+    @Test func stackedCombiningMarksCannotHideAnOversizedName() {
+        // Two characters, but a million and two scalars (about 2 MB of UTF-8).
+        let zalgo = "Ab" + String(repeating: "\u{0301}", count: 1_000_000)
+        #expect(zalgo.count == 2)
+        #expect(draft(name: zalgo).issues == [.nameTooLong(maximum: 60)])
+    }
+
+    @Test func scalarLimitLeavesRoomForDecomposedAccents() {
+        let limit = ProfileDraft.maximumNameScalarCount
+        // "e" plus three combining marks: 4 scalars per character, 240 in total.
+        let accented = String(repeating: "e\u{0301}\u{0323}\u{0302}", count: limit / 4)
+        #expect(accented.unicodeScalars.count == limit)
+        #expect(draft(name: accented).issues.isEmpty)
+        #expect(draft(name: accented + "\u{0301}").issues == [.nameTooLong(maximum: 60)])
+        // Decomposed Vietnamese: "Nguyễn" typed as base letters and combining marks.
+        #expect(draft(name: "Nguye\u{0302}\u{0303}n Va\u{0306}n A").issues.isEmpty)
+    }
+
     @Test func emptyEmailIsMissingNotInvalid() {
         #expect(draft(email: "   ").issues == [.emailMissing])
     }

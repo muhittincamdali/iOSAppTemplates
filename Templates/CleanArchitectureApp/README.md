@@ -34,8 +34,9 @@ CleanArchitectureApp (composition root)
 - Moderators and admins also see deactivated accounts. A deactivated account keeps its role but
   loses every permission, and permissions are read from the freshly loaded record.
 - The last active admin cannot be demoted or deactivated.
-- Names are 2 to 60 characters after whitespace is collapsed, and may not contain control or
-  bidirectional override characters. Email addresses are lowercased and checked against the
+- Names are 2 to 60 characters after whitespace is collapsed, at least two of them visible,
+  and at most 240 Unicode scalars, so stacked combining marks cannot hide an oversized value.
+  Control characters and bidirectional marks, overrides and isolates are rejected. Email addresses are lowercased and checked against the
   RFC 5321 length limits. The server stays the final authority, and a real server must enforce
   the same permissions, because a client can always be modified.
 

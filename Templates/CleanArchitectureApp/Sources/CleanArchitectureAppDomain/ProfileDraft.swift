@@ -2,8 +2,13 @@ import Foundation
 
 /// Edited profile values as typed by the user, before they are checked.
 public struct ProfileDraft: Hashable, Sendable {
-    /// Allowed length of the normalized name, in characters.
+    /// Allowed length of the normalized name, in visible characters.
     public static let nameLength = 2...60
+    /// Upper bound on the Unicode scalars of the normalized name. A character can hold any
+    /// number of combining marks, so counting characters alone would accept "Ab" followed by
+    /// a million accents. Four scalars per character leave room for decomposed accents and
+    /// Indic conjuncts.
+    public static let maximumNameScalarCount = 4 * nameLength.upperBound
     /// RFC 5321 limits a forward path to 256 octets including the angle brackets, which
     /// leaves 254 octets (UTF-8 bytes, not characters) for the address.
     public static let maximumEmailLength = 254
@@ -40,12 +45,13 @@ public struct ProfileDraft: Hashable, Sendable {
     public var issues: [ValidationIssue] {
         var issues: [ValidationIssue] = []
         let name = normalizedName
-        let nameLength = name.count
-        if name.unicodeScalars.contains(where: Self.isUnsafe) {
+        if name.unicodeScalars.count > Self.maximumNameScalarCount {
+            issues.append(.nameTooLong(maximum: Self.nameLength.upperBound))
+        } else if name.unicodeScalars.contains(where: Self.isUnsafe) {
             issues.append(.nameInvalidCharacters)
-        } else if nameLength < Self.nameLength.lowerBound {
+        } else if name.count(where: Self.isVisible) < Self.nameLength.lowerBound {
             issues.append(.nameTooShort(minimum: Self.nameLength.lowerBound))
-        } else if nameLength > Self.nameLength.upperBound {
+        } else if name.count > Self.nameLength.upperBound {
             issues.append(.nameTooLong(maximum: Self.nameLength.upperBound))
         }
         let email = normalizedEmail
@@ -86,14 +92,30 @@ public struct ProfileDraft: Hashable, Sendable {
             && label.allSatisfy { $0.isASCII && ($0.isLetter || $0.isNumber || $0 == "-") }
     }
 
-    /// Control characters (such as NUL or escape) and the bidirectional embedding, override
-    /// and isolate characters are invisible in the form and can make a stored value read
+    /// Control characters (such as NUL or escape) and the bidirectional marks, embeddings,
+    /// overrides and isolates are invisible in the form and can make a stored value read
     /// differently from what was typed. Other format characters, such as the zero-width
     /// non-joiner used in Persian names, stay allowed.
     private static func isUnsafe(_ scalar: Unicode.Scalar) -> Bool {
         scalar.properties.generalCategory == .control
+            || bidirectionalMarks.contains(scalar.value)
             || (0x202A...0x202E).contains(scalar.value)
             || (0x2066...0x2069).contains(scalar.value)
+    }
+
+    /// Arabic letter mark, left-to-right mark and right-to-left mark.
+    private static let bidirectionalMarks: Set<UInt32> = [0x061C, 0x200E, 0x200F]
+
+    /// A character that draws something: at least one scalar that is not whitespace, a
+    /// format character or default ignorable (zero-width space, word joiner, byte order mark,
+    /// Hangul filler and the like). Only visible characters count toward the minimum, so a
+    /// name made of invisible characters is too short.
+    private static func isVisible(_ character: Character) -> Bool {
+        character.unicodeScalars.contains { scalar in
+            !scalar.properties.isWhitespace
+                && !scalar.properties.isDefaultIgnorableCodePoint
+                && scalar.properties.generalCategory != .format
+        }
     }
 }
 
