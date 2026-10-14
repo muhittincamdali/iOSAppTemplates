@@ -111,6 +111,18 @@ struct DataManagerTests {
         return manager
     }
 
+    @Test func sampleDataNeedsNoNetwork() {
+        let manager = seeded()
+        let feed = FeedViewModel()
+        let posts = manager.posts + feed.posts
+        let references = posts.flatMap { ($0.images ?? []) + [$0.authorAvatarURL, $0.videoURL].compactMap { $0 } }
+            + manager.suggestedProfiles.compactMap(\.avatarURL)
+
+        #expect(!posts.isEmpty)
+        #expect(posts.contains { !($0.images ?? []).isEmpty }, "some sample posts show media")
+        #expect(references.allSatisfy { !$0.lowercased().hasPrefix("http") }, "\(references)")
+    }
+
     @Test func likeTogglesCountAndNeverGoesNegative() throws {
         let manager = seeded()
         let post = try #require(manager.posts.first { !manager.likedPostIDs.contains($0.id) })

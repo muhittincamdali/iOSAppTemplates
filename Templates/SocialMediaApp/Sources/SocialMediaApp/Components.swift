@@ -1,6 +1,42 @@
 import Foundation
 import SwiftUI
 
+/// One image of a post. An http(s) URL is loaded with `AsyncImage`; any other value is
+/// treated as an SF Symbol name and drawn locally, which is what the sample data uses.
+struct PostMediaTile: View {
+    let source: String
+
+    private var remoteURL: URL? {
+        guard let url = URL(string: source), ["http", "https"].contains(url.scheme?.lowercased()) else { return nil }
+        return url
+    }
+
+    var body: some View {
+        if let remoteURL {
+            AsyncImage(url: remoteURL) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            } placeholder: {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.3))
+            }
+        } else {
+            ZStack {
+                LinearGradient(
+                    colors: [Color.blue.opacity(0.35), Color.purple.opacity(0.35)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                Image(systemName: source)
+                    .font(.system(size: 56))
+                    .foregroundStyle(.white)
+            }
+            .accessibilityHidden(true)
+        }
+    }
+}
+
 struct CustomTextField: View {
     @Binding var text: String
     let placeholder: String

@@ -150,17 +150,10 @@ struct PostCard: View {
             if let images = currentPost.images, !images.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
-                        ForEach(images, id: \.self) { imageURL in
-                            AsyncImage(url: URL(string: imageURL)) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                            } placeholder: {
-                                Rectangle()
-                                    .fill(Color.gray.opacity(0.3))
-                            }
-                            .frame(width: 200, height: 200)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                        ForEach(images, id: \.self) { source in
+                            PostMediaTile(source: source)
+                                .frame(width: 200, height: 200)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
                         }
                     }
                     .padding(.horizontal, 16)

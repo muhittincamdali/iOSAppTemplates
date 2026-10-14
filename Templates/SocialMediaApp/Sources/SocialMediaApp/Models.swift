@@ -16,6 +16,8 @@ struct Post: Identifiable, Codable {
     let authorAvatarURL: String?
     let authorIsVerified: Bool
     var content: String
+    /// Image URLs. The bundled sample posts use SF Symbol names instead, so the template
+    /// shows media without network access; see `PostMediaTile`.
     var images: [String]?
     let videoURL: String?
     var likesCount: Int
