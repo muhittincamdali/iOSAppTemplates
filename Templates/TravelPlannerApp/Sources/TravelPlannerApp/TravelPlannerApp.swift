@@ -1,6 +1,5 @@
 import Foundation
 import SwiftUI
-import TravelPlannerAppCore
 
 public struct TravelPlannerAppShell: App {
     public init() {}

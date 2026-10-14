@@ -1,6 +1,5 @@
 import Foundation
 import SwiftUI
-import EducationAppCore
 
 public struct EducationAppShell: App {
     public init() {}

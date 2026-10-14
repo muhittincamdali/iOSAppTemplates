@@ -8,14 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(name: "BookingReservationsApp", targets: ["BookingReservationsApp"]),
-        .library(name: "BookingReservationsAppUI", targets: ["BookingReservationsAppUI"]),
-        .library(name: "BookingReservationsAppCore", targets: ["BookingReservationsAppCore"])
+        .library(name: "BookingReservationsApp", targets: ["BookingReservationsApp"])
     ],
     targets: [
-        .target(name: "BookingReservationsApp", dependencies: ["BookingReservationsAppUI", "BookingReservationsAppCore"]),
-        .target(name: "BookingReservationsAppUI", dependencies: ["BookingReservationsAppCore"]),
-        .target(name: "BookingReservationsAppCore"),
+        .target(name: "BookingReservationsApp"),
         .testTarget(name: "BookingReservationsAppTests", dependencies: ["BookingReservationsApp"])
     ]
 )

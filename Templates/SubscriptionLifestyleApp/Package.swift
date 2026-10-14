@@ -8,14 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(name: "SubscriptionLifestyleApp", targets: ["SubscriptionLifestyleApp"]),
-        .library(name: "SubscriptionLifestyleAppUI", targets: ["SubscriptionLifestyleAppUI"]),
-        .library(name: "SubscriptionLifestyleAppCore", targets: ["SubscriptionLifestyleAppCore"])
+        .library(name: "SubscriptionLifestyleApp", targets: ["SubscriptionLifestyleApp"])
     ],
     targets: [
-        .target(name: "SubscriptionLifestyleApp", dependencies: ["SubscriptionLifestyleAppUI", "SubscriptionLifestyleAppCore"]),
-        .target(name: "SubscriptionLifestyleAppUI", dependencies: ["SubscriptionLifestyleAppCore"]),
-        .target(name: "SubscriptionLifestyleAppCore"),
+        .target(name: "SubscriptionLifestyleApp"),
         .testTarget(name: "SubscriptionLifestyleAppTests", dependencies: ["SubscriptionLifestyleApp"])
     ]
 )

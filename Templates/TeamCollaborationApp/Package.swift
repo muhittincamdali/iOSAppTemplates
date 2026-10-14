@@ -8,14 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(name: "TeamCollaborationApp", targets: ["TeamCollaborationApp"]),
-        .library(name: "TeamCollaborationAppUI", targets: ["TeamCollaborationAppUI"]),
-        .library(name: "TeamCollaborationAppCore", targets: ["TeamCollaborationAppCore"])
+        .library(name: "TeamCollaborationApp", targets: ["TeamCollaborationApp"])
     ],
     targets: [
-        .target(name: "TeamCollaborationApp", dependencies: ["TeamCollaborationAppUI", "TeamCollaborationAppCore"]),
-        .target(name: "TeamCollaborationAppUI", dependencies: ["TeamCollaborationAppCore"]),
-        .target(name: "TeamCollaborationAppCore"),
+        .target(name: "TeamCollaborationApp"),
         .testTarget(name: "TeamCollaborationAppTests", dependencies: ["TeamCollaborationApp"])
     ]
 )

@@ -1,6 +1,5 @@
 import Foundation
 import SwiftUI
-import FoodDeliveryAppCore
 
 public struct FoodDeliveryAppShell: App {
     public init() {}

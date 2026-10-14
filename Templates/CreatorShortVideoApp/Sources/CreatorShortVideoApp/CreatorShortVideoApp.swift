@@ -1,6 +1,5 @@
 import Foundation
 import SwiftUI
-import CreatorShortVideoAppCore
 
 public struct CreatorShortVideoAppShell: App {
     public init() {}

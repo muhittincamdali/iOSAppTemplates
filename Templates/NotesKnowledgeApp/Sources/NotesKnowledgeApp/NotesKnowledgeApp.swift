@@ -1,6 +1,5 @@
 import Foundation
 import SwiftUI
-import NotesKnowledgeAppCore
 
 @available(iOS 18.0, macOS 15.0, *)
 public struct NotesKnowledgeAppShell: App {

@@ -37,7 +37,7 @@ jobs:
           swift run create-ios-app new SmokeShop --template ecommerce --output "$RUNNER_TEMP"
           udid="$(xcrun simctl list devices available | grep -E '^\s+iPhone' | head -1 | grep -oE '[0-9A-F-]{36}')"
           cd "$RUNNER_TEMP/SmokeShop"
-          xcodebuild test -scheme SmokeShop-Package -destination "platform=iOS Simulator,id=$udid" -quiet
+          xcodebuild test -scheme SmokeShop -destination "platform=iOS Simulator,id=$udid" -quiet
 
   templates:
     name: ${{ matrix.template }}

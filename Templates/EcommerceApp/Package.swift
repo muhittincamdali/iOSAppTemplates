@@ -8,14 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(name: "EcommerceApp", targets: ["EcommerceApp"]),
-        .library(name: "EcommerceAppUI", targets: ["EcommerceAppUI"]),
-        .library(name: "EcommerceAppCore", targets: ["EcommerceAppCore"])
+        .library(name: "EcommerceApp", targets: ["EcommerceApp"])
     ],
     targets: [
-        .target(name: "EcommerceApp", dependencies: ["EcommerceAppUI", "EcommerceAppCore"]),
-        .target(name: "EcommerceAppUI", dependencies: ["EcommerceAppCore"]),
-        .target(name: "EcommerceAppCore"),
+        .target(name: "EcommerceApp"),
         .testTarget(name: "EcommerceAppTests", dependencies: ["EcommerceApp"])
     ]
 )

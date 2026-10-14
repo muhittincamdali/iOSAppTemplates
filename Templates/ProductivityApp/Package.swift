@@ -8,14 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(name: "ProductivityApp", targets: ["ProductivityApp"]),
-        .library(name: "ProductivityAppUI", targets: ["ProductivityAppUI"]),
-        .library(name: "ProductivityAppCore", targets: ["ProductivityAppCore"])
+        .library(name: "ProductivityApp", targets: ["ProductivityApp"])
     ],
     targets: [
-        .target(name: "ProductivityApp", dependencies: ["ProductivityAppUI", "ProductivityAppCore"]),
-        .target(name: "ProductivityAppUI", dependencies: ["ProductivityAppCore"]),
-        .target(name: "ProductivityAppCore"),
+        .target(name: "ProductivityApp"),
         .testTarget(name: "ProductivityAppTests", dependencies: ["ProductivityApp"])
     ]
 )

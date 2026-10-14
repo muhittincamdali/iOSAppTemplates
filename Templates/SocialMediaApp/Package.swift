@@ -8,14 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(name: "SocialMediaApp", targets: ["SocialMediaApp"]),
-        .library(name: "SocialMediaAppUI", targets: ["SocialMediaAppUI"]),
-        .library(name: "SocialMediaAppCore", targets: ["SocialMediaAppCore"])
+        .library(name: "SocialMediaApp", targets: ["SocialMediaApp"])
     ],
     targets: [
-        .target(name: "SocialMediaApp", dependencies: ["SocialMediaAppUI", "SocialMediaAppCore"]),
-        .target(name: "SocialMediaAppUI", dependencies: ["SocialMediaAppCore"]),
-        .target(name: "SocialMediaAppCore"),
+        .target(name: "SocialMediaApp"),
         .testTarget(name: "SocialMediaAppTests", dependencies: ["SocialMediaApp"])
     ]
 )

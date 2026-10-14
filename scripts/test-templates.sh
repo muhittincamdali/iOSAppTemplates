@@ -34,7 +34,7 @@ failed=()
 for template in "${templates[@]}"; do
   log="$derived_data/$template.log"
   if (cd "$templates_dir/$template" && xcodebuild test \
-        -scheme "$template-Package" \
+        -scheme "$template" \
         -destination "$destination" \
         -derivedDataPath "$derived_data/$template" > "$log" 2>&1); then
     echo "$template: $(grep -E 'Test run with' "$log" | tail -1 | sed -E 's/^[^A-Za-z]*//')"

@@ -8,14 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(name: "TravelPlannerApp", targets: ["TravelPlannerApp"]),
-        .library(name: "TravelPlannerAppUI", targets: ["TravelPlannerAppUI"]),
-        .library(name: "TravelPlannerAppCore", targets: ["TravelPlannerAppCore"])
+        .library(name: "TravelPlannerApp", targets: ["TravelPlannerApp"])
     ],
     targets: [
-        .target(name: "TravelPlannerApp", dependencies: ["TravelPlannerAppUI", "TravelPlannerAppCore"]),
-        .target(name: "TravelPlannerAppUI", dependencies: ["TravelPlannerAppCore"]),
-        .target(name: "TravelPlannerAppCore"),
+        .target(name: "TravelPlannerApp"),
         .testTarget(name: "TravelPlannerAppTests", dependencies: ["TravelPlannerApp"])
     ]
 )

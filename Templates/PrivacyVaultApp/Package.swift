@@ -8,14 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(name: "PrivacyVaultApp", targets: ["PrivacyVaultApp"]),
-        .library(name: "PrivacyVaultAppUI", targets: ["PrivacyVaultAppUI"]),
-        .library(name: "PrivacyVaultAppCore", targets: ["PrivacyVaultAppCore"])
+        .library(name: "PrivacyVaultApp", targets: ["PrivacyVaultApp"])
     ],
     targets: [
-        .target(name: "PrivacyVaultApp", dependencies: ["PrivacyVaultAppUI", "PrivacyVaultAppCore"]),
-        .target(name: "PrivacyVaultAppUI", dependencies: ["PrivacyVaultAppCore"]),
-        .target(name: "PrivacyVaultAppCore"),
+        .target(name: "PrivacyVaultApp"),
         .testTarget(name: "PrivacyVaultAppTests", dependencies: ["PrivacyVaultApp"])
     ]
 )

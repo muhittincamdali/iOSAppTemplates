@@ -1,6 +1,5 @@
 import Foundation
 import SwiftUI
-import TeamCollaborationAppCore
 
 @available(iOS 18.0, macOS 15.0, *)
 public struct TeamCollaborationAppShell: App {

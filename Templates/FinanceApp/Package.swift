@@ -8,14 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(name: "FinanceApp", targets: ["FinanceApp"]),
-        .library(name: "FinanceAppUI", targets: ["FinanceAppUI"]),
-        .library(name: "FinanceAppCore", targets: ["FinanceAppCore"])
+        .library(name: "FinanceApp", targets: ["FinanceApp"])
     ],
     targets: [
-        .target(name: "FinanceApp", dependencies: ["FinanceAppUI", "FinanceAppCore"]),
-        .target(name: "FinanceAppUI", dependencies: ["FinanceAppCore"]),
-        .target(name: "FinanceAppCore"),
+        .target(name: "FinanceApp"),
         .testTarget(name: "FinanceAppTests", dependencies: ["FinanceApp"])
     ]
 )

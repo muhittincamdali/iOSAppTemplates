@@ -8,14 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(name: "MarketplaceApp", targets: ["MarketplaceApp"]),
-        .library(name: "MarketplaceAppUI", targets: ["MarketplaceAppUI"]),
-        .library(name: "MarketplaceAppCore", targets: ["MarketplaceAppCore"])
+        .library(name: "MarketplaceApp", targets: ["MarketplaceApp"])
     ],
     targets: [
-        .target(name: "MarketplaceApp", dependencies: ["MarketplaceAppUI", "MarketplaceAppCore"]),
-        .target(name: "MarketplaceAppUI", dependencies: ["MarketplaceAppCore"]),
-        .target(name: "MarketplaceAppCore"),
+        .target(name: "MarketplaceApp"),
         .testTarget(name: "MarketplaceAppTests", dependencies: ["MarketplaceApp"])
     ]
 )

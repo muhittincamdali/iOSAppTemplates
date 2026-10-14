@@ -8,14 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(name: "NotesKnowledgeApp", targets: ["NotesKnowledgeApp"]),
-        .library(name: "NotesKnowledgeAppUI", targets: ["NotesKnowledgeAppUI"]),
-        .library(name: "NotesKnowledgeAppCore", targets: ["NotesKnowledgeAppCore"])
+        .library(name: "NotesKnowledgeApp", targets: ["NotesKnowledgeApp"])
     ],
     targets: [
-        .target(name: "NotesKnowledgeApp", dependencies: ["NotesKnowledgeAppUI", "NotesKnowledgeAppCore"]),
-        .target(name: "NotesKnowledgeAppUI", dependencies: ["NotesKnowledgeAppCore"]),
-        .target(name: "NotesKnowledgeAppCore"),
+        .target(name: "NotesKnowledgeApp"),
         .testTarget(name: "NotesKnowledgeAppTests", dependencies: ["NotesKnowledgeApp"])
     ]
 )

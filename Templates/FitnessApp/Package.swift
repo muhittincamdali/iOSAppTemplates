@@ -8,14 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(name: "FitnessApp", targets: ["FitnessApp"]),
-        .library(name: "FitnessAppUI", targets: ["FitnessAppUI"]),
-        .library(name: "FitnessAppCore", targets: ["FitnessAppCore"])
+        .library(name: "FitnessApp", targets: ["FitnessApp"])
     ],
     targets: [
-        .target(name: "FitnessApp", dependencies: ["FitnessAppUI", "FitnessAppCore"]),
-        .target(name: "FitnessAppUI", dependencies: ["FitnessAppCore"]),
-        .target(name: "FitnessAppCore"),
+        .target(name: "FitnessApp"),
         .testTarget(name: "FitnessAppTests", dependencies: ["FitnessApp"])
     ]
 )
