@@ -86,8 +86,8 @@ open CleanArchitectureApp.xcodeproj
 ```
 
 In the app, open **Settings** and turn off **Server reachable**; the directory reloads and the
-Directory tab shows the saved copy with the time it was saved. Pick another person under **Signed in as** to see what a
-member or a moderator may do.
+Directory tab shows the saved copy with the time it was saved. Pick another person under
+**Signed in as** to see what a member or a moderator may do.
 
 ## Use your own server
 
