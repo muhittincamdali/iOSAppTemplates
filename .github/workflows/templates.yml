@@ -80,6 +80,37 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             -quiet
 
+  ui-tests:
+    name: CleanArchitectureApp UI tests
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Toolchain
+        run: xcodebuild -version
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate the host project
+        working-directory: Templates/CleanArchitectureApp/App
+        run: xcodegen generate
+
+      - name: Run the UI tests and the accessibility audit
+        working-directory: Templates/CleanArchitectureApp/App
+        run: |
+          udid="$(xcrun simctl list devices available | grep -E '^\s+iPhone' | head -1 | grep -oE '[0-9A-F-]{36}')"
+          xcodebuild test \
+            -project CleanArchitectureApp.xcodeproj \
+            -scheme CleanArchitectureAppHost \
+            -destination "platform=iOS Simulator,id=$udid" \
+            -test-timeouts-enabled YES \
+            -maximum-test-execution-time-allowance 120 \
+            -quiet
+
   templates:
     name: ${{ matrix.template }}
     runs-on: macos-26
