@@ -8,45 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(
-            name: "EducationApp",
-            targets: ["EducationApp"]
-        ),
-        .library(
-            name: "EducationAppUI",
-            targets: ["EducationAppUI"]
-        ),
-        .library(
-            name: "EducationAppCore",
-            targets: ["EducationAppCore"]
-        )
-    ],
-    dependencies: [
-        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.8.1")
+        .library(name: "EducationApp", targets: ["EducationApp"])
     ],
     targets: [
-        .target(
-            name: "EducationApp",
-            dependencies: [
-                "EducationAppUI",
-                "EducationAppCore"
-            ]
-        ),
-        .target(
-            name: "EducationAppUI",
-            dependencies: [
-                "EducationAppCore"
-            ]
-        ),
-        .target(
-            name: "EducationAppCore",
-            dependencies: [
-                "Alamofire"
-            ]
-        ),
-        .testTarget(
-            name: "EducationAppTests",
-            dependencies: ["EducationApp"]
-        )
+        .target(name: "EducationApp"),
+        .testTarget(name: "EducationAppTests", dependencies: ["EducationApp"])
     ]
 )

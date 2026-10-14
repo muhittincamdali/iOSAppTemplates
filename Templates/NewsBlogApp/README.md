@@ -1,83 +1,30 @@
 # NewsBlogApp
 
-Generated from `Documentation/app-surface-catalog.json`.
+News & Blog template: a SwiftUI app for iOS 18 with Today, Sections, Saved, Digest and Profile tabs.
 
-`NewsBlogApp` is the standalone-root surface for the `News` lane inside `iOSAppTemplates`.
+All data is in-memory sample data and there is no networking. Replace the sample
+data in the store with your own services.
 
-## Today
+## Layout
 
-- Label: `Standalone Root + richer example + chained runtime flow`
-- Lane: `News`
-- Entry: `Package.swift`
-- Product target: `News / Editorial`
-- Richer example: `Examples/NewsBlogExample`
+| Path | Contents |
+| --- | --- |
+| `Sources/NewsBlogApp/NewsBlogApp.swift` | `NewsBlogAppShell` (the public `App`), the screens, and `NewsBlogOperationsStore`, a `@MainActor` `ObservableObject` that owns the sample data and every action the screens trigger |
+| `Tests/NewsBlogAppTests/` | Swift Testing suite for the app's state and actions |
+| `App/` | XcodeGen spec and a host file that calls `NewsBlogAppShell.main()` |
 
-## Best For / Not For
-
-### Best for
-
-- teams evaluating editorial and article-list starter flows
-- readers comparing news lane packaging and richer example routing
-- maintainers reviewing content-first list and detail patterns
-
-### Not for
-
-- teams expecting a production newsroom platform today
-- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
-- teams that assume the hosted standalone iOS workflow is already green for this app pack
-
-## Product Shape
-
-- headline list flow
-- article detail surface
-- category routing
-- saved or trending content flow
-- starter editorial model
-
-## Current Proof
-
-- No external dependency lockfile is required today
-- `swift package dump-package` passes
-- local `swift test` passes
-- `xcodebuild -scheme NewsBlogApp -destination 'generic/platform=iOS' build` passes
-- `bash Scripts/validate-runtime-app-launches.sh NewsBlogApp` passes locally
-- root repo `swift build -c release` passes
-- root repo `swift test` passes
-- canonical app proof page exists
-- canonical app media page exists
-- runtime screenshot is published
-- demo clip is published
-- richer example route exists
-
-## Missing Proof
-
-- stable green hosted standalone iOS baseline on current `master`
-
-## Start Here
+## Test
 
 ```bash
-open Package.swift
-open ../../Examples/NewsBlogExample/README.md
+xcodebuild test -scheme NewsBlogApp -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
-Repo-level proof:
+`iPhone 17` is an example; use any simulator that `xcrun simctl list devices available` lists.
+
+## Run
 
 ```bash
-cd ../..
-swift build
-swift test
+cd App
+xcodegen generate
+open NewsBlogApp.xcodeproj
 ```
-
-Standalone generic iOS proof:
-
-```bash
-xcodebuild -scheme NewsBlogApp -destination 'generic/platform=iOS' build
-```
-
-## Canonical References
-
-- [Proof Surface](../../Documentation/App-Proofs/NewsBlogApp.md)
-- [Media Surface](../../Documentation/App-Media/NewsBlogApp.md)
-- [Template Showcase](../../Documentation/Template-Showcase.md)
-- [Proof Matrix](../../Documentation/Proof-Matrix.md)
-- [Richer Example](../../Examples/NewsBlogExample/README.md)

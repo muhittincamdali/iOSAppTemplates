@@ -1,83 +1,33 @@
 # FitnessApp
 
-Generated from `Documentation/app-surface-catalog.json`.
+Fitness template: a SwiftUI app for iOS 18 with Plan, Session, Progress, Recovery and Profile tabs.
 
-`FitnessApp` is the standalone-root surface for the `Health / Fitness` lane inside `iOSAppTemplates`.
+All data is in-memory sample data and there is no networking. Replace the sample
+data in the store with your own services.
 
-## Today
+## Layout
 
-- Label: `Standalone Root + richer example + chained runtime flow`
-- Lane: `Health / Fitness`
-- Entry: `Package.swift`
-- Product target: `Health / Fitness`
-- Richer example: `Examples/FitnessExample`
+| Path | Contents |
+| --- | --- |
+| `Sources/FitnessApp/FitnessApp.swift` | `FitnessAppShell` (the public `App`) and the root tab view |
+| `Sources/FitnessApp/FitnessStudioStore.swift` | `FitnessStudioStore`, a `@MainActor` `ObservableObject` that owns the sample data and every action the screens trigger |
+| `Sources/FitnessApp/FitnessModels.swift` | Value types for plans, workouts, exercises, sessions, goals, habits, recovery tasks, readiness checks and coach alerts |
+| `Sources/FitnessApp/FitnessDashboardView.swift`, `FitnessWorkoutViews.swift`, `FitnessProgressViews.swift` | Dashboard, workout and session, progress, recovery and profile screens |
+| `Tests/FitnessAppTests/` | Swift Testing suite for the app's state and actions |
+| `App/` | XcodeGen spec and a host file that calls `FitnessAppShell.main()` |
 
-## Best For / Not For
-
-### Best for
-
-- teams reviewing a fitness app flow package entry
-- maintainers validating HealthKit-oriented starter surfaces
-- readers comparing standalone app packaging against family-level health templates and a richer example route
-
-### Not for
-
-- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
-- teams that assume the hosted standalone iOS workflow is already green for this app pack
-
-## Product Shape
-
-- dashboard flow
-- goal and workout surface
-- health metric cards
-- progress summary flow
-- starter health domain model
-
-## Current Proof
-
-- `Package.resolved` exists as the tracked dependency lockfile
-- `swift package dump-package` passes
-- local `swift test` passes
-- `xcodebuild -scheme FitnessApp -destination 'generic/platform=iOS' build` passes
-- `bash Scripts/validate-runtime-app-launches.sh FitnessApp` passes locally
-- root repo `swift build -c release` passes
-- root repo `swift test` passes
-- canonical app proof page exists
-- canonical app media page exists
-- runtime screenshot is published
-- demo clip is published
-- richer example route exists
-
-## Missing Proof
-
-- stable green hosted standalone iOS baseline on current `master`
-
-## Start Here
+## Test
 
 ```bash
-open Package.swift
-open Package.resolved
-open ../../Examples/FitnessExample/README.md
+xcodebuild test -scheme FitnessApp -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
-Repo-level proof:
+`iPhone 17` is an example; use any simulator that `xcrun simctl list devices available` lists.
+
+## Run
 
 ```bash
-cd ../..
-swift build
-swift test
+cd App
+xcodegen generate
+open FitnessApp.xcodeproj
 ```
-
-Standalone generic iOS proof:
-
-```bash
-xcodebuild -scheme FitnessApp -destination 'generic/platform=iOS' build
-```
-
-## Canonical References
-
-- [Proof Surface](../../Documentation/App-Proofs/FitnessApp.md)
-- [Media Surface](../../Documentation/App-Media/FitnessApp.md)
-- [Template Showcase](../../Documentation/Template-Showcase.md)
-- [Proof Matrix](../../Documentation/Proof-Matrix.md)
-- [Richer Example](../../Examples/FitnessExample/README.md)

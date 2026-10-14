@@ -1,31 +1,5 @@
 import Foundation
 import SwiftUI
-import ProductivityAppCore
-
-private enum ProductivityInteractionProofMode {
-    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
-
-    static func write(summary: String, steps: [String]) {
-        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            return
-        }
-
-        let payload: [String: Any] = [
-            "app": "ProductivityApp",
-            "status": "completed",
-            "summary": summary,
-            "steps": steps,
-            "timestamp": ISO8601DateFormatter().string(from: Date())
-        ]
-
-        guard JSONSerialization.isValidJSONObject(payload),
-              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
-            return
-        }
-
-        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
-    }
-}
 
 @available(iOS 18.0, macOS 15.0, *)
 public struct ProductivityAppShell: App {
@@ -33,13 +7,13 @@ public struct ProductivityAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            ProductivityRuntimeRootView()
+            ProductivityRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct ProductivityRuntimeRootView: View {
+struct ProductivityRootView: View {
     @StateObject private var store = ProductivityOperationsStore()
 
     var body: some View {
@@ -75,9 +49,6 @@ struct ProductivityRuntimeRootView: View {
                 }
         }
         .tint(.indigo)
-        .onAppear {
-            store.runInteractionProofIfNeeded()
-        }
     }
 }
 
@@ -92,7 +63,6 @@ final class ProductivityOperationsStore: ObservableObject {
     @Published var operatorHeadline: String
     @Published var focusRule: String
     @Published var completedCount: Int
-    private var interactionProofScheduled = false
 
     init(
         inboxTasks: [ProductivityTaskRecord] = ProductivityTaskRecord.samples,
@@ -184,46 +154,6 @@ final class ProductivityOperationsStore: ObservableObject {
         reviewRisks[index].status = .resolved
         reviewRisks[index].mitigation = "Risk closed and documented in the review log."
         operatorHeadline = "Review risk closed: \(reviewRisks[index].title)."
-    }
-
-    func runInteractionProofIfNeeded() {
-        guard ProductivityInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
-        interactionProofScheduled = true
-
-        Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 800_000_000)
-
-            captureDraft = "Escalate launch checklist owner sync"
-            captureTask()
-
-            guard let task = inboxTasks.first,
-                  let project = projects.first else { return }
-
-            prioritizeTask(task.id)
-            moveTaskToProject(task.id, projectID: project.id)
-            completeTask(task.id)
-
-            if let focusBlock = focusBlocks.first {
-                startFocus(focusBlock.id)
-                completeFocus(focusBlock.id)
-            }
-
-            if let risk = reviewRisks.first {
-                resolveRisk(risk.id)
-            }
-
-            ProductivityInteractionProofMode.write(
-                summary: operatorHeadline,
-                steps: [
-                    "task-captured",
-                    "task-prioritized",
-                    "task-routed-to-project",
-                    "task-completed",
-                    "focus-started-and-completed",
-                    "review-risk-resolved"
-                ]
-            )
-        }
     }
 }
 
@@ -577,8 +507,8 @@ struct ProductivityTaskRecord: Identifiable, Hashable {
 
     static let samples: [ProductivityTaskRecord] = [
         ProductivityTaskRecord(id: UUID(), title: "Finalize launch review narrative", detail: "Go/no-go review still needs the final risk table.", project: "Release Ops", priority: .critical, dueLabel: "Today 16:00", status: .prioritized),
-        ProductivityTaskRecord(id: UUID(), title: "Review screenshot host collisions", detail: "Parallel runtime capture still needs one clean regression pass.", project: "Proof System", priority: .high, dueLabel: "Today 18:30", status: .planned),
-        ProductivityTaskRecord(id: UUID(), title: "Prepare next flagship backlog", detail: "Map the next rebuild wave into the portfolio board.", project: "Template Portfolio", priority: .medium, dueLabel: "Tomorrow", status: .captured)
+        ProductivityTaskRecord(id: UUID(), title: "Review onboarding analytics", detail: "Signup completion dropped after the last release and needs one clean regression pass.", project: "Growth Experiments", priority: .high, dueLabel: "Today 18:30", status: .planned),
+        ProductivityTaskRecord(id: UUID(), title: "Prepare next quarter backlog", detail: "Map the next feature wave onto the planning board.", project: "Roadmap", priority: .medium, dueLabel: "Tomorrow", status: .captured)
     ]
 }
 
@@ -590,9 +520,9 @@ struct ProductivityProjectRecord: Identifiable, Hashable {
     var status: String
 
     static let samples: [ProductivityProjectRecord] = [
-        ProductivityProjectRecord(id: UUID(), name: "Release Ops", owner: "Muhittin", progress: 0.72, status: "At Risk"),
-        ProductivityProjectRecord(id: UUID(), name: "Proof System", owner: "Muhittin", progress: 0.84, status: "Healthy"),
-        ProductivityProjectRecord(id: UUID(), name: "Template Portfolio", owner: "Muhittin", progress: 0.58, status: "Needs Focus")
+        ProductivityProjectRecord(id: UUID(), name: "Release Ops", owner: "Dana Wright", progress: 0.72, status: "At Risk"),
+        ProductivityProjectRecord(id: UUID(), name: "Growth Experiments", owner: "Leo Park", progress: 0.84, status: "Healthy"),
+        ProductivityProjectRecord(id: UUID(), name: "Roadmap", owner: "Dana Wright", progress: 0.58, status: "Needs Focus")
     ]
 
     var statusColor: Color {

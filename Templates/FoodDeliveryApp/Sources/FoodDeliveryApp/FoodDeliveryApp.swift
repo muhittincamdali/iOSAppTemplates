@@ -1,43 +1,17 @@
 import Foundation
 import SwiftUI
-import FoodDeliveryAppCore
-
-private enum FoodDeliveryInteractionProofMode {
-    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
-
-    static func write(summary: String, steps: [String]) {
-        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            return
-        }
-
-        let payload: [String: Any] = [
-            "app": "FoodDeliveryApp",
-            "status": "completed",
-            "summary": summary,
-            "steps": steps,
-            "timestamp": ISO8601DateFormatter().string(from: Date())
-        ]
-
-        guard JSONSerialization.isValidJSONObject(payload),
-              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
-            return
-        }
-
-        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
-    }
-}
 
 public struct FoodDeliveryAppShell: App {
     public init() {}
 
     public var body: some Scene {
         WindowGroup {
-            FoodDeliveryRuntimeRootView()
+            FoodDeliveryRootView()
         }
     }
 }
 
-struct FoodDeliveryRuntimeRootView: View {
+struct FoodDeliveryRootView: View {
     @StateObject private var store = FoodDeliveryOperationsStore()
 
     var body: some View {
@@ -73,9 +47,6 @@ struct FoodDeliveryRuntimeRootView: View {
                 }
         }
         .tint(.orange)
-        .onAppear {
-            store.runInteractionProofIfNeeded()
-        }
     }
 }
 
@@ -92,7 +63,6 @@ final class FoodDeliveryOperationsStore: ObservableObject {
     @Published var deliveryAddress = "Moda, Kadikoy"
     @Published var paymentMethod = "Visa •••• 4021"
     @Published var operatorNote = "Checkout should only lock after item totals, promo, payment, and courier window are aligned."
-    private var interactionProofScheduled = false
     let deliverySlots = ["Tonight • 19:40", "Tonight • 20:10", "Tomorrow • 12:30"]
     let paymentMethods = ["Visa •••• 4021", "Mastercard •••• 8714", "Apple Pay"]
 
@@ -134,7 +104,7 @@ final class FoodDeliveryOperationsStore: ObservableObject {
 
     var dashboardHeadline: String {
         if liveOrder.progress < 1 {
-            return "\(liveOrder.status) and the courier wave is still active."
+            return "\(liveOrder.status.label) and the courier wave is still active."
         }
         if cartItems.isEmpty {
             return "Cart is empty. Build the next order before the evening peak."
@@ -189,7 +159,7 @@ final class FoodDeliveryOperationsStore: ObservableObject {
 
         liveOrder = DeliveryOrderRecord(
             restaurantName: restaurant.name,
-            status: "Order confirmed",
+            status: .confirmed,
             eta: "24 min",
             courierName: "Mert",
             total: total,
@@ -210,21 +180,21 @@ final class FoodDeliveryOperationsStore: ObservableObject {
 
     func advanceLiveOrder() {
         switch liveOrder.status {
-        case "Order confirmed":
-            liveOrder.status = "Kitchen preparing"
+        case .confirmed:
+            liveOrder.status = .kitchenPreparing
             liveOrder.progress = 0.45
             liveOrder.timeline[1] = "Kitchen preparing"
-        case "Kitchen preparing":
-            liveOrder.status = "Courier picked up"
+        case .kitchenPreparing:
+            liveOrder.status = .courierPickedUp
             liveOrder.progress = 0.72
             liveOrder.timeline[2] = "Courier assigned"
             liveOrder.timeline[3] = "Courier picked up"
-        case "Courier picked up":
-            liveOrder.status = "Courier arriving"
+        case .courierPickedUp:
+            liveOrder.status = .courierArriving
             liveOrder.progress = 0.9
             liveOrder.eta = "8 min"
-        case "Courier arriving":
-            liveOrder.status = "Delivered"
+        case .courierArriving:
+            liveOrder.status = .delivered
             liveOrder.progress = 1
             liveOrder.eta = "Delivered now"
         default:
@@ -235,7 +205,7 @@ final class FoodDeliveryOperationsStore: ObservableObject {
 
     func reportCourierIssue() {
         liveOrder.supportStatus = "Courier issue opened"
-        liveOrder.status = "Support reviewing courier issue"
+        liveOrder.status = .courierIssue
         liveOrder.timeline.append("Courier issue opened with support")
         operatorNote = "Courier issue escalated. ETA is being recalculated."
         syncPastOrder()
@@ -243,7 +213,7 @@ final class FoodDeliveryOperationsStore: ObservableObject {
 
     func recoverCourierIssue() {
         liveOrder.supportStatus = "Courier issue resolved"
-        liveOrder.status = "Courier re-routed"
+        liveOrder.status = .courierRerouted
         liveOrder.eta = "14 min"
         liveOrder.progress = max(liveOrder.progress, 0.76)
         liveOrder.timeline.append("Courier issue resolved and route stabilized")
@@ -252,7 +222,7 @@ final class FoodDeliveryOperationsStore: ObservableObject {
     }
 
     func confirmDelivered() {
-        liveOrder.status = "Delivered"
+        liveOrder.status = .delivered
         liveOrder.eta = "Delivered now"
         liveOrder.progress = 1
         liveOrder.supportStatus = "Closed"
@@ -274,63 +244,6 @@ final class FoodDeliveryOperationsStore: ObservableObject {
     private func syncPastOrder() {
         guard let index = pastOrders.firstIndex(where: { $0.id == liveOrder.id }) else { return }
         pastOrders[index] = liveOrder
-    }
-
-    func runInteractionProofIfNeeded() {
-        guard FoodDeliveryInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
-        interactionProofScheduled = true
-
-        DispatchQueue.main.async {
-            var steps: [String] = []
-
-            if let restaurant = self.restaurants.first {
-                self.selectRestaurant(restaurant.id)
-                steps.append("Selected restaurant")
-
-                if let menuItem = restaurant.menu.first {
-                    self.addMenuItem(menuItem, from: restaurant)
-                    steps.append("Added menu item")
-                }
-            }
-
-            if let cartItem = self.cartItems.first {
-                self.incrementCartItem(cartItem.id)
-                self.decrementCartItem(cartItem.id)
-                steps.append("Adjusted cart quantity")
-            }
-
-            self.applyPromo("DINNER6")
-            steps.append("Applied promo")
-
-            if let slot = self.deliverySlots.last {
-                self.selectDeliverySlot(slot)
-                steps.append("Selected delivery slot")
-            }
-
-            if let method = self.paymentMethods.last {
-                self.selectPaymentMethod(method)
-                steps.append("Selected payment method")
-            }
-
-            self.placeOrder()
-            steps.append("Placed order")
-
-            self.advanceLiveOrder()
-            self.reportCourierIssue()
-            self.recoverCourierIssue()
-            self.confirmDelivered()
-            steps.append("Advanced live order and resolved courier issue")
-
-            if let orderID = self.pastOrders.first?.id {
-                self.reorder(orderID)
-                steps.append("Triggered reorder")
-            }
-
-            FoodDeliveryInteractionProofMode.write(
-                summary: "Delivery interaction proof completed with checkout, courier recovery, and reorder chain.",
-                steps: steps
-            )
-        }
     }
 }
 
@@ -462,7 +375,7 @@ struct FoodDeliveryOrderStatusCard: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(store.liveOrder.restaurantName)
                         .font(.headline)
-                    Text(store.liveOrder.status)
+                    Text(store.liveOrder.status.label)
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.orange)
                     Text("Courier: \(store.liveOrder.courierName) • \(store.liveOrder.eta)")
@@ -667,7 +580,7 @@ struct FoodDeliveryOrdersView: View {
                     } label: {
                         VStack(alignment: .leading, spacing: 8) {
                             Text(store.liveOrder.restaurantName)
-                            Text("\(store.liveOrder.status) • \(store.liveOrder.eta)")
+                            Text("\(store.liveOrder.status.label) • \(store.liveOrder.eta)")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -682,7 +595,7 @@ struct FoodDeliveryOrdersView: View {
                             } label: {
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text(order.restaurantName)
-                                    Text("\(order.status) • \(order.total.currencyString)")
+                                    Text("\(order.status.label) • \(order.total.currencyString)")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
@@ -710,7 +623,7 @@ struct FoodDeliveryOrderDetailView: View {
             List {
                 Section("Order") {
                     LabeledContent("Restaurant", value: order.restaurantName)
-                    LabeledContent("Status", value: order.status)
+                    LabeledContent("Status", value: order.status.label)
                     LabeledContent("ETA", value: order.eta)
                     LabeledContent("Courier", value: order.courierName)
                     LabeledContent("Total", value: order.total.currencyString)
@@ -726,13 +639,13 @@ struct FoodDeliveryOrderDetailView: View {
                 Section("Actions") {
                     if order.id == store.liveOrder.id {
                         Button("Advance Order") { store.advanceLiveOrder() }
-                            .disabled(store.liveOrder.status == "Delivered")
+                            .disabled(store.liveOrder.status == .delivered)
                         Button("Report Courier Issue") { store.reportCourierIssue() }
                             .disabled(store.liveOrder.supportStatus == "Courier issue opened")
                         Button("Resolve Courier Issue") { store.recoverCourierIssue() }
                             .disabled(store.liveOrder.supportStatus != "Courier issue opened")
                         Button("Confirm Delivery") { store.confirmDelivered() }
-                            .disabled(store.liveOrder.status == "Delivered")
+                            .disabled(store.liveOrder.status == .delivered)
                     }
                 }
             }
@@ -851,10 +764,22 @@ struct DeliveryCartItemRecord: Identifiable {
     }()
 }
 
+enum DeliveryOrderStatus: String, Hashable {
+    case confirmed = "Order confirmed"
+    case kitchenPreparing = "Kitchen preparing"
+    case courierPickedUp = "Courier picked up"
+    case courierArriving = "Courier arriving"
+    case delivered = "Delivered"
+    case courierIssue = "Support reviewing courier issue"
+    case courierRerouted = "Courier re-routed"
+
+    var label: String { rawValue }
+}
+
 struct DeliveryOrderRecord: Identifiable {
     let id: UUID
     let restaurantName: String
-    var status: String
+    var status: DeliveryOrderStatus
     var eta: String
     var courierName: String
     var total: Double
@@ -865,7 +790,7 @@ struct DeliveryOrderRecord: Identifiable {
     init(
         id: UUID = UUID(),
         restaurantName: String,
-        status: String,
+        status: DeliveryOrderStatus,
         eta: String,
         courierName: String,
         total: Double,
@@ -886,7 +811,7 @@ struct DeliveryOrderRecord: Identifiable {
 
     static let sampleLive = DeliveryOrderRecord(
         restaurantName: "Levant Kitchen",
-        status: "Courier arriving",
+        status: .courierArriving,
         eta: "8 min",
         courierName: "Mert",
         total: 24.4,
@@ -897,8 +822,8 @@ struct DeliveryOrderRecord: Identifiable {
 
     static let samplePast: [DeliveryOrderRecord] = [
         sampleLive,
-        DeliveryOrderRecord(restaurantName: "Daily Greens", status: "Delivered", eta: "Delivered Apr 24", courierName: "Aylin", total: 19.2, progress: 1.0, timeline: ["Order confirmed", "Delivered on time"], supportStatus: "Closed"),
-        DeliveryOrderRecord(restaurantName: "Burger Works", status: "Delivered", eta: "Delivered Apr 21", courierName: "Can", total: 27.6, progress: 1.0, timeline: ["Order confirmed", "Delivered with photo"], supportStatus: "Closed")
+        DeliveryOrderRecord(restaurantName: "Daily Greens", status: .delivered, eta: "Delivered Apr 24", courierName: "Aylin", total: 19.2, progress: 1.0, timeline: ["Order confirmed", "Delivered on time"], supportStatus: "Closed"),
+        DeliveryOrderRecord(restaurantName: "Burger Works", status: .delivered, eta: "Delivered Apr 21", courierName: "Can", total: 27.6, progress: 1.0, timeline: ["Order confirmed", "Delivered with photo"], supportStatus: "Closed")
     ]
 }
 

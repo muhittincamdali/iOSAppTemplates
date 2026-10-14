@@ -18,12 +18,16 @@ opt_in_rules:
   - redundant_nil_coalescing
   - sorted_first_last
 
+included:
+  - Sources
+  - Tests
+  - Templates
+
 excluded:
-  - Pods
   - .build
-  - Package.swift
-  - "*/Generated/*"
-  - DerivedData
+  - Templates/*/.build
+  - Templates/*/.swiftpm
+  - Templates/*/Package.swift
 
 identifier_name:
   min_length: 2

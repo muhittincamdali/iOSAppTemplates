@@ -8,41 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(
-            name: "MusicPodcastApp",
-            targets: ["MusicPodcastApp"]
-        ),
-        .library(
-            name: "MusicPodcastAppUI",
-            targets: ["MusicPodcastAppUI"]
-        ),
-        .library(
-            name: "MusicPodcastAppCore",
-            targets: ["MusicPodcastAppCore"]
-        )
+        .library(name: "MusicPodcastApp", targets: ["MusicPodcastApp"])
     ],
-    dependencies: [],
     targets: [
-        .target(
-            name: "MusicPodcastApp",
-            dependencies: [
-                "MusicPodcastAppUI",
-                "MusicPodcastAppCore"
-            ]
-        ),
-        .target(
-            name: "MusicPodcastAppUI",
-            dependencies: [
-                "MusicPodcastAppCore"
-            ]
-        ),
-        .target(
-            name: "MusicPodcastAppCore",
-            dependencies: []
-        ),
-        .testTarget(
-            name: "MusicPodcastAppTests",
-            dependencies: ["MusicPodcastApp"]
-        )
+        .target(name: "MusicPodcastApp"),
+        .testTarget(name: "MusicPodcastAppTests", dependencies: ["MusicPodcastApp"])
     ]
 )

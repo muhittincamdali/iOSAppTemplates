@@ -1,44 +1,18 @@
+# Managed by the repository kit (muhittincamdali/.github). Edit the inputs, keep the structure.
 name: CI
 
 on:
   push:
-    branches: [master, main]
+    branches: [master]
   pull_request:
-    branches: [master, main]
+  workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+permissions: {}
 
 jobs:
-  build:
-    runs-on: macos-15
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: Select Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
-
-      - name: Reset SwiftPM artifact caches
-        run: |
-          rm -rf ~/Library/Caches/org.swift.swiftpm/artifacts
-          rm -rf .build/artifacts
-      
-      - name: Build
-        run: swift build
-      
-      - name: Test
-        run: swift test
-
-      - name: Template generator smoke
-        run: bash Scripts/validate-template-generator-smoke.sh
-
-      - name: Standalone root manifest smoke
-        run: bash Scripts/validate-standalone-template-roots.sh
-      
-      - name: SwiftLint smoke
-        run: |
-          brew install swiftlint
-          ruby -e 'require "yaml"; YAML.load_file(".swiftlint.yml")'
-          swiftlint version
+  swift:
+    permissions:
+      contents: read
+    uses: muhittincamdali/.github/.github/workflows/swift-ci.yml@5d3c4432dae8895b16ce3caa2f78398966953212 # v1
+    with:
+      platforms: '["macOS"]'

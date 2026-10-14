@@ -8,41 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(
-            name: "MessagingApp",
-            targets: ["MessagingApp"]
-        ),
-        .library(
-            name: "MessagingAppUI",
-            targets: ["MessagingAppUI"]
-        ),
-        .library(
-            name: "MessagingAppCore",
-            targets: ["MessagingAppCore"]
-        )
+        .library(name: "MessagingApp", targets: ["MessagingApp"])
     ],
-    dependencies: [],
     targets: [
-        .target(
-            name: "MessagingApp",
-            dependencies: [
-                "MessagingAppUI",
-                "MessagingAppCore"
-            ]
-        ),
-        .target(
-            name: "MessagingAppUI",
-            dependencies: [
-                "MessagingAppCore"
-            ]
-        ),
-        .target(
-            name: "MessagingAppCore",
-            dependencies: []
-        ),
-        .testTarget(
-            name: "MessagingAppTests",
-            dependencies: ["MessagingApp"]
-        )
+        .target(name: "MessagingApp"),
+        .testTarget(name: "MessagingAppTests", dependencies: ["MessagingApp"])
     ]
 )

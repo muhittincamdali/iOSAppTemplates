@@ -1,31 +1,5 @@
 import Foundation
 import SwiftUI
-import AIAssistantAppCore
-
-private enum AIAssistantInteractionProofMode {
-    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
-
-    static func write(summary: String, steps: [String]) {
-        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            return
-        }
-
-        let payload: [String: Any] = [
-            "app": "AIAssistantApp",
-            "status": "completed",
-            "summary": summary,
-            "steps": steps,
-            "timestamp": ISO8601DateFormatter().string(from: Date())
-        ]
-
-        guard JSONSerialization.isValidJSONObject(payload),
-              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
-            return
-        }
-
-        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
-    }
-}
 
 @available(iOS 18.0, macOS 15.0, *)
 public struct AIAssistantAppShell: App {
@@ -33,13 +7,13 @@ public struct AIAssistantAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            AIAssistantRuntimeRootView()
+            AIAssistantRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct AIAssistantRuntimeRootView: View {
+struct AIAssistantRootView: View {
     @StateObject private var store = AIAssistantOperationsStore()
 
     var body: some View {
@@ -75,9 +49,6 @@ struct AIAssistantRuntimeRootView: View {
                 }
         }
         .tint(.indigo)
-        .onAppear {
-            store.runInteractionProofIfNeeded()
-        }
     }
 }
 
@@ -95,7 +66,6 @@ final class AIAssistantOperationsStore: ObservableObject {
     @Published var guardrailEvents: [String]
     @Published var currentGoal: String
     @Published var workspaceStatus: String
-    private var interactionProofScheduled = false
 
     init() {
         self.currentGoal = "Ship a customer-safe recovery message without leaking partner identity."
@@ -387,67 +357,6 @@ final class AIAssistantOperationsStore: ObservableObject {
         trustCases[index].status = .escalated
         trustCases[index].recoveryPlan = "Legal hold active. Preserve prompt, approval, and outbound artifacts before retry."
         workspaceStatus = "Legal hold active"
-    }
-
-    func runInteractionProofIfNeeded() {
-        guard AIAssistantInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
-        interactionProofScheduled = true
-
-        Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 800_000_000)
-
-            if let preset = presets.first(where: { $0.mode == "Approval required" }) {
-                runPreset(preset)
-            }
-
-            sendDraftForApproval()
-
-            if let pending = approvalRequests.first(where: { $0.status == .pending }) {
-                assignApprovalOwner(pending, owner: "Ops Reviewer - Mira")
-                prepareRollback(pending)
-                approveRequest(pending)
-            }
-
-            if let approved = approvalRequests.first(where: { $0.status == .approved }) {
-                dispatchApprovedRequest(approved)
-            }
-
-            saveMemoryDraft()
-
-            if let memory = memoryItems.first(where: { $0.scope != "Guardrail" }) {
-                promoteMemoryToGuardrail(memory)
-            }
-
-            if let tool = tools.first(where: { $0.status == .enabled }) {
-                quarantineTool(tool)
-                restoreTool(tool)
-            }
-
-            if let trustCase = trustCases.first(where: { $0.status == .open }) {
-                assignTrustOwner(trustCase, owner: "Trust Lead - Nora")
-                monitorTrustCase(trustCase)
-                placeLegalHold(trustCase)
-                escalateTrustCase(trustCase)
-                resolveTrustCase(trustCase)
-            }
-
-            AIAssistantInteractionProofMode.write(
-                summary: workspaceStatus,
-                steps: [
-                    "preset-run",
-                    "draft-sent-for-approval",
-                    "approval-owner-assigned",
-                    "rollback-prepared",
-                    "approval-granted",
-                    "outbound-dispatched",
-                    "memory-saved",
-                    "memory-promoted-to-guardrail",
-                    "tool-quarantined-and-restored",
-                    "trust-owner-assigned",
-                    "trust-case-monitored-legal-hold-escalated-resolved"
-                ]
-            )
-        }
     }
 }
 

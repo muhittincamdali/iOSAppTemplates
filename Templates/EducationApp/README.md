@@ -1,84 +1,30 @@
 # EducationApp
 
-Generated from `Documentation/app-surface-catalog.json`.
+Education template: a SwiftUI app for iOS 18 with Home, Courses, Lessons, Assessments and Progress tabs.
 
-`EducationApp` is the standalone-root surface for the `Education` lane inside `iOSAppTemplates`.
+All data is in-memory sample data and there is no networking. Replace the sample
+data in the store with your own services.
 
-## Today
+## Layout
 
-- Label: `Standalone Root + richer example + chained runtime flow`
-- Lane: `Education`
-- Entry: `Package.swift`
-- Product target: `Education / Learning`
-- Richer example: `Examples/EducationExample`
+| Path | Contents |
+| --- | --- |
+| `Sources/EducationApp/EducationApp.swift` | `EducationAppShell` (the public `App`), the screens, and `EducationLearningStore`, a `@MainActor` `ObservableObject` that owns the sample data and every action the screens trigger |
+| `Tests/EducationAppTests/` | Swift Testing suite for the app's state and actions |
+| `App/` | XcodeGen spec and a host file that calls `EducationAppShell.main()` |
 
-## Best For / Not For
-
-### Best for
-
-- teams evaluating a course and lesson starter flow
-- readers comparing education family targets with a standalone root
-- maintainers reviewing study-session and content models
-
-### Not for
-
-- teams expecting a fully instrumented LMS today
-- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
-- teams that assume the hosted standalone iOS workflow is already green for this app pack
-
-## Product Shape
-
-- course overview flow
-- lesson routing
-- assignment and quiz models
-- study-session summary
-- starter learning progress surface
-
-## Current Proof
-
-- `Package.resolved` exists as the tracked dependency lockfile
-- `swift package dump-package` passes
-- local `swift test` passes
-- `xcodebuild -scheme EducationApp -destination 'generic/platform=iOS' build` passes
-- `bash Scripts/validate-runtime-app-launches.sh EducationApp` passes locally
-- root repo `swift build -c release` passes
-- root repo `swift test` passes
-- canonical app proof page exists
-- canonical app media page exists
-- runtime screenshot is published
-- demo clip is published
-- richer example route exists
-
-## Missing Proof
-
-- stable green hosted standalone iOS baseline on current `master`
-
-## Start Here
+## Test
 
 ```bash
-open Package.swift
-open Package.resolved
-open ../../Examples/EducationExample/README.md
+xcodebuild test -scheme EducationApp -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
-Repo-level proof:
+`iPhone 17` is an example; use any simulator that `xcrun simctl list devices available` lists.
+
+## Run
 
 ```bash
-cd ../..
-swift build
-swift test
+cd App
+xcodegen generate
+open EducationApp.xcodeproj
 ```
-
-Standalone generic iOS proof:
-
-```bash
-xcodebuild -scheme EducationApp -destination 'generic/platform=iOS' build
-```
-
-## Canonical References
-
-- [Proof Surface](../../Documentation/App-Proofs/EducationApp.md)
-- [Media Surface](../../Documentation/App-Media/EducationApp.md)
-- [Template Showcase](../../Documentation/Template-Showcase.md)
-- [Proof Matrix](../../Documentation/Proof-Matrix.md)
-- [Richer Example](../../Examples/EducationExample/README.md)

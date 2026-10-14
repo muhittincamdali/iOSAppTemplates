@@ -1,83 +1,30 @@
 # CRMAdminApp
 
-Generated from `Documentation/app-surface-catalog.json`.
+CRM Admin template: a SwiftUI app for iOS 18 with Pipeline, Accounts, Renewals, Tasks and Profile tabs.
 
-`CRMAdminApp` is the standalone-root surface for the `CRM / Admin` lane inside `iOSAppTemplates`.
+All data is in-memory sample data and there is no networking. Replace the sample
+data in the store with your own services.
 
-## Today
+## Layout
 
-- Label: `Standalone Root + richer example + chained runtime flow`
-- Lane: `CRM / Admin`
-- Entry: `Package.swift`
-- Product target: `CRM / Admin Companion`
-- Richer example: `Examples/CRMAdminExample`
+| Path | Contents |
+| --- | --- |
+| `Sources/CRMAdminApp/CRMAdminApp.swift` | `CRMAdminAppShell` (the public `App`), the screens, and `CRMOperationsStore`, a `@MainActor` `ObservableObject` that owns the sample data and every action the screens trigger |
+| `Tests/CRMAdminAppTests/` | Swift Testing suite for the app's state and actions |
+| `App/` | XcodeGen spec and a host file that calls `CRMAdminAppShell.main()` |
 
-## Best For / Not For
-
-### Best for
-
-- teams evaluating admin and lead-management starter flows
-- readers comparing CRM-style surfaces against collaboration roots
-- maintainers reviewing operations-first dashboards
-
-### Not for
-
-- teams expecting backend-integrated CRM operations today
-- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
-- teams that assume the hosted standalone iOS workflow is already green for this app pack
-
-## Product Shape
-
-- admin dashboard flow
-- lead or client list surface
-- pipeline starter cards
-- operations summary
-- CRM starter domain model
-
-## Current Proof
-
-- No external dependency lockfile is required today
-- `swift package dump-package` passes
-- local `swift test` passes
-- `xcodebuild -scheme CRMAdminApp -destination 'generic/platform=iOS' build` passes
-- `bash Scripts/validate-runtime-app-launches.sh CRMAdminApp` passes locally
-- root repo `swift build -c release` passes
-- root repo `swift test` passes
-- canonical app proof page exists
-- canonical app media page exists
-- runtime screenshot is published
-- demo clip is published
-- richer example route exists
-
-## Missing Proof
-
-- stable green hosted standalone iOS baseline on current `master`
-
-## Start Here
+## Test
 
 ```bash
-open Package.swift
-open ../../Examples/CRMAdminExample/README.md
+xcodebuild test -scheme CRMAdminApp -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
-Repo-level proof:
+`iPhone 17` is an example; use any simulator that `xcrun simctl list devices available` lists.
+
+## Run
 
 ```bash
-cd ../..
-swift build
-swift test
+cd App
+xcodegen generate
+open CRMAdminApp.xcodeproj
 ```
-
-Standalone generic iOS proof:
-
-```bash
-xcodebuild -scheme CRMAdminApp -destination 'generic/platform=iOS' build
-```
-
-## Canonical References
-
-- [Proof Surface](../../Documentation/App-Proofs/CRMAdminApp.md)
-- [Media Surface](../../Documentation/App-Media/CRMAdminApp.md)
-- [Template Showcase](../../Documentation/Template-Showcase.md)
-- [Proof Matrix](../../Documentation/Proof-Matrix.md)
-- [Richer Example](../../Examples/CRMAdminExample/README.md)

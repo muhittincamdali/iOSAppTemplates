@@ -8,45 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(
-            name: "FoodDeliveryApp",
-            targets: ["FoodDeliveryApp"]
-        ),
-        .library(
-            name: "FoodDeliveryAppUI",
-            targets: ["FoodDeliveryAppUI"]
-        ),
-        .library(
-            name: "FoodDeliveryAppCore",
-            targets: ["FoodDeliveryAppCore"]
-        )
-    ],
-    dependencies: [
-        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.8.1")
+        .library(name: "FoodDeliveryApp", targets: ["FoodDeliveryApp"])
     ],
     targets: [
-        .target(
-            name: "FoodDeliveryApp",
-            dependencies: [
-                "FoodDeliveryAppUI",
-                "FoodDeliveryAppCore"
-            ]
-        ),
-        .target(
-            name: "FoodDeliveryAppUI",
-            dependencies: [
-                "FoodDeliveryAppCore"
-            ]
-        ),
-        .target(
-            name: "FoodDeliveryAppCore",
-            dependencies: [
-                "Alamofire"
-            ]
-        ),
-        .testTarget(
-            name: "FoodDeliveryAppTests",
-            dependencies: ["FoodDeliveryApp"]
-        )
+        .target(name: "FoodDeliveryApp"),
+        .testTarget(name: "FoodDeliveryAppTests", dependencies: ["FoodDeliveryApp"])
     ]
 )

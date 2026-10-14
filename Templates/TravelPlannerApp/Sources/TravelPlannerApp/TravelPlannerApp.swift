@@ -1,43 +1,17 @@
 import Foundation
 import SwiftUI
-import TravelPlannerAppCore
-
-private enum TravelInteractionProofMode {
-    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
-
-    static func write(summary: String, steps: [String]) {
-        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            return
-        }
-
-        let payload: [String: Any] = [
-            "app": "TravelPlannerApp",
-            "status": "completed",
-            "summary": summary,
-            "steps": steps,
-            "timestamp": ISO8601DateFormatter().string(from: Date())
-        ]
-
-        guard JSONSerialization.isValidJSONObject(payload),
-              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
-            return
-        }
-
-        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
-    }
-}
 
 public struct TravelPlannerAppShell: App {
     public init() {}
 
     public var body: some Scene {
         WindowGroup {
-            TravelPlannerRuntimeRootView()
+            TravelPlannerRootView()
         }
     }
 }
 
-struct TravelPlannerRuntimeRootView: View {
+struct TravelPlannerRootView: View {
     @StateObject private var store = TravelPlannerOperationsStore()
 
     var body: some View {
@@ -73,9 +47,6 @@ struct TravelPlannerRuntimeRootView: View {
                 }
         }
         .tint(.blue)
-        .onAppear {
-            store.runInteractionProofIfNeeded()
-        }
     }
 }
 
@@ -90,7 +61,6 @@ final class TravelPlannerOperationsStore: ObservableObject {
     @Published var alerts: [TravelAlertRecord] = TravelAlertRecord.sampleAlerts
     @Published var selectedTripID: UUID?
     @Published var operationsNote = "Check-in, airport transfer, and passport validity must close before the departure lock window."
-    private var interactionProofScheduled = false
 
     init() {
         selectedTripID = trips.first?.id
@@ -101,7 +71,7 @@ final class TravelPlannerOperationsStore: ObservableObject {
     }
 
     var nextFlight: TravelFlightRecord? {
-        flights.sorted { $0.departureCode < $1.departureCode }.first
+        flights.min { $0.departureCode < $1.departureCode }
     }
 
     var unresolvedAlerts: Int {
@@ -146,7 +116,7 @@ final class TravelPlannerOperationsStore: ObservableObject {
         guard let index = flights.firstIndex(where: { $0.id == flightID }) else { return }
         flights[index].isCheckedIn = true
         flights[index].seat = flights[index].seat == nil ? "12A" : flights[index].seat
-        flights[index].status = "Checked in"
+        flights[index].status = .checkedIn
         flights[index].protectionState = "Check-in secured"
         alerts.removeAll { $0.linkedFlightID == flightID && $0.type == .checkIn }
     }
@@ -159,7 +129,7 @@ final class TravelPlannerOperationsStore: ObservableObject {
 
     func requestRebook(_ flightID: UUID) {
         guard let index = flights.firstIndex(where: { $0.id == flightID }) else { return }
-        flights[index].status = "Rebooking requested"
+        flights[index].status = .rebookingRequested
         flights[index].protectionState = "Connection buffer under review"
         alerts.append(
             TravelAlertRecord(
@@ -176,7 +146,7 @@ final class TravelPlannerOperationsStore: ObservableObject {
 
     func confirmRebook(_ flightID: UUID) {
         guard let index = flights.firstIndex(where: { $0.id == flightID }) else { return }
-        flights[index].status = "Rebooked"
+        flights[index].status = .rebooked
         flights[index].departureTime = "\(flights[index].departureTime) • +45 min buffer"
         flights[index].alternateRoute = "Protected via same carrier with extra 45-minute arrival buffer."
         flights[index].protectionState = "Protected itinerary confirmed"
@@ -244,19 +214,19 @@ final class TravelPlannerOperationsStore: ObservableObject {
     func markDocumentReady(_ documentID: UUID) {
         guard let index = documents.firstIndex(where: { $0.id == documentID }) else { return }
         documents[index].isReady = true
-        documents[index].status = "Ready"
+        documents[index].status = .ready
         alerts.removeAll { $0.linkedDocumentID == documentID }
     }
 
     func downloadOfflineCopy(_ documentID: UUID) {
         guard let index = documents.firstIndex(where: { $0.id == documentID }) else { return }
-        documents[index].status = "Offline copy saved"
+        documents[index].status = .offlineCopySaved
     }
 
     func createRescuePack(_ documentID: UUID) {
         guard let index = documents.firstIndex(where: { $0.id == documentID }) else { return }
         documents[index].rescuePackIncluded = true
-        documents[index].status = "Rescue pack saved"
+        documents[index].status = .rescuePackSaved
     }
 
     func resolveAlert(_ alertID: UUID) {
@@ -282,71 +252,6 @@ final class TravelPlannerOperationsStore: ObservableObject {
         alerts[index].isResolved = true
         alerts[index].incidentState = "Recovered"
         alerts[index].detail = "Incident closed with traveler brief, owner handoff, and recovery plan synced."
-    }
-
-    func runInteractionProofIfNeeded() {
-        guard TravelInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
-        interactionProofScheduled = true
-
-        Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 800_000_000)
-
-            if let trip = trips.dropFirst().first ?? trips.first {
-                selectTrip(trip.id)
-            }
-
-            if let flight = flights.first {
-                assignRecoveryOwner(flight.id, owner: "Travel Ops - Elena")
-                confirmCheckIn(flight.id)
-                requestRebook(flight.id)
-                confirmRebook(flight.id)
-            }
-
-            if let stay = stays.first {
-                confirmStay(stay.id)
-                sendArrivalNote(stay.id)
-                lockAirportTransfer(stay.id)
-            }
-
-            if let day = timelineDays.first, let activity = day.activities.first {
-                moveActivityForward(activity.id, from: day.id)
-                publishRecoveryPlan(day.id)
-                lockDayPlan(day.id)
-                unlockDayPlan(day.id)
-            }
-
-            if let task = packingTasks.first {
-                togglePackingTask(task.id)
-            }
-
-            if let document = documents.first {
-                markDocumentReady(document.id)
-                downloadOfflineCopy(document.id)
-                createRescuePack(document.id)
-            }
-
-            if let alert = alerts.first(where: { !$0.isResolved }) {
-                assignAlertOwner(alert.id, owner: "Travel Ops - Elena")
-                escalateAlert(alert.id)
-                clearIncident(alert.id)
-            }
-
-            TravelInteractionProofMode.write(
-                summary: readinessHeadline,
-                steps: [
-                    "trip-selected",
-                    "recovery-owner-assigned",
-                    "flight-checkin-completed",
-                    "rebook-requested-and-confirmed",
-                    "stay-confirmed",
-                    "arrival-note-and-transfer-locked",
-                    "timeline-rebalanced-recovery-plan-published-and-lock-cycled",
-                    "packing-updated",
-                    "document-ready-offline-saved-and-rescue-packed",
-                    "alert-owned-escalated-and-recovered"
-                ]
-            )
-        }
     }
 }
 
@@ -654,7 +559,7 @@ struct TravelPlannerBookingsWorkspaceView: View {
                                 HStack {
                                     Text(flight.route)
                                     Spacer()
-                                    Text(flight.status)
+                                    Text(flight.status.label)
                                         .font(.caption.weight(.semibold))
                                 }
                                 Text("\(flight.departureCode) • \(flight.departureTime)")
@@ -701,7 +606,7 @@ struct TravelPlannerFlightDetailView: View {
                     LabeledContent("Route", value: flight.route)
                     LabeledContent("Departure", value: flight.departureTime)
                     LabeledContent("Seat", value: flight.seat ?? "Not assigned")
-                    LabeledContent("Status", value: flight.status)
+                    LabeledContent("Status", value: flight.status.label)
                     LabeledContent("Recovery owner", value: flight.recoveryOwner)
                     LabeledContent("Protection", value: flight.protectionState)
                     if let alternateRoute = flight.alternateRoute {
@@ -725,7 +630,7 @@ struct TravelPlannerFlightDetailView: View {
                         store.requestRebook(flight.id)
                     }
 
-                    if flight.status == "Rebooking requested" {
+                    if flight.status == .rebookingRequested {
                         Button("Confirm Rebook") {
                             store.confirmRebook(flight.id)
                         }
@@ -811,7 +716,7 @@ struct TravelPlannerEssentialsWorkspaceView: View {
                             HStack {
                                 Text(document.title)
                                 Spacer()
-                                Text(document.status)
+                                Text(document.status.label)
                                     .font(.caption.weight(.semibold))
                                     .foregroundStyle(document.isReady ? .green : .orange)
                             }
@@ -953,21 +858,31 @@ struct TravelActivityRecord: Identifiable {
     let priority: String
 }
 
+enum TravelFlightStatus: String, Hashable {
+    case awaitingCheckIn = "Awaiting check-in"
+    case confirmed = "Confirmed"
+    case checkedIn = "Checked in"
+    case rebookingRequested = "Rebooking requested"
+    case rebooked = "Rebooked"
+
+    var label: String { rawValue }
+}
+
 struct TravelFlightRecord: Identifiable {
     let id = UUID()
     let route: String
     let departureCode: String
     var departureTime: String
     var seat: String?
-    var status: String
+    var status: TravelFlightStatus
     var isCheckedIn: Bool
     var recoveryOwner: String
     var alternateRoute: String?
     var protectionState: String
 
     static let sampleFlights: [TravelFlightRecord] = [
-        TravelFlightRecord(route: "IST → BCN", departureCode: "TK1853", departureTime: "May 3 • 06:40", seat: nil, status: "Awaiting check-in", isCheckedIn: false, recoveryOwner: "Unassigned", alternateRoute: nil, protectionState: "Awaiting protection review"),
-        TravelFlightRecord(route: "BCN → IST", departureCode: "TK1856", departureTime: "May 7 • 18:15", seat: "10C", status: "Confirmed", isCheckedIn: true, recoveryOwner: "Travel Ops - Elena", alternateRoute: nil, protectionState: "Return segment protected")
+        TravelFlightRecord(route: "IST → BCN", departureCode: "TK1853", departureTime: "May 3 • 06:40", seat: nil, status: .awaitingCheckIn, isCheckedIn: false, recoveryOwner: "Unassigned", alternateRoute: nil, protectionState: "Awaiting protection review"),
+        TravelFlightRecord(route: "BCN → IST", departureCode: "TK1856", departureTime: "May 7 • 18:15", seat: "10C", status: .confirmed, isCheckedIn: true, recoveryOwner: "Travel Ops - Elena", alternateRoute: nil, protectionState: "Return segment protected")
     ]
 }
 
@@ -998,18 +913,28 @@ struct TravelPackingTaskRecord: Identifiable {
     ]
 }
 
+enum TravelDocumentStatus: String, Hashable {
+    case ready = "Ready"
+    case missingBackupCopy = "Missing backup copy"
+    case pendingOrganizerResend = "Pending organizer resend"
+    case offlineCopySaved = "Offline copy saved"
+    case rescuePackSaved = "Rescue pack saved"
+
+    var label: String { rawValue }
+}
+
 struct TravelDocumentRecord: Identifiable {
     let id = UUID()
     let title: String
-    var status: String
+    var status: TravelDocumentStatus
     let note: String
     var isReady: Bool
     var rescuePackIncluded: Bool
 
     static let sampleDocuments: [TravelDocumentRecord] = [
-        TravelDocumentRecord(title: "Passport validity", status: "Ready", note: "All travelers above 6-month validity window.", isReady: true, rescuePackIncluded: true),
-        TravelDocumentRecord(title: "Hotel confirmation PDF", status: "Missing backup copy", note: "Export offline copy for concierge and pickup vendor.", isReady: false, rescuePackIncluded: false),
-        TravelDocumentRecord(title: "Customer summit badge QR", status: "Pending organizer resend", note: "Organizer promised reissue before departure.", isReady: false, rescuePackIncluded: false)
+        TravelDocumentRecord(title: "Passport validity", status: .ready, note: "All travelers above 6-month validity window.", isReady: true, rescuePackIncluded: true),
+        TravelDocumentRecord(title: "Hotel confirmation PDF", status: .missingBackupCopy, note: "Export offline copy for concierge and pickup vendor.", isReady: false, rescuePackIncluded: false),
+        TravelDocumentRecord(title: "Customer summit badge QR", status: .pendingOrganizerResend, note: "Organizer promised reissue before departure.", isReady: false, rescuePackIncluded: false)
     ]
 }
 

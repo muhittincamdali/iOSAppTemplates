@@ -1,43 +1,17 @@
 import Foundation
 import SwiftUI
-import CreatorShortVideoAppCore
-
-private enum CreatorShortVideoInteractionProofMode {
-    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
-
-    static func write(summary: String, steps: [String]) {
-        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            return
-        }
-
-        let payload: [String: Any] = [
-            "app": "CreatorShortVideoApp",
-            "status": "completed",
-            "summary": summary,
-            "steps": steps,
-            "timestamp": ISO8601DateFormatter().string(from: Date())
-        ]
-
-        guard JSONSerialization.isValidJSONObject(payload),
-              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
-            return
-        }
-
-        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
-    }
-}
 
 public struct CreatorShortVideoAppShell: App {
     public init() {}
 
     public var body: some Scene {
         WindowGroup {
-            CreatorShortVideoRuntimeRootView()
+            CreatorShortVideoRootView()
         }
     }
 }
 
-struct CreatorShortVideoRuntimeRootView: View {
+struct CreatorShortVideoRootView: View {
     @StateObject private var store = CreatorShortVideoStudioStore()
 
     var body: some View {
@@ -73,9 +47,6 @@ struct CreatorShortVideoRuntimeRootView: View {
                 }
         }
         .tint(.pink)
-        .onAppear {
-            store.runInteractionProofIfNeeded()
-        }
     }
 }
 
@@ -88,7 +59,6 @@ final class CreatorShortVideoStudioStore: ObservableObject {
     @Published var experiments: [ShortVideoGrowthExperiment] = ShortVideoGrowthExperiment.sampleExperiments
     @Published var composer = ShortVideoComposerState.sample
     @Published var selectedDraftFilter: ShortVideoDraftFilter = .all
-    private var interactionProofScheduled = false
 
     var filteredDrafts: [ShortVideoDraftRecord] {
         drafts.filter { selectedDraftFilter.includes($0.status) }
@@ -266,54 +236,6 @@ final class CreatorShortVideoStudioStore: ObservableObject {
         guard let index = moderationCases.firstIndex(where: { $0.id == caseID }) else { return }
         mutation(&moderationCases[index])
     }
-
-    func runInteractionProofIfNeeded() {
-        guard CreatorShortVideoInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
-        interactionProofScheduled = true
-
-        DispatchQueue.main.async {
-            var steps: [String] = []
-
-            self.queueComposerDraft()
-            steps.append("Queued composer draft")
-
-            if let draftID = self.drafts.first?.id {
-                if let draft = self.drafts.first(where: { $0.id == draftID }) {
-                    for task in draft.tasks where !task.isComplete {
-                        self.toggleTask(for: draftID, taskID: task.id)
-                    }
-                }
-                self.approveBrandReview(draftID)
-                self.approveLegalReview(draftID)
-                self.sendForReview(draftID)
-                self.schedule(draftID)
-                self.publish(draftID)
-                steps.append("Completed draft review and published clip")
-            }
-
-            if let clipID = self.publishedClips.first?.id {
-                self.launchRecoveryExperiment(for: clipID)
-                steps.append("Launched recovery experiment")
-            }
-
-            if let experimentID = self.experiments.first(where: { !$0.isClosed })?.id {
-                self.closeExperiment(experimentID)
-                steps.append("Closed experiment")
-            }
-
-            if let moderationCaseID = self.moderationCases.first?.id {
-                self.approveModerationCase(moderationCaseID)
-                self.escalateModerationCase(moderationCaseID)
-                self.resolveModerationCase(moderationCaseID)
-                steps.append("Processed moderation chain")
-            }
-
-            CreatorShortVideoInteractionProofMode.write(
-                summary: "Creator interaction proof completed with draft, publish, experiment, and moderation chain.",
-                steps: steps
-            )
-        }
-    }
 }
 
 struct CreatorShortVideoStudioHomeView: View {
@@ -323,7 +245,7 @@ struct CreatorShortVideoStudioHomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    CreatorShortVideoRuntimeHeroCard(store: store)
+                    CreatorShortVideoHeroCard(store: store)
                     CreatorShortVideoComposerCard(store: store)
                     CreatorShortVideoReleaseQueueSection(store: store)
                     CreatorShortVideoProgramSection(programs: store.creatorPrograms)
@@ -335,7 +257,7 @@ struct CreatorShortVideoStudioHomeView: View {
     }
 }
 
-struct CreatorShortVideoRuntimeHeroCard: View {
+struct CreatorShortVideoHeroCard: View {
     @ObservedObject var store: CreatorShortVideoStudioStore
 
     var body: some View {

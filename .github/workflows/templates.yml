@@ -1,0 +1,122 @@
+# Checks specific to this repository. The shared Swift build and tests run in ci.yml.
+name: Templates
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: templates-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  SWIFTLINT_VERSION: 0.63.2
+  SWIFTLINT_SHA256: c59a405c85f95b92ced677a500804e081596a4cae4a6a485af76065557d6ed29
+
+jobs:
+  lint:
+    name: SwiftLint
+    runs-on: macos-26
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install SwiftLint
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/swiftlint.zip" \
+            "https://github.com/realm/SwiftLint/releases/download/$SWIFTLINT_VERSION/portable_swiftlint.zip"
+          echo "$SWIFTLINT_SHA256  $RUNNER_TEMP/swiftlint.zip" | shasum -a 256 -c -
+          unzip -q "$RUNNER_TEMP/swiftlint.zip" -d "$RUNNER_TEMP/swiftlint"
+
+      - name: Lint
+        run: '"$RUNNER_TEMP/swiftlint/swiftlint" lint --strict --reporter github-actions-logging'
+
+  scaffold:
+    name: Scaffold and test a project
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Toolchain
+        run: xcodebuild -version
+
+      - name: Create SmokeShop from the E-commerce template
+        run: swift run create-ios-app new SmokeShop --template ecommerce --output "$RUNNER_TEMP"
+
+      - name: Test it in the simulator
+        working-directory: ${{ runner.temp }}/SmokeShop
+        run: |
+          udid="$(xcrun simctl list devices available | grep -E '^\s+iPhone' | head -1 | grep -oE '[0-9A-F-]{36}')"
+          xcodebuild test -scheme SmokeShop -destination "platform=iOS Simulator,id=$udid" -quiet
+
+  example:
+    name: Build Examples/QuickStart
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Toolchain
+        run: xcodebuild -version
+
+      - name: Build for the iOS Simulator
+        run: |
+          xcodebuild build \
+            -project Examples/QuickStart/QuickStart.xcodeproj \
+            -scheme QuickStart \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            -quiet
+
+  templates:
+    name: ${{ matrix.template }}
+    runs-on: macos-26
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        template:
+          - AIAssistantApp
+          - BookingReservationsApp
+          - CRMAdminApp
+          - CreatorShortVideoApp
+          - EcommerceApp
+          - EducationApp
+          - FinanceApp
+          - FitnessApp
+          - FoodDeliveryApp
+          - MarketplaceApp
+          - MessagingApp
+          - MusicPodcastApp
+          - NewsBlogApp
+          - NotesKnowledgeApp
+          - PrivacyVaultApp
+          - ProductivityApp
+          - SocialMediaApp
+          - SubscriptionLifestyleApp
+          - TeamCollaborationApp
+          - TravelPlannerApp
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Toolchain
+        run: xcodebuild -version
+
+      - name: Build and test in the simulator
+        env:
+          TEMPLATE: ${{ matrix.template }}
+        run: scripts/test-templates.sh "$TEMPLATE"

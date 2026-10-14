@@ -1,83 +1,30 @@
 # MessagingApp
 
-Generated from `Documentation/app-surface-catalog.json`.
+Messaging template: a SwiftUI app for iOS 18 with Inbox, Rooms, Safety and Profile tabs.
 
-`MessagingApp` is the standalone-root surface for the `Messaging / Community` lane inside `iOSAppTemplates`.
+All data is in-memory sample data and there is no networking. Replace the sample
+data in the store with your own services.
 
-## Today
+## Layout
 
-- Label: `Standalone Root + richer example + chained runtime flow`
-- Lane: `Messaging / Community`
-- Entry: `Package.swift`
-- Product target: `Messaging / Community`
-- Richer example: `Examples/MessagingExample`
+| Path | Contents |
+| --- | --- |
+| `Sources/MessagingApp/MessagingApp.swift` | `MessagingAppShell` (the public `App`), the screens, and `MessagingCommandCenterStore`, a `@MainActor` `ObservableObject` that owns the sample data and every action the screens trigger |
+| `Tests/MessagingAppTests/` | Swift Testing suite for the app's state and actions |
+| `App/` | XcodeGen spec and a host file that calls `MessagingAppShell.main()` |
 
-## Best For / Not For
-
-### Best for
-
-- teams evaluating conversation-list and chat starter flows
-- readers comparing community lanes across social and messaging surfaces
-- maintainers reviewing message-thread starter patterns
-
-### Not for
-
-- teams expecting production realtime messaging today
-- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
-- teams that assume the hosted standalone iOS workflow is already green for this app pack
-
-## Product Shape
-
-- conversation list flow
-- chat thread surface
-- contact or member routing
-- composer starter flow
-- starter messaging model
-
-## Current Proof
-
-- No external dependency lockfile is required today
-- `swift package dump-package` passes
-- local `swift test` passes
-- `xcodebuild -scheme MessagingApp -destination 'generic/platform=iOS' build` passes
-- `bash Scripts/validate-runtime-app-launches.sh MessagingApp` passes locally
-- root repo `swift build -c release` passes
-- root repo `swift test` passes
-- canonical app proof page exists
-- canonical app media page exists
-- runtime screenshot is published
-- demo clip is published
-- richer example route exists
-
-## Missing Proof
-
-- stable green hosted standalone iOS baseline on current `master`
-
-## Start Here
+## Test
 
 ```bash
-open Package.swift
-open ../../Examples/MessagingExample/README.md
+xcodebuild test -scheme MessagingApp -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
-Repo-level proof:
+`iPhone 17` is an example; use any simulator that `xcrun simctl list devices available` lists.
+
+## Run
 
 ```bash
-cd ../..
-swift build
-swift test
+cd App
+xcodegen generate
+open MessagingApp.xcodeproj
 ```
-
-Standalone generic iOS proof:
-
-```bash
-xcodebuild -scheme MessagingApp -destination 'generic/platform=iOS' build
-```
-
-## Canonical References
-
-- [Proof Surface](../../Documentation/App-Proofs/MessagingApp.md)
-- [Media Surface](../../Documentation/App-Media/MessagingApp.md)
-- [Template Showcase](../../Documentation/Template-Showcase.md)
-- [Proof Matrix](../../Documentation/Proof-Matrix.md)
-- [Richer Example](../../Examples/MessagingExample/README.md)

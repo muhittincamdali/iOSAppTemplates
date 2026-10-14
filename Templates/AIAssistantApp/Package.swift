@@ -8,45 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(
-            name: "AIAssistantApp",
-            targets: ["AIAssistantApp"]
-        ),
-        .library(
-            name: "AIAssistantAppUI",
-            targets: ["AIAssistantAppUI"]
-        ),
-        .library(
-            name: "AIAssistantAppCore",
-            targets: ["AIAssistantAppCore"]
-        )
-    ],
-    dependencies: [
-        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.8.1")
+        .library(name: "AIAssistantApp", targets: ["AIAssistantApp"])
     ],
     targets: [
-        .target(
-            name: "AIAssistantApp",
-            dependencies: [
-                "AIAssistantAppUI",
-                "AIAssistantAppCore"
-            ]
-        ),
-        .target(
-            name: "AIAssistantAppUI",
-            dependencies: [
-                "AIAssistantAppCore"
-            ]
-        ),
-        .target(
-            name: "AIAssistantAppCore",
-            dependencies: [
-                "Alamofire"
-            ]
-        ),
-        .testTarget(
-            name: "AIAssistantAppTests",
-            dependencies: ["AIAssistantApp"]
-        )
+        .target(name: "AIAssistantApp"),
+        .testTarget(name: "AIAssistantAppTests", dependencies: ["AIAssistantApp"])
     ]
 )

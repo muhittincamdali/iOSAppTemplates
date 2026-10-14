@@ -8,41 +8,10 @@ let package = Package(
         .iOS(.v18)
     ],
     products: [
-        .library(
-            name: "NewsBlogApp",
-            targets: ["NewsBlogApp"]
-        ),
-        .library(
-            name: "NewsBlogAppUI",
-            targets: ["NewsBlogAppUI"]
-        ),
-        .library(
-            name: "NewsBlogAppCore",
-            targets: ["NewsBlogAppCore"]
-        )
+        .library(name: "NewsBlogApp", targets: ["NewsBlogApp"])
     ],
-    dependencies: [],
     targets: [
-        .target(
-            name: "NewsBlogApp",
-            dependencies: [
-                "NewsBlogAppUI",
-                "NewsBlogAppCore"
-            ]
-        ),
-        .target(
-            name: "NewsBlogAppUI",
-            dependencies: [
-                "NewsBlogAppCore"
-            ]
-        ),
-        .target(
-            name: "NewsBlogAppCore",
-            dependencies: []
-        ),
-        .testTarget(
-            name: "NewsBlogAppTests",
-            dependencies: ["NewsBlogApp"]
-        )
+        .target(name: "NewsBlogApp"),
+        .testTarget(name: "NewsBlogAppTests", dependencies: ["NewsBlogApp"])
     ]
 )

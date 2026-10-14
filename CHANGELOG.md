@@ -1,206 +1,105 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project are documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this
+project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-10-14
+
+This release narrows the repository to what builds and is tested: the twenty app templates
+under `Templates/` and a rewritten `create-ios-app`. The root package no longer exposes the
+template libraries it shipped before, so this is a major release.
+
+### Added
+
+- `TemplateScaffold` library with `TemplateCatalog`, `ProjectName`, `IdentifierRenamer`,
+  `Scaffolder` and `TemplateLocator`, plus a DocC catalog.
+- Swift Testing suites for the scaffolding library and for the store of every template;
+  the documented library example is compiled and run by the tests.
+- `App/project.yml` (XcodeGen) and a host file for every template, so each one runs in the
+  simulator.
+- `scripts/test-templates.sh` and `scripts/capture-screenshots.sh`, and light and dark
+  screenshots of every template in `docs/images/`.
+- Buttons in PrivacyVaultApp for hardening, alert resolution, contact verification,
+  recovery kit rotation and audit review; previously the store had no reachable actions.
+- `AuthService` protocol and in-memory `LocalAuthService` with a demo account in
+  SocialMediaApp.
+- `Examples/QuickStart`, an iOS app project that adds a template as a local package and
+  starts its scene; CI builds it.
+- DocC article "Adding a Template to an App".
+- README translations in Turkish, Simplified Chinese, Japanese, Korean, Spanish, German,
+  French, Brazilian Portuguese and Russian, and a generated banner, badges, buttons and
+  social preview (`.github/brand/`, `docs/social-preview.png`).
+
 ### Changed
-- release and GitHub distribution docs are now policy-driven instead of hardcoding an old numbered release
+
+- `create-ios-app` now copies a template and renames its package, module, types, host
+  project and bundle identifier. Commands: `create-ios-app list` and
+  `create-ios-app new <Name> --template <id>`.
+- The root package targets macOS 14 and contains only `create-ios-app` and
+  `TemplateScaffold`.
+- Every template exposes a public `<Name>Shell` scene instead of declaring `@main` in a
+  library target.
+- Each template is a single app module; the `<Name>Core` and `<Name>UI` modules, which the
+  apps did not use, are gone.
+- CI replaces nine workflows: `ci.yml`, `docs.yml` and `quality.yml` call the shared
+  workflows of `muhittincamdali/.github` (SwiftPM build and test, DocC on GitHub Pages,
+  link check, wording check, README translation check), and `templates.yml` runs SwiftLint
+  in strict mode, a scaffold-and-test of a generated project, the example build and a test
+  job per template. Actions are pinned to commit SHAs; jobs use the default Xcode of the
+  `macos-26` image.
+- EcommerceApp, FitnessApp and SocialMediaApp are split into store, model and screen
+  files.
+- PrivacyVaultApp (vault items, alerts, contacts, audit checks), FoodDeliveryApp (order
+  status) and TravelPlannerApp (flight and document status) use enums instead of strings
+  for those states. Other states in several templates are still compared as strings.
+- BookingReservationsApp links each guest request to its stay by id instead of matching
+  sample guest names.
+- The README follows the shared layout with a three-step quick start; the code of conduct
+  is inherited from `muhittincamdali/.github`.
+- README, CONTRIBUTING, SECURITY and the template READMEs describe the current layout.
+
+### Removed
+
+- Root library products `iOSAppTemplates`, `SocialTemplates`, `CommerceTemplates`,
+  `HealthTemplates`, `ProductivityTemplates`, `EntertainmentTemplates`,
+  `EducationTemplates`, `FinanceTemplates`, `TravelTemplates`, `TCATemplates`,
+  `VisionOSTemplates`, `AITemplates`, `PerformanceTemplates` and `SecurityTemplates`. Three
+  of them depended on The Composable Architecture, which does not compile with Swift 6.4,
+  so the root package did not build. They remain available in the git history.
+- Firebase, Kingfisher, Alamofire and Charts dependencies from the templates.
+- Environment-variable interaction-proof hooks in the template apps.
+- Generated documentation, proof pages, example stubs, audit reports and orphan sample
+  packages (`GalacticVault`, `MyNewApp`, `VisionEmpire`).
+
+### Fixed
+
+- The root package builds again with Swift 6.4.
+- The PrivacyVaultApp test expected three quick actions while the code defines four.
+- The old `create-ios-app` generated projects that depended on packages that do not exist.
+- `create-ios-app` rejects every Swift keyword that cannot follow `import`, such as `guard`
+  or `public`, as a project name; such names produced packages that did not compile.
+- `create-ios-app` refuses names that would collide with names in the template
+  (`ScaffoldError.nameConflict`). `new CommerceStore --template ecommerce` used to overwrite
+  `CommerceStore.swift` and report success for a project that did not compile.
+- SocialMediaApp's sample data loaded random photos from picsum.photos; sample media is now
+  drawn locally and the template makes no network requests.
+- `scripts/capture-screenshots.sh` creates an iPhone 17 Pro simulator instead of whichever
+  device type `simctl` listed last.
+- The LICENSE copyright year is 2025, when the repository started.
 
 ## [2.1.0] - 2026-04-26
 
-### Added
-- Package stabilization and truth-reset work
-- Current repo audit and complete-app standard docs
-- Root package search fix for empty queries
-- Truthful smoke coverage for the active package test graph
-- GitHub distribution, release-process, and project-status docs
-- `20` standalone app roots with per-app README, proof, and media surfaces
-- gallery cards, preview boards, runtime screenshots, and runtime demo clips for the tracked app roots
-- hosted standalone iOS proof workflow and local simulator launch-proof validation
-- generator-backed app-surface docs from a single catalog source
+Tagged release. See the tag `v2.1.0` for the state of the repository at that time.
 
-### Changed
-- Package graph and tests aligned with the current public surface
-- Public docs tightened to match current repo maturity
-- Template package baselines aligned with the current Swift/Xcode floor
-- Community, security, and contribution surfaces aligned with current repo truth
-- GitHub distribution and release docs aligned with live API-checked metadata
-- English canonical routing across README, docs hub, examples hub, proof pages, and media pages
+## [2.0.0] - 2025-08-12
 
-### Fixed
-- Swift 6 build issues across active template families
-- Stale examples, broken public links, and fabricated doc claims
-- hosted standalone iOS proof portability and runtime-host embedding gaps
+Tagged release. See the tag `v2.0.0` for the state of the repository at that time.
 
-## [1.0.0] - 2024-08-02
-
-### Added
-- Initial release
-- Three public template roots
-- Documentation surface
-- Example and reference material
-- Swift Package Manager support
-
-### Features
-- **Social Media App Template**
-  - User authentication with Firebase
-  - Feed with posts and stories
-  - Comments and likes system
-  - Real-time updates
-  - User profiles and settings
-  - Push notifications
-
-- **E-commerce App Template**
-  - Product catalog and search
-  - Shopping cart management
-  - Checkout process
-  - Payment integration with Stripe
-  - Order tracking
-  - User reviews and ratings
-
-- **Fitness App Template**
-  - Workout tracking
-  - Progress charts and analytics
-  - Goal setting and achievements
-  - HealthKit integration
-  - Social features
-  - Nutrition tracking
-
-### Documentation
-- Complete API reference
-- Architecture guide
-- Getting started guide
-- Template customization guide
-- UI components documentation
-- Deployment guide
-- Contributing guidelines
-
-### Testing
-- Initial unit-level package coverage
-- Integration tests for APIs
-- Performance tests
-- Accessibility tests
-
-## [0.9.0] - 2024-07-15
-
-### Added
-- Beta release of templates
-- Basic documentation structure
-- Initial test framework
-
-### Changed
-- Template architecture improvements
-- Documentation updates
-
-## [0.8.0] - 2024-07-01
-
-### Added
-- Alpha release
-- Core template structure
-- Basic documentation
-
-### Changed
-- Template organization
-- Code structure improvements
-
-## [0.7.0] - 2024-06-15
-
-### Added
-- Initial template development
-- Basic project structure
-- Foundation components
-
-### Changed
-- Project organization
-- Template architecture
-
-## [0.6.0] - 2024-06-01
-
-### Added
-- Project initialization
-- Template planning
-- Architecture design
-
-### Changed
-- Project structure
-- Development approach
-
-## [0.5.0] - 2024-05-15
-
-### Added
-- Project concept
-- Template requirements
-- Technology stack planning
-
-### Changed
-- Project scope
-- Development timeline
-
-## [0.4.0] - 2024-05-01
-
-### Added
-- Initial project setup
-- Repository structure
-- Development environment
-
-### Changed
-- Project organization
-- Development workflow
-
-## [0.3.0] - 2024-04-15
-
-### Added
-- Project planning
-- Template research
-- Technology evaluation
-
-### Changed
-- Project direction
-- Development strategy
-
-## [0.2.0] - 2024-04-01
-
-### Added
-- Project concept
-- Template ideas
-- Technology research
-
-### Changed
-- Project scope
-- Development approach
-
-## [0.1.0] - 2024-03-15
-
-### Added
-- Initial project idea
-- Template concept
-- Development planning
-
-### Changed
-- Project vision
-- Development strategy
-
----
-
-For current repo truth, use:
-
-- [README.md](README.md)
-- [PROJECT_STATUS.md](PROJECT_STATUS.md)
-- [Documentation/Release-Process.md](Documentation/Release-Process.md)
-# iOSAppTemplates - Update 45
-# iOSAppTemplates - Update 46
-# iOSAppTemplates - Update 47
-# iOSAppTemplates - Update 48
-# iOSAppTemplates - Update 49
-# iOSAppTemplates - Update 50
-# iOSAppTemplates - Update 51
-# iOSAppTemplates - Update 52
-# iOSAppTemplates - Update 53
-# iOSAppTemplates - Update 54
-# iOSAppTemplates - Update 55
-# iOSAppTemplates - Update 56
-# iOSAppTemplates - Update 57
+[Unreleased]: https://github.com/muhittincamdali/iOSAppTemplates/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/muhittincamdali/iOSAppTemplates/compare/v2.1.0...v3.0.0
+[2.1.0]: https://github.com/muhittincamdali/iOSAppTemplates/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/muhittincamdali/iOSAppTemplates/releases/tag/v2.0.0

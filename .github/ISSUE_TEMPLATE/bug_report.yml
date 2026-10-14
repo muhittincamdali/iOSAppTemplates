@@ -1,178 +1,40 @@
-name: 🐛 Bug Report
-description: Report a bug in the root package, standalone app packs, docs, or validation surfaces
-title: "[BUG] "
-labels: ["bug", "triage"]
-assignees: []
-
+name: Bug report
+description: Something in a template or in create-ios-app does not work as described.
+labels: ["bug"]
 body:
-  - type: markdown
+  - type: dropdown
+    id: area
     attributes:
-      value: |
-        Thank you for reporting a bug. Please keep the report scoped and tie it to an exact path, app pack, or public surface.
-
-  - type: checkboxes
-    id: checklist
-    attributes:
-      label: Pre-submission Checklist
-      description: Please check the following before submitting
+      label: Affected area
       options:
-        - label: I have searched existing issues to avoid duplicates
-          required: true
-        - label: I have read the [Contributing Guidelines](../../CONTRIBUTING.md)
-          required: true
-        - label: I checked the current repo truth in the README or PROJECT_STATUS page
-          required: true
-
-  - type: input
-    id: version
-    attributes:
-      label: Commit, tag, or branch
-      description: Which revision are you using?
-      placeholder: "e.g., master, v2.0.0, or a commit SHA"
+        - A template under Templates/
+        - create-ios-app / TemplateScaffold
+        - Scripts or CI
+        - Documentation
     validations:
       required: true
-
-  - type: dropdown
+  - type: input
     id: template
     attributes:
-      label: Affected Surface
-      description: Which repo surface is affected?
-      options:
-        - Root package graph
-        - Template family under Sources
-        - Standalone app root under Templates
-        - Example surface under Examples
-        - Proof, media, or gallery docs
-        - Workflow or validator
-        - Release or distribution surface
-        - Other
-    validations:
-      required: true
-
-  - type: dropdown
-    id: platform
+      label: Template
+      description: Directory name, if a template is affected.
+      placeholder: EcommerceApp
+  - type: textarea
+    id: what-happened
     attributes:
-      label: Platform
-      description: Which platform(s) are affected?
-      multiple: true
-      options:
-        - iOS 18.0+
-        - macOS 15.0+
-        - visionOS 2.0+
-        - tvOS 18.0+
-        - watchOS 11.0+
-        - Not platform-specific
+      label: What happened
+      description: What you did, what you expected and what happened instead.
     validations:
       required: true
-
-  - type: dropdown
-    id: xcode
+  - type: textarea
+    id: reproduce
     attributes:
-      label: Xcode Version
-      description: Which Xcode version are you using?
-      options:
-        - Xcode 16.0
-        - Xcode 15.4
-        - Other
-    validations:
-      required: true
-
+      label: Steps or command to reproduce
+      render: shell
   - type: input
-    id: affected_path
+    id: environment
     attributes:
-      label: Affected Path
-      description: Which exact file, app root, or doc page is affected?
-      placeholder: "e.g., Templates/FinanceApp/Package.swift"
+      label: Environment
+      placeholder: Xcode 27.0, iOS 27 simulator, macOS 27, commit abc1234
     validations:
       required: true
-
-  - type: textarea
-    id: description
-    attributes:
-      label: Bug Description
-      description: A clear description of the bug
-      placeholder: Describe what happened and what you expected to happen
-    validations:
-      required: true
-
-  - type: textarea
-    id: steps
-    attributes:
-      label: Steps to Reproduce
-      description: Step-by-step instructions to reproduce the issue
-      placeholder: |
-        1. Go to '...'
-        2. Click on '...'
-        3. Scroll down to '...'
-        4. See error
-    validations:
-      required: true
-
-  - type: textarea
-    id: expected
-    attributes:
-      label: Expected Behavior
-      description: What should have happened?
-      placeholder: Describe the expected behavior
-    validations:
-      required: true
-
-  - type: textarea
-    id: actual
-    attributes:
-      label: Actual Behavior
-      description: What actually happened?
-      placeholder: Describe what actually happened
-    validations:
-      required: true
-
-  - type: textarea
-    id: code
-    attributes:
-      label: Code Sample
-      description: Minimal code sample that reproduces the issue
-      render: swift
-      placeholder: |
-        import SwiftUI
-        import iOSAppTemplates
-        
-        // Your code here
-
-  - type: textarea
-    id: logs
-    attributes:
-      label: Console Output/Error Messages
-      description: Any relevant console output, error messages, or crash logs
-      render: shell
-      placeholder: Paste console output here
-
-  - type: textarea
-    id: screenshots
-    attributes:
-      label: Validation Output
-      description: Paste the exact failing command output if you have it
-      render: shell
-      placeholder: |
-        swift build -c release
-        swift test
-        bash Scripts/validate-portfolio-surface.sh
-
-  - type: dropdown
-    id: severity
-    attributes:
-      label: Severity
-      description: How severe is this issue?
-      options:
-        - Critical - App crashes or unusable
-        - High - Major feature broken
-        - Medium - Minor feature issue
-        - Low - Cosmetic/polish issue
-    validations:
-      required: true
-
-  - type: textarea
-    id: workaround
-    attributes:
-      label: Additional Context
-      description: Any other context about the problem
-      placeholder: Include links, screenshots, or proof/media impact if relevant

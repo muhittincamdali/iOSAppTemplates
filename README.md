@@ -1,301 +1,315 @@
+<!-- brand:start -->
+
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-light.svg" alt="iOSAppTemplates: Twenty SwiftUI app templates for iOS 18, each a tested Swift package you can copy under your own name."></picture></p>
+
+<!-- lang-selector:start -->
+<p align="center"><a href="README.md">English</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a> · <a href="README.es.md">Español</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a> · <a href="README.pt-BR.md">Português (Brasil)</a> · <a href="README.ru.md">Русский</a></p>
+<!-- lang-selector:end -->
+
 <p align="center">
-  <img src="https://img.shields.io/badge/Swift-6.0-FA7343?style=for-the-badge&logo=swift&logoColor=white" alt="Swift 6.0"/>
-  <img src="https://img.shields.io/badge/Platform-iOS%20|%20macOS%20|%20visionOS-007AFF?style=for-the-badge&logo=apple&logoColor=white" alt="Platform"/>
-  <img src="https://img.shields.io/badge/Standard-Unified%20Core-5856D6?style=for-the-badge" alt="Standard"/>
+<a href="https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml"><img src="https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+<a href="https://github.com/muhittincamdali/iOSAppTemplates/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-light.svg" alt="Latest version: v3.0.0"></picture></a>
+<a href="https://github.com/muhittincamdali/iOSAppTemplates/blob/master/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-platforms-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-platforms-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-platforms-light.svg" alt="Supported platforms: macOS 14+"></picture></a>
+<a href="https://github.com/muhittincamdali/iOSAppTemplates/blob/master/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-language-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-language-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-language-light.svg" alt="Language version: Swift 6.0+"></picture></a>
+<a href="https://github.com/muhittincamdali/iOSAppTemplates/blob/master/LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-license-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-license-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-license-light.svg" alt="License: MIT"></picture></a>
+<a href="https://github.com/muhittincamdali/iOSAppTemplates/tree/master/Templates"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-templates-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-templates-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-templates-light.svg" alt="Templates: iOS 18+"></picture></a>
 </p>
 
----
+<p align="center">
+<a href="#quick-start"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/button-start-en-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/button-start-en-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/button-start-en-light.svg" alt="Get started"></picture></a>
+<a href="https://muhittincamdali.github.io/iOSAppTemplates/documentation/templatescaffold/"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/button-docs-en-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/button-docs-en-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/button-docs-en-light.svg" alt="Documentation"></picture></a>
+<a href="https://github.com/muhittincamdali/iOSAppTemplates/tree/master/Examples"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/button-examples-en-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/button-examples-en-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/button-examples-en-light.svg" alt="Examples"></picture></a>
+</p>
 
-> **🛡️ PART OF THE 2026 UNIFIED CORE**
-> This repository is a verified component of 'The Endless March' initiative. Purified for Swift 6, zero-dependency, and engineered for maximum hardware saturation.
-> 
-> *Flagship Engines:* [SwiftNetwork](https://github.com/muhittincamdali/SwiftNetwork) | [SwiftAI](https://github.com/muhittincamdali/SwiftAI) | [LiquidGlassKit](https://github.com/muhittincamdali/LiquidGlassKit)
+<!-- brand:end -->
 
----
+Twenty SwiftUI app templates for iOS 18, from e-commerce and finance to messaging and travel.
+Each template is a standalone Swift package with a tab-based app, sample data and a tested store.
+Add one to an app project in Xcode to see it run, or copy it under your own name with
+`create-ios-app` and build your app from there.
 
-# iOSAppTemplates
+The templates are starting points, not finished products: every screen runs on in-memory sample
+data, and there is no networking layer or database. What they give you is a working tab
+structure, navigation and a tested store per app that you can wire to your own services.
 
-**The Ultimate Production Engine for World-Class iOS Applications.**
+## Highlights
 
-Stop copying and pasting legacy code. `create-ios-app` is a professional-grade Swift CLI that forges fully functional, 100% native iOS projects in seconds. Powered by the elite `SwiftNetwork` and `SwiftAI` cores.
+- **Twenty app types**: AI assistant, booking, creator video, CRM, e-commerce, education,
+  finance, fitness, food delivery, marketplace, messaging, music and podcasts, news, notes,
+  privacy vault, productivity, social media, subscriptions, team collaboration and travel.
+- **A tested store per app**: state and actions live in a `@MainActor` store with a Swift
+  Testing suite, so the screens stay thin and the behaviour is checked without UI.
+- **No third-party dependencies**: the templates use SwiftUI and Foundation only, and run
+  without an account, an API key or network access.
+- **Your own name**: `create-ios-app` renames the package, module, types, host project and
+  bundle identifier, and refuses names that would clash with names in the template.
+- **Light and dark**: every template has screenshots of both appearances, taken in the
+  simulator by a script in this repository.
 
-```bash
-swift run create-ios-app MyNewApp \
-  --template commerce \
-  --auth biometric \
-  --db swiftData \
-  --liquid-glass \
-  --strict
-```
+## Quick start
 
-### ⚔️ The Brutal Truth: Why iOSAppTemplates?
-We stripped out over 500MB of legacy baggage (Alamofire, Firebase, Kingfisher) to bring you a framework that is mathematically proven to be faster, lighter, and safer. **Zero Bloat. Pure Swift 6. No Compromises.**
+**1. Get the templates**
 
-```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#007AFF', 'edgeLabelBackground':'#1e1e1e', 'tertiaryColor': '#FF3B30'}}}%%
-xychart-beta
-    title "Performance: App Binary Size (MB)"
-    x-axis ["iOSAppTemplates (Native)", "Standard Templates (Legacy)"]
-    y-axis "Size (Lower is Better)" 0 --> 30
-    bar [1.2, 28.5]
-```
-
-| Feature | 🚀 iOSAppTemplates | 🐢 Standard Templates |
-| :--- | :--- | :--- |
-| **Generation** | **Instant (Swift CLI)** | Manual Clone & Search |
-| **Concurrency** | **100% Swift 6 Strict Mode** | Legacy Callbacks |
-| **Data Races** | **0 (Compile-Time Safe)** | Unchecked State |
-| **Visuals** | **Liquid Glass Built-in** | Standard UIKit/SwiftUI |
-
-`iOSAppTemplates` currently ships category-level template families, generator tooling, shared package targets, and `20` standalone app roots under `Templates/`. The product goal is broader: become the canonical SwiftUI starter portfolio with `20 provable complete apps`. The repository should only claim what can be routed, built, shown, and validated today.
-
-![iOSAppTemplates Hero](Documentation/Assets/Readme/iosapptemplates-hero.svg)
-
-## Signal Surface
-
-| Signal | Current truth |
-| --- | --- |
-| Root coverage | `20` standalone app roots under `Templates/` |
-| Build proof | local generic iOS `xcodebuild` tracked for `20` roots; hosted standalone iOS workflow is versioned and green on `master` |
-| Runtime proof | local simulator launch proof plus runtime screenshots, demo clips, and scenario frames tracked for `20` roots; automated multi-step interaction proof tracked for all `20` standalone roots |
-| Public proof | per-app proof and media pages exist for `20` roots |
-| Visual layer | gallery cards, preview boards, runtime screenshots, demo clips, and scenario frames published for `20` roots |
-| Remaining gap | deeper automated interaction depth across all lanes, equal polish across all lanes |
-
-## First Decision
-
-This repository is a strong fit if you want to:
-
-- evaluate a broad SwiftUI starter portfolio from one codebase
-- inspect reusable template families before building your own app
-- generate a starter flow quickly from the CLI
-- compare multiple architecture approaches in one repository
-
-This repository is not yet a full fit if you expect:
-
-- `20 complete apps` already shipping at equal maturity
-- the same deeper interaction-proof depth for every lane today
-- automated interaction proof that reliably traverses second-screen and third-screen consequence chains for all `20` apps
-
-![Portfolio Board](Documentation/Assets/Readme/iosapptemplates-portfolio-board.svg)
-
-## Start Here
-
-| Need | Start here |
-| --- | --- |
-| Evaluate the repo in 5 minutes | [Documentation/Guides/QuickStart.md](Documentation/Guides/QuickStart.md) |
-| See the complete-app contract | [Documentation/Complete-App-Standard.md](Documentation/Complete-App-Standard.md) |
-| See the current-vs-target portfolio map | [Documentation/Portfolio-Matrix.md](Documentation/Portfolio-Matrix.md) |
-| See the tracked gallery surface | [Documentation/Template-Showcase.md](Documentation/Template-Showcase.md) |
-| See lane-by-lane proof status | [Documentation/Proof-Matrix.md](Documentation/Proof-Matrix.md) |
-| See canonical app proof pages | [Documentation/App-Proofs/README.md](Documentation/App-Proofs/README.md) |
-| See canonical app media pages | [Documentation/App-Media/README.md](Documentation/App-Media/README.md) |
-| See canonical runtime scenario pages | [Documentation/App-Scenarios/README.md](Documentation/App-Scenarios/README.md) |
-| See published gallery cards and preview boards | [Documentation/App-Gallery.md](Documentation/App-Gallery.md) |
-| See hosted standalone iOS proof workflow | [.github/workflows/standalone-ios-proof.yml](.github/workflows/standalone-ios-proof.yml) |
-| Run local simulator launch proof | [Scripts/validate-runtime-app-launches.sh](Scripts/validate-runtime-app-launches.sh) |
-| See the current repo status | [PROJECT_STATUS.md](PROJECT_STATUS.md) |
-| See GitHub distribution rules | [Documentation/GitHub-Distribution.md](Documentation/GitHub-Distribution.md) |
-| See release rules | [Documentation/Release-Process.md](Documentation/Release-Process.md) |
-| Read the 20-app market strategy | [Documentation/World-Class-20-App-Strategy-2026-04-19.md](Documentation/World-Class-20-App-Strategy-2026-04-19.md) |
-| Read the world-class benchmark matrix | [Documentation/World-Class-20-App-Benchmark-Matrix-2026-05-01.md](Documentation/World-Class-20-App-Benchmark-Matrix-2026-05-01.md) |
-| Read the brutal 20-app rebuild audit | [Documentation/Brutal-20-App-Rebuild-Audit-2026-04-27.md](Documentation/Brutal-20-App-Rebuild-Audit-2026-04-27.md) |
-| See the Wave 1 execution plan | [Documentation/Wave-1-Implementation-Plan.md](Documentation/Wave-1-Implementation-Plan.md) |
-| Inspect template families | [Documentation/TemplateGuide.md](Documentation/TemplateGuide.md) |
-| Inspect the example router | [Examples/README.md](Examples/README.md) |
-| Read the hard gap audit | [Documentation/World-Class-Audit-2026-04-15.md](Documentation/World-Class-Audit-2026-04-15.md) |
-
-## What Ships Today
-
-- category-level template families under `Sources/`
-- `Scripts/TemplateGenerator.swift` as the generator entry point
-- `20` standalone app roots under `Templates/`:
-  - `Templates/EcommerceApp`
-  - `Templates/SocialMediaApp`
-  - `Templates/FitnessApp`
-  - `Templates/ProductivityApp`
-  - `Templates/FinanceApp`
-  - `Templates/EducationApp`
-  - `Templates/FoodDeliveryApp`
-  - `Templates/TravelPlannerApp`
-  - `Templates/AIAssistantApp`
-  - `Templates/NewsBlogApp`
-  - `Templates/MusicPodcastApp`
-  - `Templates/MarketplaceApp`
-  - `Templates/MessagingApp`
-  - `Templates/BookingReservationsApp`
-  - `Templates/NotesKnowledgeApp`
-  - `Templates/CreatorShortVideoApp`
-  - `Templates/TeamCollaborationApp`
-  - `Templates/CRMAdminApp`
-  - `Templates/SubscriptionLifestyleApp`
-  - `Templates/PrivacyVaultApp`
-- a lightweight example/router layer under `Examples/`
-- active root-package validation for build, test, security, and performance
-
-## Current Product Lanes
-
-| Lane | Current surface | Target complete app |
-| --- | --- | --- |
-| Commerce | template family + standalone root + richer example | E-Commerce Store |
-| Social | template family + standalone root + richer example | Social Media |
-| News | template family + standalone root + richer example | News / Editorial |
-| Marketplace | commerce family + standalone root + richer example | Marketplace |
-| Messaging / Community | social family + standalone root + richer example | Messaging / Community |
-| Booking / Reservations | travel family + standalone root + richer example | Booking & Reservations |
-| Notes / Knowledge | productivity family + standalone root + richer example | Notes / Knowledge Base |
-| Creator / Short Video | entertainment family + standalone root + richer example | Creator / Short Video |
-| Team Collaboration | productivity family + standalone root + richer example | Team Collaboration |
-| CRM / Admin | admin lane target + standalone root + richer example | CRM / Admin Companion |
-| Subscription Lifestyle | premium lane target + standalone root + richer example | Subscription Lifestyle / Habit Tracker |
-| Privacy / Secure Vault | security/privacy lane target + standalone root + richer example | Privacy / Secure Vault |
-| Health / Fitness | template family + standalone root | Health / Fitness |
-| Finance | template family + standalone root + richer example | Finance / Budgeting |
-| Education | template family + standalone root + richer example | Education / Learning |
-| Food Delivery | template family + standalone root + richer example | Food Delivery |
-| Travel | template family + standalone root + richer example | Travel Planner |
-| AI | template family + standalone root + richer example | AI Assistant |
-| Music / Podcast | template family + standalone root + richer example | Music / Podcast |
-| Productivity | template family + standalone root + richer example | Productivity / Tasks |
-
-This table is not a `complete app` claim. It is the current packaging truth of the repository.
-
-For the stronger current-vs-target view, use:
-
-- [Documentation/Portfolio-Matrix.md](Documentation/Portfolio-Matrix.md)
-- [Documentation/Template-Showcase.md](Documentation/Template-Showcase.md)
-- [Documentation/Proof-Matrix.md](Documentation/Proof-Matrix.md)
-- [Documentation/App-Proofs/README.md](Documentation/App-Proofs/README.md)
-- [Documentation/Wave-1-Implementation-Plan.md](Documentation/Wave-1-Implementation-Plan.md)
-- [Documentation/World-Class-20-App-Strategy-2026-04-19.md](Documentation/World-Class-20-App-Strategy-2026-04-19.md)
-- [Documentation/World-Class-20-App-Benchmark-Matrix-2026-05-01.md](Documentation/World-Class-20-App-Benchmark-Matrix-2026-05-01.md)
-- [Documentation/Brutal-20-App-Rebuild-Audit-2026-04-27.md](Documentation/Brutal-20-App-Rebuild-Audit-2026-04-27.md)
-
-## Fastest Working Paths
-
-### 1. Validate the root package graph
-
-```bash
+```sh
 git clone https://github.com/muhittincamdali/iOSAppTemplates.git
+```
+
+**2. Add a template to your app**
+
+In Xcode, create an app with **File › New › Project… › iOS › App** (or open your own app; its
+deployment target must be iOS 18 or later). Choose **File › Add Package Dependencies…**, click
+**Add Local…**, select the folder `iOSAppTemplates/Templates/EcommerceApp` and click
+**Add Package**. Add the `EcommerceApp` library to your app target.
+
+**3. Start it**
+
+Replace the contents of the file that contains `@main` (in a new project, the one named after
+your app, such as `MyAppApp.swift`) with:
+
+```swift
+import EcommerceApp
+
+@main
+enum QuickStartApp {
+    static func main() {
+        EcommerceAppShell.main()
+    }
+}
+```
+
+Choose an iPhone simulator and press **Run** (⌘R). The Shop tab of the E-commerce template
+appears. The finished project is in [Examples/QuickStart](Examples/QuickStart).
+
+## Installation
+
+### Templates
+
+Add a folder from `Templates/` to your app as a local package, as in the quick start, or create
+a renamed copy with `create-ios-app` (see [Usage](#usage)). The templates are not published as
+remote packages, because each one is meant to be copied and changed.
+
+### create-ios-app
+
+Run the tool from a clone with `swift run create-ios-app`, or build it once and run the binary:
+
+```sh
+swift build -c release
+.build/release/create-ios-app list
+```
+
+### TemplateScaffold library
+
+The logic behind `create-ios-app` is the `TemplateScaffold` library (macOS 14 or later). It is
+included in every release from 3.0.0 on:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/muhittincamdali/iOSAppTemplates.git", from: "3.0.0")
+],
+targets: [
+    .executableTarget(name: "YourTool", dependencies: [
+        .product(name: "TemplateScaffold", package: "iOSAppTemplates")
+    ])
+]
+```
+
+## Usage
+
+### Pick a template
+
+| `--template`             | Template                                                     | Tabs                                             |
+| ------------------------ | ------------------------------------------------------------ | ------------------------------------------------ |
+| `ai-assistant`           | [AI Assistant](Templates/AIAssistantApp)                     | Workspace, Presets, Memory, Tools, Trust         |
+| `booking`                | [Booking & Reservations](Templates/BookingReservationsApp)   | Home, Calendar, Guests, Requests, Profile        |
+| `creator-video`          | [Creator Short Video](Templates/CreatorShortVideoApp)        | Studio, Pipeline, Analytics, Moderation, Profile |
+| `crm`                    | [CRM Admin](Templates/CRMAdminApp)                           | Pipeline, Accounts, Renewals, Tasks, Profile     |
+| `ecommerce`              | [E-commerce](Templates/EcommerceApp)                         | Shop, Browse, Cart, Orders, Profile              |
+| `education`              | [Education](Templates/EducationApp)                          | Home, Courses, Lessons, Assessments, Progress    |
+| `finance`                | [Personal Finance](Templates/FinanceApp)                     | Overview, Accounts, Budgets, Activity, Insights  |
+| `fitness`                | [Fitness](Templates/FitnessApp)                              | Plan, Session, Progress, Recovery, Profile       |
+| `food-delivery`          | [Food Delivery](Templates/FoodDeliveryApp)                   | Home, Browse, Cart, Orders, Profile              |
+| `marketplace`            | [Marketplace](Templates/MarketplaceApp)                      | Home, Browse, Seller, Orders, Trust              |
+| `messaging`              | [Messaging](Templates/MessagingApp)                          | Inbox, Rooms, Safety, Profile                    |
+| `music-podcast`          | [Music & Podcasts](Templates/MusicPodcastApp)                | Library, Queue, Downloads, Discover, Profile     |
+| `news-blog`              | [News & Blog](Templates/NewsBlogApp)                         | Today, Sections, Saved, Digest, Profile          |
+| `notes`                  | [Notes & Knowledge](Templates/NotesKnowledgeApp)             | Capture, Library, Links, Spaces, Profile         |
+| `privacy-vault`          | [Privacy Vault](Templates/PrivacyVaultApp)                   | Vault, Alerts, Recovery, Audit, Profile          |
+| `productivity`           | [Productivity](Templates/ProductivityApp)                    | Dashboard, Inbox, Projects, Focus, Review        |
+| `social`                 | [Social Media](Templates/SocialMediaApp)                     | Feed, Explore, Create, Notifications, Profile    |
+| `subscription-lifestyle` | [Subscription Lifestyle](Templates/SubscriptionLifestyleApp) | Dashboard, Programs, Streaks, Plans, Profile     |
+| `team-collaboration`     | [Team Collaboration](Templates/TeamCollaborationApp)         | Workspace, Tasks, Decisions, Handoffs, Profile   |
+| `travel`                 | [Travel Planner](Templates/TravelPlannerApp)                 | Trips, Timeline, Bookings, Essentials, Profile   |
+
+`SocialMediaApp` also shows how to put a boundary in front of an identity provider: sign-in goes
+through an `AuthService` protocol, and the bundled `LocalAuthService` keeps accounts in memory
+with a demo account (`demo@example.com` / `password123`).
+
+### Create a project under your own name
+
+```bash
 cd iOSAppTemplates
-swift build
-swift test
+swift run create-ios-app list
+swift run create-ios-app new MyShop --template ecommerce --output ~/Developer
 ```
 
-### 2. Inspect a standalone app root
+The tool copies `Templates/EcommerceApp` to `~/Developer/MyShop` and renames the package,
+module, test target, `EcommerceAppShell`, host project and bundle identifier to use `MyShop`.
+Names must be Swift identifiers that start with an ASCII letter. The tool refuses to overwrite
+an existing directory and refuses names that would turn into a name the template already uses,
+such as `CommerceStore` for the E-commerce template.
+
+Add `~/Developer/MyShop` to your app as in the quick start (`import MyShop`,
+`MyShopShell.main()`), or test it and open its host project:
 
 ```bash
-open Templates/SocialMediaApp/Package.swift
-open Templates/EcommerceApp/Package.swift
-open Templates/FitnessApp/Package.swift
-open Templates/ProductivityApp/Package.swift
-open Templates/FinanceApp/Package.swift
-open Templates/EducationApp/Package.swift
-open Templates/FoodDeliveryApp/Package.swift
-open Templates/TravelPlannerApp/Package.swift
-open Templates/AIAssistantApp/Package.swift
-open Templates/NewsBlogApp/Package.swift
-open Templates/MusicPodcastApp/Package.swift
-open Templates/MarketplaceApp/Package.swift
-open Templates/MessagingApp/Package.swift
-open Templates/BookingReservationsApp/Package.swift
-open Templates/NotesKnowledgeApp/Package.swift
-open Templates/CreatorShortVideoApp/Package.swift
-open Templates/TeamCollaborationApp/Package.swift
-open Templates/CRMAdminApp/Package.swift
-open Templates/SubscriptionLifestyleApp/Package.swift
-open Templates/PrivacyVaultApp/Package.swift
+cd ~/Developer/MyShop
+xcodebuild test -scheme MyShop -destination 'platform=iOS Simulator,name=iPhone 17'
+
+cd App
+xcodegen generate
+open MyShop.xcodeproj
 ```
 
-This proves today:
+`iPhone 17` is an example; use any simulator that `xcrun simctl list devices available` lists.
+The host project needs [XcodeGen](https://github.com/yonaskolb/XcodeGen)
+(`brew install xcodegen`).
 
-- manifest-valid package entry
-- lane-specific source flow
-- standalone root packaging
-- deterministic `Package.resolved` coverage for `8` standalone roots with external packages
-- local generic iOS `xcodebuild` proof for `20` standalone roots:
-  - `EcommerceApp`
-  - `SocialMediaApp`
-  - `FitnessApp`
-  - `ProductivityApp`
-  - `FinanceApp`
-  - `EducationApp`
-  - `FoodDeliveryApp`
-  - `TravelPlannerApp`
-  - `AIAssistantApp`
-  - `NewsBlogApp`
-  - `MusicPodcastApp`
-  - `MarketplaceApp`
-  - `MessagingApp`
-  - `BookingReservationsApp`
-  - `NotesKnowledgeApp`
-  - `CreatorShortVideoApp`
-  - `TeamCollaborationApp`
-  - `CRMAdminApp`
-  - `SubscriptionLifestyleApp`
-  - `PrivacyVaultApp`
-- local simulator runtime launch proof for the same `20` standalone roots:
-  - `bash Scripts/validate-runtime-app-launches.sh`
-- automated multi-step interaction proof for all `20` standalone roots:
-  - `bash Scripts/validate-runtime-app-interactions.sh`
-- published runtime screenshots for the same `20` standalone roots:
-  - `Documentation/Assets/AppScreenshots/*.png`
-- published runtime demo clips for the same `20` standalone roots:
-  - `Documentation/Assets/AppDemoClips/*.mp4`
-- published launch-to-ready scenario frames for the same `20` standalone roots:
-  - `Documentation/Assets/AppScenarioShots/*-launch.png`
-  - `Documentation/Assets/AppScenarioShots/*-ready.png`
-- chained runtime consequence flows now exist across the same `20` standalone roots
+### Work on a template in place
 
-This does not yet prove today:
+Open `Templates/<Name>/Package.swift` in Xcode to edit the template and run its tests, or
+generate its host project from `Templates/<Name>/App` with `xcodegen generate`.
 
-- automated second-screen and third-screen interaction proof parity for all lanes
+### Use the scaffolding library
 
-### 3. Use the generator
+`TemplateScaffold` needs a checkout of this repository, because the templates are read from
+`Templates/`:
+
+```swift
+import Foundation
+import TemplateScaffold
+
+func makeShop(templates: URL, output: URL) throws -> ScaffoldResult {
+    guard let template = TemplateCatalog.template(named: "ecommerce") else {
+        throw CocoaError(.fileNoSuchFile)
+    }
+    let name = try ProjectName("MyShop")
+    return try Scaffolder(templatesDirectory: templates).scaffold(template, as: name, in: output)
+}
+```
+
+This snippet is compiled and run by the test suite.
+
+## Demo
+
+The first screen of every template, light and dark versions in [docs/images](docs/images):
+
+| AI Assistant                                                                             | Booking & Reservations                                                                                       | Creator Short Video                                                                                   | CRM Admin                                                                          | E-commerce                                                                           |
+| ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| <img src="docs/images/AIAssistantApp-light.jpg" width="160" alt="AI Assistant template"> | <img src="docs/images/BookingReservationsApp-light.jpg" width="160" alt="Booking and Reservations template"> | <img src="docs/images/CreatorShortVideoApp-light.jpg" width="160" alt="Creator Short Video template"> | <img src="docs/images/CRMAdminApp-light.jpg" width="160" alt="CRM Admin template"> | <img src="docs/images/EcommerceApp-light.jpg" width="160" alt="E-commerce template"> |
+
+| Education                                                                           | Personal Finance                                                                         | Fitness                                                                         | Food Delivery                                                                              | Marketplace                                                                             |
+| ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| <img src="docs/images/EducationApp-light.jpg" width="160" alt="Education template"> | <img src="docs/images/FinanceApp-light.jpg" width="160" alt="Personal Finance template"> | <img src="docs/images/FitnessApp-light.jpg" width="160" alt="Fitness template"> | <img src="docs/images/FoodDeliveryApp-light.jpg" width="160" alt="Food Delivery template"> | <img src="docs/images/MarketplaceApp-light.jpg" width="160" alt="Marketplace template"> |
+
+| Messaging                                                                                           | Music & Podcasts                                                                                                | News & Blog                                                                                            | Notes & Knowledge                                                                                                  | Privacy Vault                                                                                              |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| <img src="docs/images/MessagingApp-dark.jpg" width="160" alt="Messaging template, dark appearance"> | <img src="docs/images/MusicPodcastApp-dark.jpg" width="160" alt="Music and Podcasts template, dark appearance"> | <img src="docs/images/NewsBlogApp-dark.jpg" width="160" alt="News and Blog template, dark appearance"> | <img src="docs/images/NotesKnowledgeApp-dark.jpg" width="160" alt="Notes and Knowledge template, dark appearance"> | <img src="docs/images/PrivacyVaultApp-dark.jpg" width="160" alt="Privacy Vault template, dark appearance"> |
+
+| Productivity                                                                                              | Social Media                                                                                             | Subscription Lifestyle                                                                                                       | Team Collaboration                                                                                                   | Travel Planner                                                                                               |
+| --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| <img src="docs/images/ProductivityApp-dark.jpg" width="160" alt="Productivity template, dark appearance"> | <img src="docs/images/SocialMediaApp-dark.jpg" width="160" alt="Social Media template, dark appearance"> | <img src="docs/images/SubscriptionLifestyleApp-dark.jpg" width="160" alt="Subscription Lifestyle template, dark appearance"> | <img src="docs/images/TeamCollaborationApp-dark.jpg" width="160" alt="Team Collaboration template, dark appearance"> | <img src="docs/images/TravelPlannerApp-dark.jpg" width="160" alt="Travel Planner template, dark appearance"> |
+
+Screenshots are taken on an iPhone 17 Pro simulator by
+[scripts/capture-screenshots.sh](scripts/capture-screenshots.sh). To run a template yourself,
+open [Examples/QuickStart](Examples/QuickStart) in Xcode and press **Run**.
+
+## Documentation
+
+Reference documentation and articles:
+
+- [TemplateScaffold on GitHub Pages](https://muhittincamdali.github.io/iOSAppTemplates/documentation/templatescaffold/):
+  the API of the scaffolding library and the articles below.
+- Each template has a README in its folder, for example
+  [Templates/EcommerceApp](Templates/EcommerceApp), that lists its screens, store and tests.
+
+To build the documentation locally:
 
 ```bash
-swift Scripts/TemplateGenerator.swift --interactive
-swift Scripts/TemplateGenerator.swift --list
+swift package generate-documentation --target TemplateScaffold
 ```
 
-## Quality Bar
+## Guides
 
-- active root package graph builds
-- active root package graph tests
-- security smoke surface exists
-- performance smoke surface exists
-- tracked local generic iOS build proof exists for `20` standalone roots
-- tracked local simulator runtime launch proof exists for the same `20` roots
-- hosted standalone iOS proof workflow is now versioned for the same `20` roots
-- public docs are being tightened around truth-first product claims
-- the repo now has explicit app proof, media, lockfile, and portfolio routers
-- the repo now has published gallery cards and preview boards for `20` standalone roots
-- the repo now has published runtime screenshots for `20` standalone roots
-- the repo now has published runtime demo clips for `20` standalone roots
-- the repo now has published launch-to-ready scenario frames for `20` standalone roots
-- the repo now has rebuilt runtime flows across the tracked `20` standalone roots
+- [Getting Started](Sources/TemplateScaffold/TemplateScaffold.docc/GettingStarted.md): create a
+  project with `create-ios-app`, run its tests and open it in Xcode.
+- [Adding a Template to an App](Sources/TemplateScaffold/TemplateScaffold.docc/AddingATemplateToAnApp.md):
+  the quick start in detail, and what to change next.
+- [How Renaming Works](Sources/TemplateScaffold/TemplateScaffold.docc/HowRenamingWorks.md):
+  which names change, which do not, and which names are refused.
+- [Examples](Examples): the QuickStart app.
 
-## Canonical Docs
+## Requirements
 
-- [Documentation/README.md](Documentation/README.md)
-- [Documentation/Guides/Installation.md](Documentation/Guides/Installation.md)
-- [Documentation/API-Reference.md](Documentation/API-Reference.md)
-- [Documentation/World-Class-20-App-Strategy-2026-04-19.md](Documentation/World-Class-20-App-Strategy-2026-04-19.md)
+| Platform                                 | Minimum version           |
+| ---------------------------------------- | ------------------------- |
+| iOS (templates)                          | 18.0                      |
+| macOS (create-ios-app, TemplateScaffold) | 14.0                      |
+| Toolchain                                | Swift 6.0 (tools version) |
+
+The code is built and tested with Xcode 27.0 (Swift 6.4); CI uses the default Xcode of GitHub's
+`macos-26` image. XcodeGen is needed only for the host projects in `Templates/<Name>/App`.
+
+## Architecture
+
+```text
+Package.swift                 create-ios-app + TemplateScaffold (macOS)
+Sources/CLI/                  argument parsing (swift-argument-parser)
+Sources/TemplateScaffold/     catalog, name validation, renaming, copying
+Tests/TemplateScaffoldTests/  Swift Testing, including a scaffold of every template
+Templates/<Name>/             20 independent iOS 18 packages with tests and an App/ host
+Examples/QuickStart/          an app project that runs a template as a local package
+scripts/                      test-templates.sh, capture-screenshots.sh
+```
+
+Each template contains:
+
+- `Sources/<Name>/`: the public `<Name>Shell` app scene, the screens, and a `@MainActor`
+  `ObservableObject` store that owns the sample data and every action the screens trigger
+  (cart totals, order and booking state transitions, approval queues and so on). Most
+  templates keep this in `<Name>.swift`; `EcommerceApp`, `FitnessApp` and `SocialMediaApp`
+  split the store, the models and the screens into separate files.
+- `Tests/<Name>Tests/`: a Swift Testing suite for that store, covering derived values, state
+  transitions, guard clauses for invalid input and unknown identifiers, and limits that must
+  not be exceeded.
+- `App/`: an XcodeGen spec and a host file that calls `<Name>Shell.main()`.
+
+The templates do not depend on the root package or on each other. Renaming is a text
+substitution of the template's directory name, which is why every name that has to change
+starts with it (`EcommerceApp`, `EcommerceAppShell`, `EcommerceAppTests`).
+
+## Roadmap
+
+- List the package on the Swift Package Index.
+- Replace the remaining string-typed states with enums, such as the order headline in
+  `EcommerceApp`, the containment status in `MessagingApp` and the preset mode in
+  `AIAssistantApp`.
+- Split the templates that still keep most of their code in `<Name>.swift` into store, model
+  and screen files, as `EcommerceApp`, `FitnessApp` and `SocialMediaApp` already do.
 
 ## Contributing
 
-If you add a product claim, add the proof path too.
+Contributions are welcome. Read the [contributing guide](CONTRIBUTING.md) and the
+[code of conduct](https://github.com/muhittincamdali/.github/blob/main/CODE_OF_CONDUCT.md) before
+opening a pull request. Report security issues privately as described in the
+[security policy](SECURITY.md). Changes are recorded in [CHANGELOG.md](CHANGELOG.md).
 
-- [CONTRIBUTING.md](CONTRIBUTING.md)
-- [SECURITY.md](SECURITY.md)
-- [SUPPORT.md](SUPPORT.md)
-- [PROJECT_STATUS.md](PROJECT_STATUS.md)
-- [Documentation/GitHub-Distribution.md](Documentation/GitHub-Distribution.md)
-- [Documentation/Release-Process.md](Documentation/Release-Process.md)
+```bash
+swift test                                   # scaffolding library and CLI
+scripts/test-templates.sh                    # all templates in the iOS Simulator
+scripts/test-templates.sh EcommerceApp       # one template
+scripts/capture-screenshots.sh               # refresh docs/images
+```
 
 ## License
 
-[MIT](LICENSE)
-
-## 🚀 Killer Feature: The 2026 Standard
-This repository has been upgraded to the absolute global #1 standard in its category.
+Released under the MIT license. See [LICENSE](LICENSE).
