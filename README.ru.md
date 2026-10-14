@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@930ecae6c52c696ce79171172268185a0dc74d4e status=reviewed -->
+<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ru-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ru-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ru-light.svg" alt="iOSAppTemplates: 21 шаблон SwiftUI-приложений для iOS 18: Swift-пакеты с тестами, которые копируются под вашим именем."></picture></p>
@@ -26,14 +26,15 @@
 
 <!-- brand:end -->
 
-Двадцать шаблонов SwiftUI-приложений для iOS 18: от интернет-магазина и финансов до мессенджера и
+Двадцать один шаблон SwiftUI-приложений для iOS 18: от интернет-магазина и финансов до мессенджера и
 путешествий. Каждый шаблон — отдельный Swift-пакет с приложением на вкладках, демонстрационными
-данными и store с тестами. Добавьте шаблон в проект приложения в Xcode, чтобы увидеть его в работе,
-или скопируйте его под своим именем с помощью `create-ios-app` и стройте на нём своё приложение.
+данными и тестами. Добавьте шаблон в проект приложения в Xcode, чтобы увидеть его в работе, или
+скопируйте его под своим именем с помощью `create-ios-app` и стройте на нём своё приложение.
 
-Шаблоны — это отправная точка, а не готовый продукт: все экраны работают на демонстрационных
-данных в памяти, сетевого слоя и базы данных нет. Зато у вас есть работающая структура вкладок,
-навигация и для каждого приложения store с тестами, который можно подключить к своим сервисам.
+Шаблоны — это отправная точка, а не готовый продукт. Двадцать из них работают на демонстрационных
+данных в памяти и дают вам работающую структуру вкладок, навигацию и store с тестами, который можно
+подключить к своим сервисам. Шаблон Clean Architecture идёт на шаг дальше: таргеты Domain, Data и
+Presentation, HTTP-слой с демонстрационным сервером внутри процесса и офлайн-кэш.
 
 ## Основные возможности
 
@@ -41,6 +42,10 @@
   интернет-магазин, обучение, личные финансы, фитнес, доставка еды, маркетплейс, мессенджер, музыка
   и подкасты, новости, заметки, приватное хранилище, продуктивность, соцсеть, подписки, командная
   работа и путешествия.
+- **Многослойное эталонное приложение**: `CleanArchitectureApp` — справочник сотрудников команды,
+  слои которого вынесены в отдельные таргеты, поэтому правило зависимостей обеспечивает компилятор.
+  Приложение загружает людей по HTTP, офлайн переключается на сохранённую копию и проверяет роли и
+  права в use case; в четырёх таргетах 98 тестов, а также UI-тесты с аудитом доступности.
 - **Store с тестами в каждом приложении**: состояние и действия собраны в `@MainActor` store с
   набором тестов Swift Testing, поэтому экраны остаются простыми, а поведение проверяется без UI.
 - **Без сторонних зависимостей**: шаблоны используют только SwiftUI и Foundation и работают без
@@ -129,6 +134,7 @@ targets: [
 | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------ |
 | `ai-assistant`           | [AI Assistant](Templates/AIAssistantApp)                     | Workspace, Presets, Memory, Tools, Trust         |
 | `booking`                | [Booking & Reservations](Templates/BookingReservationsApp)   | Home, Calendar, Guests, Requests, Profile        |
+| `clean-architecture`     | [Clean Architecture](Templates/CleanArchitectureApp)         | Directory, Summary, Settings                     |
 | `creator-video`          | [Creator Short Video](Templates/CreatorShortVideoApp)        | Studio, Pipeline, Analytics, Moderation, Profile |
 | `crm`                    | [CRM Admin](Templates/CRMAdminApp)                           | Pipeline, Accounts, Renewals, Tasks, Profile     |
 | `ecommerce`              | [E-commerce](Templates/EcommerceApp)                         | Shop, Browse, Cart, Orders, Profile              |
@@ -151,6 +157,11 @@ targets: [
 `SocialMediaApp` также показывает, как отделить приложение от провайдера идентификации: вход
 выполняется через протокол `AuthService`, а встроенный `LocalAuthService` хранит аккаунты в памяти
 вместе с демо-аккаунтом (`demo@example.com` / `password123`).
+
+`CleanArchitectureApp` показывает, как подключить настоящий бэкенд: замените его демонстрационный
+сервер внутри процесса на `URLSessionHTTPClient` и свой базовый URL. Руководство
+[Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md)
+объясняет, куда добавлять новый код.
 
 ### Создайте проект под своим именем
 
@@ -227,6 +238,10 @@ func makeShop(templates: URL, output: URL) throws -> ScaffoldResult {
 | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | <img src="docs/images/ProductivityApp-dark.jpg" width="160" alt="Шаблон Productivity, тёмное оформление"> | <img src="docs/images/SocialMediaApp-dark.jpg" width="160" alt="Шаблон Social Media, тёмное оформление"> | <img src="docs/images/SubscriptionLifestyleApp-dark.jpg" width="160" alt="Шаблон Subscription Lifestyle, тёмное оформление"> | <img src="docs/images/TeamCollaborationApp-dark.jpg" width="160" alt="Шаблон Team Collaboration, тёмное оформление"> | <img src="docs/images/TravelPlannerApp-dark.jpg" width="160" alt="Шаблон Travel Planner, тёмное оформление"> |
 
+| Clean Architecture                                                                                 | Clean Architecture, тёмная                                                                                           |
+| -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| <img src="docs/images/CleanArchitectureApp-light.jpg" width="160" alt="Шаблон Clean Architecture"> | <img src="docs/images/CleanArchitectureApp-dark.jpg" width="160" alt="Шаблон Clean Architecture, тёмное оформление"> |
+
 Скриншоты снимаются в симуляторе iPhone 17 Pro скриптом
 [scripts/capture-screenshots.sh](scripts/capture-screenshots.sh). Чтобы запустить шаблон
 самостоятельно, откройте [Examples/QuickStart](Examples/QuickStart) в Xcode и нажмите **Run**.
@@ -254,6 +269,8 @@ swift package generate-documentation --target TemplateScaffold
   быстрый старт подробно и что менять дальше.
 - [How Renaming Works](Sources/TemplateScaffold/TemplateScaffold.docc/HowRenamingWorks.md):
   какие имена меняются, какие нет и какие отклоняются.
+- [Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md):
+  правило зависимостей, добавление функции слой за слоем и подключение собственного сервера.
 - [Examples](Examples): приложение QuickStart.
 
 Руководства написаны на английском.
@@ -276,7 +293,7 @@ Package.swift                 create-ios-app + TemplateScaffold (macOS)
 Sources/CLI/                  argument parsing (swift-argument-parser)
 Sources/TemplateScaffold/     catalog, name validation, renaming, copying
 Tests/TemplateScaffoldTests/  Swift Testing, including a scaffold of every template
-Templates/<Name>/             20 independent iOS 18 packages with tests and an App/ host
+Templates/<Name>/             21 independent iOS 18 packages with tests and an App/ host
 Examples/QuickStart/          an app project that runs a template as a local package
 scripts/                      test-templates.sh, capture-screenshots.sh
 ```
@@ -292,6 +309,11 @@ scripts/                      test-templates.sh, capture-screenshots.sh
   состояний, guard-условия для некорректного ввода и неизвестных идентификаторов, а также пределы,
   которые нельзя превышать.
 - `App/`: спецификацию XcodeGen и host-файл, который вызывает `<Name>Shell.main()`.
+
+`CleanArchitectureApp` заменяет единый store четырьмя таргетами: `CleanArchitectureAppDomain`
+(сущности, правила, use case), `CleanArchitectureAppData` (HTTP, JSON, кэш, репозиторий),
+`CleanArchitectureAppPresentation` (модели `@Observable` и экраны) и `CleanArchitectureApp` — корень
+композиции; у каждого свой тестовый таргет.
 
 Шаблоны не зависят ни от корневого пакета, ни друг от друга. Переименование — это текстовая
 замена имени папки шаблона, поэтому каждое имя, которое должно измениться, начинается с него

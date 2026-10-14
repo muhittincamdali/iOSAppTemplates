@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@930ecae6c52c696ce79171172268185a0dc74d4e status=reviewed -->
+<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-tr-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-tr-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-tr-light.svg" alt="iOSAppTemplates: iOS 18 için 21 SwiftUI uygulama şablonu; her biri kendi adınızla kopyalayabileceğiniz testli bir Swift paketi."></picture></p>
@@ -26,20 +26,26 @@
 
 <!-- brand:end -->
 
-iOS 18 için e-ticaretten finansa, mesajlaşmadan seyahate yirmi SwiftUI uygulama şablonu. Her
-şablon; sekmeli bir uygulama, örnek veriler ve testleri yazılmış bir store içeren bağımsız bir
-Swift paketidir. Çalıştığını görmek için birini Xcode'da bir uygulama projesine ekleyin ya da
-`create-ios-app` ile kendi adınızla kopyalayıp uygulamanızı onun üzerine kurun.
+iOS 18 için e-ticaretten finansa, mesajlaşmadan seyahate yirmi bir SwiftUI uygulama şablonu. Her
+şablon; sekmeli bir uygulama, örnek veriler ve testler içeren bağımsız bir Swift paketidir.
+Çalıştığını görmek için birini Xcode'da bir uygulama projesine ekleyin ya da `create-ios-app` ile
+kendi adınızla kopyalayıp uygulamanızı onun üzerine kurun.
 
-Şablonlar bitmiş ürün değil, başlangıç noktasıdır: tüm ekranlar bellekteki örnek verilerle
-çalışır; ağ katmanı ya da veritabanı yoktur. Size verdikleri şey çalışan bir sekme yapısı,
-navigasyon ve her uygulama için kendi servislerinize bağlayabileceğiniz, testli bir store'dur.
+Şablonlar bitmiş ürün değil, başlangıç noktasıdır. Bunların yirmisi bellekteki örnek verilerle
+çalışır; size çalışan bir sekme yapısı, navigasyon ve kendi servislerinize bağlayabileceğiniz,
+testli bir store verir. Clean Architecture şablonu bir adım daha ileri gider: Domain, Data ve
+Presentation hedefleri, süreç içi bir örnek sunucuyla çalışan bir HTTP katmanı ve çevrimdışı bir
+önbellek.
 
 ## Öne çıkanlar
 
 - **Yirmi uygulama türü**: yapay zekâ asistanı, rezervasyon, içerik üreticisi videosu, CRM,
   e-ticaret, eğitim, finans, fitness, yemek siparişi, pazar yeri, mesajlaşma, müzik ve podcast,
   haber, notlar, gizlilik kasası, verimlilik, sosyal medya, abonelik, ekip çalışması ve seyahat.
+- **Katmanlı bir referans uygulama**: `CleanArchitectureApp`, katmanları ayrı hedefler olan bir ekip
+  dizinidir; bu yüzden bağımlılık kuralını derleyici zorunlu kılar. Kişileri HTTP üzerinden yükler,
+  çevrimdışıyken kayıtlı kopyaya döner, rolleri ve izinleri use case'lerde denetler; dört hedefte 98
+  test ve erişilebilirlik denetimi içeren UI testleri vardır.
 - **Her uygulamada testli bir store**: durum ve eylemler, Swift Testing paketi olan bir
   `@MainActor` store'da tutulur; böylece ekranlar sade kalır ve davranış arayüz olmadan test
   edilir.
@@ -130,6 +136,7 @@ targets: [
 | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------ |
 | `ai-assistant`           | [AI Assistant](Templates/AIAssistantApp)                     | Workspace, Presets, Memory, Tools, Trust         |
 | `booking`                | [Booking & Reservations](Templates/BookingReservationsApp)   | Home, Calendar, Guests, Requests, Profile        |
+| `clean-architecture`     | [Clean Architecture](Templates/CleanArchitectureApp)         | Directory, Summary, Settings                     |
 | `creator-video`          | [Creator Short Video](Templates/CreatorShortVideoApp)        | Studio, Pipeline, Analytics, Moderation, Profile |
 | `crm`                    | [CRM Admin](Templates/CRMAdminApp)                           | Pipeline, Accounts, Renewals, Tasks, Profile     |
 | `ecommerce`              | [E-commerce](Templates/EcommerceApp)                         | Shop, Browse, Cart, Orders, Profile              |
@@ -152,6 +159,11 @@ targets: [
 `SocialMediaApp` ayrıca bir kimlik sağlayıcının önüne nasıl sınır konacağını da gösterir: giriş
 bir `AuthService` protokolü üzerinden yapılır ve pakete dahil `LocalAuthService` hesapları
 bellekte, bir demo hesabıyla birlikte tutar (`demo@example.com` / `password123`).
+
+`CleanArchitectureApp` gerçek bir arka uca nasıl bağlanılacağını gösterir: süreç içi örnek sunucuyu
+`URLSessionHTTPClient` ve kendi temel URL'nizle değiştirin.
+[Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md)
+rehberi yeni kodun nereye gideceğini anlatır.
 
 ### Kendi adınızla bir proje oluşturun
 
@@ -229,6 +241,10 @@ Her şablonun ilk ekranı; açık ve koyu sürümler [docs/images](docs/images) 
 | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | <img src="docs/images/ProductivityApp-dark.jpg" width="160" alt="Productivity şablonu, koyu görünüm"> | <img src="docs/images/SocialMediaApp-dark.jpg" width="160" alt="Social Media şablonu, koyu görünüm"> | <img src="docs/images/SubscriptionLifestyleApp-dark.jpg" width="160" alt="Subscription Lifestyle şablonu, koyu görünüm"> | <img src="docs/images/TeamCollaborationApp-dark.jpg" width="160" alt="Team Collaboration şablonu, koyu görünüm"> | <img src="docs/images/TravelPlannerApp-dark.jpg" width="160" alt="Travel Planner şablonu, koyu görünüm"> |
 
+| Clean Architecture                                                                                  | Clean Architecture, koyu                                                                                         |
+| --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| <img src="docs/images/CleanArchitectureApp-light.jpg" width="160" alt="Clean Architecture şablonu"> | <img src="docs/images/CleanArchitectureApp-dark.jpg" width="160" alt="Clean Architecture şablonu, koyu görünüm"> |
+
 Ekran görüntüleri bir iPhone 17 Pro simülatöründe
 [scripts/capture-screenshots.sh](scripts/capture-screenshots.sh) ile alınır. Bir şablonu kendiniz
 çalıştırmak için [Examples/QuickStart](Examples/QuickStart) projesini Xcode'da açın ve
@@ -257,6 +273,8 @@ swift package generate-documentation --target TemplateScaffold
   hızlı başlangıcın ayrıntılı hâli ve sonrasında neyin değiştirileceği.
 - [How Renaming Works](Sources/TemplateScaffold/TemplateScaffold.docc/HowRenamingWorks.md):
   hangi adların değiştiği, hangilerinin değişmediği ve hangilerinin reddedildiği.
+- [Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md):
+  bağımlılık kuralı, bir özelliği katman katman eklemek ve kendi sunucunuzu bağlamak.
 - [Examples](Examples): QuickStart uygulaması.
 
 Rehberler İngilizcedir.
@@ -280,7 +298,7 @@ Package.swift                 create-ios-app + TemplateScaffold (macOS)
 Sources/CLI/                  argument parsing (swift-argument-parser)
 Sources/TemplateScaffold/     catalog, name validation, renaming, copying
 Tests/TemplateScaffoldTests/  Swift Testing, including a scaffold of every template
-Templates/<Name>/             20 independent iOS 18 packages with tests and an App/ host
+Templates/<Name>/             21 independent iOS 18 packages with tests and an App/ host
 Examples/QuickStart/          an app project that runs a template as a local package
 scripts/                      test-templates.sh, capture-screenshots.sh
 ```
@@ -296,6 +314,11 @@ Her şablon şunları içerir:
   bilinmeyen tanımlayıcılar için guard koşullarını ve aşılmaması gereken sınırları kapsayan bir
   Swift Testing paketi.
 - `App/`: bir XcodeGen tanımı ve `<Name>Shell.main()` çağıran bir host dosyası.
+
+`CleanArchitectureApp`, tek store yerine dört hedef kullanır: `CleanArchitectureAppDomain`
+(varlıklar, kurallar, use case'ler), `CleanArchitectureAppData` (HTTP, JSON, önbellek, repository),
+`CleanArchitectureAppPresentation` (`@Observable` modeller ve ekranlar) ve kompozisyon kökü olan
+`CleanArchitectureApp`; her birinin kendi test hedefi vardır.
 
 Şablonlar kök pakete ya da birbirine bağımlı değildir. Yeniden adlandırma, şablonun klasör
 adının metin olarak değiştirilmesidir; bu yüzden değişmesi gereken her ad bu adla başlar

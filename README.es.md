@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@930ecae6c52c696ce79171172268185a0dc74d4e status=reviewed -->
+<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-es-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-es-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-es-light.svg" alt="iOSAppTemplates: 21 plantillas de apps SwiftUI para iOS 18, cada una un paquete Swift con tests que puedes copiar con tu propio nombre."></picture></p>
@@ -26,16 +26,16 @@
 
 <!-- brand:end -->
 
-Veinte plantillas de apps SwiftUI para iOS 18, desde comercio electrónico y finanzas hasta
+Veintiuna plantillas de apps SwiftUI para iOS 18, desde comercio electrónico y finanzas hasta
 mensajería y viajes. Cada plantilla es un paquete Swift independiente con una app basada en
-pestañas, datos de ejemplo y un store con tests. Añade una a un proyecto de app en Xcode para
-verla funcionar, o cópiala con tu propio nombre usando `create-ios-app` y construye tu app a partir
-de ella.
+pestañas, datos de ejemplo y tests. Añade una a un proyecto de app en Xcode para verla funcionar, o
+cópiala con tu propio nombre usando `create-ios-app` y construye tu app a partir de ella.
 
-Las plantillas son puntos de partida, no productos terminados: todas las pantallas funcionan con
-datos de ejemplo en memoria y no hay capa de red ni base de datos. Lo que te dan es una estructura
-de pestañas que funciona, la navegación y, en cada app, un store con tests que puedes conectar a tus
-propios servicios.
+Las plantillas son puntos de partida, no productos terminados. Veinte de ellas funcionan con datos
+de ejemplo en memoria y te dan una estructura de pestañas que funciona, la navegación y un store con
+tests que puedes conectar a tus propios servicios. La plantilla Clean Architecture va un paso más
+allá: targets Domain, Data y Presentation, una capa HTTP con un servidor de ejemplo en el mismo
+proceso y una caché sin conexión.
 
 ## Lo más destacado
 
@@ -43,6 +43,11 @@ propios servicios.
   electrónico, educación, finanzas personales, fitness, comida a domicilio, marketplace, mensajería,
   música y pódcasts, noticias, notas, bóveda de privacidad, productividad, redes sociales,
   suscripciones, colaboración en equipo y viajes.
+- **Una app de referencia por capas**: `CleanArchitectureApp` es un directorio de equipo cuyas capas
+  son targets separados, de modo que el compilador hace cumplir la regla de dependencias. Carga
+  personas por HTTP, recurre a una copia guardada cuando no hay conexión y comprueba roles y
+  permisos en los casos de uso, con 98 tests repartidos en los cuatro targets y tests de UI que
+  incluyen una auditoría de accesibilidad.
 - **Un store con tests en cada app**: el estado y las acciones están en un store `@MainActor` con
   una suite de Swift Testing, así que las pantallas se mantienen simples y el comportamiento se
   comprueba sin interfaz.
@@ -131,6 +136,7 @@ Los nombres de las plantillas y de las pestañas aparecen tal como se ven en la 
 | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------ |
 | `ai-assistant`           | [AI Assistant](Templates/AIAssistantApp)                     | Workspace, Presets, Memory, Tools, Trust         |
 | `booking`                | [Booking & Reservations](Templates/BookingReservationsApp)   | Home, Calendar, Guests, Requests, Profile        |
+| `clean-architecture`     | [Clean Architecture](Templates/CleanArchitectureApp)         | Directory, Summary, Settings                     |
 | `creator-video`          | [Creator Short Video](Templates/CreatorShortVideoApp)        | Studio, Pipeline, Analytics, Moderation, Profile |
 | `crm`                    | [CRM Admin](Templates/CRMAdminApp)                           | Pipeline, Accounts, Renewals, Tasks, Profile     |
 | `ecommerce`              | [E-commerce](Templates/EcommerceApp)                         | Shop, Browse, Cart, Orders, Profile              |
@@ -153,6 +159,11 @@ Los nombres de las plantillas y de las pestañas aparecen tal como se ven en la 
 `SocialMediaApp` también muestra cómo poner un límite delante de un proveedor de identidad: el
 inicio de sesión pasa por un protocolo `AuthService`, y el `LocalAuthService` incluido guarda las
 cuentas en memoria con una cuenta de demostración (`demo@example.com` / `password123`).
+
+`CleanArchitectureApp` muestra cómo conectar un backend real: sustituye su servidor de ejemplo en el
+mismo proceso por `URLSessionHTTPClient` y tu URL base. La guía
+[Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md)
+explica dónde va el código nuevo.
 
 ### Crea un proyecto con tu propio nombre
 
@@ -230,6 +241,10 @@ La primera pantalla de cada plantilla; las versiones clara y oscura están en
 | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | <img src="docs/images/ProductivityApp-dark.jpg" width="160" alt="Plantilla Productivity, modo oscuro"> | <img src="docs/images/SocialMediaApp-dark.jpg" width="160" alt="Plantilla Social Media, modo oscuro"> | <img src="docs/images/SubscriptionLifestyleApp-dark.jpg" width="160" alt="Plantilla Subscription Lifestyle, modo oscuro"> | <img src="docs/images/TeamCollaborationApp-dark.jpg" width="160" alt="Plantilla Team Collaboration, modo oscuro"> | <img src="docs/images/TravelPlannerApp-dark.jpg" width="160" alt="Plantilla Travel Planner, modo oscuro"> |
 
+| Clean Architecture                                                                                    | Clean Architecture, oscuro                                                                                        |
+| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| <img src="docs/images/CleanArchitectureApp-light.jpg" width="160" alt="Plantilla Clean Architecture"> | <img src="docs/images/CleanArchitectureApp-dark.jpg" width="160" alt="Plantilla Clean Architecture, modo oscuro"> |
+
 Las capturas se toman en un simulador de iPhone 17 Pro con
 [scripts/capture-screenshots.sh](scripts/capture-screenshots.sh). Para ejecutar una plantilla tú
 mismo, abre [Examples/QuickStart](Examples/QuickStart) en Xcode y pulsa **Run**.
@@ -257,6 +272,9 @@ swift package generate-documentation --target TemplateScaffold
   el inicio rápido en detalle y qué cambiar después.
 - [How Renaming Works](Sources/TemplateScaffold/TemplateScaffold.docc/HowRenamingWorks.md):
   qué nombres cambian, cuáles no y cuáles se rechazan.
+- [Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md):
+  la regla de dependencias, cómo añadir una funcionalidad capa por capa y cómo conectar tu propio
+  servidor.
 - [Examples](Examples): la app QuickStart.
 
 Las guías están en inglés.
@@ -280,7 +298,7 @@ Package.swift                 create-ios-app + TemplateScaffold (macOS)
 Sources/CLI/                  argument parsing (swift-argument-parser)
 Sources/TemplateScaffold/     catalog, name validation, renaming, copying
 Tests/TemplateScaffoldTests/  Swift Testing, including a scaffold of every template
-Templates/<Name>/             20 independent iOS 18 packages with tests and an App/ host
+Templates/<Name>/             21 independent iOS 18 packages with tests and an App/ host
 Examples/QuickStart/          an app project that runs a template as a local package
 scripts/                      test-templates.sh, capture-screenshots.sh
 ```
@@ -297,6 +315,11 @@ Cada plantilla contiene:
   transiciones de estado, cláusulas guard para entradas no válidas e identificadores desconocidos,
   y límites que no deben superarse.
 - `App/`: una especificación de XcodeGen y un archivo anfitrión que llama a `<Name>Shell.main()`.
+
+`CleanArchitectureApp` sustituye el store único por cuatro targets: `CleanArchitectureAppDomain`
+(entidades, reglas, casos de uso), `CleanArchitectureAppData` (HTTP, JSON, caché, repositorio),
+`CleanArchitectureAppPresentation` (modelos `@Observable` y pantallas) y `CleanArchitectureApp`, la
+raíz de composición, cada uno con su propio target de tests.
 
 Las plantillas no dependen del paquete raíz ni entre sí. El renombrado es una sustitución de texto
 del nombre del directorio de la plantilla; por eso todos los nombres que deben cambiar empiezan por

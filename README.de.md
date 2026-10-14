@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@930ecae6c52c696ce79171172268185a0dc74d4e status=reviewed -->
+<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-de-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-de-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-de-light.svg" alt="iOSAppTemplates: 21 SwiftUI-App-Vorlagen für iOS 18, jede ein getestetes Swift-Paket, das Sie unter eigenem Namen kopieren können."></picture></p>
@@ -26,15 +26,16 @@
 
 <!-- brand:end -->
 
-Zwanzig SwiftUI-App-Vorlagen für iOS 18, von E-Commerce und Finanzen bis zu Messaging und Reisen.
-Jede Vorlage ist ein eigenständiges Swift-Paket mit einer tabbasierten App, Beispieldaten und einem
-getesteten Store. Füge eine Vorlage in Xcode zu einem App-Projekt hinzu, um sie laufen zu sehen,
-oder kopiere sie mit `create-ios-app` unter deinem eigenen Namen und baue deine App darauf auf.
+Einundzwanzig SwiftUI-App-Vorlagen für iOS 18, von E-Commerce und Finanzen bis zu Messaging und
+Reisen. Jede Vorlage ist ein eigenständiges Swift-Paket mit einer tabbasierten App, Beispieldaten
+und Tests. Füge eine Vorlage in Xcode zu einem App-Projekt hinzu, um sie laufen zu sehen, oder
+kopiere sie mit `create-ios-app` unter deinem eigenen Namen und baue deine App darauf auf.
 
-Die Vorlagen sind Ausgangspunkte, keine fertigen Produkte: Alle Screens arbeiten mit Beispieldaten
-im Speicher, und es gibt weder eine Netzwerkschicht noch eine Datenbank. Du bekommst eine
-funktionierende Tab-Struktur, Navigation und pro App einen getesteten Store, den du an deine
-eigenen Dienste anbinden kannst.
+Die Vorlagen sind Ausgangspunkte, keine fertigen Produkte. Zwanzig davon arbeiten mit Beispieldaten
+im Speicher und geben dir eine funktionierende Tab-Struktur, Navigation und einen getesteten Store,
+den du an deine eigenen Dienste anbinden kannst. Die Clean-Architecture-Vorlage geht einen Schritt
+weiter: Targets für Domain, Data und Presentation, eine HTTP-Schicht mit einem Beispielserver im
+selben Prozess und ein Offline-Cache.
 
 ## Highlights
 
@@ -42,6 +43,11 @@ eigenen Dienste anbinden kannst.
   persönliche Finanzen, Fitness, Essenslieferung, Marktplatz, Messaging, Musik und Podcasts,
   Nachrichten, Notizen, Privacy-Tresor, Produktivität, Social Media, Abonnements,
   Teamzusammenarbeit und Reisen.
+- **Eine geschichtete Referenz-App**: `CleanArchitectureApp` ist ein Team-Verzeichnis, dessen
+  Schichten getrennte Targets sind, sodass der Compiler die Abhängigkeitsregel durchsetzt. Die App
+  lädt Personen per HTTP, greift offline auf eine gespeicherte Kopie zurück und prüft Rollen und
+  Berechtigungen in Use Cases; dazu kommen 98 Tests in den vier Targets sowie UI-Tests mit einem
+  Accessibility-Audit.
 - **Ein getesteter Store pro App**: Zustand und Aktionen liegen in einem `@MainActor`-Store mit
   einer Swift-Testing-Suite. Die Screens bleiben schlank, und das Verhalten wird ohne UI geprüft.
 - **Keine Abhängigkeiten von Drittanbietern**: Die Vorlagen nutzen nur SwiftUI und Foundation und
@@ -130,6 +136,7 @@ Die Namen der Vorlagen und Tabs stehen so da, wie sie in der App erscheinen (auf
 | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------ |
 | `ai-assistant`           | [AI Assistant](Templates/AIAssistantApp)                     | Workspace, Presets, Memory, Tools, Trust         |
 | `booking`                | [Booking & Reservations](Templates/BookingReservationsApp)   | Home, Calendar, Guests, Requests, Profile        |
+| `clean-architecture`     | [Clean Architecture](Templates/CleanArchitectureApp)         | Directory, Summary, Settings                     |
 | `creator-video`          | [Creator Short Video](Templates/CreatorShortVideoApp)        | Studio, Pipeline, Analytics, Moderation, Profile |
 | `crm`                    | [CRM Admin](Templates/CRMAdminApp)                           | Pipeline, Accounts, Renewals, Tasks, Profile     |
 | `ecommerce`              | [E-commerce](Templates/EcommerceApp)                         | Shop, Browse, Cart, Orders, Profile              |
@@ -152,6 +159,11 @@ Die Namen der Vorlagen und Tabs stehen so da, wie sie in der App erscheinen (auf
 `SocialMediaApp` zeigt außerdem, wie man eine Grenze vor einen Identitätsanbieter setzt: Die
 Anmeldung läuft über ein `AuthService`-Protokoll, und der mitgelieferte `LocalAuthService` hält die
 Konten im Speicher, inklusive eines Demo-Kontos (`demo@example.com` / `password123`).
+
+`CleanArchitectureApp` zeigt, wie du ein echtes Backend anbindest: Ersetze den Beispielserver im
+selben Prozess durch `URLSessionHTTPClient` und deine Basis-URL. Der Leitfaden
+[Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md)
+erklärt, wo neuer Code hingehört.
 
 ### Ein Projekt unter eigenem Namen erstellen
 
@@ -228,6 +240,10 @@ Der erste Screen jeder Vorlage; helle und dunkle Versionen liegen in [docs/image
 | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | <img src="docs/images/ProductivityApp-dark.jpg" width="160" alt="Vorlage Productivity, dunkles Erscheinungsbild"> | <img src="docs/images/SocialMediaApp-dark.jpg" width="160" alt="Vorlage Social Media, dunkles Erscheinungsbild"> | <img src="docs/images/SubscriptionLifestyleApp-dark.jpg" width="160" alt="Vorlage Subscription Lifestyle, dunkles Erscheinungsbild"> | <img src="docs/images/TeamCollaborationApp-dark.jpg" width="160" alt="Vorlage Team Collaboration, dunkles Erscheinungsbild"> | <img src="docs/images/TravelPlannerApp-dark.jpg" width="160" alt="Vorlage Travel Planner, dunkles Erscheinungsbild"> |
 
+| Clean Architecture                                                                                  | Clean Architecture, dunkel                                                                                                   |
+| --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| <img src="docs/images/CleanArchitectureApp-light.jpg" width="160" alt="Vorlage Clean Architecture"> | <img src="docs/images/CleanArchitectureApp-dark.jpg" width="160" alt="Vorlage Clean Architecture, dunkles Erscheinungsbild"> |
+
 Die Screenshots werden mit [scripts/capture-screenshots.sh](scripts/capture-screenshots.sh) auf
 einem iPhone-17-Pro-Simulator aufgenommen. Um eine Vorlage selbst zu starten, öffne
 [Examples/QuickStart](Examples/QuickStart) in Xcode und drücke **Run**.
@@ -255,6 +271,9 @@ swift package generate-documentation --target TemplateScaffold
   der Schnellstart im Detail und was du danach änderst.
 - [How Renaming Works](Sources/TemplateScaffold/TemplateScaffold.docc/HowRenamingWorks.md):
   welche Namen sich ändern, welche nicht und welche abgelehnt werden.
+- [Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md):
+  die Abhängigkeitsregel, eine Funktion Schicht für Schicht ergänzen und den eigenen Server
+  anbinden.
 - [Examples](Examples): die QuickStart-App.
 
 Die Anleitungen sind auf Englisch.
@@ -278,7 +297,7 @@ Package.swift                 create-ios-app + TemplateScaffold (macOS)
 Sources/CLI/                  argument parsing (swift-argument-parser)
 Sources/TemplateScaffold/     catalog, name validation, renaming, copying
 Tests/TemplateScaffoldTests/  Swift Testing, including a scaffold of every template
-Templates/<Name>/             20 independent iOS 18 packages with tests and an App/ host
+Templates/<Name>/             21 independent iOS 18 packages with tests and an App/ host
 Examples/QuickStart/          an app project that runs a template as a local package
 scripts/                      test-templates.sh, capture-screenshots.sh
 ```
@@ -294,6 +313,11 @@ Jede Vorlage enthält:
   Statusübergängen, Guard-Bedingungen für ungültige Eingaben und unbekannte Bezeichner sowie
   Grenzen, die nicht überschritten werden dürfen.
 - `App/`: eine XcodeGen-Spezifikation und eine Host-Datei, die `<Name>Shell.main()` aufruft.
+
+`CleanArchitectureApp` ersetzt den einzelnen Store durch vier Targets: `CleanArchitectureAppDomain`
+(Entitäten, Regeln, Use Cases), `CleanArchitectureAppData` (HTTP, JSON, Cache, Repository),
+`CleanArchitectureAppPresentation` (`@Observable`-Modelle und Screens) und `CleanArchitectureApp`,
+die Composition Root; jedes hat ein eigenes Test-Target.
 
 Die Vorlagen hängen weder vom Root-Paket noch voneinander ab. Das Umbenennen ist eine
 Textersetzung des Verzeichnisnamens der Vorlage; deshalb beginnt jeder Name, der sich ändern muss,

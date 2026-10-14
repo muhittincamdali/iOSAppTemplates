@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@930ecae6c52c696ce79171172268185a0dc74d4e status=reviewed -->
+<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-fr-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-fr-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-fr-light.svg" alt="iOSAppTemplates: 21 modèles d'apps SwiftUI pour iOS 18, chacun un package Swift testé que vous pouvez copier sous votre propre nom."></picture></p>
@@ -26,15 +26,16 @@
 
 <!-- brand:end -->
 
-Vingt modèles d'apps SwiftUI pour iOS 18, du e-commerce et de la finance à la messagerie et au
-voyage. Chaque modèle est un package Swift indépendant avec une app à onglets, des données
-d'exemple et un store testé. Ajoutez-en un à un projet d'app dans Xcode pour le voir tourner, ou
-copiez-le sous votre propre nom avec `create-ios-app` et construisez votre app à partir de là.
+Vingt et un modèles d'apps SwiftUI pour iOS 18, du e-commerce et de la finance à la messagerie et au
+voyage. Chaque modèle est un package Swift indépendant avec une app à onglets, des données d'exemple
+et des tests. Ajoutez-en un à un projet d'app dans Xcode pour le voir tourner, ou copiez-le sous
+votre propre nom avec `create-ios-app` et construisez votre app à partir de là.
 
-Ces modèles sont des points de départ, pas des produits finis : tous les écrans fonctionnent avec
-des données d'exemple en mémoire, sans couche réseau ni base de données. Ils vous donnent une
-structure d'onglets qui fonctionne, la navigation et, pour chaque app, un store testé que vous
-pouvez brancher sur vos propres services.
+Ces modèles sont des points de départ, pas des produits finis. Vingt d'entre eux fonctionnent avec
+des données d'exemple en mémoire et vous donnent une structure d'onglets qui fonctionne, la
+navigation et un store testé que vous pouvez brancher sur vos propres services. Le modèle Clean
+Architecture va un cran plus loin : des targets Domain, Data et Presentation, une couche HTTP avec
+un serveur d'exemple dans le même processus, et un cache hors ligne.
 
 ## Points forts
 
@@ -42,6 +43,11 @@ pouvez brancher sur vos propres services.
   e-commerce, éducation, finances personnelles, fitness, livraison de repas, marketplace,
   messagerie, musique et podcasts, actualités, notes, coffre-fort de confidentialité, productivité,
   réseau social, abonnements, collaboration d'équipe et voyage.
+- **Une app de référence en couches** : `CleanArchitectureApp` est un annuaire d'équipe dont les
+  couches sont des targets distincts, si bien que le compilateur impose la règle de dépendance. Elle
+  charge les personnes via HTTP, se rabat sur une copie enregistrée hors ligne et vérifie les rôles
+  et les permissions dans des cas d'usage, avec 98 tests répartis sur les quatre targets et des
+  tests d'UI qui incluent un audit d'accessibilité.
 - **Un store testé par app** : l'état et les actions sont regroupés dans un store `@MainActor`
   doté d'une suite Swift Testing ; les écrans restent simples et le comportement est vérifié sans
   interface.
@@ -131,6 +137,7 @@ Les noms des modèles et des onglets sont donnés tels qu'ils apparaissent dans 
 | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------ |
 | `ai-assistant`           | [AI Assistant](Templates/AIAssistantApp)                     | Workspace, Presets, Memory, Tools, Trust         |
 | `booking`                | [Booking & Reservations](Templates/BookingReservationsApp)   | Home, Calendar, Guests, Requests, Profile        |
+| `clean-architecture`     | [Clean Architecture](Templates/CleanArchitectureApp)         | Directory, Summary, Settings                     |
 | `creator-video`          | [Creator Short Video](Templates/CreatorShortVideoApp)        | Studio, Pipeline, Analytics, Moderation, Profile |
 | `crm`                    | [CRM Admin](Templates/CRMAdminApp)                           | Pipeline, Accounts, Renewals, Tasks, Profile     |
 | `ecommerce`              | [E-commerce](Templates/EcommerceApp)                         | Shop, Browse, Cart, Orders, Profile              |
@@ -153,6 +160,11 @@ Les noms des modèles et des onglets sont donnés tels qu'ils apparaissent dans 
 `SocialMediaApp` montre aussi comment placer une frontière devant un fournisseur d'identité : la
 connexion passe par un protocole `AuthService`, et le `LocalAuthService` fourni garde les comptes
 en mémoire avec un compte de démonstration (`demo@example.com` / `password123`).
+
+`CleanArchitectureApp` montre comment brancher un vrai backend : remplacez son serveur d'exemple
+dans le même processus par `URLSessionHTTPClient` et votre URL de base. Le guide
+[Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md)
+explique où placer le nouveau code.
 
 ### Créer un projet sous votre propre nom
 
@@ -230,6 +242,10 @@ Le premier écran de chaque modèle ; les versions claire et sombre sont dans
 | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | <img src="docs/images/ProductivityApp-dark.jpg" width="160" alt="Modèle Productivity, apparence sombre"> | <img src="docs/images/SocialMediaApp-dark.jpg" width="160" alt="Modèle Social Media, apparence sombre"> | <img src="docs/images/SubscriptionLifestyleApp-dark.jpg" width="160" alt="Modèle Subscription Lifestyle, apparence sombre"> | <img src="docs/images/TeamCollaborationApp-dark.jpg" width="160" alt="Modèle Team Collaboration, apparence sombre"> | <img src="docs/images/TravelPlannerApp-dark.jpg" width="160" alt="Modèle Travel Planner, apparence sombre"> |
 
+| Clean Architecture                                                                                 | Clean Architecture, sombre                                                                                          |
+| -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| <img src="docs/images/CleanArchitectureApp-light.jpg" width="160" alt="Modèle Clean Architecture"> | <img src="docs/images/CleanArchitectureApp-dark.jpg" width="160" alt="Modèle Clean Architecture, apparence sombre"> |
+
 Les captures sont prises sur un simulateur d'iPhone 17 Pro par
 [scripts/capture-screenshots.sh](scripts/capture-screenshots.sh). Pour lancer un modèle vous-même,
 ouvrez [Examples/QuickStart](Examples/QuickStart) dans Xcode et appuyez sur **Run**.
@@ -257,6 +273,9 @@ swift package generate-documentation --target TemplateScaffold
   le démarrage rapide en détail, et ce qu'il faut modifier ensuite.
 - [How Renaming Works](Sources/TemplateScaffold/TemplateScaffold.docc/HowRenamingWorks.md) :
   quels noms changent, lesquels ne changent pas et lesquels sont refusés.
+- [Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md) :
+  la règle de dépendance, l'ajout d'une fonctionnalité couche par couche et le branchement de votre
+  propre serveur.
 - [Examples](Examples) : l'app QuickStart.
 
 Les guides sont en anglais.
@@ -280,7 +299,7 @@ Package.swift                 create-ios-app + TemplateScaffold (macOS)
 Sources/CLI/                  argument parsing (swift-argument-parser)
 Sources/TemplateScaffold/     catalog, name validation, renaming, copying
 Tests/TemplateScaffoldTests/  Swift Testing, including a scaffold of every template
-Templates/<Name>/             20 independent iOS 18 packages with tests and an App/ host
+Templates/<Name>/             21 independent iOS 18 packages with tests and an App/ host
 Examples/QuickStart/          an app project that runs a template as a local package
 scripts/                      test-templates.sh, capture-screenshots.sh
 ```
@@ -297,6 +316,11 @@ Chaque modèle contient :
   les transitions d'état, les clauses guard pour les entrées invalides et les identifiants
   inconnus, ainsi que les limites à ne pas dépasser.
 - `App/` : une spécification XcodeGen et un fichier hôte qui appelle `<Name>Shell.main()`.
+
+`CleanArchitectureApp` remplace le store unique par quatre targets : `CleanArchitectureAppDomain`
+(entités, règles, cas d'usage), `CleanArchitectureAppData` (HTTP, JSON, cache, repository),
+`CleanArchitectureAppPresentation` (modèles `@Observable` et écrans) et `CleanArchitectureApp`, la
+racine de composition, chacun avec son propre target de tests.
 
 Les modèles ne dépendent ni du package racine ni les uns des autres. Le renommage est une
 substitution de texte du nom de dossier du modèle ; c'est pourquoi chaque nom qui doit changer

@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@930ecae6c52c696ce79171172268185a0dc74d4e status=reviewed -->
+<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-zh-CN-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-zh-CN-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-zh-CN-light.svg" alt="iOSAppTemplates: 面向 iOS 18 的 21 个 SwiftUI 应用模板，每个都是带测试的 Swift 包，可用你自己的名称复制。"></picture></p>
@@ -26,13 +26,14 @@
 
 <!-- brand:end -->
 
-二十个面向 iOS 18 的 SwiftUI 应用模板，涵盖电商、理财、即时通讯、旅行等类型。每个模板都是一个独立的 Swift 包，包含基于标签页的应用、示例数据和一个带测试的 store。你可以在 Xcode 中把模板加入应用项目直接运行，也可以用 `create-ios-app` 以自己的名称复制一份，在此基础上开发你的应用。
+二十一个面向 iOS 18 的 SwiftUI 应用模板，涵盖电商、理财、即时通讯、旅行等类型。每个模板都是一个独立的 Swift 包，包含基于标签页的应用、示例数据和测试。你可以在 Xcode 中把模板加入应用项目直接运行，也可以用 `create-ios-app` 以自己的名称复制一份，在此基础上开发你的应用。
 
-这些模板是起点，而不是成品：所有界面都使用内存中的示例数据，没有网络层，也没有数据库。它们提供的是可运行的标签页结构、导航，以及每个应用一个带测试的 store，你可以把它接入自己的服务。
+这些模板是起点，而不是成品。其中二十个使用内存中的示例数据运行，提供可运行的标签页结构、导航和一个带测试的 store，你可以把它接入自己的服务。Clean Architecture 模板更进一步：包含 Domain、Data 和 Presentation 三个 target、带进程内示例服务器的 HTTP 层，以及离线缓存。
 
 ## 亮点
 
 - **二十种应用类型**：AI 助手、预订、创作者短视频、CRM、电商、教育、理财、健身、外卖、交易市场、即时通讯、音乐与播客、新闻、笔记、隐私保险箱、效率工具、社交媒体、订阅、团队协作和旅行。
+- **分层的参考应用**：`CleanArchitectureApp` 是一个团队通讯录，各层是独立的 target，因此依赖规则由编译器强制执行。它通过 HTTP 加载成员，离线时回退到已保存的副本，并在 use case 中检查角色和权限；四个 target 共有 98 个测试，另有包含无障碍审计的 UI 测试。
 - **每个应用一个带测试的 store**：状态和操作集中在一个 `@MainActor` store 中，并配有 Swift Testing 测试套件，因此界面保持精简，行为无需 UI 即可验证。
 - **无第三方依赖**：模板只使用 SwiftUI 和 Foundation，无需账号、API 密钥或网络连接即可运行。
 - **使用你自己的名称**：`create-ios-app` 会重命名包、模块、类型、宿主项目和 bundle identifier，并拒绝会与模板中已有名称冲突的名字。
@@ -107,6 +108,7 @@ targets: [
 | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------ |
 | `ai-assistant`           | [AI Assistant](Templates/AIAssistantApp)                     | Workspace, Presets, Memory, Tools, Trust         |
 | `booking`                | [Booking & Reservations](Templates/BookingReservationsApp)   | Home, Calendar, Guests, Requests, Profile        |
+| `clean-architecture`     | [Clean Architecture](Templates/CleanArchitectureApp)         | Directory, Summary, Settings                     |
 | `creator-video`          | [Creator Short Video](Templates/CreatorShortVideoApp)        | Studio, Pipeline, Analytics, Moderation, Profile |
 | `crm`                    | [CRM Admin](Templates/CRMAdminApp)                           | Pipeline, Accounts, Renewals, Tasks, Profile     |
 | `ecommerce`              | [E-commerce](Templates/EcommerceApp)                         | Shop, Browse, Cart, Orders, Profile              |
@@ -127,6 +129,8 @@ targets: [
 | `travel`                 | [Travel Planner](Templates/TravelPlannerApp)                 | Trips, Timeline, Bookings, Essentials, Profile   |
 
 `SocialMediaApp` 还演示了如何在身份提供方之前设置一层边界：登录通过 `AuthService` 协议完成，内置的 `LocalAuthService` 把账号保存在内存中，并附带一个演示账号（`demo@example.com` / `password123`）。
+
+`CleanArchitectureApp` 演示了如何接入真实后端：用 `URLSessionHTTPClient` 和你的基础 URL 替换其进程内示例服务器。[Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md) 指南说明了新代码应放在哪里。
 
 ### 以自己的名称创建项目
 
@@ -194,6 +198,10 @@ func makeShop(templates: URL, output: URL) throws -> ScaffoldResult {
 | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | <img src="docs/images/ProductivityApp-dark.jpg" width="160" alt="Productivity 模板，深色外观"> | <img src="docs/images/SocialMediaApp-dark.jpg" width="160" alt="Social Media 模板，深色外观"> | <img src="docs/images/SubscriptionLifestyleApp-dark.jpg" width="160" alt="Subscription Lifestyle 模板，深色外观"> | <img src="docs/images/TeamCollaborationApp-dark.jpg" width="160" alt="Team Collaboration 模板，深色外观"> | <img src="docs/images/TravelPlannerApp-dark.jpg" width="160" alt="Travel Planner 模板，深色外观"> |
 
+| Clean Architecture                                                                             | Clean Architecture（深色）                                                                             |
+| ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| <img src="docs/images/CleanArchitectureApp-light.jpg" width="160" alt="Clean Architecture 模板"> | <img src="docs/images/CleanArchitectureApp-dark.jpg" width="160" alt="Clean Architecture 模板，深色外观"> |
+
 截图由 [scripts/capture-screenshots.sh](scripts/capture-screenshots.sh) 在 iPhone 17 Pro 模拟器上截取。如果想自己运行模板，在 Xcode 中打开 [Examples/QuickStart](Examples/QuickStart) 并点击 **Run**。
 
 ## 文档
@@ -214,6 +222,7 @@ swift package generate-documentation --target TemplateScaffold
 - [Getting Started](Sources/TemplateScaffold/TemplateScaffold.docc/GettingStarted.md)：用 `create-ios-app` 创建项目、运行测试并在 Xcode 中打开。
 - [Adding a Template to an App](Sources/TemplateScaffold/TemplateScaffold.docc/AddingATemplateToAnApp.md)：快速开始的详细说明，以及之后要修改的地方。
 - [How Renaming Works](Sources/TemplateScaffold/TemplateScaffold.docc/HowRenamingWorks.md)：哪些名称会改变、哪些不会，以及哪些名称会被拒绝。
+- [Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md)：依赖规则、按层添加功能，以及连接你自己的服务器。
 - [Examples](Examples)：QuickStart 应用。
 
 指南为英文。
@@ -235,7 +244,7 @@ Package.swift                 create-ios-app + TemplateScaffold (macOS)
 Sources/CLI/                  argument parsing (swift-argument-parser)
 Sources/TemplateScaffold/     catalog, name validation, renaming, copying
 Tests/TemplateScaffoldTests/  Swift Testing, including a scaffold of every template
-Templates/<Name>/             20 independent iOS 18 packages with tests and an App/ host
+Templates/<Name>/             21 independent iOS 18 packages with tests and an App/ host
 Examples/QuickStart/          an app project that runs a template as a local package
 scripts/                      test-templates.sh, capture-screenshots.sh
 ```
@@ -245,6 +254,8 @@ scripts/                      test-templates.sh, capture-screenshots.sh
 - `Sources/<Name>/`：公开的 `<Name>Shell` 应用场景、各个界面，以及一个 `@MainActor` `ObservableObject` store，它持有示例数据和界面触发的所有操作（购物车总额、订单和预订的状态流转、审批队列等）。大多数模板把这些放在 `<Name>.swift` 中；`EcommerceApp`、`FitnessApp` 和 `SocialMediaApp` 则把 store、模型和界面拆分到不同文件。
 - `Tests/<Name>Tests/`：针对该 store 的 Swift Testing 测试套件，覆盖派生值、状态流转、对无效输入和未知标识符的 guard 判断，以及不得超出的上限。
 - `App/`：一个 XcodeGen 配置和一个调用 `<Name>Shell.main()` 的宿主文件。
+
+`CleanArchitectureApp` 用四个 target 取代单一 store：`CleanArchitectureAppDomain`（实体、规则、use case）、`CleanArchitectureAppData`（HTTP、JSON、缓存、repository）、`CleanArchitectureAppPresentation`（`@Observable` 模型和界面）以及作为组合根的 `CleanArchitectureApp`，每个都有自己的测试 target。
 
 模板既不依赖根包，也不相互依赖。重命名就是对模板目录名做文本替换，因此所有需要改变的名称都以它开头（`EcommerceApp`、`EcommerceAppShell`、`EcommerceAppTests`）。
 

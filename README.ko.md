@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@930ecae6c52c696ce79171172268185a0dc74d4e status=reviewed -->
+<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ko-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ko-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ko-light.svg" alt="iOSAppTemplates: iOS 18용 SwiftUI 앱 템플릿 21종. 각각 테스트가 포함된 Swift 패키지이며 원하는 이름으로 복사할 수 있습니다."></picture></p>
@@ -26,19 +26,21 @@
 
 <!-- brand:end -->
 
-전자상거래와 금융부터 메신저와 여행까지, iOS 18용 SwiftUI 앱 템플릿 20종입니다. 각 템플릿은 탭 기반
-앱, 샘플 데이터, 테스트가 있는 store를 담은 독립적인 Swift 패키지입니다. Xcode에서 앱 프로젝트에 추가해
-바로 실행해 보거나, `create-ios-app`으로 원하는 이름의 사본을 만들어 앱 개발의 출발점으로 쓸 수 있습니다.
+전자상거래와 금융부터 메신저와 여행까지, iOS 18용 SwiftUI 앱 템플릿 21종입니다. 각 템플릿은 탭 기반 앱, 샘플 데이터, 테스트를 담은 독립적인 Swift
+패키지입니다. Xcode에서 앱 프로젝트에 추가해 바로 실행해 보거나, `create-ios-app`으로 원하는 이름의 사본을 만들어 앱 개발의 출발점으로 쓸 수 있습니다.
 
-템플릿은 완성된 제품이 아니라 출발점입니다. 모든 화면은 메모리에 있는 샘플 데이터로 동작하며 네트워크
-계층이나 데이터베이스는 없습니다. 대신 동작하는 탭 구조와 내비게이션, 그리고 직접 만든 서비스에 연결할 수
-있는, 테스트가 있는 store를 앱마다 제공합니다.
+템플릿은 완성된 제품이 아니라 출발점입니다. 그중 20종은 메모리에 있는 샘플 데이터로 동작하며, 동작하는 탭 구조와 내비게이션, 직접 만든 서비스에 연결할 수 있는 테스트가 있는
+store를 제공합니다. Clean Architecture 템플릿은 한 걸음 더 나아가 Domain, Data, Presentation 타깃과 프로세스 내 샘플 서버를 쓰는
+HTTP 계층, 오프라인 캐시를 갖추고 있습니다.
 
 ## 주요 기능
 
 - **20가지 앱 유형**: AI 어시스턴트, 예약, 크리에이터 숏폼 영상, CRM, 전자상거래, 교육, 개인 금융,
   피트니스, 음식 배달, 마켓플레이스, 메신저, 음악과 팟캐스트, 뉴스, 노트, 개인정보 보관함, 생산성,
   소셜 미디어, 구독, 팀 협업, 여행.
+- **계층형 참조 앱**: `CleanArchitectureApp`은 팀 디렉터리 앱으로, 계층이 각각 별도 타깃이라 의존성 규칙을 컴파일러가 강제합니다. HTTP로 구성원을
+  불러오고, 오프라인일 때는 저장된 사본으로 대체하며, use case에서 역할과 권한을 확인합니다. 네 개 타깃에 걸쳐 테스트 98개가 있고, 접근성 감사를 포함한 UI
+  테스트도 있습니다.
 - **앱마다 테스트가 있는 store**: 상태와 액션은 Swift Testing 테스트 스위트를 갖춘 `@MainActor` store에
   모여 있어 화면은 단순하게 유지되고, 동작은 UI 없이 검증됩니다.
 - **서드파티 의존성 없음**: 템플릿은 SwiftUI와 Foundation만 사용하며 계정, API 키, 네트워크 연결 없이
@@ -125,6 +127,7 @@ targets: [
 | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------ |
 | `ai-assistant`           | [AI Assistant](Templates/AIAssistantApp)                     | Workspace, Presets, Memory, Tools, Trust         |
 | `booking`                | [Booking & Reservations](Templates/BookingReservationsApp)   | Home, Calendar, Guests, Requests, Profile        |
+| `clean-architecture`     | [Clean Architecture](Templates/CleanArchitectureApp)         | Directory, Summary, Settings                     |
 | `creator-video`          | [Creator Short Video](Templates/CreatorShortVideoApp)        | Studio, Pipeline, Analytics, Moderation, Profile |
 | `crm`                    | [CRM Admin](Templates/CRMAdminApp)                           | Pipeline, Accounts, Renewals, Tasks, Profile     |
 | `ecommerce`              | [E-commerce](Templates/EcommerceApp)                         | Shop, Browse, Cart, Orders, Profile              |
@@ -147,6 +150,11 @@ targets: [
 `SocialMediaApp`은 ID 공급자 앞에 경계를 두는 방법도 보여 줍니다. 로그인은 `AuthService` 프로토콜을 거치며,
 함께 제공되는 `LocalAuthService`는 데모 계정(`demo@example.com` / `password123`)과 함께 계정을 메모리에
 보관합니다.
+
+`CleanArchitectureApp`은 실제 백엔드를 연결하는 방법을 보여 줍니다. 프로세스 내 샘플 서버를 `URLSessionHTTPClient`와 직접 사용하는 기본
+URL로 교체하세요. 새 코드를 어디에 넣어야 하는지는
+[Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md)
+가이드에서 설명합니다.
 
 ### 원하는 이름으로 프로젝트 만들기
 
@@ -221,6 +229,10 @@ func makeShop(templates: URL, output: URL) throws -> ScaffoldResult {
 | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | <img src="docs/images/ProductivityApp-dark.jpg" width="160" alt="Productivity 템플릿, 다크 모드"> | <img src="docs/images/SocialMediaApp-dark.jpg" width="160" alt="Social Media 템플릿, 다크 모드"> | <img src="docs/images/SubscriptionLifestyleApp-dark.jpg" width="160" alt="Subscription Lifestyle 템플릿, 다크 모드"> | <img src="docs/images/TeamCollaborationApp-dark.jpg" width="160" alt="Team Collaboration 템플릿, 다크 모드"> | <img src="docs/images/TravelPlannerApp-dark.jpg" width="160" alt="Travel Planner 템플릿, 다크 모드"> |
 
+| Clean Architecture                                                                              | Clean Architecture, 다크                                                                                |
+| ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| <img src="docs/images/CleanArchitectureApp-light.jpg" width="160" alt="Clean Architecture 템플릿"> | <img src="docs/images/CleanArchitectureApp-dark.jpg" width="160" alt="Clean Architecture 템플릿, 다크 모드"> |
+
 스크린샷은 [scripts/capture-screenshots.sh](scripts/capture-screenshots.sh)로 iPhone 17 Pro
 시뮬레이터에서 촬영했습니다. 템플릿을 직접 실행하려면 [Examples/QuickStart](Examples/QuickStart)를
 Xcode에서 열고 **Run**을 누르세요.
@@ -248,6 +260,8 @@ swift package generate-documentation --target TemplateScaffold
   빠른 시작의 자세한 설명과 그다음에 바꿀 부분.
 - [How Renaming Works](Sources/TemplateScaffold/TemplateScaffold.docc/HowRenamingWorks.md):
   바뀌는 이름, 바뀌지 않는 이름, 거부되는 이름.
+- [Working with the Clean Architecture Template](Sources/TemplateScaffold/TemplateScaffold.docc/WorkingWithTheCleanArchitectureTemplate.md):
+  의존성 규칙, 계층별로 기능 추가하기, 직접 만든 서버 연결하기.
 - [Examples](Examples): QuickStart 앱.
 
 가이드는 영어로 되어 있습니다.
@@ -270,7 +284,7 @@ Package.swift                 create-ios-app + TemplateScaffold (macOS)
 Sources/CLI/                  argument parsing (swift-argument-parser)
 Sources/TemplateScaffold/     catalog, name validation, renaming, copying
 Tests/TemplateScaffoldTests/  Swift Testing, including a scaffold of every template
-Templates/<Name>/             20 independent iOS 18 packages with tests and an App/ host
+Templates/<Name>/             21 independent iOS 18 packages with tests and an App/ host
 Examples/QuickStart/          an app project that runs a template as a local package
 scripts/                      test-templates.sh, capture-screenshots.sh
 ```
@@ -284,6 +298,11 @@ scripts/                      test-templates.sh, capture-screenshots.sh
 - `Tests/<Name>Tests/`: 그 store에 대한 Swift Testing 스위트로, 파생 값, 상태 전환, 잘못된 입력과 알 수 없는
   식별자에 대한 guard, 넘어서는 안 되는 한도를 검증합니다.
 - `App/`: XcodeGen 설정과 `<Name>Shell.main()`을 호출하는 호스트 파일.
+
+`CleanArchitectureApp`은 단일 store 대신 타깃 네 개로 구성됩니다. `CleanArchitectureAppDomain`(엔티티, 규칙, use case),
+`CleanArchitectureAppData`(HTTP, JSON, 캐시, repository),
+`CleanArchitectureAppPresentation`(`@Observable` 모델과 화면), 그리고 컴포지션 루트인 `CleanArchitectureApp`이며, 각각
+자체 테스트 타깃이 있습니다.
 
 템플릿은 루트 패키지에도, 서로에게도 의존하지 않습니다. 이름 변경은 템플릿 디렉터리 이름의 텍스트 치환이므로
 바뀌어야 하는 이름은 모두 그 이름으로 시작합니다(`EcommerceApp`, `EcommerceAppShell`,
