@@ -1,7 +1,7 @@
 <!-- i18n-source: README.md@930ecae6c52c696ce79171172268185a0dc74d4e status=reviewed -->
 <!-- brand:start -->
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-light.svg" alt="iOSAppTemplates: iOS 18 向け SwiftUI アプリテンプレート 20 種。どれもテスト付きの Swift パッケージで、自分の名前で複製できます。"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-light.svg" alt="iOSAppTemplates: iOS 18 向け SwiftUI アプリテンプレート 21 種。テスト付きで、自分の名前で複製できます。"></picture></p>
 
 <!-- lang-selector:start -->
 <p align="center"><a href="README.md">English</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a> · <a href="README.es.md">Español</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a> · <a href="README.pt-BR.md">Português (Brasil)</a> · <a href="README.ru.md">Русский</a></p>
