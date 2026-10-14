@@ -59,10 +59,11 @@ versions of every template are in [`docs/images`](docs/images).
 
 Each template contains:
 
-- `Sources/<Name>/<Name>.swift`: the public `<Name>Shell` app scene, the screens, and a
+- `Sources/<Name>/`: the public `<Name>Shell` app scene, the screens, and a
   `@MainActor` `ObservableObject` store that owns the sample data and every action the
   screens trigger (cart totals, order and booking state transitions, approval queues and
-  so on).
+  so on). Most templates keep this in `<Name>.swift`; `EcommerceApp`, `FitnessApp` and
+  `SocialMediaApp` split the store, the models and the screens into separate files.
 - `Tests/<Name>Tests/`: a Swift Testing suite for that store, covering derived values,
   state transitions, guard clauses for invalid input and unknown identifiers, and limits
   that must not be exceeded.
