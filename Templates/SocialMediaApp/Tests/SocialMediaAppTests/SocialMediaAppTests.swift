@@ -22,7 +22,7 @@ struct LocalAuthServiceTests {
         #expect(await LocalAuthService(defaultsSuiteName: suite).currentSession() == session, "a new instance restores the session")
     }
 
-    @Test func wrongPasswordOrUnknownEmailIsRejected() async {
+    @Test func wrongPasswordOrUnknownEmailIsRejected() async throws {
         let service = LocalAuthService(defaultsSuiteName: isolatedSuiteName())
 
         await #expect(throws: AuthError.invalidCredentials) {
@@ -34,7 +34,7 @@ struct LocalAuthServiceTests {
         #expect(await service.currentSession() == nil)
     }
 
-    @Test func signUpValidatesInput() async {
+    @Test func signUpValidatesInput() async throws {
         let service = LocalAuthService(defaultsSuiteName: isolatedSuiteName())
 
         await #expect(throws: AuthError.usernameMissing) {
@@ -92,7 +92,7 @@ struct AuthManagerTests {
         #expect(manager.currentUser == nil)
     }
 
-    @Test func failedSignInLeavesStateUnchanged() async {
+    @Test func failedSignInLeavesStateUnchanged() async throws {
         let manager = AuthManager(service: LocalAuthService(defaultsSuiteName: isolatedSuiteName()))
 
         await #expect(throws: AuthError.invalidCredentials) {
@@ -137,7 +137,12 @@ struct DataManagerTests {
     @Test func publishingPostPutsItFirstWithAudienceTag() {
         let manager = seeded()
 
-        manager.publishPost(content: "Hello", authorName: "Demo", username: "demo", isVerified: false, audience: "Friends", attachmentCount: 2)
+        manager.publishPost(
+            content: "Hello",
+            author: PostAuthor(name: "Demo", username: "demo", isVerified: false),
+            audience: "Friends",
+            attachmentCount: 2
+        )
 
         #expect(manager.posts[0].content.hasPrefix("[Friends] Hello"))
         #expect(manager.profilePosts(for: "demo").count == 1)

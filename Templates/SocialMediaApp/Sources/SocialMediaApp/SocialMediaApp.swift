@@ -601,6 +601,13 @@ struct PostCard: View {
 }
 
 // MARK: - Models
+/// The account a new post is published as.
+struct PostAuthor: Sendable {
+    let name: String
+    let username: String
+    let isVerified: Bool
+}
+
 struct Post: Identifiable, Codable {
     let id: String
     let authorId: String
@@ -957,9 +964,7 @@ struct CreatePostView: View {
             await MainActor.run {
                 dataManager.publishPost(
                     content: trimmedCaption,
-                    authorName: "Preview User",
-                    username: "preview",
-                    isVerified: true,
+                    author: PostAuthor(name: "Preview User", username: "preview", isVerified: true),
                     audience: selectedAudience,
                     attachmentCount: attachedMedia.count
                 )
@@ -1382,14 +1387,14 @@ class DataManager: ObservableObject {
         }
     }
     
-    func addPost(content: String, authorName: String, username: String, isVerified: Bool) {
+    func addPost(content: String, author: PostAuthor) {
         let post = Post(
             id: UUID().uuidString,
             authorId: "current-user",
-            authorUsername: username,
-            authorDisplayName: authorName,
+            authorUsername: author.username,
+            authorDisplayName: author.name,
             authorAvatarURL: "https://picsum.photos/210",
-            authorIsVerified: isVerified,
+            authorIsVerified: author.isVerified,
             content: content,
             images: ["https://picsum.photos/410/310"],
             videoURL: nil,
@@ -1403,16 +1408,9 @@ class DataManager: ObservableObject {
         commentsByPostId[post.id] = []
     }
     
-    func publishPost(
-        content: String,
-        authorName: String,
-        username: String,
-        isVerified: Bool,
-        audience: String,
-        attachmentCount: Int
-    ) {
+    func publishPost(content: String, author: PostAuthor, audience: String, attachmentCount: Int) {
         let decoratedContent = "[\(audience)] \(content)\n\nAttached assets: \(attachmentCount)"
-        addPost(content: decoratedContent, authorName: authorName, username: username, isVerified: isVerified)
+        addPost(content: decoratedContent, author: author)
     }
     
     func profilePosts(for username: String) -> [Post] {
