@@ -13,6 +13,8 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `ios-clean-architecture-template`: a team directory split into Domain, Data and Presentation
   targets plus a composition root, with an HTTP layer, an in-process sample server, an offline
   file cache, role-based permissions enforced in use cases and 98 tests in four test targets.
+- UI tests for the `CleanArchitectureApp` host app (search, offline fallback and an
+  accessibility audit), run by a new job in `templates.yml`.
 - DocC article "Working with the Clean Architecture Template".
 
 ### Changed
