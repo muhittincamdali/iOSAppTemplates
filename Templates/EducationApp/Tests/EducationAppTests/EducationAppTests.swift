@@ -16,7 +16,23 @@ struct EducationLearningStoreTests {
     @Test func completionRateAveragesCourseProgress() {
         let store = EducationLearningStore()
 
-        #expect(store.completionRateText == "64%")
+        // (0.78 + 0.62 + 0.54) / 3 = 0.6467, shown to the nearest whole percent.
+        #expect(store.completionRateText == "65%")
+    }
+
+    @Test(arguments: [
+        (0.0, "0%"), (0.004, "0%"), (0.005, "1%"), (0.69, "69%"), (1.0, "100%"),
+        (-0.2, "0%"), (1.7, "100%"), (.nan, "0%"), (.infinity, "0%"), (-.infinity, "0%")
+    ])
+    func percentTextClampsAndNeverTraps(fraction: Double, expected: String) {
+        #expect(EducationCourseRecord.percentText(fraction) == expected)
+    }
+
+    @Test func completionRateSurvivesNonFiniteProgress() {
+        let store = EducationLearningStore()
+        store.courses[0].progress = .nan
+
+        #expect(store.completionRateText == "0%")
     }
 
     @Test func completingLessonUnlocksCourseQuizOnce() throws {
