@@ -1,0 +1,118 @@
+{
+  "name": "iOSAppTemplates",
+  "repository": "muhittincamdali/iOSAppTemplates",
+  "branch": "master",
+  "tagline": {
+    "en": "Twenty SwiftUI app templates for iOS 18, each a tested Swift package you can copy under your own name.",
+    "tr": "iOS 18 için yirmi SwiftUI uygulama şablonu; her biri kendi adınızla kopyalayabileceğiniz testli bir Swift paketi.",
+    "zh-CN": "面向 iOS 18 的二十个 SwiftUI 应用模板，每个都是带测试的 Swift 包，可用你自己的名称复制。",
+    "ja": "iOS 18 向け SwiftUI アプリテンプレート 20 種。どれもテスト付きの Swift パッケージで、自分の名前で複製できます。",
+    "ko": "iOS 18용 SwiftUI 앱 템플릿 20종. 각각 테스트가 포함된 Swift 패키지이며 원하는 이름으로 복사할 수 있습니다.",
+    "es": "Veinte plantillas de apps SwiftUI para iOS 18, cada una un paquete Swift con tests que puedes copiar con tu propio nombre.",
+    "de": "Zwanzig SwiftUI-App-Vorlagen für iOS 18, jede ein getestetes Swift-Paket, das Sie unter eigenem Namen kopieren können.",
+    "fr": "Vingt modèles d'apps SwiftUI pour iOS 18, chacun un package Swift testé que vous pouvez copier sous votre propre nom.",
+    "pt-BR": "Vinte templates de apps SwiftUI para iOS 18, cada um um pacote Swift testado que você copia com o seu nome.",
+    "ru": "Двадцать шаблонов SwiftUI-приложений для iOS 18: Swift-пакеты с тестами, которые копируются под вашим именем."
+  },
+  "tags": {
+    "en": [
+      "SwiftUI",
+      "iOS 18",
+      "20 templates",
+      "Swift Testing"
+    ],
+    "tr": [
+      "SwiftUI",
+      "iOS 18",
+      "20 şablon",
+      "Swift Testing"
+    ],
+    "zh-CN": [
+      "SwiftUI",
+      "iOS 18",
+      "20 个模板",
+      "Swift Testing"
+    ],
+    "ja": [
+      "SwiftUI",
+      "iOS 18",
+      "テンプレート 20 種",
+      "Swift Testing"
+    ],
+    "ko": [
+      "SwiftUI",
+      "iOS 18",
+      "템플릿 20종",
+      "Swift Testing"
+    ],
+    "es": [
+      "SwiftUI",
+      "iOS 18",
+      "20 plantillas",
+      "Swift Testing"
+    ],
+    "de": [
+      "SwiftUI",
+      "iOS 18",
+      "20 Vorlagen",
+      "Swift Testing"
+    ],
+    "fr": [
+      "SwiftUI",
+      "iOS 18",
+      "20 modèles",
+      "Swift Testing"
+    ],
+    "pt-BR": [
+      "SwiftUI",
+      "iOS 18",
+      "20 templates",
+      "Swift Testing"
+    ],
+    "ru": [
+      "SwiftUI",
+      "iOS 18",
+      "20 шаблонов",
+      "Swift Testing"
+    ]
+  },
+  "motif": "phone",
+  "buttons": [
+    "start",
+    "docs",
+    "examples"
+  ],
+  "links": {
+    "docs": "https://muhittincamdali.github.io/iOSAppTemplates/documentation/templatescaffold/",
+    "examples": "Examples/"
+  },
+  "languages": [
+    "en",
+    "tr",
+    "zh-CN",
+    "ja",
+    "ko",
+    "es",
+    "de",
+    "fr",
+    "pt-BR",
+    "ru"
+  ],
+  "docc": {
+    "targets": [
+      "TemplateScaffold"
+    ]
+  },
+  "socialTheme": "dark",
+  "badgeOverrides": {},
+  "extraBadges": [
+    {
+      "key": "templates",
+      "label": "Templates",
+      "value": "iOS 18+",
+      "alt": "iOS 18+",
+      "icon": "device",
+      "href": "https://github.com/muhittincamdali/iOSAppTemplates/tree/master/Templates"
+    }
+  ]
+}

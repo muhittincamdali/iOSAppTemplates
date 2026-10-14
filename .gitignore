@@ -6,3 +6,5 @@ xcuserdata/
 DerivedData/
 .vscode/
 !Examples/*/*.xcodeproj/
+# The social preview is kept in docs/social-preview.png.
+.github/brand/social-preview.png
