@@ -10,6 +10,8 @@
 #
 # Environment:
 #   SIMULATOR_UDID     use an existing simulator instead of creating one
+#   DEVICE_TYPE        simulator device type (default: iPhone-17-Pro, the size of docs/images)
+#   RUNTIME            simulator runtime identifier (default: newest available iOS runtime)
 #   DERIVED_DATA_PATH  build directory (default: .build/screenshots)
 #   SCREENSHOT_WIDTH   output width in pixels (default: 390)
 #   JPEG_QUALITY       0-100 (default: 80)
@@ -24,7 +26,8 @@ derived_data="${DERIVED_DATA_PATH:-$repo_root/.build/screenshots}"
 width="${SCREENSHOT_WIDTH:-390}"
 quality="${JPEG_QUALITY:-80}"
 launch_wait="${LAUNCH_WAIT:-4}"
-simulator_name="iOSAppTemplates Screenshots"
+device_type="com.apple.CoreSimulator.SimDeviceType.${DEVICE_TYPE:-iPhone-17-Pro}"
+simulator_name="iOSAppTemplates Screenshots ${DEVICE_TYPE:-iPhone-17-Pro}"
 
 command -v xcodegen >/dev/null || { echo "xcodegen is required: brew install xcodegen" >&2; exit 1; }
 
@@ -41,9 +44,16 @@ resolve_simulator() {
     return
   fi
 
-  local runtime device_type
-  runtime="$(xcrun simctl list runtimes available | grep -oE 'com\.apple\.CoreSimulator\.SimRuntime\.iOS-[0-9-]+' | tail -1)"
-  device_type="$(xcrun simctl list devicetypes | grep -oE 'com\.apple\.CoreSimulator\.SimDeviceType\.iPhone-[0-9]+-Pro\b' | tail -1)"
+  # The device type is fixed so the screenshots keep the same size on every machine;
+  # `simctl list devicetypes` is not sorted by model, so picking "the latest" is not stable.
+  if ! xcrun simctl list devicetypes | grep -qF "($device_type)"; then
+    echo "Device type $device_type is not installed. Set DEVICE_TYPE, e.g. DEVICE_TYPE=iPhone-16-Pro." >&2
+    exit 1
+  fi
+  local runtime="${RUNTIME:-}"
+  if [[ -z "$runtime" ]]; then
+    runtime="$(xcrun simctl list runtimes available | grep -oE 'com\.apple\.CoreSimulator\.SimRuntime\.iOS-[0-9-]+' | sort -t- -k2,2n -k3,3n | tail -1)"
+  fi
   xcrun simctl create "$simulator_name" "$device_type" "$runtime"
 }
 
