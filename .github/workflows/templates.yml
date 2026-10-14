@@ -17,6 +17,8 @@ concurrency:
 env:
   SWIFTLINT_VERSION: 0.63.2
   SWIFTLINT_SHA256: c59a405c85f95b92ced677a500804e081596a4cae4a6a485af76065557d6ed29
+  XCODEGEN_VERSION: 2.45.3
+  XCODEGEN_SHA256: 0c90f4d28ca57335f9fa78cf5bf6dabfe20a232036dabe36de2eef79cb7c0878
 
 jobs:
   lint:
@@ -93,7 +95,12 @@ jobs:
         run: xcodebuild -version
 
       - name: Install XcodeGen
-        run: brew install xcodegen
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/xcodegen.zip" \
+            "https://github.com/yonaskolb/XcodeGen/releases/download/$XCODEGEN_VERSION/xcodegen.zip"
+          echo "$XCODEGEN_SHA256  $RUNNER_TEMP/xcodegen.zip" | shasum -a 256 -c -
+          unzip -q "$RUNNER_TEMP/xcodegen.zip" -d "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/xcodegen/bin" >> "$GITHUB_PATH"
 
       - name: Generate the host project
         working-directory: Templates/CleanArchitectureApp/App
