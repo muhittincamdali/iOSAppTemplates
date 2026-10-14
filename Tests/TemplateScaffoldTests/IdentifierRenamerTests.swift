@@ -7,13 +7,13 @@ struct IdentifierRenamerTests {
 
     @Test func renamesNameAndSuffixedModules() {
         #expect(renamer.rename("EcommerceApp") == "MyShop")
-        #expect(renamer.rename("import EcommerceAppCore") == "import MyShopCore")
+        #expect(renamer.rename("EcommerceAppShell.main()") == "MyShopShell.main()")
         #expect(renamer.rename("@testable import EcommerceApp\nEcommerceAppTests") == "@testable import MyShop\nMyShopTests")
     }
 
     @Test func renamesAfterPunctuationAndQuotes() {
-        let manifest = #".target(name: "EcommerceAppUI", dependencies: ["EcommerceAppCore"])"#
-        #expect(renamer.rename(manifest) == #".target(name: "MyShopUI", dependencies: ["MyShopCore"])"#)
+        let manifest = #".testTarget(name: "EcommerceAppTests", dependencies: ["EcommerceApp"])"#
+        #expect(renamer.rename(manifest) == #".testTarget(name: "MyShopTests", dependencies: ["MyShop"])"#)
         #expect(renamer.rename("com.example.EcommerceApp") == "com.example.MyShop")
     }
 
@@ -40,8 +40,8 @@ struct IdentifierRenamerTests {
 
     @Test func renamesEachPathComponent() {
         #expect(
-            renamer.renamePath("Sources/EcommerceAppCore/EcommerceAppCore.swift")
-                == "Sources/MyShopCore/MyShopCore.swift"
+            renamer.renamePath("Tests/EcommerceAppTests/EcommerceAppTests.swift")
+                == "Tests/MyShopTests/MyShopTests.swift"
         )
         #expect(renamer.renamePath("App/project.yml") == "App/project.yml")
     }

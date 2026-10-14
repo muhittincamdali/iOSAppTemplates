@@ -11,7 +11,7 @@ struct ScaffolderTests {
         let root = templates.appendingPathComponent("FixtureApp")
         try TestSupport.write(#"let package = Package(name: "FixtureApp")"#, to: "Package.swift", in: root)
         try TestSupport.write("public struct FixtureAppShell {}", to: "Sources/FixtureApp/FixtureApp.swift", in: root)
-        try TestSupport.write("public enum FixtureAppCoreValue {}", to: "Sources/FixtureAppCore/FixtureAppCore.swift", in: root)
+        try TestSupport.write("FixtureAppShell.main()", to: "App/FixtureAppHost.swift", in: root)
         try TestSupport.write("@testable import FixtureApp", to: "Tests/FixtureAppTests/FixtureAppTests.swift", in: root)
         try TestSupport.write("cache", to: ".build/debug/FixtureApp.o", in: root)
         try TestSupport.write("state", to: ".swiftpm/xcode/FixtureApp.xcworkspace", in: root)
@@ -30,10 +30,10 @@ struct ScaffolderTests {
 
             #expect(result.projectDirectory.lastPathComponent == "Demo")
             #expect(result.files == [
+                "App/DemoHost.swift",
                 "App/project.yml",
                 "Package.swift",
                 "Sources/Demo/Demo.swift",
-                "Sources/DemoCore/DemoCore.swift",
                 "Tests/DemoTests/DemoTests.swift"
             ])
             let project = result.projectDirectory
@@ -41,6 +41,7 @@ struct ScaffolderTests {
             #expect(try TestSupport.read("Sources/Demo/Demo.swift", in: project) == "public struct DemoShell {}")
             #expect(try TestSupport.read("Tests/DemoTests/DemoTests.swift", in: project) == "@testable import Demo")
             #expect(try TestSupport.read("App/project.yml", in: project) == "name: Demo")
+            #expect(try TestSupport.read("App/DemoHost.swift", in: project) == "DemoShell.main()")
         }
     }
 

@@ -2,9 +2,10 @@ import Foundation
 
 /// A validated name for a new project.
 ///
-/// The name becomes the Swift package name, the module names (`<Name>`, `<Name>UI`,
-/// `<Name>Core`) and the prefix of the app's entry type, so it has to be a valid
-/// Swift identifier that does not shadow a module or type the templates rely on.
+/// The name becomes the Swift package and app module name (`<Name>`), the prefix of the
+/// test module (`<Name>Tests`), the host app target (`<Name>Host`) and the app's entry
+/// type (`<Name>Shell`). It has to be a valid Swift identifier that can follow `import`
+/// and does not shadow a module or type the templates rely on.
 public struct ProjectName: Hashable, Sendable, CustomStringConvertible {
     public static let maximumLength = 64
 

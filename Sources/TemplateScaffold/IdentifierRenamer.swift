@@ -4,7 +4,7 @@ import Foundation
 ///
 /// A match is replaced only when it starts an identifier, that is when the preceding
 /// character is not a letter, digit or underscore. Characters after the match are left
-/// alone, so `EcommerceApp`, `EcommerceAppCore` and `EcommerceAppTests` all follow the
+/// alone, so `EcommerceApp`, `EcommerceAppShell` and `EcommerceAppTests` all follow the
 /// rename while `MyEcommerceApp` does not.
 public struct IdentifierRenamer: Sendable {
     public let oldName: String
@@ -33,7 +33,7 @@ public struct IdentifierRenamer: Sendable {
         return result
     }
 
-    /// Renames each component of a relative path such as `Sources/EcommerceAppCore/EcommerceAppCore.swift`.
+    /// Renames each component of a relative path such as `Tests/EcommerceAppTests/EcommerceAppTests.swift`.
     public func renamePath(_ relativePath: String) -> String {
         relativePath
             .split(separator: "/", omittingEmptySubsequences: false)
