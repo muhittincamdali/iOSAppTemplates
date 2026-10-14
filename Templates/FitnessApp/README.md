@@ -9,7 +9,10 @@ data in the store with your own services.
 
 | Path | Contents |
 | --- | --- |
-| `Sources/FitnessApp/FitnessApp.swift` | `FitnessAppShell` (the public `App`), the screens, and `FitnessStudioStore`, a `@MainActor` `ObservableObject` that owns the sample data and every action the screens trigger |
+| `Sources/FitnessApp/FitnessApp.swift` | `FitnessAppShell` (the public `App`) and the root tab view |
+| `Sources/FitnessApp/FitnessStudioStore.swift` | `FitnessStudioStore`, a `@MainActor` `ObservableObject` that owns the sample data and every action the screens trigger |
+| `Sources/FitnessApp/FitnessModels.swift` | Value types for plans, workouts, exercises, sessions, goals, habits, recovery tasks, readiness checks and coach alerts |
+| `Sources/FitnessApp/FitnessDashboardView.swift`, `FitnessWorkoutViews.swift`, `FitnessProgressViews.swift` | Dashboard, workout and session, progress, recovery and profile screens |
 | `Tests/FitnessAppTests/` | Swift Testing suite for the app's state and actions |
 | `App/` | XcodeGen spec and a host file that calls `FitnessAppShell.main()` |
 
