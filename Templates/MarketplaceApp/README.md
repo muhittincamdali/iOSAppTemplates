@@ -26,11 +26,3 @@ cd App
 xcodegen generate
 open MarketplaceApp.xcodeproj
 ```
-
-## Start a project from this template
-
-From the repository root:
-
-```bash
-swift run create-ios-app new MyApp --template marketplace
-```

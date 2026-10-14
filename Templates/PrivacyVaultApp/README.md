@@ -27,11 +27,3 @@ cd App
 xcodegen generate
 open PrivacyVaultApp.xcodeproj
 ```
-
-## Start a project from this template
-
-From the repository root:
-
-```bash
-swift run create-ios-app new MyApp --template privacy-vault
-```
