@@ -11,14 +11,16 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[*.{swift,h,m}]
-indent_size = 4
-
 [*.{yml,yaml,json}]
 indent_size = 2
 
 [*.md]
 trim_trailing_whitespace = false
 
-[Makefile]
+# Xcode writes project files with tabs and schemes with three-space indentation.
+# Matching that keeps an editor from reindenting files that Xcode rewrites anyway.
+[*.pbxproj]
 indent_style = tab
+
+[*.{xcscheme,xcworkspacedata}]
+indent_size = 3
