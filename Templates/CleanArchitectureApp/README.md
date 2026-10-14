@@ -36,9 +36,11 @@ CleanArchitectureApp (composition root)
 - The last active admin cannot be demoted or deactivated.
 - Names are 2 to 60 characters after whitespace is collapsed, at least two of them visible,
   and at most 240 Unicode scalars, so stacked combining marks cannot hide an oversized value.
-  Control characters and bidirectional marks, overrides and isolates are rejected. Email addresses are lowercased and checked against the
-  RFC 5321 length limits. The server stays the final authority, and a real server must enforce
-  the same permissions, because a client can always be modified.
+  Control characters, bidirectional marks, overrides and isolates are rejected, and so is any
+  character other than a space that draws nothing, such as a zero-width space or a Braille
+  blank. Email addresses are lowercased and checked against the RFC 5321 length limits. The
+  server stays the final authority, and a real server must enforce the same permissions,
+  because a client can always be modified.
 
 ## Data flow
 

@@ -55,6 +55,16 @@ struct ProfileDraftTests {
         #expect(draft(name: name).issues == [.nameTooShort(minimum: 2)])
     }
 
+    @Test(arguments: [
+        "AB" + String(repeating: "\u{200B}", count: 58), // 60 characters, "AB" on screen
+        "Ada\u{2060}Lovelace", // word joiner
+        "Ada \u{2800} Lovelace", // Braille pattern blank between words
+        "Ada \u{3164} Lovelace" // Hangul filler between words
+    ])
+    func rejectsCharactersThatDrawNothingBesideVisibleOnes(_ name: String) {
+        #expect(draft(name: name).issues == [.nameInvalidCharacters])
+    }
+
     @Test func stackedCombiningMarksCannotHideAnOversizedName() {
         // Two characters, but a million and two scalars (about 2 MB of UTF-8).
         let zalgo = "Ab" + String(repeating: "\u{0301}", count: 1_000_000)

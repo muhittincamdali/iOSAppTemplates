@@ -51,6 +51,8 @@ public struct ProfileDraft: Hashable, Sendable {
             issues.append(.nameInvalidCharacters)
         } else if name.count(where: Self.isVisible) < Self.nameLength.lowerBound {
             issues.append(.nameTooShort(minimum: Self.nameLength.lowerBound))
+        } else if name.contains(where: Self.drawsNothing) {
+            issues.append(.nameInvalidCharacters)
         } else if name.count > Self.nameLength.upperBound {
             issues.append(.nameTooLong(maximum: Self.nameLength.upperBound))
         }
@@ -121,6 +123,15 @@ public struct ProfileDraft: Hashable, Sendable {
                 && scalar.properties.generalCategory != .format
                 && scalar != brailleBlank
         }
+    }
+
+    /// A character other than the single space left by normalizing that draws nothing, such
+    /// as a zero-width space or a Braille blank between letters. It would count toward the
+    /// length while adding nothing on screen, so "AB" followed by 58 zero-width spaces would
+    /// pass as 60 characters. Joiners inside a word, like the Persian zero-width non-joiner,
+    /// attach to the letter before them and are part of a visible character.
+    private static func drawsNothing(_ character: Character) -> Bool {
+        character != " " && !isVisible(character)
     }
 }
 
