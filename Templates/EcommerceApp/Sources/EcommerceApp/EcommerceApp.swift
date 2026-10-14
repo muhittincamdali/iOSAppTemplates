@@ -99,8 +99,16 @@ final class CommerceStore: ObservableObject {
         appliedCouponCode == "SPRINT10" ? subtotal * 0.1 : 0
     }
 
+    static let freeShippingThreshold: Double = 150
+    static let standardShippingFee = 12.99
+
+    /// Shipping is free once the subtotal reaches the threshold, before coupon savings.
+    static func shippingFee(forSubtotal subtotal: Double) -> Double {
+        subtotal >= freeShippingThreshold ? 0 : standardShippingFee
+    }
+
     var shippingFee: Double {
-        subtotal >= 150 ? 0 : 12.99
+        Self.shippingFee(forSubtotal: subtotal)
     }
 
     var taxes: Double {

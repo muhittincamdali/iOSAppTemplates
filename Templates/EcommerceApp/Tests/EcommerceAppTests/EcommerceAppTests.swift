@@ -35,6 +35,12 @@ struct CommerceStoreTests {
         #expect(store.shippingFee == 0)
     }
 
+    @Test func freeShippingStartsExactlyAtTheThreshold() {
+        #expect(CommerceStore.shippingFee(forSubtotal: 149.99) == 12.99)
+        #expect(CommerceStore.shippingFee(forSubtotal: 150) == 0)
+        #expect(CommerceStore.shippingFee(forSubtotal: 150.01) == 0)
+    }
+
     @Test func couponIsNormalisedAndOnlyKnownCodeApplies() {
         let store = CommerceStore()
 
