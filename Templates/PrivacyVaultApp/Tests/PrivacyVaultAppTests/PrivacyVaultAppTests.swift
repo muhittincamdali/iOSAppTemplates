@@ -18,7 +18,7 @@ struct PrivacyVaultOperationsStoreTests {
 
         store.hardenFeaturedItem()
 
-        #expect(store.state.featuredItems[0].status == "Hardened")
+        #expect(store.state.featuredItems[0].status == .hardened)
         #expect(Array(store.state.featuredItems.dropFirst()) == others)
         #expect(store.snapshot.securedItems == secured + 1)
         #expect(store.state.protectionHeadline.contains("hardened"))
@@ -40,7 +40,7 @@ struct PrivacyVaultOperationsStoreTests {
         let store = PrivacyVaultOperationsStore()
 
         store.verifyTrustedContact()
-        #expect(store.state.trustedContacts.allSatisfy { $0.status == "Verified" })
+        #expect(store.state.trustedContacts.allSatisfy { $0.status == .verified })
         #expect(!store.state.recoveryChecklist.contains { $0.contains("Confirm trusted contacts") })
 
         let state = store.state
@@ -51,11 +51,11 @@ struct PrivacyVaultOperationsStoreTests {
     @Test func auditReviewResolvesOneCheckAtATime() {
         let store = PrivacyVaultOperationsStore()
         let pending = store.snapshot.pendingAudits
-        let open = store.state.auditChecks.filter { $0.status != "Resolved" && $0.status != "Complete" }.count
+        let open = store.state.auditChecks.filter { $0.status.isOpen }.count
 
         store.completeAuditReview()
 
-        let stillOpen = store.state.auditChecks.filter { $0.status != "Resolved" && $0.status != "Complete" }.count
+        let stillOpen = store.state.auditChecks.filter { $0.status.isOpen }.count
         #expect(stillOpen == open - 1)
         #expect(store.snapshot.pendingAudits == pending - 1)
     }
@@ -66,7 +66,7 @@ struct PrivacyVaultOperationsStoreTests {
         for _ in 0..<20 { store.completeAuditReview() }
 
         #expect(store.snapshot.pendingAudits >= 0)
-        #expect(store.state.auditChecks.allSatisfy { $0.status == "Resolved" || $0.status == "Complete" })
+        #expect(store.state.auditChecks.allSatisfy { !$0.status.isOpen })
     }
 
     @Test func rotatingRecoveryKitUpdatesSyncWindowAndScore() {

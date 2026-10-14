@@ -81,10 +81,9 @@ final class PrivacyVaultOperationsStore: ObservableObject {
                     title: current.title,
                     category: current.category,
                     owner: current.owner,
-                    status: "Hardened",
+                    status: .hardened,
                     summary: "Recovery package rotated and reveal rules tightened for the next secure sync window.",
-                    nextStep: "Keep the hardened bundle sealed until the next travel readiness review.",
-                    statusColorName: "green"
+                    nextStep: "Keep the hardened bundle sealed until the next travel readiness review."
                 )
             }
             return current
@@ -125,14 +124,14 @@ final class PrivacyVaultOperationsStore: ObservableObject {
     }
 
     func verifyTrustedContact() {
-        guard let index = state.trustedContacts.firstIndex(where: { $0.status != "Verified" }) else { return }
+        guard let index = state.trustedContacts.firstIndex(where: { $0.status != .verified }) else { return }
         var contacts = state.trustedContacts
         let current = contacts[index]
         contacts[index] = PrivacyVaultTrustedContact(
             id: current.id,
             name: current.name,
             role: current.role,
-            status: "Verified"
+            status: .verified
         )
 
         replaceState(
@@ -142,16 +141,15 @@ final class PrivacyVaultOperationsStore: ObservableObject {
     }
 
     func completeAuditReview() {
-        guard let index = state.auditChecks.firstIndex(where: { $0.status != "Resolved" && $0.status != "Complete" }) else { return }
+        guard let index = state.auditChecks.firstIndex(where: { $0.status.isOpen }) else { return }
         var checks = state.auditChecks
         let current = checks[index]
         checks[index] = PrivacyVaultAuditCheck(
             id: current.id,
             title: current.title,
-            status: "Resolved",
+            status: .resolved,
             summary: "Quarterly review cleared and linked grants recertified.",
-            nextStep: "Monitor until the next weekly audit sweep.",
-            statusColorName: "green"
+            nextStep: "Monitor until the next weekly audit sweep."
         )
 
         snapshot = PrivacyVaultDashboardSnapshot(
@@ -242,7 +240,7 @@ struct PrivacyVaultHomeView: View {
             .navigationTitle("Vault")
             .toolbar {
                 Button("Harden", systemImage: "lock.shield", action: onHardenFeaturedItem)
-                    .disabled(state.featuredItems.first?.status == "Hardened")
+                    .disabled(state.featuredItems.first?.status == .hardened)
             }
         }
     }
@@ -370,7 +368,7 @@ struct PrivacyVaultSensitiveItemsCard: View {
                                     .foregroundStyle(.secondary)
                             }
                             Spacer()
-                            Text(item.status)
+                            Text(item.status.label)
                                 .font(.caption.weight(.semibold))
                                 .foregroundStyle(item.statusColor)
                         }
@@ -482,7 +480,7 @@ struct PrivacyVaultAlertsView: View {
                             HStack {
                                 Text(alert.title)
                                 Spacer()
-                                Text(alert.severity)
+                                Text(alert.severity.label)
                                     .font(.caption.weight(.semibold))
                                     .foregroundStyle(alert.severityColor)
                             }
@@ -525,7 +523,7 @@ struct PrivacyVaultRecoveryView: View {
                     ForEach(state.trustedContacts) { contact in
                         VStack(alignment: .leading, spacing: 6) {
                             Text(contact.name)
-                            Text("\(contact.role) - \(contact.status)")
+                            Text("\(contact.role) - \(contact.status.label)")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -534,7 +532,7 @@ struct PrivacyVaultRecoveryView: View {
 
                 Section("Actions") {
                     Button("Verify next trusted contact", systemImage: "person.badge.shield.checkmark", action: onVerifyContact)
-                        .disabled(state.trustedContacts.allSatisfy { $0.status == "Verified" })
+                        .disabled(state.trustedContacts.allSatisfy { $0.status == .verified })
                     Button("Rotate recovery kit", systemImage: "arrow.triangle.2.circlepath", action: onRotateRecoveryKit)
                 }
             }
@@ -557,7 +555,7 @@ struct PrivacyVaultAuditView: View {
                             HStack {
                                 Text(check.title)
                                 Spacer()
-                                Text(check.status)
+                                Text(check.status.label)
                                     .font(.caption.weight(.semibold))
                                     .foregroundStyle(check.statusColor)
                             }
@@ -580,7 +578,7 @@ struct PrivacyVaultAuditView: View {
             .navigationTitle("Audit")
             .toolbar {
                 Button("Resolve next", systemImage: "checkmark.shield", action: onCompleteReview)
-                    .disabled(state.auditChecks.allSatisfy { $0.status == "Resolved" || $0.status == "Complete" })
+                    .disabled(state.auditChecks.allSatisfy { !$0.status.isOpen })
             }
         }
     }
@@ -649,7 +647,7 @@ struct PrivacyVaultItemDetailView: View {
             Section("Security") {
                 Label(item.category, systemImage: "folder.fill")
                 Label(item.owner, systemImage: "person.fill")
-                Label(item.status, systemImage: "shield.lefthalf.filled")
+                Label(item.status.label, systemImage: "shield.lefthalf.filled")
             }
 
             Section("Next Step") {
@@ -676,7 +674,7 @@ struct PrivacyVaultAlertDetailView: View {
             }
 
             Section("Signal") {
-                Label(alert.severity, systemImage: "exclamationmark.triangle.fill")
+                Label(alert.severity.label, systemImage: "exclamationmark.triangle.fill")
                 Label(alert.timestamp, systemImage: "clock.fill")
                 Label(alert.origin, systemImage: "location.fill")
             }
@@ -758,48 +756,43 @@ struct PrivacyVaultWorkspaceState: Hashable, Sendable {
                 title: "Executive Passport Bundle",
                 category: "Identity Vault",
                 owner: "Maren Cole",
-                status: "Protected",
+                status: .protected,
                 summary: "Primary travel identity pack with border-control docs, visas and emergency copies.",
-                nextStep: "Rotate the sealed backup package before the June travel window.",
-                statusColorName: "green"
+                nextStep: "Rotate the sealed backup package before the June travel window."
             ),
             PrivacyVaultItem(
                 title: "Family Medical Archive",
                 category: "Document Safe",
                 owner: "Shared Family Vault",
-                status: "Review",
+                status: .review,
                 summary: "One trusted-contact grant changed after the last recovery rehearsal.",
-                nextStep: "Confirm the updated family contact list and re-run access acknowledgment.",
-                statusColorName: "orange"
+                nextStep: "Confirm the updated family contact list and re-run access acknowledgment."
             ),
             PrivacyVaultItem(
                 title: "Board Cap Table Export",
                 category: "Business Vault",
                 owner: "Finance Team",
-                status: "Sensitive",
+                status: .sensitive,
                 summary: "Board-ready ownership export with limited reveal rules and quarterly expiry.",
-                nextStep: "Expire last quarter's contractor link and issue a fresh board-only share.",
-                statusColorName: "red"
+                nextStep: "Expire last quarter's contractor link and issue a fresh board-only share."
             )
         ],
         accessAlerts: [
             PrivacyVaultAccessAlert(
                 title: "New device attempted vault reveal",
-                severity: "High",
+                severity: .high,
                 summary: "A first-time device requested reveal access for the family medical archive.",
                 timestamp: "Today 09:12",
                 origin: "Berlin, DE",
-                nextStep: "Confirm owner identity and revoke session if the request stays unverified.",
-                severityColorName: "red"
+                nextStep: "Confirm owner identity and revoke session if the request stays unverified."
             ),
             PrivacyVaultAccessAlert(
                 title: "Travel unlock exceeded normal duration",
-                severity: "Watch",
+                severity: .watch,
                 summary: "An airport unlock session stayed open longer than the normal secure window.",
                 timestamp: "Today 06:45",
                 origin: "AMS Airport",
-                nextStep: "Review the unlock log and shorten the travel policy timeout if needed.",
-                severityColorName: "orange"
+                nextStep: "Review the unlock log and shorten the travel policy timeout if needed."
             )
         ],
         recoveryChecklist: [
@@ -809,31 +802,28 @@ struct PrivacyVaultWorkspaceState: Hashable, Sendable {
             "Reconfirm the family vault disclosure ladder."
         ],
         trustedContacts: [
-            PrivacyVaultTrustedContact(name: "Lina Brooks", role: "Primary family contact", status: "Verified"),
-            PrivacyVaultTrustedContact(name: "Dev Patel", role: "Legal executor", status: "Awaiting acknowledgement"),
-            PrivacyVaultTrustedContact(name: "Ava Stone", role: "Business continuity contact", status: "Verified")
+            PrivacyVaultTrustedContact(name: "Lina Brooks", role: "Primary family contact", status: .verified),
+            PrivacyVaultTrustedContact(name: "Dev Patel", role: "Legal executor", status: .awaitingAcknowledgement),
+            PrivacyVaultTrustedContact(name: "Ava Stone", role: "Business continuity contact", status: .verified)
         ],
         auditChecks: [
             PrivacyVaultAuditCheck(
                 title: "Shared grant recertification",
-                status: "In Review",
+                status: .inReview,
                 summary: "Three shared-vault links are due for quarterly approval.",
-                nextStep: "Collect owner approval before tomorrow's sync cycle.",
-                statusColorName: "orange"
+                nextStep: "Collect owner approval before tomorrow's sync cycle."
             ),
             PrivacyVaultAuditCheck(
                 title: "Dormant secret cleanup",
-                status: "Ready",
+                status: .ready,
                 summary: "Two deprecated API credentials remain in the business vault.",
-                nextStep: "Archive the old credentials and replace linked references.",
-                statusColorName: "green"
+                nextStep: "Archive the old credentials and replace linked references."
             ),
             PrivacyVaultAuditCheck(
                 title: "Sensitive export verification",
-                status: "Action Needed",
+                status: .actionNeeded,
                 summary: "A board-export package is still accessible to one expired contractor account.",
-                nextStep: "Revoke the share and append the event to the audit log.",
-                statusColorName: "red"
+                nextStep: "Revoke the share and append the event to the audit log."
             )
         ],
         auditEvents: [
@@ -859,20 +849,18 @@ struct PrivacyVaultItem: Identifiable, Hashable, Sendable {
     let title: String
     let category: String
     let owner: String
-    let status: String
+    let status: PrivacyVaultItemStatus
     let summary: String
     let nextStep: String
-    let statusColorName: String
 
     init(
         id: UUID = UUID(),
         title: String,
         category: String,
         owner: String,
-        status: String,
+        status: PrivacyVaultItemStatus,
         summary: String,
-        nextStep: String,
-        statusColorName: String
+        nextStep: String
     ) {
         self.id = id
         self.title = title
@@ -881,40 +869,30 @@ struct PrivacyVaultItem: Identifiable, Hashable, Sendable {
         self.status = status
         self.summary = summary
         self.nextStep = nextStep
-        self.statusColorName = statusColorName
     }
 
     var statusColor: Color {
-        switch statusColorName {
-        case "red":
-            return .red
-        case "orange":
-            return .orange
-        default:
-            return .green
-        }
+        status.color
     }
 }
 
 struct PrivacyVaultAccessAlert: Identifiable, Hashable, Sendable {
     let id: UUID
     let title: String
-    let severity: String
+    let severity: PrivacyVaultAlertSeverity
     let summary: String
     let timestamp: String
     let origin: String
     let nextStep: String
-    let severityColorName: String
 
     init(
         id: UUID = UUID(),
         title: String,
-        severity: String,
+        severity: PrivacyVaultAlertSeverity,
         summary: String,
         timestamp: String,
         origin: String,
-        nextStep: String,
-        severityColorName: String
+        nextStep: String
     ) {
         self.id = id
         self.title = title
@@ -923,18 +901,10 @@ struct PrivacyVaultAccessAlert: Identifiable, Hashable, Sendable {
         self.timestamp = timestamp
         self.origin = origin
         self.nextStep = nextStep
-        self.severityColorName = severityColorName
     }
 
     var severityColor: Color {
-        switch severityColorName {
-        case "red":
-            return .red
-        case "orange":
-            return .orange
-        default:
-            return .green
-        }
+        severity.color
     }
 }
 
@@ -942,13 +912,13 @@ struct PrivacyVaultTrustedContact: Identifiable, Hashable, Sendable {
     let id: UUID
     let name: String
     let role: String
-    let status: String
+    let status: PrivacyVaultContactStatus
 
     init(
         id: UUID = UUID(),
         name: String,
         role: String,
-        status: String
+        status: PrivacyVaultContactStatus
     ) {
         self.id = id
         self.name = name
@@ -960,40 +930,95 @@ struct PrivacyVaultTrustedContact: Identifiable, Hashable, Sendable {
 struct PrivacyVaultAuditCheck: Identifiable, Hashable, Sendable {
     let id: UUID
     let title: String
-    let status: String
+    let status: PrivacyVaultAuditStatus
     let summary: String
     let nextStep: String
-    let statusColorName: String
 
     init(
         id: UUID = UUID(),
         title: String,
-        status: String,
+        status: PrivacyVaultAuditStatus,
         summary: String,
-        nextStep: String,
-        statusColorName: String
+        nextStep: String
     ) {
         self.id = id
         self.title = title
         self.status = status
         self.summary = summary
         self.nextStep = nextStep
-        self.statusColorName = statusColorName
     }
 
     var statusColor: Color {
-        switch statusColorName {
-        case "red":
-            return .red
-        case "orange":
-            return .orange
-        default:
-            return .green
-        }
+        status.color
     }
 }
 
 struct PrivacyVaultMetric: Hashable, Sendable {
     let label: String
     let value: String
+}
+
+enum PrivacyVaultItemStatus: String, Hashable, Sendable {
+    case protected = "Protected"
+    case review = "Review"
+    case sensitive = "Sensitive"
+    case hardened = "Hardened"
+
+    var label: String { rawValue }
+
+    var color: Color {
+        switch self {
+        case .protected, .hardened:
+            return .green
+        case .review:
+            return .orange
+        case .sensitive:
+            return .red
+        }
+    }
+}
+
+enum PrivacyVaultAlertSeverity: String, Hashable, Sendable {
+    case high = "High"
+    case watch = "Watch"
+
+    var label: String { rawValue }
+
+    var color: Color {
+        switch self {
+        case .high:
+            return .red
+        case .watch:
+            return .orange
+        }
+    }
+}
+
+enum PrivacyVaultContactStatus: String, Hashable, Sendable {
+    case verified = "Verified"
+    case awaitingAcknowledgement = "Awaiting acknowledgement"
+
+    var label: String { rawValue }
+}
+
+enum PrivacyVaultAuditStatus: String, Hashable, Sendable {
+    case inReview = "In Review"
+    case ready = "Ready"
+    case actionNeeded = "Action Needed"
+    case resolved = "Resolved"
+
+    var label: String { rawValue }
+
+    var isOpen: Bool { self != .resolved }
+
+    var color: Color {
+        switch self {
+        case .ready, .resolved:
+            return .green
+        case .inReview:
+            return .orange
+        case .actionNeeded:
+            return .red
+        }
+    }
 }
