@@ -21,9 +21,7 @@ let package = Package(
             targets: ["FinanceAppCore"]
         )
     ],
-    dependencies: [
-        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.8.1")
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "FinanceApp",
@@ -40,9 +38,7 @@ let package = Package(
         ),
         .target(
             name: "FinanceAppCore",
-            dependencies: [
-                "Alamofire"
-            ]
+            dependencies: []
         ),
         .testTarget(
             name: "FinanceAppTests",

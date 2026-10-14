@@ -19,25 +19,13 @@ let package = Package(
             name: "FitnessAppCore",
             targets: ["FitnessAppCore"])
     ],
-    dependencies: [
-        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.8.1"),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.18.0"),
-        .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.9.1"),
-        .package(url: "https://github.com/danielgindi/Charts.git", from: "5.0.0")
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "FitnessApp",
             dependencies: [
                 "FitnessAppUI",
-                "FitnessAppCore",
-                "Alamofire",
-                .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
-                .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
-                .product(name: "FirebaseStorage", package: "firebase-ios-sdk"),
-                .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk"),
-                "Kingfisher",
-                .product(name: "DGCharts", package: "Charts")
+                "FitnessAppCore"
             ]),
         .target(
             name: "FitnessAppUI",
@@ -46,9 +34,7 @@ let package = Package(
             ]),
         .target(
             name: "FitnessAppCore",
-            dependencies: [
-                "Alamofire"
-            ]),
+            dependencies: []),
         .testTarget(
             name: "FitnessAppTests",
             dependencies: ["FitnessApp"])

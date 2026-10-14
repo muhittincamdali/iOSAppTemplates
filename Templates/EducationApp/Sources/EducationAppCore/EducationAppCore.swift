@@ -1,4 +1,3 @@
-import Alamofire
 import Foundation
 
 public struct EducationDashboardSnapshot: Hashable, Sendable {
@@ -30,19 +29,10 @@ public struct EducationDashboardSnapshot: Hashable, Sendable {
 public struct EducationAPIClient: Sendable {
     public init() {}
 
-    public func makeCoursesRequest(baseURL: URL) -> URLRequestConvertible {
-        EducationEndpoint(baseURL: baseURL, path: "/courses")
-    }
-}
-
-private struct EducationEndpoint: URLRequestConvertible, Sendable {
-    let baseURL: URL
-    let path: String
-
-    func asURLRequest() throws -> URLRequest {
-        let url = baseURL.appendingPathComponent(path)
-        var request = URLRequest(url: url)
-        request.httpMethod = HTTPMethod.get.rawValue
+    /// Builds the GET request for the `/courses` resource relative to `baseURL`.
+    public func makeCoursesRequest(baseURL: URL) -> URLRequest {
+        var request = URLRequest(url: baseURL.appendingPathComponent("courses"))
+        request.httpMethod = "GET"
         return request
     }
 }

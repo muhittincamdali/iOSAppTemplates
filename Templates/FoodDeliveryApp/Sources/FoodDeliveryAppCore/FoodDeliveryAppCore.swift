@@ -1,4 +1,3 @@
-import Alamofire
 import Foundation
 
 public struct FoodDeliveryDashboardSnapshot: Hashable, Sendable {
@@ -30,19 +29,10 @@ public struct FoodDeliveryDashboardSnapshot: Hashable, Sendable {
 public struct FoodDeliveryAPIClient: Sendable {
     public init() {}
 
-    public func makeRestaurantsRequest(baseURL: URL) -> URLRequestConvertible {
-        FoodDeliveryEndpoint(baseURL: baseURL, path: "/restaurants")
-    }
-}
-
-private struct FoodDeliveryEndpoint: URLRequestConvertible, Sendable {
-    let baseURL: URL
-    let path: String
-
-    func asURLRequest() throws -> URLRequest {
-        let url = baseURL.appendingPathComponent(path)
-        var request = URLRequest(url: url)
-        request.httpMethod = HTTPMethod.get.rawValue
+    /// Builds the GET request for the `/restaurants` resource relative to `baseURL`.
+    public func makeRestaurantsRequest(baseURL: URL) -> URLRequest {
+        var request = URLRequest(url: baseURL.appendingPathComponent("restaurants"))
+        request.httpMethod = "GET"
         return request
     }
 }

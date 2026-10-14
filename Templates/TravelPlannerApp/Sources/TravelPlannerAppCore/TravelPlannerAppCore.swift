@@ -1,5 +1,4 @@
 import Foundation
-import Alamofire
 
 public struct TravelPlannerDashboardSnapshot: Hashable, Sendable {
     public let activeTrips: Int

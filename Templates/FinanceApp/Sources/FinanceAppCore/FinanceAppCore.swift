@@ -1,4 +1,3 @@
-import Alamofire
 import Foundation
 
 public struct FinanceDashboardSnapshot: Hashable, Sendable {
@@ -30,19 +29,10 @@ public struct FinanceDashboardSnapshot: Hashable, Sendable {
 public struct FinanceAPIClient: Sendable {
     public init() {}
 
-    public func makeAccountsRequest(baseURL: URL) -> URLRequestConvertible {
-        FinanceEndpoint(baseURL: baseURL, path: "/accounts")
-    }
-}
-
-private struct FinanceEndpoint: URLRequestConvertible, Sendable {
-    let baseURL: URL
-    let path: String
-
-    func asURLRequest() throws -> URLRequest {
-        let url = baseURL.appendingPathComponent(path)
-        var request = URLRequest(url: url)
-        request.httpMethod = HTTPMethod.get.rawValue
+    /// Builds the GET request for the `/accounts` resource relative to `baseURL`.
+    public func makeAccountsRequest(baseURL: URL) -> URLRequest {
+        var request = URLRequest(url: baseURL.appendingPathComponent("accounts"))
+        request.httpMethod = "GET"
         return request
     }
 }

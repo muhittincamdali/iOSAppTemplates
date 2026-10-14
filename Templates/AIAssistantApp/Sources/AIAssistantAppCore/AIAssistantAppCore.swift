@@ -1,5 +1,4 @@
 import Foundation
-import Alamofire
 
 public struct AIAssistantWorkspaceSnapshot: Hashable, Sendable {
     public let activeContext: String

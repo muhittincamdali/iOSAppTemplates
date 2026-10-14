@@ -1,4 +1,3 @@
-import Alamofire
 import Foundation
 
 public struct ProductivityWorkspaceSummary: Hashable, Sendable {
@@ -30,19 +29,10 @@ public struct ProductivityWorkspaceSummary: Hashable, Sendable {
 public struct ProductivityAPIClient: Sendable {
     public init() {}
 
-    public func makeTasksRequest(baseURL: URL) -> URLRequestConvertible {
-        ProductivityEndpoint(baseURL: baseURL, path: "/tasks")
-    }
-}
-
-private struct ProductivityEndpoint: URLRequestConvertible, Sendable {
-    let baseURL: URL
-    let path: String
-
-    func asURLRequest() throws -> URLRequest {
-        let url = baseURL.appendingPathComponent(path)
-        var request = URLRequest(url: url)
-        request.httpMethod = HTTPMethod.get.rawValue
+    /// Builds the GET request for the `/tasks` resource relative to `baseURL`.
+    public func makeTasksRequest(baseURL: URL) -> URLRequest {
+        var request = URLRequest(url: baseURL.appendingPathComponent("tasks"))
+        request.httpMethod = "GET"
         return request
     }
 }
