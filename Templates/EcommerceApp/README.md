@@ -1,83 +1,36 @@
 # EcommerceApp
 
-Generated from `Documentation/app-surface-catalog.json`.
+E-commerce template: a SwiftUI app for iOS 18 with Shop, Browse, Cart, Orders and Profile tabs.
 
-`EcommerceApp` is the standalone-root surface for the `Commerce` lane inside `iOSAppTemplates`.
+All data is in-memory sample data and there is no networking. Replace the sample
+data in the store with your own services.
 
-## Today
+## Layout
 
-- Label: `Standalone Root + richer example + chained runtime flow`
-- Lane: `Commerce`
-- Entry: `Package.swift`
-- Product target: `E-Commerce Store`
-- Richer example: `Examples/EcommerceExample`
+| Path | Contents |
+| --- | --- |
+| `Sources/EcommerceApp/EcommerceApp.swift` | `EcommerceAppShell` (the public `App`), the screens, and `CommerceStore`, a `@MainActor` `ObservableObject` that owns the sample data and every action the screens trigger |
+| `Tests/EcommerceAppTests/` | Swift Testing suite for the app's state and actions |
+| `App/` | XcodeGen spec and a host file that calls `EcommerceAppShell.main()` |
 
-## Best For / Not For
-
-### Best for
-
-- teams evaluating a catalog and checkout starter flow
-- commerce lanes that need a SwiftUI package entry first
-- maintainers comparing standalone root packaging against the richer example
-
-### Not for
-
-- teams that expect release-grade commerce integrations today
-- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
-- teams that assume the hosted standalone iOS workflow is already green for this app pack
-
-## Product Shape
-
-- auth flow
-- catalog and featured-product surface
-- cart flow
-- checkout flow
-- order domain surface
-
-## Current Proof
-
-- No external dependency lockfile is required today
-- `swift package dump-package` passes
-- local `swift test` passes
-- `xcodebuild -scheme EcommerceApp -destination 'generic/platform=iOS' build` passes
-- `bash Scripts/validate-runtime-app-launches.sh EcommerceApp` passes locally
-- root repo `swift build -c release` passes
-- root repo `swift test` passes
-- canonical app proof page exists
-- canonical app media page exists
-- runtime screenshot is published
-- demo clip is published
-- richer example route exists
-
-## Missing Proof
-
-- stable green hosted standalone iOS baseline on current `master`
-
-## Start Here
+## Test
 
 ```bash
-open Package.swift
-open ../../Examples/EcommerceExample/README.md
+xcodebuild test -scheme EcommerceApp -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
-Repo-level proof:
+## Run
 
 ```bash
-cd ../..
-swift build
-swift test
+cd App
+xcodegen generate
+open EcommerceApp.xcodeproj
 ```
 
-Standalone generic iOS proof:
+## Start a project from this template
+
+From the repository root:
 
 ```bash
-xcodebuild -scheme EcommerceApp -destination 'generic/platform=iOS' build
+swift run create-ios-app new MyApp --template ecommerce
 ```
-
-## Canonical References
-
-- [Proof Surface](../../Documentation/App-Proofs/EcommerceApp.md)
-- [Media Surface](../../Documentation/App-Media/EcommerceApp.md)
-- [Template Showcase](../../Documentation/Template-Showcase.md)
-- [Proof Matrix](../../Documentation/Proof-Matrix.md)
-- [Richer Example](../../Examples/EcommerceExample/README.md)

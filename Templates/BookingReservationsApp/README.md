@@ -1,83 +1,36 @@
 # BookingReservationsApp
 
-Generated from `Documentation/app-surface-catalog.json`.
+Booking & Reservations template: a SwiftUI app for iOS 18 with Home, Calendar, Guests, Requests and Profile tabs.
 
-`BookingReservationsApp` is the standalone-root surface for the `Booking / Reservations` lane inside `iOSAppTemplates`.
+All data is in-memory sample data and there is no networking. Replace the sample
+data in the store with your own services.
 
-## Today
+## Layout
 
-- Label: `Standalone Root + richer example + chained runtime flow`
-- Lane: `Booking / Reservations`
-- Entry: `Package.swift`
-- Product target: `Booking & Reservations`
-- Richer example: `Examples/BookingReservationsExample`
+| Path | Contents |
+| --- | --- |
+| `Sources/BookingReservationsApp/BookingReservationsApp.swift` | `BookingReservationsAppShell` (the public `App`), the screens, and `BookingOperationsStore`, a `@MainActor` `ObservableObject` that owns the sample data and every action the screens trigger |
+| `Tests/BookingReservationsAppTests/` | Swift Testing suite for the app's state and actions |
+| `App/` | XcodeGen spec and a host file that calls `BookingReservationsAppShell.main()` |
 
-## Best For / Not For
-
-### Best for
-
-- teams evaluating booking, calendar, and reservation starter flows
-- readers comparing travel-adjacent booking surfaces
-- maintainers reviewing appointment or reservation starter patterns
-
-### Not for
-
-- teams expecting production reservation backends today
-- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
-- teams that assume the hosted standalone iOS workflow is already green for this app pack
-
-## Product Shape
-
-- availability flow
-- reservation detail surface
-- calendar or timeslot routing
-- confirmation starter flow
-- reservation domain model
-
-## Current Proof
-
-- No external dependency lockfile is required today
-- `swift package dump-package` passes
-- local `swift test` passes
-- `xcodebuild -scheme BookingReservationsApp -destination 'generic/platform=iOS' build` passes
-- `bash Scripts/validate-runtime-app-launches.sh BookingReservationsApp` passes locally
-- root repo `swift build -c release` passes
-- root repo `swift test` passes
-- canonical app proof page exists
-- canonical app media page exists
-- runtime screenshot is published
-- demo clip is published
-- richer example route exists
-
-## Missing Proof
-
-- stable green hosted standalone iOS baseline on current `master`
-
-## Start Here
+## Test
 
 ```bash
-open Package.swift
-open ../../Examples/BookingReservationsExample/README.md
+xcodebuild test -scheme BookingReservationsApp -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
-Repo-level proof:
+## Run
 
 ```bash
-cd ../..
-swift build
-swift test
+cd App
+xcodegen generate
+open BookingReservationsApp.xcodeproj
 ```
 
-Standalone generic iOS proof:
+## Start a project from this template
+
+From the repository root:
 
 ```bash
-xcodebuild -scheme BookingReservationsApp -destination 'generic/platform=iOS' build
+swift run create-ios-app new MyApp --template booking
 ```
-
-## Canonical References
-
-- [Proof Surface](../../Documentation/App-Proofs/BookingReservationsApp.md)
-- [Media Surface](../../Documentation/App-Media/BookingReservationsApp.md)
-- [Template Showcase](../../Documentation/Template-Showcase.md)
-- [Proof Matrix](../../Documentation/Proof-Matrix.md)
-- [Richer Example](../../Examples/BookingReservationsExample/README.md)

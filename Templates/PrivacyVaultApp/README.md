@@ -1,83 +1,37 @@
 # PrivacyVaultApp
 
-Generated from `Documentation/app-surface-catalog.json`.
+Privacy Vault template: a SwiftUI app for iOS 18 with Vault, Alerts, Recovery, Audit and Profile tabs.
 
-`PrivacyVaultApp` is the standalone-root surface for the `Privacy / Secure Vault` lane inside `iOSAppTemplates`.
+All data is in-memory sample data and there is no networking. Replace the sample
+data in the store with your own services.
 
-## Today
+## Layout
 
-- Label: `Standalone Root + richer example + chained runtime flow`
-- Lane: `Privacy / Secure Vault`
-- Entry: `Package.swift`
-- Product target: `Privacy / Secure Vault`
-- Richer example: `Examples/PrivacyVaultExample`
+| Path | Contents |
+| --- | --- |
+| `Sources/PrivacyVaultApp/PrivacyVaultApp.swift` | `PrivacyVaultAppShell` (the public `App`), the screens, and `PrivacyVaultOperationsStore`, a `@MainActor` `ObservableObject` that owns the sample data and every action the screens trigger |
+| `Sources/PrivacyVaultApp/PrivacyVaultModels.swift` | Dashboard snapshot, collection and health value types |
+| `Tests/PrivacyVaultAppTests/` | Swift Testing suite for the app's state and actions |
+| `App/` | XcodeGen spec and a host file that calls `PrivacyVaultAppShell.main()` |
 
-## Best For / Not For
-
-### Best for
-
-- teams evaluating a privacy-first storage starter flow
-- readers comparing security-oriented packaging with a richer example route
-- maintainers reviewing secure-list and vault UI patterns
-
-### Not for
-
-- teams expecting production audited secure storage today
-- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
-- teams that assume the hosted standalone iOS workflow is already green for this app pack
-
-## Product Shape
-
-- vault overview flow
-- secure item list surface
-- detail and reveal starter flow
-- privacy settings flow
-- secure-vault starter model
-
-## Current Proof
-
-- No external dependency lockfile is required today
-- `swift package dump-package` passes
-- local `swift test` passes
-- `xcodebuild -scheme PrivacyVaultApp -destination 'generic/platform=iOS' build` passes
-- `bash Scripts/validate-runtime-app-launches.sh PrivacyVaultApp` passes locally
-- root repo `swift build -c release` passes
-- root repo `swift test` passes
-- canonical app proof page exists
-- canonical app media page exists
-- runtime screenshot is published
-- demo clip is published
-- richer example route exists
-
-## Missing Proof
-
-- stable green hosted standalone iOS baseline on current `master`
-
-## Start Here
+## Test
 
 ```bash
-open Package.swift
-open ../../Examples/PrivacyVaultExample/README.md
+xcodebuild test -scheme PrivacyVaultApp -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
-Repo-level proof:
+## Run
 
 ```bash
-cd ../..
-swift build
-swift test
+cd App
+xcodegen generate
+open PrivacyVaultApp.xcodeproj
 ```
 
-Standalone generic iOS proof:
+## Start a project from this template
+
+From the repository root:
 
 ```bash
-xcodebuild -scheme PrivacyVaultApp -destination 'generic/platform=iOS' build
+swift run create-ios-app new MyApp --template privacy-vault
 ```
-
-## Canonical References
-
-- [Proof Surface](../../Documentation/App-Proofs/PrivacyVaultApp.md)
-- [Media Surface](../../Documentation/App-Media/PrivacyVaultApp.md)
-- [Template Showcase](../../Documentation/Template-Showcase.md)
-- [Proof Matrix](../../Documentation/Proof-Matrix.md)
-- [Richer Example](../../Examples/PrivacyVaultExample/README.md)

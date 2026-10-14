@@ -1,84 +1,36 @@
 # TravelPlannerApp
 
-Generated from `Documentation/app-surface-catalog.json`.
+Travel Planner template: a SwiftUI app for iOS 18 with Trips, Timeline, Bookings, Essentials and Profile tabs.
 
-`TravelPlannerApp` is the standalone-root surface for the `Travel` lane inside `iOSAppTemplates`.
+All data is in-memory sample data and there is no networking. Replace the sample
+data in the store with your own services.
 
-## Today
+## Layout
 
-- Label: `Standalone Root + richer example + chained runtime flow`
-- Lane: `Travel`
-- Entry: `Package.swift`
-- Product target: `Travel Planner`
-- Richer example: `Examples/TravelPlannerExample`
+| Path | Contents |
+| --- | --- |
+| `Sources/TravelPlannerApp/TravelPlannerApp.swift` | `TravelPlannerAppShell` (the public `App`), the screens, and `TravelPlannerOperationsStore`, a `@MainActor` `ObservableObject` that owns the sample data and every action the screens trigger |
+| `Tests/TravelPlannerAppTests/` | Swift Testing suite for the app's state and actions |
+| `App/` | XcodeGen spec and a host file that calls `TravelPlannerAppShell.main()` |
 
-## Best For / Not For
-
-### Best for
-
-- teams evaluating trip and itinerary planning flows
-- readers comparing travel lane packaging and richer example routing
-- maintainers reviewing booking-adjacent trip surfaces
-
-### Not for
-
-- teams expecting full booking network integrations today
-- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
-- teams that assume the hosted standalone iOS workflow is already green for this app pack
-
-## Product Shape
-
-- trip overview flow
-- itinerary cards
-- destination highlights
-- booking-adjacent planning surface
-- starter travel domain model
-
-## Current Proof
-
-- `Package.resolved` exists as the tracked dependency lockfile
-- `swift package dump-package` passes
-- local `swift test` passes
-- `xcodebuild -scheme TravelPlannerApp -destination 'generic/platform=iOS' build` passes
-- `bash Scripts/validate-runtime-app-launches.sh TravelPlannerApp` passes locally
-- root repo `swift build -c release` passes
-- root repo `swift test` passes
-- canonical app proof page exists
-- canonical app media page exists
-- runtime screenshot is published
-- demo clip is published
-- richer example route exists
-
-## Missing Proof
-
-- stable green hosted standalone iOS baseline on current `master`
-
-## Start Here
+## Test
 
 ```bash
-open Package.swift
-open Package.resolved
-open ../../Examples/TravelPlannerExample/README.md
+xcodebuild test -scheme TravelPlannerApp -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
-Repo-level proof:
+## Run
 
 ```bash
-cd ../..
-swift build
-swift test
+cd App
+xcodegen generate
+open TravelPlannerApp.xcodeproj
 ```
 
-Standalone generic iOS proof:
+## Start a project from this template
+
+From the repository root:
 
 ```bash
-xcodebuild -scheme TravelPlannerApp -destination 'generic/platform=iOS' build
+swift run create-ios-app new MyApp --template travel
 ```
-
-## Canonical References
-
-- [Proof Surface](../../Documentation/App-Proofs/TravelPlannerApp.md)
-- [Media Surface](../../Documentation/App-Media/TravelPlannerApp.md)
-- [Template Showcase](../../Documentation/Template-Showcase.md)
-- [Proof Matrix](../../Documentation/Proof-Matrix.md)
-- [Richer Example](../../Examples/TravelPlannerExample/README.md)

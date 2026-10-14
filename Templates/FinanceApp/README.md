@@ -1,84 +1,36 @@
 # FinanceApp
 
-Generated from `Documentation/app-surface-catalog.json`.
+Personal Finance template: a SwiftUI app for iOS 18 with Overview, Accounts, Budgets, Activity and Insights tabs.
 
-`FinanceApp` is the standalone-root surface for the `Finance` lane inside `iOSAppTemplates`.
+All data is in-memory sample data and there is no networking. Replace the sample
+data in the store with your own services.
 
-## Today
+## Layout
 
-- Label: `Standalone Root + richer example + chained runtime flow`
-- Lane: `Finance`
-- Entry: `Package.swift`
-- Product target: `Finance / Budgeting`
-- Richer example: `Examples/FinanceExample`
+| Path | Contents |
+| --- | --- |
+| `Sources/FinanceApp/FinanceApp.swift` | `FinanceAppShell` (the public `App`), the screens, and `FinanceOperatingStore`, a `@MainActor` `ObservableObject` that owns the sample data and every action the screens trigger |
+| `Tests/FinanceAppTests/` | Swift Testing suite for the app's state and actions |
+| `App/` | XcodeGen spec and a host file that calls `FinanceAppShell.main()` |
 
-## Best For / Not For
-
-### Best for
-
-- teams inspecting budgeting and account-summary starter flows
-- readers who want a finance lane with root packaging and richer example coverage
-- maintainers reviewing starter financial UI patterns without backend claims
-
-### Not for
-
-- teams expecting bank-grade integrations today
-- readers who expect automated multi-step interaction proof beyond the current first-screen runtime proof set
-- teams that assume the hosted standalone iOS workflow is already green for this app pack
-
-## Product Shape
-
-- account summary flow
-- transaction overview
-- budget category surface
-- spending insight cards
-- starter finance domain model
-
-## Current Proof
-
-- `Package.resolved` exists as the tracked dependency lockfile
-- `swift package dump-package` passes
-- local `swift test` passes
-- `xcodebuild -scheme FinanceApp -destination 'generic/platform=iOS' build` passes
-- `bash Scripts/validate-runtime-app-launches.sh FinanceApp` passes locally
-- root repo `swift build -c release` passes
-- root repo `swift test` passes
-- canonical app proof page exists
-- canonical app media page exists
-- runtime screenshot is published
-- demo clip is published
-- richer example route exists
-
-## Missing Proof
-
-- stable green hosted standalone iOS baseline on current `master`
-
-## Start Here
+## Test
 
 ```bash
-open Package.swift
-open Package.resolved
-open ../../Examples/FinanceExample/README.md
+xcodebuild test -scheme FinanceApp -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
-Repo-level proof:
+## Run
 
 ```bash
-cd ../..
-swift build
-swift test
+cd App
+xcodegen generate
+open FinanceApp.xcodeproj
 ```
 
-Standalone generic iOS proof:
+## Start a project from this template
+
+From the repository root:
 
 ```bash
-xcodebuild -scheme FinanceApp -destination 'generic/platform=iOS' build
+swift run create-ios-app new MyApp --template finance
 ```
-
-## Canonical References
-
-- [Proof Surface](../../Documentation/App-Proofs/FinanceApp.md)
-- [Media Surface](../../Documentation/App-Media/FinanceApp.md)
-- [Template Showcase](../../Documentation/Template-Showcase.md)
-- [Proof Matrix](../../Documentation/Proof-Matrix.md)
-- [Richer Example](../../Examples/FinanceExample/README.md)
