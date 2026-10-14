@@ -68,7 +68,7 @@ struct FoodDeliveryOperationsStoreTests {
 
         store.placeOrder()
 
-        #expect(store.liveOrder.status == "Order confirmed")
+        #expect(store.liveOrder.status == .confirmed)
         #expect(store.liveOrder.total == total)
         #expect(store.pastOrders.count == pastCount + 1)
         #expect(store.pastOrders[0].id == store.liveOrder.id)
@@ -89,16 +89,16 @@ struct FoodDeliveryOperationsStoreTests {
     @Test func liveOrderAdvancesThroughEveryStageAndStaysDelivered() {
         let store = FoodDeliveryOperationsStore()
         store.placeOrder()
-        var statuses: [String] = []
+        var statuses: [DeliveryOrderStatus] = []
 
         for _ in 0..<5 {
             store.advanceLiveOrder()
             statuses.append(store.liveOrder.status)
         }
 
-        #expect(statuses == ["Kitchen preparing", "Courier picked up", "Courier arriving", "Delivered", "Delivered"])
+        #expect(statuses == [.kitchenPreparing, .courierPickedUp, .courierArriving, .delivered, .delivered])
         #expect(store.liveOrder.progress == 1)
-        #expect(store.pastOrders[0].status == "Delivered", "past order mirrors the live order")
+        #expect(store.pastOrders[0].status == .delivered, "past order mirrors the live order")
     }
 
     @Test func courierRecoveryNeverMovesProgressBackwards() {

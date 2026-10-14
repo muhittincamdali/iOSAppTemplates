@@ -104,7 +104,7 @@ final class FoodDeliveryOperationsStore: ObservableObject {
 
     var dashboardHeadline: String {
         if liveOrder.progress < 1 {
-            return "\(liveOrder.status) and the courier wave is still active."
+            return "\(liveOrder.status.label) and the courier wave is still active."
         }
         if cartItems.isEmpty {
             return "Cart is empty. Build the next order before the evening peak."
@@ -159,7 +159,7 @@ final class FoodDeliveryOperationsStore: ObservableObject {
 
         liveOrder = DeliveryOrderRecord(
             restaurantName: restaurant.name,
-            status: "Order confirmed",
+            status: .confirmed,
             eta: "24 min",
             courierName: "Mert",
             total: total,
@@ -180,21 +180,21 @@ final class FoodDeliveryOperationsStore: ObservableObject {
 
     func advanceLiveOrder() {
         switch liveOrder.status {
-        case "Order confirmed":
-            liveOrder.status = "Kitchen preparing"
+        case .confirmed:
+            liveOrder.status = .kitchenPreparing
             liveOrder.progress = 0.45
             liveOrder.timeline[1] = "Kitchen preparing"
-        case "Kitchen preparing":
-            liveOrder.status = "Courier picked up"
+        case .kitchenPreparing:
+            liveOrder.status = .courierPickedUp
             liveOrder.progress = 0.72
             liveOrder.timeline[2] = "Courier assigned"
             liveOrder.timeline[3] = "Courier picked up"
-        case "Courier picked up":
-            liveOrder.status = "Courier arriving"
+        case .courierPickedUp:
+            liveOrder.status = .courierArriving
             liveOrder.progress = 0.9
             liveOrder.eta = "8 min"
-        case "Courier arriving":
-            liveOrder.status = "Delivered"
+        case .courierArriving:
+            liveOrder.status = .delivered
             liveOrder.progress = 1
             liveOrder.eta = "Delivered now"
         default:
@@ -205,7 +205,7 @@ final class FoodDeliveryOperationsStore: ObservableObject {
 
     func reportCourierIssue() {
         liveOrder.supportStatus = "Courier issue opened"
-        liveOrder.status = "Support reviewing courier issue"
+        liveOrder.status = .courierIssue
         liveOrder.timeline.append("Courier issue opened with support")
         operatorNote = "Courier issue escalated. ETA is being recalculated."
         syncPastOrder()
@@ -213,7 +213,7 @@ final class FoodDeliveryOperationsStore: ObservableObject {
 
     func recoverCourierIssue() {
         liveOrder.supportStatus = "Courier issue resolved"
-        liveOrder.status = "Courier re-routed"
+        liveOrder.status = .courierRerouted
         liveOrder.eta = "14 min"
         liveOrder.progress = max(liveOrder.progress, 0.76)
         liveOrder.timeline.append("Courier issue resolved and route stabilized")
@@ -222,7 +222,7 @@ final class FoodDeliveryOperationsStore: ObservableObject {
     }
 
     func confirmDelivered() {
-        liveOrder.status = "Delivered"
+        liveOrder.status = .delivered
         liveOrder.eta = "Delivered now"
         liveOrder.progress = 1
         liveOrder.supportStatus = "Closed"
@@ -375,7 +375,7 @@ struct FoodDeliveryOrderStatusCard: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(store.liveOrder.restaurantName)
                         .font(.headline)
-                    Text(store.liveOrder.status)
+                    Text(store.liveOrder.status.label)
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.orange)
                     Text("Courier: \(store.liveOrder.courierName) • \(store.liveOrder.eta)")
@@ -580,7 +580,7 @@ struct FoodDeliveryOrdersView: View {
                     } label: {
                         VStack(alignment: .leading, spacing: 8) {
                             Text(store.liveOrder.restaurantName)
-                            Text("\(store.liveOrder.status) • \(store.liveOrder.eta)")
+                            Text("\(store.liveOrder.status.label) • \(store.liveOrder.eta)")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -595,7 +595,7 @@ struct FoodDeliveryOrdersView: View {
                             } label: {
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text(order.restaurantName)
-                                    Text("\(order.status) • \(order.total.currencyString)")
+                                    Text("\(order.status.label) • \(order.total.currencyString)")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
@@ -623,7 +623,7 @@ struct FoodDeliveryOrderDetailView: View {
             List {
                 Section("Order") {
                     LabeledContent("Restaurant", value: order.restaurantName)
-                    LabeledContent("Status", value: order.status)
+                    LabeledContent("Status", value: order.status.label)
                     LabeledContent("ETA", value: order.eta)
                     LabeledContent("Courier", value: order.courierName)
                     LabeledContent("Total", value: order.total.currencyString)
@@ -639,13 +639,13 @@ struct FoodDeliveryOrderDetailView: View {
                 Section("Actions") {
                     if order.id == store.liveOrder.id {
                         Button("Advance Order") { store.advanceLiveOrder() }
-                            .disabled(store.liveOrder.status == "Delivered")
+                            .disabled(store.liveOrder.status == .delivered)
                         Button("Report Courier Issue") { store.reportCourierIssue() }
                             .disabled(store.liveOrder.supportStatus == "Courier issue opened")
                         Button("Resolve Courier Issue") { store.recoverCourierIssue() }
                             .disabled(store.liveOrder.supportStatus != "Courier issue opened")
                         Button("Confirm Delivery") { store.confirmDelivered() }
-                            .disabled(store.liveOrder.status == "Delivered")
+                            .disabled(store.liveOrder.status == .delivered)
                     }
                 }
             }
@@ -764,10 +764,22 @@ struct DeliveryCartItemRecord: Identifiable {
     }()
 }
 
+enum DeliveryOrderStatus: String, Hashable {
+    case confirmed = "Order confirmed"
+    case kitchenPreparing = "Kitchen preparing"
+    case courierPickedUp = "Courier picked up"
+    case courierArriving = "Courier arriving"
+    case delivered = "Delivered"
+    case courierIssue = "Support reviewing courier issue"
+    case courierRerouted = "Courier re-routed"
+
+    var label: String { rawValue }
+}
+
 struct DeliveryOrderRecord: Identifiable {
     let id: UUID
     let restaurantName: String
-    var status: String
+    var status: DeliveryOrderStatus
     var eta: String
     var courierName: String
     var total: Double
@@ -778,7 +790,7 @@ struct DeliveryOrderRecord: Identifiable {
     init(
         id: UUID = UUID(),
         restaurantName: String,
-        status: String,
+        status: DeliveryOrderStatus,
         eta: String,
         courierName: String,
         total: Double,
@@ -799,7 +811,7 @@ struct DeliveryOrderRecord: Identifiable {
 
     static let sampleLive = DeliveryOrderRecord(
         restaurantName: "Levant Kitchen",
-        status: "Courier arriving",
+        status: .courierArriving,
         eta: "8 min",
         courierName: "Mert",
         total: 24.4,
@@ -810,8 +822,8 @@ struct DeliveryOrderRecord: Identifiable {
 
     static let samplePast: [DeliveryOrderRecord] = [
         sampleLive,
-        DeliveryOrderRecord(restaurantName: "Daily Greens", status: "Delivered", eta: "Delivered Apr 24", courierName: "Aylin", total: 19.2, progress: 1.0, timeline: ["Order confirmed", "Delivered on time"], supportStatus: "Closed"),
-        DeliveryOrderRecord(restaurantName: "Burger Works", status: "Delivered", eta: "Delivered Apr 21", courierName: "Can", total: 27.6, progress: 1.0, timeline: ["Order confirmed", "Delivered with photo"], supportStatus: "Closed")
+        DeliveryOrderRecord(restaurantName: "Daily Greens", status: .delivered, eta: "Delivered Apr 24", courierName: "Aylin", total: 19.2, progress: 1.0, timeline: ["Order confirmed", "Delivered on time"], supportStatus: "Closed"),
+        DeliveryOrderRecord(restaurantName: "Burger Works", status: .delivered, eta: "Delivered Apr 21", courierName: "Can", total: 27.6, progress: 1.0, timeline: ["Order confirmed", "Delivered with photo"], supportStatus: "Closed")
     ]
 }
 
