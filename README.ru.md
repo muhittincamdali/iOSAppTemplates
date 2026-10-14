@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@80ba9c903424f2df7f4502c7f0fcfb1759126c62 status=reviewed -->
+<!-- i18n-source: README.md@930ecae6c52c696ce79171172268185a0dc74d4e status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ru-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ru-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ru-light.svg" alt="iOSAppTemplates: Двадцать шаблонов SwiftUI-приложений для iOS 18: Swift-пакеты с тестами, которые копируются под вашим именем."></picture></p>
@@ -9,7 +9,7 @@
 
 <p align="center">
 <a href="https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml"><img src="https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml/badge.svg" alt="Статус CI"></a>
-<a href="https://github.com/muhittincamdali/iOSAppTemplates/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-light.svg" alt="Последняя версия: v2.1.0"></picture></a>
+<a href="https://github.com/muhittincamdali/iOSAppTemplates/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-light.svg" alt="Последняя версия: v3.0.0"></picture></a>
 <a href="https://github.com/muhittincamdali/iOSAppTemplates/blob/master/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-platforms-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-platforms-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-platforms-light.svg" alt="Поддерживаемые платформы: macOS 14+"></picture></a>
 <a href="https://github.com/muhittincamdali/iOSAppTemplates/blob/master/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-language-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-language-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-language-light.svg" alt="Версия языка: Swift 6.0+"></picture></a>
 <a href="https://github.com/muhittincamdali/iOSAppTemplates/blob/master/LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-license-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-license-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-license-light.svg" alt="Лицензия: MIT"></picture></a>
@@ -105,13 +105,12 @@ swift build -c release
 
 ### Библиотека TemplateScaffold
 
-Логика `create-ios-app` находится в библиотеке `TemplateScaffold` (macOS 14 или новее). Она ещё не
-вошла ни в один релиз с тегом (тег `v2.1.0` содержит прежнюю структуру), поэтому подключайте ветку
-`master`:
+Логика `create-ios-app` находится в библиотеке `TemplateScaffold` (macOS 14 или новее). Она входит
+в релизы начиная с 3.0.0:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/muhittincamdali/iOSAppTemplates.git", branch: "master")
+    .package(url: "https://github.com/muhittincamdali/iOSAppTemplates.git", from: "3.0.0")
 ],
 targets: [
     .executableTarget(name: "YourTool", dependencies: [
@@ -300,8 +299,7 @@ scripts/                      test-templates.sh, capture-screenshots.sh
 
 ## План развития
 
-- Выпустить текущую структуру как 3.0.0 с примечаниями к выпуску и добавить пакет в Swift Package
-  Index.
+- Добавить пакет в Swift Package Index.
 - Заменить на enum оставшиеся строковые состояния, например заголовок заказа в `EcommerceApp`,
   статус изоляции в `MessagingApp` и режим пресета в `AIAssistantApp`.
 - Разделить шаблоны, в которых большая часть кода всё ещё лежит в `<Name>.swift`, на файлы store,

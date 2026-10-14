@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@80ba9c903424f2df7f4502c7f0fcfb1759126c62 status=reviewed -->
+<!-- i18n-source: README.md@930ecae6c52c696ce79171172268185a0dc74d4e status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-light.svg" alt="iOSAppTemplates: iOS 18 向け SwiftUI アプリテンプレート 20 種。どれもテスト付きの Swift パッケージで、自分の名前で複製できます。"></picture></p>
@@ -9,7 +9,7 @@
 
 <p align="center">
 <a href="https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml"><img src="https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml/badge.svg" alt="CI ステータス"></a>
-<a href="https://github.com/muhittincamdali/iOSAppTemplates/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-light.svg" alt="最新バージョン: v2.1.0"></picture></a>
+<a href="https://github.com/muhittincamdali/iOSAppTemplates/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-light.svg" alt="最新バージョン: v3.0.0"></picture></a>
 <a href="https://github.com/muhittincamdali/iOSAppTemplates/blob/master/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-platforms-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-platforms-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-platforms-light.svg" alt="対応プラットフォーム: macOS 14+"></picture></a>
 <a href="https://github.com/muhittincamdali/iOSAppTemplates/blob/master/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-language-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-language-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-language-light.svg" alt="言語バージョン: Swift 6.0+"></picture></a>
 <a href="https://github.com/muhittincamdali/iOSAppTemplates/blob/master/LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-license-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-license-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-license-light.svg" alt="ライセンス: MIT"></picture></a>
@@ -84,11 +84,11 @@ swift build -c release
 
 ### TemplateScaffold ライブラリ
 
-`create-ios-app` のロジックは `TemplateScaffold` ライブラリ（macOS 14 以上）にあります。まだタグ付きのリリースには含まれていない（`v2.1.0` タグは以前の構成）ため、`master` ブランチに依存してください。
+`create-ios-app` のロジックは `TemplateScaffold` ライブラリ（macOS 14 以上）にあります。3.0.0 以降のリリースに含まれています。
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/muhittincamdali/iOSAppTemplates.git", branch: "master")
+    .package(url: "https://github.com/muhittincamdali/iOSAppTemplates.git", from: "3.0.0")
 ],
 targets: [
     .executableTarget(name: "YourTool", dependencies: [
@@ -250,7 +250,7 @@ scripts/                      test-templates.sh, capture-screenshots.sh
 
 ## ロードマップ
 
-- 現在の構成をリリースノート付きの 3.0.0 として公開し、パッケージを Swift Package Index に登録する。
+- パッケージを Swift Package Index に登録する。
 - 残っている文字列ベースの状態を enum に置き換える。たとえば `EcommerceApp` の注文見出し、 `MessagingApp` の containment 状態、`AIAssistantApp` の preset モード。
 - まだコードの大半を `<Name>.swift` に置いているテンプレートを、`EcommerceApp`、`FitnessApp`、 `SocialMediaApp` と同じように store、モデル、画面のファイルに分割する。
 

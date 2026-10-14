@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@80ba9c903424f2df7f4502c7f0fcfb1759126c62 status=reviewed -->
+<!-- i18n-source: README.md@930ecae6c52c696ce79171172268185a0dc74d4e status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ko-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ko-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ko-light.svg" alt="iOSAppTemplates: iOS 18용 SwiftUI 앱 템플릿 20종. 각각 테스트가 포함된 Swift 패키지이며 원하는 이름으로 복사할 수 있습니다."></picture></p>
@@ -9,7 +9,7 @@
 
 <p align="center">
 <a href="https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml"><img src="https://github.com/muhittincamdali/iOSAppTemplates/actions/workflows/ci.yml/badge.svg" alt="CI 상태"></a>
-<a href="https://github.com/muhittincamdali/iOSAppTemplates/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-light.svg" alt="최신 버전: v2.1.0"></picture></a>
+<a href="https://github.com/muhittincamdali/iOSAppTemplates/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-version-light.svg" alt="최신 버전: v3.0.0"></picture></a>
 <a href="https://github.com/muhittincamdali/iOSAppTemplates/blob/master/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-platforms-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-platforms-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-platforms-light.svg" alt="지원 플랫폼: macOS 14+"></picture></a>
 <a href="https://github.com/muhittincamdali/iOSAppTemplates/blob/master/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-language-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-language-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-language-light.svg" alt="언어 버전: Swift 6.0+"></picture></a>
 <a href="https://github.com/muhittincamdali/iOSAppTemplates/blob/master/LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-license-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-license-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/badge-license-light.svg" alt="라이선스: MIT"></picture></a>
@@ -101,12 +101,12 @@ swift build -c release
 
 ### TemplateScaffold 라이브러리
 
-`create-ios-app`의 로직은 `TemplateScaffold` 라이브러리(macOS 14 이상)에 있습니다. 아직 태그가 붙은
-릴리스에 포함되지 않았으므로(`v2.1.0` 태그는 이전 구조입니다) `master` 브랜치에 의존하세요.
+`create-ios-app`의 로직은 `TemplateScaffold` 라이브러리(macOS 14 이상)에 있습니다. 3.0.0 이후
+릴리스에 포함되어 있습니다.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/muhittincamdali/iOSAppTemplates.git", branch: "master")
+    .package(url: "https://github.com/muhittincamdali/iOSAppTemplates.git", from: "3.0.0")
 ],
 targets: [
     .executableTarget(name: "YourTool", dependencies: [
@@ -291,7 +291,7 @@ scripts/                      test-templates.sh, capture-screenshots.sh
 
 ## 로드맵
 
-- 현재 구조를 릴리스 노트와 함께 3.0.0으로 배포하고 패키지를 Swift Package Index에 등록합니다.
+- 패키지를 Swift Package Index에 등록합니다.
 - 남아 있는 문자열 기반 상태를 enum으로 바꿉니다. 예를 들어 `EcommerceApp`의 주문 헤드라인,
   `MessagingApp`의 containment 상태, `AIAssistantApp`의 preset 모드입니다.
 - 아직 코드 대부분을 `<Name>.swift`에 두고 있는 템플릿을 `EcommerceApp`, `FitnessApp`, `SocialMediaApp`처럼

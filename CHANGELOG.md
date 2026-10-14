@@ -7,9 +7,11 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-10-14
+
 This release narrows the repository to what builds and is tested: the twenty app templates
 under `Templates/` and a rewritten `create-ios-app`. The root package no longer exposes the
-template libraries it shipped before, so the next version is a major release.
+template libraries it shipped before, so this is a major release.
 
 ### Added
 
@@ -97,6 +99,7 @@ Tagged release. See the tag `v2.1.0` for the state of the repository at that tim
 
 Tagged release. See the tag `v2.0.0` for the state of the repository at that time.
 
-[Unreleased]: https://github.com/muhittincamdali/iOSAppTemplates/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/muhittincamdali/iOSAppTemplates/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/muhittincamdali/iOSAppTemplates/compare/v2.1.0...v3.0.0
 [2.1.0]: https://github.com/muhittincamdali/iOSAppTemplates/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/muhittincamdali/iOSAppTemplates/releases/tag/v2.0.0
