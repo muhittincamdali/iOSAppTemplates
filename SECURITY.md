@@ -25,3 +25,6 @@ or email muhittincamdali@gmail.com with:
 - steps to reproduce
 
 Fixes are released on `master`; there are no separately maintained release branches.
+
+Response times and the disclosure process are described in the
+[shared security policy](https://github.com/muhittincamdali/.github/blob/main/SECURITY.md).

@@ -3,3 +3,6 @@ contact_links:
   - name: Security vulnerability
     url: https://github.com/muhittincamdali/iOSAppTemplates/security/advisories/new
     about: Report security issues privately instead of opening a public issue.
+  - name: Questions and help
+    url: https://github.com/muhittincamdali/.github/blob/main/SUPPORT.md
+    about: Where to ask how to do something and what to include.

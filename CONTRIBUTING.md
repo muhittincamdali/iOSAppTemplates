@@ -45,7 +45,8 @@ open FinanceApp.xcodeproj
    `Package.swift`, `Sources/<Name>App/`, `Tests/<Name>AppTests/`, `App/project.yml` and
    `App/<Name>AppHost.swift`.
 2. Expose a public `<Name>AppShell: App`.
-3. Add a `TemplateDescriptor` to `TemplateCatalog` and the template to the CI matrix.
+3. Add a `TemplateDescriptor` to `TemplateCatalog` and the template to the matrix in
+   `.github/workflows/templates.yml`.
 4. Add screenshots and a row to the README tables.
 
 ## Commits and pull requests
@@ -55,6 +56,15 @@ open FinanceApp.xcodeproj
 - Describe what changed and how you tested it.
 - Add an entry under `Unreleased` in `CHANGELOG.md` for user-visible changes.
 
+## README translations
+
+`README.md` is the source; `README.<language>.md` are translations. Change the English file
+in your pull request; the translations can follow in a later one. CI reports a translation as
+behind until it is updated and its first line is stamped with the new source version (see the
+[shared contributing guide](https://github.com/muhittincamdali/.github/blob/main/CONTRIBUTING.md)).
+
 ## Code of conduct
 
-This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md).
+This project follows the
+[code of conduct](https://github.com/muhittincamdali/.github/blob/main/CODE_OF_CONDUCT.md)
+shared by all repositories under muhittincamdali.
