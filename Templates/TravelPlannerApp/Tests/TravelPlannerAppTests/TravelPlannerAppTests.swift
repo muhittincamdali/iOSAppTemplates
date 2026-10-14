@@ -44,7 +44,7 @@ struct TravelPlannerOperationsStoreTests {
         #expect(store.alerts.last?.linkedFlightID == flight.id)
 
         store.confirmRebook(flight.id)
-        #expect(store.flights[1].status == "Rebooked")
+        #expect(store.flights[1].status == .rebooked)
         #expect(store.flights[1].departureTime.hasSuffix("+45 min buffer"))
         #expect(store.incidentRecoveredCount == recovered + 1)
     }
