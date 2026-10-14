@@ -1,14 +1,5 @@
 import Foundation
 import SwiftUI
-import Firebase
-import FirebaseAuth
-import FirebaseFirestore
-import FirebaseStorage
-import Kingfisher
-
-private enum RuntimeCaptureMode {
-    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_SCREENSHOT_MODE"] == "1"
-}
 
 private enum SocialInteractionProofMode {
     static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
@@ -44,9 +35,7 @@ struct SocialMediaApp: App {
     @StateObject private var notificationManager = NotificationManager.shared
     
     init() {
-        setupFirebase()
         setupAppearance()
-        setupAnalytics()
     }
     
     var body: some Scene {
@@ -62,12 +51,6 @@ struct SocialMediaApp: App {
     }
     
     // MARK: - Setup Methods
-    private func setupFirebase() {
-        guard !RuntimeCaptureMode.isEnabled else { return }
-        FirebaseApp.configure()
-        print("🔥 Firebase configured successfully")
-    }
-    
     private func setupAppearance() {
         // Navigation bar appearance
         let appearance = UINavigationBarAppearance()
@@ -87,39 +70,9 @@ struct SocialMediaApp: App {
         
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-        
-        print("🎨 App appearance configured")
-    }
-    
-    private func setupAnalytics() {
-        guard !RuntimeCaptureMode.isEnabled else { return }
-        Analytics.setAnalyticsCollectionEnabled(true)
-        Analytics.logEvent(AnalyticsEventAppOpen, parameters: nil)
-        print("📊 Analytics configured")
     }
     
     private func setupApp() {
-        if RuntimeCaptureMode.isEnabled {
-            authManager.currentUser = User(
-                id: "preview-user",
-                username: "preview",
-                email: "preview@iosapptemplates.dev",
-                displayName: "Preview User",
-                avatarURL: nil,
-                bio: "Runtime screenshot mode",
-                followersCount: 320,
-                followingCount: 124,
-                postsCount: 48,
-                isVerified: true,
-                createdAt: Date(),
-                lastActiveAt: Date()
-            )
-            authManager.isAuthenticated = true
-            dataManager.seedPreviewState(currentUser: authManager.currentUser)
-            notificationManager.seedPreviewState()
-            return
-        }
-
         Task {
             await authManager.checkAuthState()
             await dataManager.initialize()
@@ -146,8 +99,7 @@ struct ContentView: View {
         .animation(.easeInOut(duration: 0.3), value: authManager.isAuthenticated)
         .animation(.easeInOut(duration: 0.3), value: isLoading)
         .onAppear {
-            let delay = RuntimeCaptureMode.isEnabled ? 0.1 : 2.0
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 withAnimation {
                     isLoading = false
                 }
@@ -315,12 +267,9 @@ struct SignInView: View {
             }
             .padding(.horizontal, 32)
             
-            // Forgot password
-            Button("Forgot Password?") {
-                // Handle forgot password
-            }
-            .font(.subheadline)
-            .foregroundColor(.blue)
+            Text("Demo account: \(LocalAuthService.demoAccount.email) / \(LocalAuthService.demoAccount.password)")
+                .font(.footnote)
+                .foregroundColor(.secondary)
             
             Spacer()
         }
@@ -1446,44 +1395,38 @@ struct SearchBar: View {
 
 // MARK: - Managers
 @MainActor
-class AuthManager: ObservableObject {
-    static let shared = AuthManager()
+final class AuthManager: ObservableObject {
+    static let shared = AuthManager(service: LocalAuthService())
     
     @Published var isAuthenticated = false
     @Published var currentUser: User?
     
-    private init() {}
+    private let service: any AuthService
+    
+    init(service: any AuthService) {
+        self.service = service
+    }
     
     func checkAuthState() async {
-        // Check Firebase auth state
-        if let user = Auth.auth().currentUser {
-            await MainActor.run {
-                self.isAuthenticated = true
-                // Load user data
-            }
-        }
+        apply(await service.currentSession())
     }
     
     func signIn(email: String, password: String) async throws {
-        let result = try await Auth.auth().signIn(withEmail: email, password: password)
-        await MainActor.run {
-            self.isAuthenticated = true
-            // Load user data
-        }
+        apply(try await service.signIn(email: email, password: password))
     }
     
     func signUp(username: String, email: String, password: String) async throws {
-        let result = try await Auth.auth().createUser(withEmail: email, password: password)
-        await MainActor.run {
-            self.isAuthenticated = true
-            // Create user profile
-        }
+        apply(try await service.signUp(username: username, email: email, password: password))
     }
     
-    func signOut() {
-        try? Auth.auth().signOut()
-        isAuthenticated = false
-        currentUser = nil
+    func signOut() async {
+        await service.signOut()
+        apply(nil)
+    }
+    
+    private func apply(_ session: AuthSession?) {
+        currentUser = session.map(User.init(session:))
+        isAuthenticated = session != nil
     }
 }
 
@@ -1784,4 +1727,23 @@ struct User: Identifiable, Codable {
     let isVerified: Bool
     let createdAt: Date
     let lastActiveAt: Date
+}
+
+extension User {
+    init(session: AuthSession) {
+        self.init(
+            id: session.userID,
+            username: session.username,
+            email: session.email,
+            displayName: session.username.capitalized,
+            avatarURL: nil,
+            bio: nil,
+            followersCount: 0,
+            followingCount: 0,
+            postsCount: 0,
+            isVerified: false,
+            createdAt: Date(),
+            lastActiveAt: Date()
+        )
+    }
 } 
