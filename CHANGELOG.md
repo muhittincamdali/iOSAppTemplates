@@ -33,11 +33,16 @@ template libraries it shipped before, so the next version is a major release.
   `create-ios-app new <Name> --template <id>`.
 - The root package targets macOS 14 and contains only `create-ios-app` and
   `TemplateScaffold`.
-- Every template exposes a public `<Name>AppShell` scene instead of declaring `@main` in a
+- Every template exposes a public `<Name>Shell` scene instead of declaring `@main` in a
   library target.
 - Each template is a single app module; the `<Name>Core` and `<Name>UI` modules, which the
   apps did not use, are gone.
-- One CI workflow on macOS with SHA-pinned actions replaces nine workflows.
+- One CI workflow on macOS with SHA-pinned actions replaces nine workflows. It pins
+  Xcode 26.6 and runs SwiftLint in strict mode.
+- EcommerceApp, FitnessApp and SocialMediaApp are split into store, model and screen
+  files.
+- PrivacyVaultApp, FoodDeliveryApp and TravelPlannerApp use enums instead of strings for
+  the statuses their logic compares.
 - README, CONTRIBUTING, SECURITY and the template READMEs describe the current layout.
 
 ### Removed
@@ -58,6 +63,8 @@ template libraries it shipped before, so the next version is a major release.
 - The root package builds again with Swift 6.4.
 - The PrivacyVaultApp test expected three quick actions while the code defines four.
 - The old `create-ios-app` generated projects that depended on packages that do not exist.
+- `create-ios-app` rejects every Swift keyword that cannot follow `import`, such as `guard`
+  or `public`, as a project name; such names produced packages that did not compile.
 
 ## [2.1.0] - 2026-04-26
 
