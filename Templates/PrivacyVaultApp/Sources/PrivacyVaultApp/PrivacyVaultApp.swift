@@ -24,26 +24,31 @@ struct PrivacyVaultWorkspaceRootView: View {
                 collections: store.collections,
                 actions: store.actions,
                 health: store.health,
-                state: store.state
+                state: store.state,
+                onHardenFeaturedItem: store.hardenFeaturedItem
             )
             .tabItem {
                 Image(systemName: "lock.doc.fill")
                 Text("Vault")
             }
 
-            PrivacyVaultAlertsView(state: store.state)
+            PrivacyVaultAlertsView(state: store.state, onResolveFirstAlert: store.resolveFirstAlert)
                 .tabItem {
                     Image(systemName: "bell.badge.fill")
                     Text("Alerts")
                 }
 
-            PrivacyVaultRecoveryView(state: store.state)
+            PrivacyVaultRecoveryView(
+                state: store.state,
+                onVerifyContact: store.verifyTrustedContact,
+                onRotateRecoveryKit: store.rotateRecoveryWindow
+            )
                 .tabItem {
                     Image(systemName: "key.horizontal.fill")
                     Text("Recovery")
                 }
 
-            PrivacyVaultAuditView(state: store.state)
+            PrivacyVaultAuditView(state: store.state, onCompleteReview: store.completeAuditReview)
                 .tabItem {
                     Image(systemName: "checkmark.shield.fill")
                     Text("Audit")
@@ -69,7 +74,7 @@ final class PrivacyVaultOperationsStore: ObservableObject {
     @Published var state = PrivacyVaultWorkspaceState.sample
 
 
-    private func hardenFeaturedItem() {
+    func hardenFeaturedItem() {
         guard let item = state.featuredItems.first else { return }
         let updatedItems = state.featuredItems.enumerated().map { index, current in
             if index == 0 {
@@ -100,7 +105,7 @@ final class PrivacyVaultOperationsStore: ObservableObject {
         )
     }
 
-    private func resolveFirstAlert() {
+    func resolveFirstAlert() {
         guard !state.accessAlerts.isEmpty else { return }
         let updatedAlerts = Array(state.accessAlerts.dropFirst())
 
@@ -121,7 +126,7 @@ final class PrivacyVaultOperationsStore: ObservableObject {
         )
     }
 
-    private func verifyTrustedContact() {
+    func verifyTrustedContact() {
         guard let index = state.trustedContacts.firstIndex(where: { $0.status != "Verified" }) else { return }
         var contacts = state.trustedContacts
         let current = contacts[index]
@@ -138,7 +143,7 @@ final class PrivacyVaultOperationsStore: ObservableObject {
         )
     }
 
-    private func completeAuditReview() {
+    func completeAuditReview() {
         guard let index = state.auditChecks.firstIndex(where: { $0.status != "Resolved" && $0.status != "Complete" }) else { return }
         var checks = state.auditChecks
         let current = checks[index]
@@ -166,7 +171,7 @@ final class PrivacyVaultOperationsStore: ObservableObject {
         )
     }
 
-    private func rotateRecoveryWindow() {
+    func rotateRecoveryWindow() {
         health = PrivacyVaultOperationalHealth(
             accessAlerts: health.accessAlerts,
             medianUnlockSeconds: health.medianUnlockSeconds,
@@ -222,6 +227,7 @@ struct PrivacyVaultHomeView: View {
     let actions: [PrivacyVaultQuickAction]
     let health: PrivacyVaultOperationalHealth
     let state: PrivacyVaultWorkspaceState
+    let onHardenFeaturedItem: () -> Void
 
     var body: some View {
         NavigationStack {
@@ -236,6 +242,10 @@ struct PrivacyVaultHomeView: View {
                 .padding(16)
             }
             .navigationTitle("Vault")
+            .toolbar {
+                Button("Harden", systemImage: "lock.shield", action: onHardenFeaturedItem)
+                    .disabled(state.featuredItems.first?.status == "Hardened")
+            }
         }
     }
 }
@@ -461,6 +471,7 @@ struct PrivacyVaultOperationTile: View {
 @available(iOS 18.0, macOS 15.0, *)
 struct PrivacyVaultAlertsView: View {
     let state: PrivacyVaultWorkspaceState
+    let onResolveFirstAlert: () -> Void
 
     var body: some View {
         NavigationStack {
@@ -489,6 +500,10 @@ struct PrivacyVaultAlertsView: View {
                 }
             }
             .navigationTitle("Alerts")
+            .toolbar {
+                Button("Resolve", systemImage: "checkmark.seal", action: onResolveFirstAlert)
+                    .disabled(state.accessAlerts.isEmpty)
+            }
         }
     }
 }
@@ -496,6 +511,8 @@ struct PrivacyVaultAlertsView: View {
 @available(iOS 18.0, macOS 15.0, *)
 struct PrivacyVaultRecoveryView: View {
     let state: PrivacyVaultWorkspaceState
+    let onVerifyContact: () -> Void
+    let onRotateRecoveryKit: () -> Void
 
     var body: some View {
         NavigationStack {
@@ -516,6 +533,12 @@ struct PrivacyVaultRecoveryView: View {
                         }
                     }
                 }
+
+                Section("Actions") {
+                    Button("Verify next trusted contact", systemImage: "person.badge.shield.checkmark", action: onVerifyContact)
+                        .disabled(state.trustedContacts.allSatisfy { $0.status == "Verified" })
+                    Button("Rotate recovery kit", systemImage: "arrow.triangle.2.circlepath", action: onRotateRecoveryKit)
+                }
             }
             .navigationTitle("Recovery")
         }
@@ -525,6 +548,7 @@ struct PrivacyVaultRecoveryView: View {
 @available(iOS 18.0, macOS 15.0, *)
 struct PrivacyVaultAuditView: View {
     let state: PrivacyVaultWorkspaceState
+    let onCompleteReview: () -> Void
 
     var body: some View {
         NavigationStack {
@@ -556,6 +580,10 @@ struct PrivacyVaultAuditView: View {
                 }
             }
             .navigationTitle("Audit")
+            .toolbar {
+                Button("Resolve next", systemImage: "checkmark.shield", action: onCompleteReview)
+                    .disabled(state.auditChecks.allSatisfy { $0.status == "Resolved" || $0.status == "Complete" })
+            }
         }
     }
 }
