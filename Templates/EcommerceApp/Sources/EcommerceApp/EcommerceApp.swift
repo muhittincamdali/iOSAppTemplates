@@ -1,31 +1,6 @@
 import Foundation
 import SwiftUI
 
-private enum EcommerceInteractionProofMode {
-    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
-
-    static func write(summary: String, steps: [String]) {
-        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            return
-        }
-
-        let payload: [String: Any] = [
-            "app": "EcommerceApp",
-            "status": "completed",
-            "summary": summary,
-            "steps": steps,
-            "timestamp": ISO8601DateFormatter().string(from: Date())
-        ]
-
-        guard JSONSerialization.isValidJSONObject(payload),
-              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
-            return
-        }
-
-        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
-    }
-}
-
 @main
 struct EcommerceApp: App {
     var body: some Scene {
@@ -71,9 +46,6 @@ struct EcommerceRuntimeRootView: View {
                 }
         }
         .tint(.orange)
-        .onAppear {
-            store.runInteractionProofIfNeeded()
-        }
     }
 }
 
@@ -94,7 +66,6 @@ final class CommerceStore: ObservableObject {
     let savedAddresses: [CommerceAddress] = CommerceAddress.sampleAddresses
     let paymentMethods: [CommercePaymentMethod] = CommercePaymentMethod.sampleMethods
     let deliveryWindows = ["Tomorrow • 12:00-15:00", "Tomorrow • 18:00-21:00", "Friday • 10:00-13:00"]
-    private var interactionProofScheduled = false
 
     init() {
         selectedCategoryID = categories.first?.id
@@ -348,59 +319,6 @@ final class CommerceStore: ObservableObject {
         placedOrders[index].returnStatus = .closed
         placedOrders[index].supportStatus = "Return case closed"
         checkoutNotice = "Return case closed for \(placedOrders[index].title). Buyer can reorder or keep the replacement lane."
-    }
-
-    func runInteractionProofIfNeeded() {
-        guard EcommerceInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
-        interactionProofScheduled = true
-
-        Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 800_000_000)
-
-            if let alternateCategory = categories.dropFirst().first {
-                selectCategory(alternateCategory.id)
-            }
-
-            if let product = visibleProducts.first ?? featuredProducts.first {
-                addToCart(product.id)
-                toggleWishlist(product.id)
-            }
-
-            applyCoupon("SPRINT10")
-
-            if let window = deliveryWindows.first {
-                selectDeliveryWindow(window)
-            }
-
-            placeOrder()
-
-            guard let orderID = placedOrders.first?.id else { return }
-            lockFulfillmentReview(orderID)
-            clearFulfillmentReview(orderID)
-            advanceOrder(orderID)
-            openSupportIssue(orderID)
-            resolveSupportIssue(orderID)
-            confirmDelivery(orderID)
-            openReturnInspection(orderID)
-            approveExchange(orderID)
-            closeReturnCase(orderID)
-
-            EcommerceInteractionProofMode.write(
-                summary: placedOrders.first?.statusHeadline ?? checkoutNotice,
-                steps: [
-                    "category-selected",
-                    "product-added",
-                    "coupon-applied",
-                    "delivery-window-selected",
-                    "order-placed",
-                    "fulfillment-review-locked-and-cleared",
-                    "support-opened-and-resolved",
-                    "delivery-confirmed",
-                    "return-inspection-opened",
-                    "exchange-approved-and-closed"
-                ]
-            )
-        }
     }
 
     private func seedCart() {

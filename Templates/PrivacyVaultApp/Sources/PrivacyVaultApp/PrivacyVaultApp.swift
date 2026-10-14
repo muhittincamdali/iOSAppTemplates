@@ -2,31 +2,6 @@ import Foundation
 import SwiftUI
 import PrivacyVaultAppCore
 
-private enum PrivacyVaultInteractionProofMode {
-    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
-
-    static func write(summary: String, steps: [String]) {
-        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            return
-        }
-
-        let payload: [String: Any] = [
-            "app": "PrivacyVaultApp",
-            "status": "completed",
-            "summary": summary,
-            "steps": steps,
-            "timestamp": ISO8601DateFormatter().string(from: Date())
-        ]
-
-        guard JSONSerialization.isValidJSONObject(payload),
-              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
-            return
-        }
-
-        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
-    }
-}
-
 @available(iOS 18.0, macOS 15.0, *)
 public struct PrivacyVaultAppShell: App {
     public init() {}
@@ -81,9 +56,6 @@ struct PrivacyVaultWorkspaceRootView: View {
                 }
         }
         .tint(.teal)
-        .onAppear {
-            store.runInteractionProofIfNeeded()
-        }
     }
 }
 
@@ -96,36 +68,6 @@ final class PrivacyVaultOperationsStore: ObservableObject {
     @Published var health = PrivacyVaultOperationalHealth.sample
     @Published var state = PrivacyVaultWorkspaceState.sample
 
-    private var interactionProofScheduled = false
-
-    func runInteractionProofIfNeeded() {
-        guard PrivacyVaultInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
-        interactionProofScheduled = true
-
-        DispatchQueue.main.async {
-            var steps: [String] = []
-
-            self.hardenFeaturedItem()
-            steps.append("Hardened featured item")
-
-            self.resolveFirstAlert()
-            steps.append("Resolved first access alert")
-
-            self.verifyTrustedContact()
-            steps.append("Verified trusted contact")
-
-            self.completeAuditReview()
-            steps.append("Completed audit review")
-
-            self.rotateRecoveryWindow()
-            steps.append("Rotated recovery window")
-
-            PrivacyVaultInteractionProofMode.write(
-                summary: self.state.protectionHeadline,
-                steps: steps
-            )
-        }
-    }
 
     private func hardenFeaturedItem() {
         guard let item = state.featuredItems.first else { return }

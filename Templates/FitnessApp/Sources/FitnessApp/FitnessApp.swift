@@ -1,31 +1,6 @@
 import Foundation
 import SwiftUI
 
-private enum FitnessInteractionProofMode {
-    static let isEnabled = ProcessInfo.processInfo.environment["IOSAPPTEMPLATES_INTERACTION_PROOF_MODE"] == "1"
-
-    static func write(summary: String, steps: [String]) {
-        guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            return
-        }
-
-        let payload: [String: Any] = [
-            "app": "FitnessApp",
-            "status": "completed",
-            "summary": summary,
-            "steps": steps,
-            "timestamp": ISO8601DateFormatter().string(from: Date())
-        ]
-
-        guard JSONSerialization.isValidJSONObject(payload),
-              let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys]) else {
-            return
-        }
-
-        try? data.write(to: documentsURL.appendingPathComponent("interaction-proof.json"), options: [.atomic])
-    }
-}
-
 @main
 struct FitnessApp: App {
     var body: some Scene {
@@ -71,9 +46,6 @@ struct FitnessRuntimeRootView: View {
                 }
         }
         .tint(.green)
-        .onAppear {
-            store.runInteractionProofIfNeeded()
-        }
     }
 }
 
@@ -92,7 +64,6 @@ final class FitnessStudioStore: ObservableObject {
     @Published var streakDays = 18
     @Published var bodyWeight = 78.4
     @Published var weeklyLoadScore = 82
-    private var interactionProofScheduled = false
 
     init() {
         selectedPlanID = plans.first?.id
@@ -312,76 +283,6 @@ final class FitnessStudioStore: ObservableObject {
             return "Readiness gate is green. Heavy loading can start without a coach override."
         }
         return "Readiness gate is still amber. Clear every protocol item before the next heavy block."
-    }
-
-    func runInteractionProofIfNeeded() {
-        guard FitnessInteractionProofMode.isEnabled, !interactionProofScheduled else { return }
-        interactionProofScheduled = true
-
-        DispatchQueue.main.async {
-            var steps: [String] = []
-
-            self.readinessChecks
-                .filter { !$0.isComplete }
-                .forEach { self.toggleReadinessCheck($0.id) }
-            steps.append("Cleared readiness protocol")
-
-            if let plan = self.plans.first {
-                self.selectPlan(plan.id)
-                steps.append("Selected plan")
-            }
-
-            if let workout = self.nextWorkout {
-                self.startWorkout(workout.id)
-                steps.append("Started next workout")
-            }
-
-            self.advanceActiveSessionBlock()
-            self.pauseActiveSession()
-            self.resumeActiveSession()
-            self.advanceActiveSessionBlock()
-            steps.append("Advanced and resumed live session")
-
-            self.activeSession?.exerciseLogs.forEach { exercise in
-                self.toggleExercise(exercise.id)
-            }
-            steps.append("Completed every exercise")
-
-            self.incrementHydration()
-            self.incrementHydration()
-            steps.append("Logged hydration")
-
-            self.logCoachingReflection("Interaction proof session completed with clean technique and stable recovery.")
-            steps.append("Saved coaching reflection")
-
-            self.finishActiveSession()
-            steps.append("Finished active session")
-
-            if let recoveryTask = self.recoveryTasks.first {
-                self.toggleRecoveryTask(recoveryTask.id)
-                steps.append("Completed recovery task")
-            }
-
-            if let habit = self.weeklyHabits.first {
-                self.toggleHabit(habit.id)
-                steps.append("Logged weekly habit")
-            }
-
-            if let goal = self.goals.first(where: { !$0.isCompleted }) {
-                self.completeGoal(goal.id)
-                steps.append("Completed goal")
-            }
-
-            if let alert = self.coachAlerts.first(where: { !$0.isResolved }) {
-                self.resolveCoachAlert(alert.id)
-                steps.append("Resolved coach alert")
-            }
-
-            FitnessInteractionProofMode.write(
-                summary: "Fitness interaction proof completed with readiness, session, recovery, habit, and alert chain.",
-                steps: steps
-            )
-        }
     }
 
     private var activeSessionIndex: Int? {
