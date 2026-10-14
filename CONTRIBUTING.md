@@ -1,102 +1,60 @@
-# Contributing to iOSAppTemplates
+# Contributing
 
-`iOSAppTemplates` is trying to become a truthful SwiftUI starter portfolio, not a template dump. Contributions are welcome, but they need to preserve proof discipline first.
+Thanks for helping improve iOSAppTemplates. Bug reports, fixes to existing templates and
+improvements to `create-ios-app` are all welcome.
 
-## Before You Start
+## Before you start
 
-- Read [README.md](README.md), [Documentation/README.md](Documentation/README.md), and [Examples/README.md](Examples/README.md).
-- Read [Documentation/Complete-App-Standard.md](Documentation/Complete-App-Standard.md).
-- Read [Documentation/Portfolio-Matrix.md](Documentation/Portfolio-Matrix.md) and [Documentation/Proof-Matrix.md](Documentation/Proof-Matrix.md).
-- Decide whether your change affects:
-  - the root package graph
-  - a template family under `Sources/`
-  - a standalone app root under `Templates/`
-  - an example router under `Examples/`
-  - documentation, proof, media, or workflow surfaces
+- For a larger change, such as a new template or a change to the scaffolding rules, open an
+  issue first so we can agree on the scope.
+- Keep a pull request to one change. A fix to one template and a CI change are two pull
+  requests.
 
-If you add a public claim, add the proof path too.
+## Local setup
 
-## What We Accept
-
-- bug fixes in active package targets or standalone roots
-- new app-pack surfaces that follow the complete-app contract
-- documentation and proof corrections
-- validator improvements that reduce drift
-- visual-system improvements backed by tracked assets
-
-## What We Usually Reject
-
-- fake metrics, fake coverage, fake App Store posture, or fake release claims
-- new abstraction layers without a concrete need
-- broad rewrites that mix product, docs, and workflow changes without a staged rollout
-- new public promises without build, proof, or media routing
-
-## Local Workflow
+You need Xcode with a Swift 6 toolchain and, to run the apps, XcodeGen
+(`brew install xcodegen`).
 
 ```bash
-swift build -c release
-swift test
+swift test                               # create-ios-app and TemplateScaffold
+scripts/test-templates.sh                # every template in the iOS Simulator
+scripts/test-templates.sh FinanceApp     # a single template
 ```
 
-If your change touches public repo surfaces, also run:
+To run a template app:
 
 ```bash
-bash Scripts/validate-portfolio-surface.sh
-bash Scripts/validate-app-proof-surfaces.sh
-bash Scripts/validate-app-media-surfaces.sh
+cd Templates/FinanceApp/App
+xcodegen generate
+open FinanceApp.xcodeproj
 ```
 
-If your change touches visual surfaces, also run:
+## Changing a template
 
-```bash
-bash Scripts/validate-readme-visual-assets.sh
-bash Scripts/validate-app-gallery-cards.sh
-bash Scripts/validate-app-preview-boards.sh
-```
+- Keep the template free of third-party dependencies and of the root package.
+- Put state and actions in the store and keep views thin, then add or update tests in
+  `Tests/<Name>Tests/` for the behaviour you changed.
+- If the first screen changes, refresh the screenshots with
+  `scripts/capture-screenshots.sh <Name>` and commit the updated files in `docs/images/`.
+- If you rename tabs, update `TemplateCatalog` and the table in `README.md`; a test checks
+  that the catalog matches the source.
 
-If your change touches standalone roots, also run:
+## Adding a template
 
-```bash
-bash Scripts/validate-standalone-template-roots.sh
-bash Scripts/validate-standalone-root-lockfiles.sh
-bash Scripts/validate-template-root-readmes.sh
-bash Scripts/validate-standalone-ios-builds.sh
-```
+1. Create `Templates/<Name>App/` with the same layout as the existing templates:
+   `Package.swift`, `Sources/<Name>App/`, `Tests/<Name>AppTests/`, `App/project.yml` and
+   `App/<Name>AppHost.swift`.
+2. Expose a public `<Name>AppShell: App`.
+3. Add a `TemplateDescriptor` to `TemplateCatalog` and the template to the CI matrix.
+4. Add screenshots and a row to the README tables.
 
-## Pull Request Rules
+## Commits and pull requests
 
-- One pull request should solve one problem.
-- Describe the lane, app pack, or public surface you changed.
-- State whether any public claim changed.
-- State whether proof, media, gallery, distribution, or release wording changed.
-- List the validation commands you ran.
-- Update docs when the public surface changes.
-- Do not leave placeholders, dead links, or fabricated roadmap language behind.
+- Use [Conventional Commits](https://www.conventionalcommits.org/): `feat:`, `fix:`,
+  `docs:`, `test:`, `refactor:`, `ci:`, `chore:`.
+- Describe what changed and how you tested it.
+- Add an entry under `Unreleased` in `CHANGELOG.md` for user-visible changes.
 
-## Commit Style
+## Code of conduct
 
-Use conventional commits:
-
-- `feat:`
-- `fix:`
-- `docs:`
-- `refactor:`
-- `test:`
-- `chore:`
-
-## Checklist
-
-- [ ] `swift build -c release` passed
-- [ ] `swift test` passed
-- [ ] relevant validators passed
-- [ ] public claims still match current proof
-- [ ] related docs were updated
-- [ ] no placeholder or broken-link drift was introduced
-
-## Security
-
-Do not open public issues for vulnerabilities. Use [SECURITY.md](SECURITY.md).
-
-## License
-
-By contributing, you agree that your contributions are licensed under the [MIT License](LICENSE).
+This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md).
