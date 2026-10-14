@@ -18,3 +18,6 @@ To try another template, select the project in the navigator, remove the `Ecomme
 package under **Package Dependencies**, add another folder from `Templates/` with
 **File › Add Package Dependencies… › Add Local…**, and change the two names in
 `QuickStartApp.swift`, for example to `import FinanceApp` and `FinanceAppShell.main()`.
+
+CI builds this project for the iOS Simulator on every push and pull request
+([`templates.yml`](../.github/workflows/templates.yml)).

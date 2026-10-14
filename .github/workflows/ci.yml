@@ -1,3 +1,4 @@
+# Managed by the repository kit (muhittincamdali/.github). Edit the inputs, keep the structure.
 name: CI
 
 on:
@@ -6,98 +7,12 @@ on:
   pull_request:
   workflow_dispatch:
 
-permissions:
-  contents: read
-
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
-
-env:
-  # Pinned so a runner image update cannot change the toolchain silently.
-  # Installed versions: https://github.com/actions/runner-images/blob/main/images/macos/macos-26-arm64-Readme.md
-  DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
-  SWIFTLINT_VERSION: 0.63.2
-  SWIFTLINT_SHA256: c59a405c85f95b92ced677a500804e081596a4cae4a6a485af76065557d6ed29
+permissions: {}
 
 jobs:
-  lint:
-    name: SwiftLint
-    runs-on: macos-26
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Install SwiftLint
-        run: |
-          curl -fsSL -o "$RUNNER_TEMP/swiftlint.zip" \
-            "https://github.com/realm/SwiftLint/releases/download/$SWIFTLINT_VERSION/portable_swiftlint.zip"
-          echo "$SWIFTLINT_SHA256  $RUNNER_TEMP/swiftlint.zip" | shasum -a 256 -c -
-          unzip -q "$RUNNER_TEMP/swiftlint.zip" -d "$RUNNER_TEMP/swiftlint"
-
-      - name: Lint
-        run: '"$RUNNER_TEMP/swiftlint/swiftlint" lint --strict --reporter github-actions-logging'
-
-  scaffold-tool:
-    name: create-ios-app
-    runs-on: macos-26
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Show toolchain
-        run: |
-          xcodebuild -version
-          swift --version
-
-      - name: Build
-        run: swift build
-
-      - name: Test
-        run: swift test
-
-      - name: Scaffold a project and test it in the simulator
-        run: |
-          swift run create-ios-app new SmokeShop --template ecommerce --output "$RUNNER_TEMP"
-          udid="$(xcrun simctl list devices available | grep -E '^\s+iPhone' | head -1 | grep -oE '[0-9A-F-]{36}')"
-          cd "$RUNNER_TEMP/SmokeShop"
-          xcodebuild test -scheme SmokeShop -destination "platform=iOS Simulator,id=$udid" -quiet
-
-  templates:
-    name: ${{ matrix.template }}
-    runs-on: macos-26
-    timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        template:
-          - AIAssistantApp
-          - BookingReservationsApp
-          - CRMAdminApp
-          - CreatorShortVideoApp
-          - EcommerceApp
-          - EducationApp
-          - FinanceApp
-          - FitnessApp
-          - FoodDeliveryApp
-          - MarketplaceApp
-          - MessagingApp
-          - MusicPodcastApp
-          - NewsBlogApp
-          - NotesKnowledgeApp
-          - PrivacyVaultApp
-          - ProductivityApp
-          - SocialMediaApp
-          - SubscriptionLifestyleApp
-          - TeamCollaborationApp
-          - TravelPlannerApp
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Show toolchain
-        run: xcodebuild -version
-
-      - name: Build and test
-        env:
-          TEMPLATE: ${{ matrix.template }}
-        run: scripts/test-templates.sh "$TEMPLATE"
+  swift:
+    permissions:
+      contents: read
+    uses: muhittincamdali/.github/.github/workflows/swift-ci.yml@5d3c4432dae8895b16ce3caa2f78398966953212 # v1
+    with:
+      platforms: '["macOS"]'
