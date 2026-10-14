@@ -20,6 +20,8 @@ data in the store with your own services.
 xcodebuild test -scheme PrivacyVaultApp -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
+`iPhone 17` is an example; use any simulator that `xcrun simctl list devices available` lists.
+
 ## Run
 
 ```bash

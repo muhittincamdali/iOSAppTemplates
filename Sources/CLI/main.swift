@@ -76,6 +76,8 @@ extension CreateIOSApp {
                   cd \(result.projectDirectory.path)
                   xcodebuild test -scheme \(projectName) -destination 'platform=iOS Simulator,name=iPhone 17'
                   cd App && xcodegen generate && open \(projectName).xcodeproj
+
+                Any simulator from `xcrun simctl list devices available` works in place of iPhone 17.
                 """)
             } catch let error as ScaffoldError {
                 throw ValidationError(error.description)

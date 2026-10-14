@@ -23,6 +23,8 @@ Conform another type to `AuthService` to use Firebase, Sign in with Apple or you
 xcodebuild test -scheme SocialMediaApp -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
+`iPhone 17` is an example; use any simulator that `xcrun simctl list devices available` lists.
+
 ## Run
 
 ```bash

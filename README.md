@@ -105,6 +105,8 @@ xcodegen generate
 open MyShop.xcodeproj
 ```
 
+`iPhone 17` is an example; use any simulator that `xcrun simctl list devices available` lists.
+
 You can also work on a template in place: open `Templates/<Name>/Package.swift` in Xcode
 to edit and test it, or generate its host project from `Templates/<Name>/App`.
 

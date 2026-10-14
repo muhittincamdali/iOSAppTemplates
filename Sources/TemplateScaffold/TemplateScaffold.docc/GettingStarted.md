@@ -40,6 +40,8 @@ cd ~/Developer/MyShop
 xcodebuild test -scheme MyShop -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
+`iPhone 17` is an example; use any simulator that `xcrun simctl list devices available` lists.
+
 ### Run the app
 
 ```bash
