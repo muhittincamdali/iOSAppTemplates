@@ -39,3 +39,10 @@ exclude_path = [
   "build",
   "Pods",
 ]
+
+# README images point to raw files on master. Check the checked-out file instead, so a pull
+# request that adds or renames an image is checked against its own tree, not against master.
+# The path is the workspace of GitHub-hosted runners for this repository.
+remap = [
+  '^https://raw\.githubusercontent\.com/muhittincamdali/iOSAppTemplates/master/(.*)$ file:///home/runner/work/iOSAppTemplates/iOSAppTemplates/$1',
+]
