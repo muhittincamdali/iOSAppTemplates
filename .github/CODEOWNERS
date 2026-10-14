@@ -1,6 +1,0 @@
-# CODEOWNERS
-# Add team(s) or bot account(s) here instead of personal names.
-# Example:
-# * @org/maintainers
-README.md @maintainers
-Documentation/** @maintainers
