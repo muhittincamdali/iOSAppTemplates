@@ -9,7 +9,10 @@ data in the store with your own services.
 
 | Path | Contents |
 | --- | --- |
-| `Sources/EcommerceApp/EcommerceApp.swift` | `EcommerceAppShell` (the public `App`), the screens, and `CommerceStore`, a `@MainActor` `ObservableObject` that owns the sample data and every action the screens trigger |
+| `Sources/EcommerceApp/EcommerceApp.swift` | `EcommerceAppShell` (the public `App`) and the root tab view |
+| `Sources/EcommerceApp/CommerceStore.swift` | `CommerceStore`, a `@MainActor` `ObservableObject` that owns the sample data and every action the screens trigger |
+| `Sources/EcommerceApp/CommerceModels.swift` | Value types for categories, products, cart items, addresses, payment methods, orders and their fulfillment and return states |
+| `Sources/EcommerceApp/Commerce*View.swift`, `Commerce*Views.swift` | Home, catalog and product detail, cart and checkout, orders and profile screens |
 | `Tests/EcommerceAppTests/` | Swift Testing suite for the app's state and actions |
 | `App/` | XcodeGen spec and a host file that calls `EcommerceAppShell.main()` |
 
