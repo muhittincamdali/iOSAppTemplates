@@ -4,9 +4,10 @@ Run a template inside an app project you created in Xcode, without XcodeGen.
 
 ## Overview
 
-Every template is a Swift package with one library. The library's only public type is
-`<Name>Shell`, a SwiftUI `App` whose scene contains the template's tab bar, screens and
-sample data. An app target that starts this scene runs the whole template; the app target
+Every template is a Swift package with one library. Its entry point is `<Name>Shell`, a
+SwiftUI `App` whose scene contains the template's tab bar, screens and sample data. In most
+templates it is the only public type; `CleanArchitectureApp` also makes its layers public so
+they can be tested and reused. An app target that starts this scene runs the whole template; the app target
 itself needs a single file.
 
 This is the setup of the quick start in the repository README and of the `QuickStart`
