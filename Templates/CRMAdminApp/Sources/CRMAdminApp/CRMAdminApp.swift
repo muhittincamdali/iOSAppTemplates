@@ -7,13 +7,13 @@ public struct CRMAdminAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            CRMRuntimeRootView()
+            CRMRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct CRMRuntimeRootView: View {
+struct CRMRootView: View {
     @StateObject private var store = CRMOperationsStore()
 
     var body: some View {

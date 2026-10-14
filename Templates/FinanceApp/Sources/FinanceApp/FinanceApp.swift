@@ -7,12 +7,12 @@ public struct FinanceAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            FinanceRuntimeRootView()
+            FinanceRootView()
         }
     }
 }
 
-struct FinanceRuntimeRootView: View {
+struct FinanceRootView: View {
     @StateObject private var store = FinanceOperatingStore()
 
     var body: some View {

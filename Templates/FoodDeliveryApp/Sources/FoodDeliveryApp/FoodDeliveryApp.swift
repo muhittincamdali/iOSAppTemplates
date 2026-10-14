@@ -6,12 +6,12 @@ public struct FoodDeliveryAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            FoodDeliveryRuntimeRootView()
+            FoodDeliveryRootView()
         }
     }
 }
 
-struct FoodDeliveryRuntimeRootView: View {
+struct FoodDeliveryRootView: View {
     @StateObject private var store = FoodDeliveryOperationsStore()
 
     var body: some View {

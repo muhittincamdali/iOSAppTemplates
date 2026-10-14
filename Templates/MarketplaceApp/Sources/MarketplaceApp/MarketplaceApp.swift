@@ -7,13 +7,13 @@ public struct MarketplaceAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            MarketplaceRuntimeRootView()
+            MarketplaceRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct MarketplaceRuntimeRootView: View {
+struct MarketplaceRootView: View {
     @StateObject private var store = MarketplaceOperationsStore()
 
     var body: some View {

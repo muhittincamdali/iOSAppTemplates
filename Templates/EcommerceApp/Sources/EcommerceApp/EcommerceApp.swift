@@ -7,12 +7,12 @@ public struct EcommerceAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            EcommerceRuntimeRootView()
+            EcommerceRootView()
         }
     }
 }
 
-struct EcommerceRuntimeRootView: View {
+struct EcommerceRootView: View {
     @StateObject private var store = CommerceStore()
 
     var body: some View {

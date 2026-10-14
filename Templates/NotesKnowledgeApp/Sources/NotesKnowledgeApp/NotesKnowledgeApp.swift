@@ -7,13 +7,13 @@ public struct NotesKnowledgeAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            NotesKnowledgeRuntimeRootView()
+            NotesKnowledgeRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct NotesKnowledgeRuntimeRootView: View {
+struct NotesKnowledgeRootView: View {
     @StateObject private var store = NotesKnowledgeOperationsStore()
 
     var body: some View {

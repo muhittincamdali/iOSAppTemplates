@@ -7,13 +7,13 @@ public struct AIAssistantAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            AIAssistantRuntimeRootView()
+            AIAssistantRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct AIAssistantRuntimeRootView: View {
+struct AIAssistantRootView: View {
     @StateObject private var store = AIAssistantOperationsStore()
 
     var body: some View {

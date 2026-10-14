@@ -7,12 +7,12 @@ public struct MessagingAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            MessagingRuntimeRootView()
+            MessagingRootView()
         }
     }
 }
 
-struct MessagingRuntimeRootView: View {
+struct MessagingRootView: View {
     @StateObject private var store = MessagingCommandCenterStore()
 
     var body: some View {

@@ -7,13 +7,13 @@ public struct SubscriptionLifestyleAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            SubscriptionLifestyleRuntimeRootView()
+            SubscriptionLifestyleRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct SubscriptionLifestyleRuntimeRootView: View {
+struct SubscriptionLifestyleRootView: View {
     @StateObject private var store = SubscriptionLifestyleOperationsStore()
 
     var body: some View {

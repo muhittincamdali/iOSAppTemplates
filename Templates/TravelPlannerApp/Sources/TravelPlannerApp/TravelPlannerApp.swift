@@ -6,12 +6,12 @@ public struct TravelPlannerAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            TravelPlannerRuntimeRootView()
+            TravelPlannerRootView()
         }
     }
 }
 
-struct TravelPlannerRuntimeRootView: View {
+struct TravelPlannerRootView: View {
     @StateObject private var store = TravelPlannerOperationsStore()
 
     var body: some View {

@@ -7,13 +7,13 @@ public struct ProductivityAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            ProductivityRuntimeRootView()
+            ProductivityRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct ProductivityRuntimeRootView: View {
+struct ProductivityRootView: View {
     @StateObject private var store = ProductivityOperationsStore()
 
     var body: some View {

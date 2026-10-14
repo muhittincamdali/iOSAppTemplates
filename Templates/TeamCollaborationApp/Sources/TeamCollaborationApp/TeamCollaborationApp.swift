@@ -7,13 +7,13 @@ public struct TeamCollaborationAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            TeamCollaborationRuntimeRootView()
+            TeamCollaborationRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct TeamCollaborationRuntimeRootView: View {
+struct TeamCollaborationRootView: View {
     @StateObject private var store = TeamCollaborationOperationsStore()
 
     var body: some View {

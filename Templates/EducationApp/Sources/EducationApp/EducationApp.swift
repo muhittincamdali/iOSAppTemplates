@@ -6,12 +6,12 @@ public struct EducationAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            EducationRuntimeRootView()
+            EducationRootView()
         }
     }
 }
 
-struct EducationRuntimeRootView: View {
+struct EducationRootView: View {
     @StateObject private var store = EducationLearningStore()
 
     var body: some View {

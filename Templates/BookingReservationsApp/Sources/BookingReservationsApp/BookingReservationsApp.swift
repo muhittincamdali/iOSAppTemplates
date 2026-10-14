@@ -7,13 +7,13 @@ public struct BookingReservationsAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            BookingRuntimeRootView()
+            BookingRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct BookingRuntimeRootView: View {
+struct BookingRootView: View {
     @StateObject private var store = BookingOperationsStore()
 
     var body: some View {

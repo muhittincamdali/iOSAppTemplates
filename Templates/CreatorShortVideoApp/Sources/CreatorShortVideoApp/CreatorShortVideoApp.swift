@@ -6,12 +6,12 @@ public struct CreatorShortVideoAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            CreatorShortVideoRuntimeRootView()
+            CreatorShortVideoRootView()
         }
     }
 }
 
-struct CreatorShortVideoRuntimeRootView: View {
+struct CreatorShortVideoRootView: View {
     @StateObject private var store = CreatorShortVideoStudioStore()
 
     var body: some View {
@@ -245,7 +245,7 @@ struct CreatorShortVideoStudioHomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    CreatorShortVideoRuntimeHeroCard(store: store)
+                    CreatorShortVideoHeroCard(store: store)
                     CreatorShortVideoComposerCard(store: store)
                     CreatorShortVideoReleaseQueueSection(store: store)
                     CreatorShortVideoProgramSection(programs: store.creatorPrograms)
@@ -257,7 +257,7 @@ struct CreatorShortVideoStudioHomeView: View {
     }
 }
 
-struct CreatorShortVideoRuntimeHeroCard: View {
+struct CreatorShortVideoHeroCard: View {
     @ObservedObject var store: CreatorShortVideoStudioStore
 
     var body: some View {

@@ -7,13 +7,13 @@ public struct MusicPodcastAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            MusicPodcastRuntimeRootView()
+            MusicPodcastRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct MusicPodcastRuntimeRootView: View {
+struct MusicPodcastRootView: View {
     @StateObject private var store = MusicPodcastOperationsStore()
 
     var body: some View {

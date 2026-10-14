@@ -7,13 +7,13 @@ public struct NewsBlogAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            NewsBlogRuntimeRootView()
+            NewsBlogRootView()
         }
     }
 }
 
 @available(iOS 18.0, macOS 15.0, *)
-struct NewsBlogRuntimeRootView: View {
+struct NewsBlogRootView: View {
     @StateObject private var store = NewsBlogOperationsStore()
 
     var body: some View {

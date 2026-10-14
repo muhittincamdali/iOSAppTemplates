@@ -7,12 +7,12 @@ public struct FitnessAppShell: App {
 
     public var body: some Scene {
         WindowGroup {
-            FitnessRuntimeRootView()
+            FitnessRootView()
         }
     }
 }
 
-struct FitnessRuntimeRootView: View {
+struct FitnessRootView: View {
     @StateObject private var store = FitnessStudioStore()
 
     var body: some View {
