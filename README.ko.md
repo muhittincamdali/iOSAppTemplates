@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@a152ec6369400e028598e5491520d5303a39f33b status=reviewed -->
+<!-- i18n-source: README.md@eed94fcb5366016b592c2a744777b343f1322349 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ko-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ko-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ko-light.svg" alt="iOSAppTemplates: iOS 18용 SwiftUI 앱 템플릿 21종. 각각 테스트가 포함된 Swift 패키지이며 원하는 이름으로 복사할 수 있습니다."></picture></p>

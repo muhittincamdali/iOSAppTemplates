@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@a152ec6369400e028598e5491520d5303a39f33b status=reviewed -->
+<!-- i18n-source: README.md@eed94fcb5366016b592c2a744777b343f1322349 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-fr-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-fr-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-fr-light.svg" alt="iOSAppTemplates: 21 modèles d'apps SwiftUI pour iOS 18, chacun un package Swift testé que vous pouvez copier sous votre propre nom."></picture></p>
