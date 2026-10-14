@@ -48,6 +48,7 @@ struct ProfileDraftTests {
         "\u{FEFF}\u{2060}", // byte order mark and word joiner
         "\u{200C}\u{200C}\u{200C}", // zero-width non-joiners
         "\u{3164}\u{3164}", // Hangul fillers
+        "\u{2800}\u{2800}", // Braille pattern blanks
         "A\u{200B}" // one visible letter
     ])
     func namesWithoutTwoVisibleCharactersAreTooShort(_ name: String) {

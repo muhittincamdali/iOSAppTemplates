@@ -103,18 +103,23 @@ public struct ProfileDraft: Hashable, Sendable {
             || (0x2066...0x2069).contains(scalar.value)
     }
 
+    /// U+2800 BRAILLE PATTERN BLANK, an empty Braille cell that renders as blank space.
+    private static let brailleBlank: Unicode.Scalar = "\u{2800}"
+
     /// Arabic letter mark, left-to-right mark and right-to-left mark.
     private static let bidirectionalMarks: Set<UInt32> = [0x061C, 0x200E, 0x200F]
 
     /// A character that draws something: at least one scalar that is not whitespace, a
     /// format character or default ignorable (zero-width space, word joiner, byte order mark,
-    /// Hangul filler and the like). Only visible characters count toward the minimum, so a
-    /// name made of invisible characters is too short.
+    /// Hangul filler and the like). The Braille blank is a symbol, so Unicode does not mark
+    /// it ignorable, but it draws nothing either. Only visible characters count toward the
+    /// minimum, so a name made of invisible characters is too short.
     private static func isVisible(_ character: Character) -> Bool {
         character.unicodeScalars.contains { scalar in
             !scalar.properties.isWhitespace
                 && !scalar.properties.isDefaultIgnorableCodePoint
                 && scalar.properties.generalCategory != .format
+                && scalar != brailleBlank
         }
     }
 }
