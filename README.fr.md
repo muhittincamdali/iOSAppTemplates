@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
+<!-- i18n-source: README.md@a152ec6369400e028598e5491520d5303a39f33b status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-fr-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-fr-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-fr-light.svg" alt="iOSAppTemplates: 21 modèles d'apps SwiftUI pour iOS 18, chacun un package Swift testé que vous pouvez copier sous votre propre nom."></picture></p>
@@ -46,7 +46,7 @@ un serveur d'exemple dans le même processus, et un cache hors ligne.
 - **Une app de référence en couches** : `CleanArchitectureApp` est un annuaire d'équipe dont les
   couches sont des targets distincts, si bien que le compilateur impose la règle de dépendance. Elle
   charge les personnes via HTTP, se rabat sur une copie enregistrée hors ligne et vérifie les rôles
-  et les permissions dans des cas d'usage, avec 98 tests répartis sur les quatre targets et des
+  et les permissions dans des cas d'usage, avec 108 tests répartis sur les quatre targets et des
   tests d'UI qui incluent un audit d'accessibilité.
 - **Un store testé par app** : l'état et les actions sont regroupés dans un store `@MainActor`
   doté d'une suite Swift Testing ; les écrans restent simples et le comportement est vérifié sans

@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
+<!-- i18n-source: README.md@a152ec6369400e028598e5491520d5303a39f33b status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-es-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-es-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-es-light.svg" alt="iOSAppTemplates: 21 plantillas de apps SwiftUI para iOS 18, cada una un paquete Swift con tests que puedes copiar con tu propio nombre."></picture></p>
@@ -46,7 +46,7 @@ proceso y una caché sin conexión.
 - **Una app de referencia por capas**: `CleanArchitectureApp` es un directorio de equipo cuyas capas
   son targets separados, de modo que el compilador hace cumplir la regla de dependencias. Carga
   personas por HTTP, recurre a una copia guardada cuando no hay conexión y comprueba roles y
-  permisos en los casos de uso, con 98 tests repartidos en los cuatro targets y tests de UI que
+  permisos en los casos de uso, con 108 tests repartidos en los cuatro targets y tests de UI que
   incluyen una auditoría de accesibilidad.
 - **Un store con tests en cada app**: el estado y las acciones están en un store `@MainActor` con
   una suite de Swift Testing, así que las pantallas se mantienen simples y el comportamiento se

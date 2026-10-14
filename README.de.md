@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
+<!-- i18n-source: README.md@a152ec6369400e028598e5491520d5303a39f33b status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-de-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-de-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-de-light.svg" alt="iOSAppTemplates: 21 SwiftUI-App-Vorlagen für iOS 18, jede ein getestetes Swift-Paket, das Sie unter eigenem Namen kopieren können."></picture></p>
@@ -46,7 +46,7 @@ selben Prozess und ein Offline-Cache.
 - **Eine geschichtete Referenz-App**: `CleanArchitectureApp` ist ein Team-Verzeichnis, dessen
   Schichten getrennte Targets sind, sodass der Compiler die Abhängigkeitsregel durchsetzt. Die App
   lädt Personen per HTTP, greift offline auf eine gespeicherte Kopie zurück und prüft Rollen und
-  Berechtigungen in Use Cases; dazu kommen 98 Tests in den vier Targets sowie UI-Tests mit einem
+  Berechtigungen in Use Cases; dazu kommen 108 Tests in den vier Targets sowie UI-Tests mit einem
   Accessibility-Audit.
 - **Ein getesteter Store pro App**: Zustand und Aktionen liegen in einem `@MainActor`-Store mit
   einer Swift-Testing-Suite. Die Screens bleiben schlank, und das Verhalten wird ohne UI geprüft.

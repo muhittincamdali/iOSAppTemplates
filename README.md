@@ -40,7 +40,7 @@ and Presentation targets, an HTTP layer with an in-process sample server, and an
   privacy vault, productivity, social media, subscriptions, team collaboration and travel.
 - **A layered reference app**: `CleanArchitectureApp` is a team directory whose layers are
   separate targets, so the compiler enforces the dependency rule. It loads people over HTTP,
-  falls back to a saved copy offline and checks roles and permissions in use cases, with 98
+  falls back to a saved copy offline and checks roles and permissions in use cases, with 108
   tests across the four targets and UI tests that include an accessibility audit.
 - **A tested store per app**: state and actions live in a `@MainActor` store with a Swift
   Testing suite, so the screens stay thin and the behaviour is checked without UI.

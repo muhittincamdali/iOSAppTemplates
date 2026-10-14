@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
+<!-- i18n-source: README.md@a152ec6369400e028598e5491520d5303a39f33b status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-tr-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-tr-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-tr-light.svg" alt="iOSAppTemplates: iOS 18 için 21 SwiftUI uygulama şablonu; her biri kendi adınızla kopyalayabileceğiniz testli bir Swift paketi."></picture></p>
@@ -44,7 +44,7 @@ Presentation hedefleri, süreç içi bir örnek sunucuyla çalışan bir HTTP ka
   haber, notlar, gizlilik kasası, verimlilik, sosyal medya, abonelik, ekip çalışması ve seyahat.
 - **Katmanlı bir referans uygulama**: `CleanArchitectureApp`, katmanları ayrı hedefler olan bir ekip
   dizinidir; bu yüzden bağımlılık kuralını derleyici zorunlu kılar. Kişileri HTTP üzerinden yükler,
-  çevrimdışıyken kayıtlı kopyaya döner, rolleri ve izinleri use case'lerde denetler; dört hedefte 98
+  çevrimdışıyken kayıtlı kopyaya döner, rolleri ve izinleri use case'lerde denetler; dört hedefte 108
   test ve erişilebilirlik denetimi içeren UI testleri vardır.
 - **Her uygulamada testli bir store**: durum ve eylemler, Swift Testing paketi olan bir
   `@MainActor` store'da tutulur; böylece ekranlar sade kalır ve davranış arayüz olmadan test

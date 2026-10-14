@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
+<!-- i18n-source: README.md@a152ec6369400e028598e5491520d5303a39f33b status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-zh-CN-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-zh-CN-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-zh-CN-light.svg" alt="iOSAppTemplates: 面向 iOS 18 的 21 个 SwiftUI 应用模板，每个都是带测试的 Swift 包，可用你自己的名称复制。"></picture></p>
@@ -33,7 +33,7 @@
 ## 亮点
 
 - **二十种应用类型**：AI 助手、预订、创作者短视频、CRM、电商、教育、理财、健身、外卖、交易市场、即时通讯、音乐与播客、新闻、笔记、隐私保险箱、效率工具、社交媒体、订阅、团队协作和旅行。
-- **分层的参考应用**：`CleanArchitectureApp` 是一个团队通讯录，各层是独立的 target，因此依赖规则由编译器强制执行。它通过 HTTP 加载成员，离线时回退到已保存的副本，并在 use case 中检查角色和权限；四个 target 共有 98 个测试，另有包含无障碍审计的 UI 测试。
+- **分层的参考应用**：`CleanArchitectureApp` 是一个团队通讯录，各层是独立的 target，因此依赖规则由编译器强制执行。它通过 HTTP 加载成员，离线时回退到已保存的副本，并在 use case 中检查角色和权限；四个 target 共有 108 个测试，另有包含无障碍审计的 UI 测试。
 - **每个应用一个带测试的 store**：状态和操作集中在一个 `@MainActor` store 中，并配有 Swift Testing 测试套件，因此界面保持精简，行为无需 UI 即可验证。
 - **无第三方依赖**：模板只使用 SwiftUI 和 Foundation，无需账号、API 密钥或网络连接即可运行。
 - **使用你自己的名称**：`create-ios-app` 会重命名包、模块、类型、宿主项目和 bundle identifier，并拒绝会与模板中已有名称冲突的名字。

@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
+<!-- i18n-source: README.md@a152ec6369400e028598e5491520d5303a39f33b status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ko-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ko-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ko-light.svg" alt="iOSAppTemplates: iOS 18용 SwiftUI 앱 템플릿 21종. 각각 테스트가 포함된 Swift 패키지이며 원하는 이름으로 복사할 수 있습니다."></picture></p>
@@ -39,7 +39,7 @@ HTTP 계층, 오프라인 캐시를 갖추고 있습니다.
   피트니스, 음식 배달, 마켓플레이스, 메신저, 음악과 팟캐스트, 뉴스, 노트, 개인정보 보관함, 생산성,
   소셜 미디어, 구독, 팀 협업, 여행.
 - **계층형 참조 앱**: `CleanArchitectureApp`은 팀 디렉터리 앱으로, 계층이 각각 별도 타깃이라 의존성 규칙을 컴파일러가 강제합니다. HTTP로 구성원을
-  불러오고, 오프라인일 때는 저장된 사본으로 대체하며, use case에서 역할과 권한을 확인합니다. 네 개 타깃에 걸쳐 테스트 98개가 있고, 접근성 감사를 포함한 UI
+  불러오고, 오프라인일 때는 저장된 사본으로 대체하며, use case에서 역할과 권한을 확인합니다. 네 개 타깃에 걸쳐 테스트 108개가 있고, 접근성 감사를 포함한 UI
   테스트도 있습니다.
 - **앱마다 테스트가 있는 store**: 상태와 액션은 Swift Testing 테스트 스위트를 갖춘 `@MainActor` store에
   모여 있어 화면은 단순하게 유지되고, 동작은 UI 없이 검증됩니다.

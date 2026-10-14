@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
+<!-- i18n-source: README.md@a152ec6369400e028598e5491520d5303a39f33b status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ru-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ru-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ru-light.svg" alt="iOSAppTemplates: 21 шаблон SwiftUI-приложений для iOS 18: Swift-пакеты с тестами, которые копируются под вашим именем."></picture></p>
@@ -45,7 +45,7 @@ Presentation, HTTP-слой с демонстрационным сервером
 - **Многослойное эталонное приложение**: `CleanArchitectureApp` — справочник сотрудников команды,
   слои которого вынесены в отдельные таргеты, поэтому правило зависимостей обеспечивает компилятор.
   Приложение загружает людей по HTTP, офлайн переключается на сохранённую копию и проверяет роли и
-  права в use case; в четырёх таргетах 98 тестов, а также UI-тесты с аудитом доступности.
+  права в use case; в четырёх таргетах 108 тестов, а также UI-тесты с аудитом доступности.
 - **Store с тестами в каждом приложении**: состояние и действия собраны в `@MainActor` store с
   набором тестов Swift Testing, поэтому экраны остаются простыми, а поведение проверяется без UI.
 - **Без сторонних зависимостей**: шаблоны используют только SwiftUI и Foundation и работают без

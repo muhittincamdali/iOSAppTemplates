@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@7279031ea2f44b8049cc659349704756e19da2be status=reviewed -->
+<!-- i18n-source: README.md@a152ec6369400e028598e5491520d5303a39f33b status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/iOSAppTemplates/master/.github/brand/banner-ja-light.svg" alt="iOSAppTemplates: iOS 18 向け SwiftUI アプリテンプレート 21 種。テスト付きで、自分の名前で複製できます。"></picture></p>
@@ -33,7 +33,7 @@ EC、家計管理、メッセージング、旅行など、iOS 18 向けの Swif
 ## 主な特長
 
 - **20 種類のアプリ**：AI アシスタント、予約、クリエイター向けショート動画、CRM、EC、教育、家計管理、フィットネス、フードデリバリー、マーケットプレイス、メッセージング、音楽とポッドキャスト、ニュース、ノート、プライバシー保管庫、生産性、SNS、サブスクリプション、チームコラボレーション、旅行。
-- **レイヤー構成のリファレンスアプリ**：`CleanArchitectureApp` はチームのディレクトリアプリで、各レイヤーが別々のターゲットなので、依存関係のルールはコンパイラが強制します。人物一覧を HTTP で読み込み、オフライン時は保存済みのコピーに切り替え、ロールと権限を use case で検証します。4 つのターゲットに 98 件のテストがあり、アクセシビリティ監査を含む UI テストもあります。
+- **レイヤー構成のリファレンスアプリ**：`CleanArchitectureApp` はチームのディレクトリアプリで、各レイヤーが別々のターゲットなので、依存関係のルールはコンパイラが強制します。人物一覧を HTTP で読み込み、オフライン時は保存済みのコピーに切り替え、ロールと権限を use case で検証します。4 つのターゲットに 108 件のテストがあり、アクセシビリティ監査を含む UI テストもあります。
 - **アプリごとにテスト付きの store**：状態とアクションは Swift Testing のテストスイートを持つ `@MainActor` の store にまとまっているため、画面はシンプルなまま、振る舞いを UI なしで検証できます。
 - **サードパーティ依存なし**：テンプレートは SwiftUI と Foundation だけを使い、アカウントや API キー、ネットワーク接続なしで動作します。
 - **自分の名前で**：`create-ios-app` はパッケージ、モジュール、型、ホストプロジェクト、bundle identifier の名前を変更し、テンプレート内の既存の名前と衝突する名前は受け付けません。
