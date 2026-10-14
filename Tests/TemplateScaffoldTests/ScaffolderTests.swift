@@ -82,6 +82,45 @@ struct ScaffolderTests {
         }
     }
 
+    @Test func refusesNamesThatClashWithExistingNames() throws {
+        try TestSupport.withTemporaryDirectory { directory in
+            let templates = directory.appendingPathComponent("Templates")
+            try makeFixture(in: templates)
+            try TestSupport.write("final class FixtureStore {}", to: "FixtureApp/Sources/FixtureApp/FixtureStore.swift", in: templates)
+
+            let expected = ScaffoldError.nameConflict("FixtureStore", ["FixtureStore", "Sources/FixtureStore/FixtureStore.swift"])
+            #expect(throws: expected) {
+                try Scaffolder(templatesDirectory: templates).scaffold(fixture, as: try ProjectName("FixtureStore"), in: directory)
+            }
+            #expect(!FileManager.default.fileExists(atPath: directory.appendingPathComponent("FixtureStore").path))
+        }
+    }
+
+    @Test func refusesPathsThatDifferOnlyInCase() throws {
+        try TestSupport.withTemporaryDirectory { directory in
+            let templates = directory.appendingPathComponent("Templates")
+            try makeFixture(in: templates)
+            try TestSupport.write("let notes = 1", to: "FixtureApp/Sources/FixtureApp/demo.swift", in: templates)
+
+            let expected = ScaffoldError.nameConflict("Demo", ["Sources/Demo/Demo.swift", "Sources/Demo/demo.swift"])
+            #expect(throws: expected) {
+                try Scaffolder(templatesDirectory: templates).scaffold(fixture, as: try ProjectName("Demo"), in: directory)
+            }
+        }
+    }
+
+    @Test(arguments: [("ecommerce", "CommerceStore"), ("social", "Models"), ("social", "FeedViewModel")])
+    func refusesNamesThatClashInBundledTemplates(template id: String, name: String) throws {
+        let template = try #require(TemplateCatalog.template(named: id))
+        try TestSupport.withTemporaryDirectory { directory in
+            #expect(throws: ScaffoldError.self) {
+                try Scaffolder(templatesDirectory: TestSupport.templatesDirectory)
+                    .scaffold(template, as: try ProjectName(name), in: directory)
+            }
+            #expect(!FileManager.default.fileExists(atPath: directory.appendingPathComponent(name).path))
+        }
+    }
+
     @Test func reportsMissingTemplate() throws {
         try TestSupport.withTemporaryDirectory { directory in
             let expected = directory.appendingPathComponent("FixtureApp", isDirectory: true)

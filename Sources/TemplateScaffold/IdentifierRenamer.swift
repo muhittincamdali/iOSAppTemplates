@@ -41,6 +41,11 @@ public struct IdentifierRenamer: Sendable {
             .joined(separator: "/")
     }
 
+    /// Every run of letters, digits and underscores in `text`, the units ``rename(_:)`` works on.
+    static func identifiers(in text: String) -> Set<String> {
+        Set(text.split { !isIdentifierCharacter($0) }.map(String.init))
+    }
+
     private static func isIdentifierCharacter(_ character: Character) -> Bool {
         character.isLetter || character.isNumber || character == "_"
     }
