@@ -15,9 +15,9 @@ struct AIAssistantOperationsStoreTests {
         #expect(store.legalHoldCount == 0)
     }
 
-    @Test func approvalPresetQueuesAnOutboundDraft() {
+    @Test func approvalPresetQueuesAnOutboundDraft() throws {
         let store = AIAssistantOperationsStore()
-        let preset = store.presets.first { $0.mode == "Approval required" }!
+        let preset = try #require(store.presets.first { $0.mode == "Approval required" })
 
         store.runPreset(preset)
 
@@ -26,9 +26,9 @@ struct AIAssistantOperationsStoreTests {
         #expect(store.pendingApprovalCount == 2)
     }
 
-    @Test func localPresetCompletesWithoutApproval() {
+    @Test func localPresetCompletesWithoutApproval() throws {
         let store = AIAssistantOperationsStore()
-        let preset = store.presets.first { $0.mode == "Local-first" }!
+        let preset = try #require(store.presets.first { $0.mode == "Local-first" })
 
         store.runPreset(preset)
 
@@ -56,24 +56,24 @@ struct AIAssistantOperationsStoreTests {
         #expect(store.approvalRequests.count == requests)
     }
 
-    @Test func approvedRequestDispatchRecordsMemoryAndRollback() {
+    @Test func approvedRequestDispatchRecordsMemoryAndRollback() throws {
         let store = AIAssistantOperationsStore()
-        let request = store.approvalRequests.first { $0.status == .pending }!
+        let request = try #require(store.approvalRequests.first { $0.status == .pending })
         let memories = store.memoryItems.count
 
         store.approveRequest(request)
         store.dispatchApprovedRequest(request)
 
-        let sent = store.approvalRequests.first { $0.id == request.id }!
+        let sent = try #require(store.approvalRequests.first { $0.id == request.id })
         #expect(sent.status == .sent)
         #expect(sent.rollbackState == "Rollback ready")
         #expect(store.memoryItems.count == memories + 1)
         #expect(store.pendingApprovalCount == 0)
     }
 
-    @Test func denyingOpensTrustCaseAndRewriteReturnsToPending() {
+    @Test func denyingOpensTrustCaseAndRewriteReturnsToPending() throws {
         let store = AIAssistantOperationsStore()
-        let request = store.approvalRequests.first { $0.status == .pending }!
+        let request = try #require(store.approvalRequests.first { $0.status == .pending })
         let trustCases = store.trustCases.count
 
         store.denyRequest(request)
@@ -98,22 +98,22 @@ struct AIAssistantOperationsStoreTests {
         #expect(store.memoryItems.count == count)
     }
 
-    @Test func promotingMemoryPinsItAsGuardrail() {
+    @Test func promotingMemoryPinsItAsGuardrail() throws {
         let store = AIAssistantOperationsStore()
-        let item = store.memoryItems.first { !$0.isPinned }!
+        let item = try #require(store.memoryItems.first { !$0.isPinned })
 
         store.promoteMemoryToGuardrail(item)
 
-        let promoted = store.memoryItems.first { $0.id == item.id }!
+        let promoted = try #require(store.memoryItems.first { $0.id == item.id })
         #expect(promoted.scope == "Guardrail")
         #expect(promoted.isPinned)
         #expect(store.guardrailEvents[0].contains("escalation threshold"))
     }
 
-    @Test func toggleToolCyclesEnabledAndScopedButNotApprovalGate() {
+    @Test func toggleToolCyclesEnabledAndScopedButNotApprovalGate() throws {
         let store = AIAssistantOperationsStore()
-        let enabled = store.tools.first { $0.status == .enabled }!
-        let gated = store.tools.first { $0.status == .approvalRequired }!
+        let enabled = try #require(store.tools.first { $0.status == .enabled })
+        let gated = try #require(store.tools.first { $0.status == .approvalRequired })
 
         store.toggleTool(enabled)
         #expect(store.tools.first { $0.id == enabled.id }?.status == .scoped)

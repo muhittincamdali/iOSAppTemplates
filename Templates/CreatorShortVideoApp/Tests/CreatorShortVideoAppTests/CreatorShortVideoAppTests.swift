@@ -42,10 +42,10 @@ struct CreatorShortVideoStudioStoreTests {
         #expect(store.drafts[0].legalReviewState == .pending)
     }
 
-    @Test func draftBecomesReadyOnlyWhenTasksAndReviewsAreDone() {
+    @Test func draftBecomesReadyOnlyWhenTasksAndReviewsAreDone() throws {
         let store = CreatorShortVideoStudioStore()
-        let draft = store.drafts.first { $0.title == "Sponsor-safe desk setup" }!
-        let openTask = draft.tasks.first { !$0.isComplete }!
+        let draft = try #require(store.drafts.first { $0.title == "Sponsor-safe desk setup" })
+        let openTask = try #require(draft.tasks.first { !$0.isComplete })
 
         store.toggleTask(for: draft.id, taskID: openTask.id)
         #expect(store.drafts.first { $0.id == draft.id }?.status != .readyToSchedule, "reviews still pending")
@@ -57,9 +57,9 @@ struct CreatorShortVideoStudioStoreTests {
         #expect(store.drafts.first { $0.id == draft.id }?.status == .readyToSchedule)
     }
 
-    @Test func reopeningATaskMovesReadyDraftBackToEditing() {
+    @Test func reopeningATaskMovesReadyDraftBackToEditing() throws {
         let store = CreatorShortVideoStudioStore()
-        let ready = store.drafts.first { $0.status == .readyToSchedule }!
+        let ready = try #require(store.drafts.first { $0.status == .readyToSchedule })
 
         store.toggleTask(for: ready.id, taskID: ready.tasks[0].id)
 
@@ -102,10 +102,10 @@ struct CreatorShortVideoStudioStoreTests {
         #expect(store.publishedClips[0].hasRecoveryExperiment)
     }
 
-    @Test func closingExperimentReducesActiveCount() {
+    @Test func closingExperimentReducesActiveCount() throws {
         let store = CreatorShortVideoStudioStore()
         let active = store.activeExperimentCount
-        let open = store.experiments.first { !$0.isClosed }!
+        let open = try #require(store.experiments.first { !$0.isClosed })
 
         store.closeExperiment(open.id)
 

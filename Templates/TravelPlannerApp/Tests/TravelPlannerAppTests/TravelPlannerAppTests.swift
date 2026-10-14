@@ -12,22 +12,22 @@ struct TravelPlannerOperationsStoreTests {
         #expect(store.readinessHeadline.hasPrefix("2 trip alerts"))
     }
 
-    @Test func checkInAssignsDefaultSeatAndClearsCheckInAlert() {
+    @Test func checkInAssignsDefaultSeatAndClearsCheckInAlert() throws {
         let store = TravelPlannerOperationsStore()
-        let flight = store.flights.first { !$0.isCheckedIn }!
+        let flight = try #require(store.flights.first { !$0.isCheckedIn })
 
         store.confirmCheckIn(flight.id)
 
-        let updated = store.flights.first { $0.id == flight.id }!
+        let updated = try #require(store.flights.first { $0.id == flight.id })
         #expect(updated.isCheckedIn)
         #expect(updated.seat == "12A")
         #expect(!store.alerts.contains { $0.linkedFlightID == flight.id && $0.type == .checkIn })
         #expect(store.unresolvedAlerts == 1)
     }
 
-    @Test func checkInKeepsAnExistingSeat() {
+    @Test func checkInKeepsAnExistingSeat() throws {
         let store = TravelPlannerOperationsStore()
-        let seated = store.flights.first { $0.seat != nil }!
+        let seated = try #require(store.flights.first { $0.seat != nil })
 
         store.confirmCheckIn(seated.id)
 
@@ -63,8 +63,8 @@ struct TravelPlannerOperationsStoreTests {
 
     @Test func movingActivityShiftsItToTheNextDay() throws {
         let store = TravelPlannerOperationsStore()
-        let day = store.timelineDays.first { !$0.activities.isEmpty }!
-        let dayIndex = store.timelineDays.firstIndex { $0.id == day.id }!
+        let day = try #require(store.timelineDays.first { !$0.activities.isEmpty })
+        let dayIndex = try #require(store.timelineDays.firstIndex { $0.id == day.id })
         try #require(dayIndex + 1 < store.timelineDays.count)
         let activity = day.activities[0]
 
@@ -95,14 +95,15 @@ struct TravelPlannerOperationsStoreTests {
         #expect(!store.timelineDays[0].isLocked)
     }
 
-    @Test func packingAndRescuePackCounters() {
+    @Test func packingAndRescuePackCounters() throws {
         let store = TravelPlannerOperationsStore()
-        let task = store.packingTasks.first { !$0.isPacked }!
+        let task = try #require(store.packingTasks.first { !$0.isPacked })
         let packed = store.packedTasks
         let rescue = store.rescuePackCount
 
+        let document = try #require(store.documents.first { !$0.rescuePackIncluded })
         store.togglePackingTask(task.id)
-        store.createRescuePack(store.documents.first { !$0.rescuePackIncluded }!.id)
+        store.createRescuePack(document.id)
 
         #expect(store.packedTasks == packed + 1)
         #expect(store.rescuePackCount == rescue + 1)

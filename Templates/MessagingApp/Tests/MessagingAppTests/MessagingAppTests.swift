@@ -5,8 +5,8 @@ import Testing
 @MainActor
 @Suite("MessagingCommandCenterStore")
 struct MessagingCommandCenterStoreTests {
-    private func thread(_ title: String, in store: MessagingCommandCenterStore) -> MessagingThreadRecord {
-        store.threads.first { $0.title == title }!
+    private func thread(_ title: String, in store: MessagingCommandCenterStore) throws -> MessagingThreadRecord {
+        try #require(store.threads.first { $0.title == title })
     }
 
     @Test func seededCountersMatchSampleData() {
@@ -29,15 +29,15 @@ struct MessagingCommandCenterStoreTests {
         #expect(store.filteredThreads.isEmpty)
     }
 
-    @Test func sendingReplyClearsUnreadAndDraft() {
+    @Test func sendingReplyClearsUnreadAndDraft() throws {
         let store = MessagingCommandCenterStore()
-        let support = thread("Support Escalations", in: store)
+        let support = try thread("Support Escalations", in: store)
         let messages = support.messages.count
 
         store.updateDraft(support.id, text: "  Refund approved.  ")
         store.sendReply(to: support.id)
 
-        let updated = thread("Support Escalations", in: store)
+        let updated = try thread("Support Escalations", in: store)
         #expect(updated.messages.count == messages + 1)
         #expect(updated.latestMessage == "Refund approved.")
         #expect(updated.unreadCount == 0)
@@ -46,32 +46,32 @@ struct MessagingCommandCenterStoreTests {
         #expect(store.containedThreadCount == 1)
     }
 
-    @Test func blankReplyIsNotSent() {
+    @Test func blankReplyIsNotSent() throws {
         let store = MessagingCommandCenterStore()
-        let support = thread("Support Escalations", in: store)
+        let support = try thread("Support Escalations", in: store)
 
         store.updateDraft(support.id, text: " \n ")
         store.sendReply(to: support.id)
 
-        #expect(thread("Support Escalations", in: store).messages.count == support.messages.count)
-        #expect(thread("Support Escalations", in: store).unreadCount == support.unreadCount)
+        #expect(try thread("Support Escalations", in: store).messages.count == support.messages.count)
+        #expect(try thread("Support Escalations", in: store).unreadCount == support.unreadCount)
     }
 
-    @Test func freezingThenReleasingContainment() {
+    @Test func freezingThenReleasingContainment() throws {
         let store = MessagingCommandCenterStore()
-        let community = thread("Creator Community", in: store)
+        let community = try thread("Creator Community", in: store)
 
         store.freezeThread(community.id)
-        #expect(thread("Creator Community", in: store).status == .escalated)
-        #expect(thread("Creator Community", in: store).isPinned)
+        #expect(try thread("Creator Community", in: store).status == .escalated)
+        #expect(try thread("Creator Community", in: store).isPinned)
         store.selectedFilter = .escalated
         #expect(store.filteredThreads.map(\.title) == ["Creator Community"])
 
         store.releaseThreadContainment(community.id)
-        #expect(thread("Creator Community", in: store).status == .monitoring)
+        #expect(try thread("Creator Community", in: store).status == .monitoring)
     }
 
-    @Test func roomUpdateIsBroadcastToLinkedThread() {
+    @Test func roomUpdateIsBroadcastToLinkedThread() throws {
         let store = MessagingCommandCenterStore()
         let room = store.rooms[0]
 
@@ -80,7 +80,7 @@ struct MessagingCommandCenterStoreTests {
         #expect(store.rooms[0].pendingRequests == room.pendingRequests - 1)
         #expect(store.rooms[0].announcements.first == room.operatorDraft)
         #expect(store.rooms[0].operatorDraft.isEmpty)
-        #expect(thread("Creator Community", in: store).latestMessage == room.operatorDraft)
+        #expect(try thread("Creator Community", in: store).latestMessage == room.operatorDraft)
     }
 
     @Test func emptyRoomDraftPostsNothing() {
@@ -94,9 +94,9 @@ struct MessagingCommandCenterStoreTests {
         #expect(store.rooms[0].announcements.count == announcements)
     }
 
-    @Test func moderatorAssignmentNeverMakesRequestsNegative() {
+    @Test func moderatorAssignmentNeverMakesRequestsNegative() throws {
         let store = MessagingCommandCenterStore()
-        let room = store.rooms.first { $0.name == "Launch War Room" }!
+        let room = try #require(store.rooms.first { $0.name == "Launch War Room" })
 
         store.assignModerator(room.id)
         store.assignModerator(room.id)
@@ -116,20 +116,20 @@ struct MessagingCommandCenterStoreTests {
         #expect(!store.rooms[0].slowModeEnabled && !store.rooms[0].inviteGateLocked)
     }
 
-    @Test func legalHoldEscalatesLinkedThreadAndResolveRestoresIt() {
+    @Test func legalHoldEscalatesLinkedThreadAndResolveRestoresIt() throws {
         let store = MessagingCommandCenterStore()
-        let safetyCase = store.safetyCases.first { $0.threadTitle == "Support Escalations" }!
+        let safetyCase = try #require(store.safetyCases.first { $0.threadTitle == "Support Escalations" })
 
         store.placeLegalHold(safetyCase.id)
         #expect(store.legalHoldCount == 1)
         #expect(store.escalatedCaseCount == 1)
-        #expect(thread("Support Escalations", in: store).status == .escalated)
+        #expect(try thread("Support Escalations", in: store).status == .escalated)
         #expect(store.controlCenterHeadline.hasPrefix("1 trust escalations"))
 
         store.resolveSafetyCase(safetyCase.id)
         #expect(store.legalHoldCount == 0)
         #expect(store.resolvedCaseCount == 1)
-        #expect(thread("Support Escalations", in: store).status == .monitoring)
+        #expect(try thread("Support Escalations", in: store).status == .monitoring)
     }
 
     @Test func evidenceExportAndLeadAssignment() {

@@ -51,9 +51,9 @@ struct FoodDeliveryOperationsStoreTests {
         #expect(store.cartItems[0].quantity == 2)
     }
 
-    @Test func decrementingToZeroRemovesItem() {
+    @Test func decrementingToZeroRemovesItem() throws {
         let store = FoodDeliveryOperationsStore()
-        let single = store.cartItems.first { $0.quantity == 1 }!
+        let single = try #require(store.cartItems.first { $0.quantity == 1 })
 
         store.decrementCartItem(single.id)
 
@@ -124,10 +124,10 @@ struct FoodDeliveryOperationsStoreTests {
         #expect(store.liveOrder.supportStatus == "Closed")
     }
 
-    @Test func reorderFillsCartFromThatRestaurant() {
+    @Test func reorderFillsCartFromThatRestaurant() throws {
         let store = FoodDeliveryOperationsStore()
-        let order = store.pastOrders.first { past in store.restaurants.contains { $0.name == past.restaurantName } }!
-        let restaurant = store.restaurants.first { $0.name == order.restaurantName }!
+        let order = try #require(store.pastOrders.first { past in store.restaurants.contains { $0.name == past.restaurantName } })
+        let restaurant = try #require(store.restaurants.first { $0.name == order.restaurantName })
         store.cartItems = []
 
         store.reorder(order.id)

@@ -5,8 +5,8 @@ import Testing
 @MainActor
 @Suite("MarketplaceOperationsStore")
 struct MarketplaceOperationsStoreTests {
-    private func listing(_ title: String, in store: MarketplaceOperationsStore) -> MarketplaceListingRecord {
-        store.listings.first { $0.title == title }!
+    private func listing(_ title: String, in store: MarketplaceOperationsStore) throws -> MarketplaceListingRecord {
+        try #require(store.listings.first { $0.title == title })
     }
 
     @Test func seededCountersMatchSampleData() {
@@ -26,22 +26,22 @@ struct MarketplaceOperationsStoreTests {
         #expect(store.featuredListings.map(\.title) == ["Home Podcast Mixer"])
     }
 
-    @Test func reservingExistingCartListingIncrementsQuantityAndStock() {
+    @Test func reservingExistingCartListingIncrementsQuantityAndStock() throws {
         let store = MarketplaceOperationsStore()
-        let mixer = listing("Home Podcast Mixer", in: store)
+        let mixer = try listing("Home Podcast Mixer", in: store)
 
         store.reserveListing(mixer)
 
         #expect(store.cart.count == 1)
         #expect(store.cart[0].quantity == 2)
-        #expect(listing("Home Podcast Mixer", in: store).stockCount == mixer.stockCount - 1)
-        #expect(listing("Home Podcast Mixer", in: store).isReserved)
+        #expect(try listing("Home Podcast Mixer", in: store).stockCount == mixer.stockCount - 1)
+        #expect(try listing("Home Podcast Mixer", in: store).isReserved)
         #expect(store.subtotal == 778)
     }
 
-    @Test func soldOutListingCannotBeReserved() {
+    @Test func soldOutListingCannotBeReserved() throws {
         let store = MarketplaceOperationsStore()
-        let index = store.listings.firstIndex { $0.title == "Refurbished Ultrabook" }!
+        let index = try #require(store.listings.firstIndex { $0.title == "Refurbished Ultrabook" })
         store.listings[index].stockCount = 0
 
         store.reserveListing(store.listings[index])
@@ -91,9 +91,9 @@ struct MarketplaceOperationsStoreTests {
         #expect(store.orders[0].status == .delivered)
     }
 
-    @Test func manualReviewBlocksAdvanceUntilCleared() {
+    @Test func manualReviewBlocksAdvanceUntilCleared() throws {
         let store = MarketplaceOperationsStore()
-        let reviewed = store.orders.first { $0.status == .manualReview }!
+        let reviewed = try #require(store.orders.first { $0.status == .manualReview })
 
         store.advanceOrder(reviewed)
         #expect(store.orders.first { $0.id == reviewed.id }?.status == .manualReview)
@@ -103,9 +103,9 @@ struct MarketplaceOperationsStoreTests {
         #expect(store.orders.first { $0.id == reviewed.id }?.status == .packed)
     }
 
-    @Test func buyerProtectionHoldsSellerPayoutsAndOpensDispute() {
+    @Test func buyerProtectionHoldsSellerPayoutsAndOpensDispute() throws {
         let store = MarketplaceOperationsStore()
-        let order = store.orders.first { $0.seller == "North Studio" }!
+        let order = try #require(store.orders.first { $0.seller == "North Studio" })
         let disputes = store.disputes.count
 
         store.requestBuyerProtection(order)

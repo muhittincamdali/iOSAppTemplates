@@ -5,12 +5,12 @@ import Testing
 @MainActor
 @Suite("EducationLearningStore")
 struct EducationLearningStoreTests {
-    private func course(_ title: String, in store: EducationLearningStore) -> EducationCourseRecord {
-        store.courses.first { $0.title == title }!
+    private func course(_ title: String, in store: EducationLearningStore) throws -> EducationCourseRecord {
+        try #require(store.courses.first { $0.title == title })
     }
 
-    private func quiz(for course: String, in store: EducationLearningStore) -> EducationQuizRecord {
-        store.quizzes.first { $0.course == course }!
+    private func quiz(for course: String, in store: EducationLearningStore) throws -> EducationQuizRecord {
+        try #require(store.quizzes.first { $0.course == course })
     }
 
     @Test func completionRateAveragesCourseProgress() {
@@ -19,16 +19,16 @@ struct EducationLearningStoreTests {
         #expect(store.completionRateText == "64%")
     }
 
-    @Test func completingLessonUnlocksCourseQuizOnce() {
+    @Test func completingLessonUnlocksCourseQuizOnce() throws {
         let store = EducationLearningStore()
-        let lesson = store.lessons.first { $0.course == "Product Analytics" }!
-        let progress = course("Product Analytics", in: store).progress
+        let lesson = try #require(store.lessons.first { $0.course == "Product Analytics" })
+        let progress = try course("Product Analytics", in: store).progress
 
         store.completeLesson(lesson.id)
         store.completeLesson(lesson.id)
 
-        #expect(quiz(for: "Product Analytics", in: store).status == .ready)
-        #expect(abs(course("Product Analytics", in: store).progress - (progress + 0.08)) < 0.0001)
+        #expect(try quiz(for: "Product Analytics", in: store).status == .ready)
+        #expect(abs(try course("Product Analytics", in: store).progress - (progress + 0.08)) < 0.0001)
         #expect(store.completedLessonsCount == 29)
         #expect(store.studyStreakDays == 13)
     }
@@ -42,59 +42,59 @@ struct EducationLearningStoreTests {
         #expect(store.nextLesson?.id == store.lessons[1].id)
     }
 
-    @Test func lockedQuizCannotBeAnswered() {
+    @Test func lockedQuizCannotBeAnswered() throws {
         let store = EducationLearningStore()
-        let locked = quiz(for: "Product Analytics", in: store)
+        let locked = try quiz(for: "Product Analytics", in: store)
 
         store.answerQuizQuestion(locked.id)
 
-        #expect(quiz(for: "Product Analytics", in: store).answeredQuestions == 0)
-        #expect(quiz(for: "Product Analytics", in: store).status == .locked)
+        #expect(try quiz(for: "Product Analytics", in: store).answeredQuestions == 0)
+        #expect(try quiz(for: "Product Analytics", in: store).status == .locked)
     }
 
-    @Test func answeringEveryQuestionMakesQuizSubmittable() {
+    @Test func answeringEveryQuestionMakesQuizSubmittable() throws {
         let store = EducationLearningStore()
-        let ready = quiz(for: "Design Systems", in: store)
+        let ready = try quiz(for: "Design Systems", in: store)
 
         store.answerQuizQuestion(ready.id)
-        #expect(quiz(for: "Design Systems", in: store).status == .inProgress)
+        #expect(try quiz(for: "Design Systems", in: store).status == .inProgress)
 
         for _ in 0..<(ready.questionCount + 3) {
             store.answerQuizQuestion(ready.id)
         }
 
-        let finished = quiz(for: "Design Systems", in: store)
+        let finished = try quiz(for: "Design Systems", in: store)
         #expect(finished.answeredQuestions == finished.questionCount)
         #expect(finished.status == .readyToSubmit)
         #expect(store.dashboardHeadline.contains("ready to submit"))
     }
 
-    @Test func submittingRequiresAFinishedQuiz() {
+    @Test func submittingRequiresAFinishedQuiz() throws {
         let store = EducationLearningStore()
-        let ready = quiz(for: "Design Systems", in: store)
+        let ready = try quiz(for: "Design Systems", in: store)
 
         store.submitQuiz(ready.id)
 
-        #expect(quiz(for: "Design Systems", in: store).status == .ready)
+        #expect(try quiz(for: "Design Systems", in: store).status == .ready)
     }
 
-    @Test func submittedQuizRaisesScoreAndPreparesAssignment() {
+    @Test func submittedQuizRaisesScoreAndPreparesAssignment() throws {
         let store = EducationLearningStore()
-        let ready = quiz(for: "Design Systems", in: store)
+        let ready = try quiz(for: "Design Systems", in: store)
         for _ in 0..<ready.questionCount { store.answerQuizQuestion(ready.id) }
 
         store.submitQuiz(ready.id)
 
-        #expect(quiz(for: "Design Systems", in: store).status == .submitted)
-        #expect(quiz(for: "Design Systems", in: store).score >= 94)
+        #expect(try quiz(for: "Design Systems", in: store).status == .submitted)
+        #expect(try quiz(for: "Design Systems", in: store).score >= 94)
         #expect(store.quizAverage >= 94 && store.quizAverage <= 99)
         #expect(store.assignments.first { $0.course == "Design Systems" }?.status == "Ready to submit")
     }
 
-    @Test func assignmentSubmissionIsIdempotentAndProgressIsCapped() {
+    @Test func assignmentSubmissionIsIdempotentAndProgressIsCapped() throws {
         let store = EducationLearningStore()
-        let assignment = store.assignments.first { $0.course == "Design Systems" }!
-        let index = store.courses.firstIndex { $0.title == "Design Systems" }!
+        let assignment = try #require(store.assignments.first { $0.course == "Design Systems" })
+        let index = try #require(store.courses.firstIndex { $0.title == "Design Systems" })
         store.courses[index].progress = 0.95
 
         store.submitAssignment(assignment.id)

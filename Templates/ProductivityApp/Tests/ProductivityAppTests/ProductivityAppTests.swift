@@ -5,8 +5,8 @@ import Testing
 @MainActor
 @Suite("ProductivityOperationsStore")
 struct ProductivityOperationsStoreTests {
-    private func project(_ name: String, in store: ProductivityOperationsStore) -> ProductivityProjectRecord {
-        store.projects.first { $0.name == name }!
+    private func project(_ name: String, in store: ProductivityOperationsStore) throws -> ProductivityProjectRecord {
+        try #require(store.projects.first { $0.name == name })
     }
 
     @Test func capturedTaskIsTrimmedAndQueuedFirst() {
@@ -31,52 +31,52 @@ struct ProductivityOperationsStoreTests {
         #expect(store.inboxTasks.count == count)
     }
 
-    @Test func routingTaskToProjectPlansItAndAddsProgress() {
+    @Test func routingTaskToProjectPlansItAndAddsProgress() throws {
         let store = ProductivityOperationsStore()
-        let task = store.inboxTasks.first { $0.status == .captured }!
-        let target = project("Release Ops", in: store)
+        let task = try #require(store.inboxTasks.first { $0.status == .captured })
+        let target = try project("Release Ops", in: store)
 
         store.moveTaskToProject(task.id, projectID: target.id)
 
-        let routed = store.inboxTasks.first { $0.id == task.id }!
+        let routed = try #require(store.inboxTasks.first { $0.id == task.id })
         #expect(routed.project == "Release Ops")
         #expect(routed.status == .planned)
-        #expect(abs(project("Release Ops", in: store).progress - (target.progress + 0.08)) < 0.0001)
+        #expect(abs(try project("Release Ops", in: store).progress - (target.progress + 0.08)) < 0.0001)
     }
 
-    @Test func completingTaskMarksProjectHealthyAboveThreshold() {
+    @Test func completingTaskMarksProjectHealthyAboveThreshold() throws {
         let store = ProductivityOperationsStore()
-        let task = store.inboxTasks.first { $0.project == "Release Ops" }!
+        let task = try #require(store.inboxTasks.first { $0.project == "Release Ops" })
 
         store.completeTask(task.id)
 
         #expect(store.completedCount == 15)
         #expect(!store.activeTasks.contains { $0.id == task.id })
-        #expect(project("Release Ops", in: store).status == "Healthy", "0.72 + 0.12 crosses the 0.75 threshold")
+        #expect(try project("Release Ops", in: store).status == "Healthy", "0.72 + 0.12 crosses the 0.75 threshold")
     }
 
-    @Test func completingTaskBelowThresholdKeepsProjectStatus() {
+    @Test func completingTaskBelowThresholdKeepsProjectStatus() throws {
         let store = ProductivityOperationsStore()
-        let task = store.inboxTasks.first { $0.project == "Roadmap" }!
+        let task = try #require(store.inboxTasks.first { $0.project == "Roadmap" })
 
         store.completeTask(task.id)
 
-        #expect(project("Roadmap", in: store).status == "Needs Focus")
+        #expect(try project("Roadmap", in: store).status == "Needs Focus")
     }
 
-    @Test func projectProgressIsCappedAtOne() {
+    @Test func projectProgressIsCappedAtOne() throws {
         let store = ProductivityOperationsStore()
         let task = store.inboxTasks[0]
-        let target = project("Growth Experiments", in: store)
+        let target = try project("Growth Experiments", in: store)
 
         for _ in 0..<5 { store.moveTaskToProject(task.id, projectID: target.id) }
 
-        #expect(project("Growth Experiments", in: store).progress == 1.0)
+        #expect(try project("Growth Experiments", in: store).progress == 1.0)
     }
 
-    @Test func focusBlockLifecycle() {
+    @Test func focusBlockLifecycle() throws {
         let store = ProductivityOperationsStore()
-        let block = store.focusBlocks.first { $0.status != .active && $0.status != .completed }!
+        let block = try #require(store.focusBlocks.first { $0.status != .active && $0.status != .completed })
 
         store.startFocus(block.id)
         #expect(store.focusBlocks.first { $0.id == block.id }?.status == .active)

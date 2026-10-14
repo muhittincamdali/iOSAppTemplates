@@ -14,10 +14,10 @@ struct CommerceStoreTests {
         #expect(store.selectedPaymentMethod?.id == store.paymentMethods.first?.id)
     }
 
-    @Test func totalsAddShippingBelowThresholdAndTax() {
+    @Test func totalsAddShippingBelowThresholdAndTax() throws {
         let store = CommerceStore()
         store.cartItems = []
-        let cheapest = store.products.min(by: { $0.price < $1.price })!
+        let cheapest = try #require(store.products.min(by: { $0.price < $1.price }))
         store.addToCart(cheapest.id)
 
         #expect(store.subtotal == cheapest.price)
@@ -63,9 +63,9 @@ struct CommerceStoreTests {
         #expect(store.cartItems[0].quantity == 2)
     }
 
-    @Test func decrementingLastUnitRemovesItem() {
+    @Test func decrementingLastUnitRemovesItem() throws {
         let store = CommerceStore()
-        let single = store.cartItems.first { $0.quantity == 1 }!
+        let single = try #require(store.cartItems.first { $0.quantity == 1 })
 
         store.decrementCartItem(single.id)
 

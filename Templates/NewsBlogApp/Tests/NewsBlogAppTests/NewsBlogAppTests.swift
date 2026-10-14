@@ -12,9 +12,9 @@ struct NewsBlogOperationsStoreTests {
         #expect(store.savedCount == 1)
     }
 
-    @Test func savingAndUnsavingKeepsSavedReadsInSync() {
+    @Test func savingAndUnsavingKeepsSavedReadsInSync() throws {
         let store = NewsBlogOperationsStore()
-        let unsaved = store.trendingStories.first { !$0.isSaved }!
+        let unsaved = try #require(store.trendingStories.first { !$0.isSaved })
 
         store.toggleSave(unsaved)
         #expect(store.savedCount == 2)
@@ -34,19 +34,19 @@ struct NewsBlogOperationsStoreTests {
         #expect(store.savedReads[0].id == store.leadStory.id)
     }
 
-    @Test func publishingDraftStoryIncreasesPublishedCount() {
+    @Test func publishingDraftStoryIncreasesPublishedCount() throws {
         let store = NewsBlogOperationsStore()
-        let draft = store.trendingStories.first { !$0.isPublished }!
+        let draft = try #require(store.trendingStories.first { !$0.isPublished })
 
         store.publishArticle(draft)
 
         #expect(store.publishedCount == 4)
     }
 
-    @Test func promotingSwapsLeadAndPublishesNewLead() {
+    @Test func promotingSwapsLeadAndPublishesNewLead() throws {
         let store = NewsBlogOperationsStore()
         let previousLead = store.leadStory
-        let draft = store.trendingStories.first { !$0.isPublished }!
+        let draft = try #require(store.trendingStories.first { !$0.isPublished })
 
         store.promoteToLead(draft)
 

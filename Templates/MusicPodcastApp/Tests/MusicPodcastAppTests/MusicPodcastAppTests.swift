@@ -76,9 +76,9 @@ struct MusicPodcastOperationsStoreTests {
         #expect(store.activeDownloadsCount == active + 1)
     }
 
-    @Test func pinDownloadTogglesBetweenReadyAndPinned() {
+    @Test func pinDownloadTogglesBetweenReadyAndPinned() throws {
         let store = MusicPodcastOperationsStore()
-        let ready = store.downloads.first { $0.status == .ready }!
+        let ready = try #require(store.downloads.first { $0.status == .ready })
 
         store.pinDownload(ready)
         #expect(store.downloads.first { $0.id == ready.id }?.status == .pinned)

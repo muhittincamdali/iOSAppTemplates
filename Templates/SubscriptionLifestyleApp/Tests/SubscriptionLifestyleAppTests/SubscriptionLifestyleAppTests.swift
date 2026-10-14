@@ -4,10 +4,10 @@ import Testing
 
 @MainActor
 @Suite("SubscriptionLifestyleOperationsStore")
-struct SubscriptionLifestyleOperationsStoreTests {
-    @Test func enrollingDraftProgram() {
+struct SubscriptionLifestyleStoreTests {
+    @Test func enrollingDraftProgram() throws {
         let store = SubscriptionLifestyleOperationsStore()
-        let draft = store.programs.first { $0.status == .draft }!
+        let draft = try #require(store.programs.first { $0.status == .draft })
 
         store.enroll(draft.id)
 
@@ -15,22 +15,22 @@ struct SubscriptionLifestyleOperationsStoreTests {
         #expect(store.operatorHeadline.contains(draft.title))
     }
 
-    @Test func completingSessionExtendsMatchingStreak() {
+    @Test func completingSessionExtendsMatchingStreak() throws {
         let store = SubscriptionLifestyleOperationsStore()
-        let program = store.programs.first { $0.title == "Wellness Streak" }!
-        let streak = store.streaks.first { $0.programTitle == "Wellness Streak" }!
+        let program = try #require(store.programs.first { $0.title == "Wellness Streak" })
+        let streak = try #require(store.streaks.first { $0.programTitle == "Wellness Streak" })
 
         store.completeSession(program.id)
 
-        let updated = store.streaks.first { $0.id == streak.id }!
+        let updated = try #require(store.streaks.first { $0.id == streak.id })
         #expect(store.programs.first { $0.id == program.id }?.status == .active)
         #expect(updated.days == streak.days + 1)
         #expect(updated.status == .healthy)
     }
 
-    @Test func completingSessionWithoutStreakLeavesStreaksAlone() {
+    @Test func completingSessionWithoutStreakLeavesStreaksAlone() throws {
         let store = SubscriptionLifestyleOperationsStore()
-        let program = store.programs.first { $0.title == "Premium Coaching" }!
+        let program = try #require(store.programs.first { $0.title == "Premium Coaching" })
         let streaks = store.streaks.map(\.days)
 
         store.completeSession(program.id)
@@ -38,9 +38,9 @@ struct SubscriptionLifestyleOperationsStoreTests {
         #expect(store.streaks.map(\.days) == streaks)
     }
 
-    @Test func churnRiskMovesFromOfferToSaved() {
+    @Test func churnRiskMovesFromOfferToSaved() throws {
         let store = SubscriptionLifestyleOperationsStore()
-        let risk = store.risks.first { $0.status == .open }!
+        let risk = try #require(store.risks.first { $0.status == .open })
 
         store.recoverRisk(risk.id)
         #expect(store.risks.first { $0.id == risk.id }?.status == .offerSent)
@@ -49,9 +49,9 @@ struct SubscriptionLifestyleOperationsStoreTests {
         #expect(store.risks.first { $0.id == risk.id }?.status == .saved)
     }
 
-    @Test func recoveringStreakAddsTwoDays() {
+    @Test func recoveringStreakAddsTwoDays() throws {
         let store = SubscriptionLifestyleOperationsStore()
-        let watched = store.streaks.first { $0.status == .watch }!
+        let watched = try #require(store.streaks.first { $0.status == .watch })
 
         store.recoverStreak(watched.id)
 
@@ -59,9 +59,9 @@ struct SubscriptionLifestyleOperationsStoreTests {
         #expect(store.streaks.allSatisfy { $0.status == .healthy })
     }
 
-    @Test func switchingPlanLeavesExactlyOneCurrentPlan() {
+    @Test func switchingPlanLeavesExactlyOneCurrentPlan() throws {
         let store = SubscriptionLifestyleOperationsStore()
-        let annual = store.plans.first { $0.name == "Annual Reset" }!
+        let annual = try #require(store.plans.first { $0.name == "Annual Reset" })
 
         store.switchPlan(annual.id)
 
@@ -78,9 +78,9 @@ struct SubscriptionLifestyleOperationsStoreTests {
         #expect(store.operatorHeadline == headline)
     }
 
-    @Test func experimentLifecycle() {
+    @Test func experimentLifecycle() throws {
         let store = SubscriptionLifestyleOperationsStore()
-        let draft = store.experiments.first { $0.status == .draft }!
+        let draft = try #require(store.experiments.first { $0.status == .draft })
 
         store.launchExperiment(draft.id)
         #expect(store.experiments.first { $0.id == draft.id }?.status == .running)

@@ -11,9 +11,9 @@ struct FitnessStudioStoreTests {
         }
     }
 
-    private func startNextWorkout(_ store: FitnessStudioStore) -> FitnessWorkout {
+    private func startNextWorkout(_ store: FitnessStudioStore) throws -> FitnessWorkout {
         clearReadiness(store)
-        let workout = store.nextWorkout!
+        let workout = try #require(store.nextWorkout)
         store.startWorkout(workout.id)
         return workout
     }
@@ -26,10 +26,10 @@ struct FitnessStudioStoreTests {
         #expect(!store.isReadyForTraining)
     }
 
-    @Test func workoutIsBlockedUntilReadinessClearsAndAlertIsNotDuplicated() {
+    @Test func workoutIsBlockedUntilReadinessClearsAndAlertIsNotDuplicated() throws {
         let store = FitnessStudioStore()
         let alerts = store.coachAlerts.count
-        let workout = store.nextWorkout!
+        let workout = try #require(store.nextWorkout)
 
         store.startWorkout(workout.id)
         store.startWorkout(workout.id)
@@ -39,28 +39,29 @@ struct FitnessStudioStoreTests {
         #expect(store.coachAlerts[0].severity == .high)
     }
 
-    @Test func startingWorkoutCreatesSessionWithEveryExercise() {
+    @Test func startingWorkoutCreatesSessionWithEveryExercise() throws {
         let store = FitnessStudioStore()
 
-        let workout = startNextWorkout(store)
+        let workout = try startNextWorkout(store)
 
         #expect(store.activeSession?.workoutTitle == workout.title)
         #expect(store.activeSession?.exerciseLogs.count == workout.exercises.count)
     }
 
-    @Test func secondWorkoutCannotStartWhileOneIsActive() {
+    @Test func secondWorkoutCannotStartWhileOneIsActive() throws {
         let store = FitnessStudioStore()
-        let first = startNextWorkout(store)
-        let other = store.selectedPlan!.workouts.first { $0.id != first.id }!
+        let first = try startNextWorkout(store)
+        let plan = try #require(store.selectedPlan)
+        let other = try #require(plan.workouts.first { $0.id != first.id })
 
         store.startWorkout(other.id)
 
         #expect(store.activeSession?.workoutTitle == first.title)
     }
 
-    @Test func sessionCannotFinishWithOpenExercises() {
+    @Test func sessionCannotFinishWithOpenExercises() throws {
         let store = FitnessStudioStore()
-        _ = startNextWorkout(store)
+        _ = try startNextWorkout(store)
         let sessions = store.completedSessions.count
 
         store.finishActiveSession()
@@ -69,12 +70,12 @@ struct FitnessStudioStoreTests {
         #expect(store.completedSessions.count == sessions)
     }
 
-    @Test func finishingSessionRecordsItAndResetsReadiness() {
+    @Test func finishingSessionRecordsItAndResetsReadiness() throws {
         let store = FitnessStudioStore()
-        let workout = startNextWorkout(store)
+        let workout = try startNextWorkout(store)
         let sessions = store.completedSessions.count
         let streak = store.streakDays
-        for log in store.activeSession!.exerciseLogs {
+        for log in try #require(store.activeSession).exerciseLogs {
             store.toggleExercise(log.id)
         }
         #expect(store.selectedPlan?.workouts.first { $0.id == workout.id }?.status == .readyToComplete)
@@ -93,7 +94,7 @@ struct FitnessStudioStoreTests {
 
     @Test func pausedSessionDoesNotAdvanceAndElapsedTimeIsCapped() throws {
         let store = FitnessStudioStore()
-        _ = startNextWorkout(store)
+        _ = try startNextWorkout(store)
 
         store.pauseActiveSession()
         store.advanceActiveSessionBlock()
@@ -107,13 +108,13 @@ struct FitnessStudioStoreTests {
         #expect(store.activeSession?.elapsedMinutes == estimated)
     }
 
-    @Test func blankReflectionIsIgnored() {
+    @Test func blankReflectionIsIgnored() throws {
         let store = FitnessStudioStore()
-        _ = startNextWorkout(store)
+        _ = try startNextWorkout(store)
 
         store.logCoachingReflection("   ")
 
-        #expect(store.activeSession?.coachReflection == "")
+        #expect(store.activeSession?.coachReflection.isEmpty == true)
     }
 
     @Test func habitDaysAreCappedAtSeven() {
@@ -125,14 +126,15 @@ struct FitnessStudioStoreTests {
         #expect(store.weeklyHabits[0].completedDays == 7)
     }
 
-    @Test func completingGoalAndResolvingAlertUpdateCounters() {
+    @Test func completingGoalAndResolvingAlertUpdateCounters() throws {
         let store = FitnessStudioStore()
-        let goal = store.goals.first { !$0.isCompleted }!
+        let goal = try #require(store.goals.first { !$0.isCompleted })
         let completedGoals = store.completedGoalCount
         let alerts = store.activeCoachAlertCount
 
+        let alert = try #require(store.coachAlerts.first { !$0.isResolved })
         store.completeGoal(goal.id)
-        store.resolveCoachAlert(store.coachAlerts.first { !$0.isResolved }!.id)
+        store.resolveCoachAlert(alert.id)
 
         #expect(store.completedGoalCount == completedGoals + 1)
         #expect(store.activeCoachAlertCount == alerts - 1)

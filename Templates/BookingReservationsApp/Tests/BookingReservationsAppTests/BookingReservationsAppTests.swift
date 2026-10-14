@@ -13,20 +13,20 @@ struct BookingOperationsStoreTests {
         #expect(store.openRequestCount == 3)
     }
 
-    @Test func verifyingIdentityPromotesAwaitingGuestToReady() {
+    @Test func verifyingIdentityPromotesAwaitingGuestToReady() throws {
         let store = BookingOperationsStore()
-        let mila = store.stays.first { $0.status == .awaitingID }!
+        let mila = try #require(store.stays.first { $0.status == .awaitingID })
 
         store.verifyIdentity(for: mila)
 
-        let updated = store.stays.first { $0.id == mila.id }!
+        let updated = try #require(store.stays.first { $0.id == mila.id })
         #expect(updated.identityVerified)
         #expect(updated.status == .arrivalReady)
     }
 
-    @Test func verifyingIdentityKeepsOtherStatuses() {
+    @Test func verifyingIdentityKeepsOtherStatuses() throws {
         let store = BookingOperationsStore()
-        let inReview = store.stays.first { $0.status == .pendingReview }!
+        let inReview = try #require(store.stays.first { $0.status == .pendingReview })
 
         store.verifyIdentity(for: inReview)
 
@@ -44,9 +44,9 @@ struct BookingOperationsStoreTests {
         #expect(store.operatorHeadline.contains("Liam Carter"))
     }
 
-    @Test func checkoutThenTurnoverReturnsRoomToInventory() {
+    @Test func checkoutThenTurnoverReturnsRoomToInventory() throws {
         let store = BookingOperationsStore()
-        let oliver = store.stays.first { $0.status == .checkoutToday }!
+        let oliver = try #require(store.stays.first { $0.status == .checkoutToday })
 
         store.completeCheckout(oliver)
         #expect(store.stays.first { $0.id == oliver.id }?.status == .checkedOut)
@@ -56,18 +56,18 @@ struct BookingOperationsStoreTests {
         #expect(store.stays.first { $0.id == oliver.id }?.status == .turnoverReady)
     }
 
-    @Test func settlingReviewMovesStayBackToCheckoutToday() {
+    @Test func settlingReviewMovesStayBackToCheckoutToday() throws {
         let store = BookingOperationsStore()
-        let ava = store.stays.first { $0.status == .pendingReview }!
+        let ava = try #require(store.stays.first { $0.status == .pendingReview })
 
         store.settlePendingReview(ava)
 
         #expect(store.stays.first { $0.id == ava.id }?.status == .checkoutToday)
     }
 
-    @Test func approvingLateCheckoutUpdatesTheMatchingStay() {
+    @Test func approvingLateCheckoutUpdatesTheMatchingStay() throws {
         let store = BookingOperationsStore()
-        let request = store.guestRequests.first { $0.title.contains("Late checkout") }!
+        let request = try #require(store.guestRequests.first { $0.title.contains("Late checkout") })
 
         store.approveRequest(request)
 

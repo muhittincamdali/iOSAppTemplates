@@ -52,20 +52,20 @@ struct NotesKnowledgeOperationsStoreTests {
         #expect(store.libraryNotes[1].highlightCount == note.highlightCount + 1)
     }
 
-    @Test func refreshingUnhealthyLinkMapMarksItHealthy() {
+    @Test func refreshingUnhealthyLinkMapMarksItHealthy() throws {
         let store = NotesKnowledgeOperationsStore()
-        let unhealthy = store.linkMaps.first { !$0.isHealthy }!
+        let unhealthy = try #require(store.linkMaps.first { !$0.isHealthy })
 
         store.refreshLinkMap(unhealthy)
 
-        let refreshed = store.linkMaps.first { $0.id == unhealthy.id }!
+        let refreshed = try #require(store.linkMaps.first { $0.id == unhealthy.id })
         #expect(refreshed.isHealthy)
         #expect(refreshed.referenceCount == unhealthy.referenceCount + 1)
     }
 
-    @Test func syncingSpaceClearsNeedsSync() {
+    @Test func syncingSpaceClearsNeedsSync() throws {
         let store = NotesKnowledgeOperationsStore()
-        let pending = store.spaces.first { $0.syncStatus == .needsSync }!
+        let pending = try #require(store.spaces.first { $0.syncStatus == .needsSync })
 
         store.syncSpace(pending)
 
