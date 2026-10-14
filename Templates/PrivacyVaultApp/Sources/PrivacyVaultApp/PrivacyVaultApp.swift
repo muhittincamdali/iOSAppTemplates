@@ -72,7 +72,6 @@ final class PrivacyVaultOperationsStore: ObservableObject {
     @Published var health = PrivacyVaultOperationalHealth.sample
     @Published var state = PrivacyVaultWorkspaceState.sample
 
-
     func hardenFeaturedItem() {
         guard let item = state.featuredItems.first else { return }
         let updatedItems = state.featuredItems.enumerated().map { index, current in

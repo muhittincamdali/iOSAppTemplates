@@ -26,7 +26,7 @@ struct IdentifierRenamerTests {
     @Test func textWithoutMatchesIsUnchanged() {
         let text = "struct CommerceStore {}\n// Ecommerce app"
         #expect(renamer.rename(text) == text)
-        #expect(renamer.rename("") == "")
+        #expect(renamer.rename("").isEmpty)
     }
 
     @Test func renamesEveryOccurrenceIncludingAdjacentOnes() {

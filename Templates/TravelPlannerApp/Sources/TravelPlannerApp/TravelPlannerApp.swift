@@ -71,7 +71,7 @@ final class TravelPlannerOperationsStore: ObservableObject {
     }
 
     var nextFlight: TravelFlightRecord? {
-        flights.sorted { $0.departureCode < $1.departureCode }.first
+        flights.min { $0.departureCode < $1.departureCode }
     }
 
     var unresolvedAlerts: Int {

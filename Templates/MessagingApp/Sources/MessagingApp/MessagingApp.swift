@@ -61,7 +61,7 @@ final class MessagingCommandCenterStore: ObservableObject {
     }
 
     var priorityThread: MessagingThreadRecord? {
-        threads.first(where: \.isPinned) ?? threads.sorted { $0.unreadCount > $1.unreadCount }.first
+        threads.first(where: \.isPinned) ?? threads.max { $0.unreadCount < $1.unreadCount }
     }
 
     var unreadCount: Int {

@@ -161,11 +161,11 @@ struct AuthView: View {
                 }
                 
                 // Toggle button
-                Button(action: {
+                Button {
                     withAnimation(.easeInOut(duration: 0.3)) {
                         isSignUp.toggle()
                     }
-                }) {
+                } label: {
                     Text(isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up")
                         .font(.subheadline)
                         .foregroundColor(.blue)
@@ -444,9 +444,9 @@ struct FeedView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
+                    Button {
                         showCreatePost = true
-                    }) {
+                    } label: {
                         Image(systemName: "plus")
                     }
                 }
@@ -547,9 +547,9 @@ struct PostCard: View {
             
             // Actions
             HStack(spacing: 20) {
-                Button(action: {
+                Button {
                     dataManager.toggleLike(postID: currentPost.id)
-                }) {
+                } label: {
                     HStack(spacing: 4) {
                         Image(systemName: isLiked ? "heart.fill" : "heart")
                             .foregroundColor(isLiked ? .red : .primary)
@@ -558,9 +558,9 @@ struct PostCard: View {
                     }
                 }
                 
-                Button(action: {
+                Button {
                     showComments = true
-                }) {
+                } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "bubble.left")
                         Text("\(currentPost.commentsCount)")
@@ -568,9 +568,9 @@ struct PostCard: View {
                     }
                 }
                 
-                Button(action: {
+                Button {
                     dataManager.sharePost(postID: currentPost.id)
-                }) {
+                } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "arrowshape.turn.up.right")
                         Text("\(currentPost.sharesCount)")
@@ -580,9 +580,9 @@ struct PostCard: View {
                 
                 Spacer()
                 
-                Button(action: {
+                Button {
                     dataManager.toggleBookmark(postID: currentPost.id)
-                }) {
+                } label: {
                     Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
                         .foregroundColor(isBookmarked ? .blue : .primary)
                 }
